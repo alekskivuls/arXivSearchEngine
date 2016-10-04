@@ -147,7 +147,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
 	// insert getPostings, union and intersect as many times until all postings are merged into one. 
 	std::stack<std::list<DocInfo>> result;
 	std::list<DocInfo> left, right;
-	for (auto token : rpnQuery) { 
+	for (auto token : rpnQuery) {
 		if (token == "*" || token == "+") {
 			right = result.top();
 			result.pop();
@@ -155,18 +155,16 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
 			left = result.top();
 			result.pop();
 
-			if (token == "*") { // AND
-
-			}
-			if (token == "+") { // OR
-
-			}
-			//if () {
-				// AND NOT
-			//}
-
-
-			// result.push( <> );
+			if (token == "*") 
+				result.push(AND(left, right)); // AND
+			if (token == "+") 
+				result.push(AND(left, right)); // OR
+			if (token == "~") // insert operator for and not
+				result.push(ANDNOT(left, right)); // ANDNOT
+			if (token == "`") 
+				result.push(PHRASE(left, right));
+			//if (token == "^") // possibly cool future operator (assuming it makes sense)?
+				//result.push(XOR(left, right));
 		}
 		else 
 			result.push(_invIndex.getPostings(token));
@@ -174,4 +172,108 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
 
 	// while rpnStack is not empty, pop 2 operands and 1 operator, perform merge,
 	return result.top();
+}
+
+std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
+	std::list<DocInfo> result;
+	
+	std::list<DocInfo> min, max;
+	if (left.size() < right.size()) {
+		min = left;
+		max = right;
+	}
+	else {
+		min = right;
+		max = left;
+	}
+	
+	auto iIter = min.begin(), jIter = max.begin();
+	while (iIter != min.end() || jIter != max.end()) {
+
+		if ((*iIter).getDocName() > (*jIter).getDocName()) 
+			++jIter;
+		else if ((*jIter).getDocName() > (*iIter).getDocName())
+			++iIter;
+		else {
+			result.push_back(DocInfo((*iIter).getDocName()));
+			++iIter;
+			++jIter;
+		}
+	}
+
+	return result;
+}
+
+/*
+ * Merges 2 postings list. The postingslist do not need to know the positions; therefore, a simple 
+ * OR merge will only copy the document name/ id.
+ */
+std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
+	std::list<DocInfo> result;
+
+	std::list<DocInfo> min, max;
+	if (left.size() < right.size()) {
+		min = left;
+		max = right;
+	}
+	else {
+		min = right;
+		max = left;
+	}
+
+	auto iIter = min.begin(), jIter = max.begin();
+	while (iIter != min.end() || jIter != max.end()) {
+
+		if ((*iIter).getDocName() > (*jIter).getDocName()) {
+			result.push_back(DocInfo((*jIter).getDocName()));
+			++jIter;
+		}
+		else if ((*jIter).getDocName() > (*iIter).getDocName()) {
+			result.push_back(DocInfo((*iIter).getDocName()));
+			++iIter;
+		}
+		else {
+			result.push_back(DocInfo((*iIter).getDocName()));
+			++iIter;
+			++jIter;
+		}
+	}
+
+	while (iIter != min.end()) {
+		result.push_back(DocInfo((*iIter++).getDocName()));
+		++iIter;
+	}
+
+	while (jIter != max.end()) {
+		result.push_back(DocInfo((*jIter).getDocName()));
+		++jIter;
+	}
+
+	return result;
+}
+
+std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
+	std::list<DocInfo> result;
+
+	std::list<DocInfo>::const_iterator iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
+	while (iIter != left.end()) {
+		if ((*iIter).getDocName() > (*jIter).getDocName())
+			++jIter;
+		else if ((*jIter).getDocName() > (*iIter).getDocName()) {
+			result.push_back(DocInfo((*iIter).getDocName()));
+			++iIter;
+		}
+		else {
+			++iIter;
+			++jIter;
+		}
+	}
+
+	return result;
+}
+
+std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
+	std::list<DocInfo> result;
+
+	return result;
 }

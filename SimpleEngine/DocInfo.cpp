@@ -14,7 +14,7 @@ void DocInfo::addPosition(const int &pos) {
 	_posList.push_back(pos);
 }
 
-std::string DocInfo::getDocName() {
+std::string DocInfo::getDocName() const {
 	return _docName;
 }
 

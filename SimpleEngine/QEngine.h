@@ -15,6 +15,14 @@ class QEngine {
 	// of stemmed tokens and operators in inverse notation. 
 	std::list<std::string> stemmify(const std::string &userQuery);
 
+	std::list<DocInfo> AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
+	std::list<DocInfo> OR(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
+	std::list<DocInfo> ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
+	std::list<DocInfo> PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
 public:
 	QEngine(const InvertedIndex &idx);
 	~QEngine();

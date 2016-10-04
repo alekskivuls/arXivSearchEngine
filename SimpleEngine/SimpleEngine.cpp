@@ -52,32 +52,32 @@ int main() {
 	queryEngine.printInfixRpn2();
 	system("pause");
 
+	std::cout << "idx size = " << idx.getTermCount() << '\n';
+	std::cout << "Adding Hello Terms...\n";
+	idx.addTerm("Hello", "Article1.json", 1);
+	idx.addTerm("Hello", "Article1.json", 2);
+	idx.addTerm("Hello", "Article1.json", 3);
+	idx.addTerm("Hello", "Article1.json", 10);
 
-
-	//initializes dummy values for term insertion
-	std::string term = "Hello";
-	std::string docName = "Article1.json";
-	int pos = 123;
+	idx.addTerm("Hello", "Article2.json", 4);
+	idx.addTerm("Hello", "Article2.json", 6);
+	idx.addTerm("Hello", "Article2.json", 8);
+	idx.addTerm("Hello", "Article2.json", 30);
+	std::cout << "idx size = " << idx.getTermCount() << '\n';
 	
-	// Sanity check for proper inverted index insertion
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	idx.addTerm(term, docName, pos);
+	std::cout << "Adding World Terms...\n";
+	idx.addTerm("World", "Article2.json", 5);
+	idx.addTerm("World", "Article2.json", 10);
+	idx.addTerm("World", "Article2.json", 20);
+	idx.addTerm("World", "Article2.json", 25);
+
+	idx.addTerm("World", "Article3.json", 3);
+	idx.addTerm("World", "Article3.json", 4);
+	idx.addTerm("World", "Article3.json", 19);
+	idx.addTerm("World", "Article3.json", 31);
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	idx.printIndex();
-
-
-	system("pause");
-
-
-	//initializes dummy values for term insertion
-	term = "Random Term";
-	docName = "Article2.json";
-	pos = 345;
-
-	// Sanity check for proper inverted index insertion
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	idx.addTerm(term, docName, pos);
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
+	
 	idx.printIndex();
 
 	// close test.txt file

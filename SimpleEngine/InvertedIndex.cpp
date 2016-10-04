@@ -28,7 +28,8 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) {
  * later? this way, we can put more on RAM
  */
 void InvertedIndex::addTerm(const std::string &term, const std::string &docName, const int &pos) {
-	if (_mIndex.find(term) == _mIndex.end()) { 
+	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
+		std::cout << "Term does not exists: " << term << '\n';
 		std::list<DocInfo> postingsList; // create postings list
 
 		DocInfo DI(docName); // create new DocInfo
@@ -39,21 +40,26 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 		_mIndex[term] = postingsList; // populate
 	}
 	else { // TERM DOES EXIST
+		std::cout << "Term does exist: " << term << '\n';
 		std::list<DocInfo> postingsList = _mIndex[term];
 
 		// Search list of Docs associated with "term"
 		auto it = postingsList.begin();
 		for (; it != postingsList.end(); ++it) {
 			if ((*it).getDocName() == docName) {
+				std::cout << "Doc Name does exist: " << (*it).getDocName() << '\n';
 				(*it).addPosition(pos); // DOCNAME DOES EXIST. UPDATE/ INSERT POS INTO EXISTING DOCLIST.
+				_mIndex[term] = postingsList;
 				return;
 			}
 			else if ((*it).getDocName() < docName) // i did not check for edge case... if docList is empty
 				break;
 		}
+		std::cout << "Doc Name does NOT exist: " << docName << " pos-> " << pos << '\n';
 		DocInfo DI(docName);
 		DI.addPosition(pos);
 		postingsList.insert(it, DI);
+		_mIndex[term] = postingsList;
 	}
 }
 
@@ -63,10 +69,10 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 void InvertedIndex::printIndex() {
 	for (auto pair : _mIndex) {
 		std::cout << "Term: " << pair.first << "\n\t";
-		for (auto inner : pair.second) {
+		for (auto inner : pair.second) { // list<DocInfo>
 			std::cout << inner.getDocName() << ":\n\t\t";
-			for (auto lowest : inner.getPositions()) {
-				std::cout << lowest << ' ';
+			for (auto pos : inner.getPositions()) {
+				std::cout << pos << ' ';
 			}
 			std::cout << '\n';
 		}

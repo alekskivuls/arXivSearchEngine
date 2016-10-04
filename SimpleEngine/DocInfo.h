@@ -24,10 +24,10 @@ public:
 	void addPosition(const int &pos);
 
 	// Returns the name of the document (json file name).
-	std::string getDocName();
+	std::string getDocName() const;
 
 	// Returns the list of the term's occurence.
-	std::list<int> getPositions();
+	std::list<int> DocInfo::getPositions();
 };
 
 #endif
