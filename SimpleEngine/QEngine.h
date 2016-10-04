@@ -34,6 +34,7 @@ public:
 	void printInfixRpn();
 	void printInfixRpn2();
 	void printQueryTest(InvertedIndex &idx);
+	void printQueryTest2(InvertedIndex &idx);
 };
 
 #endif
