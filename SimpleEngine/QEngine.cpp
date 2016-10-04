@@ -16,8 +16,14 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 	char precThis, precOther;
 
 	for (auto token : invQuery) { 
-		if (token == "*" || token == "+") {
-			precThis = (token == "*") ? 1 : 0;
+		if (token == "*" || token == "~" || token == "`" || token == "+" ) {
+			if (token == "`") 
+				precThis = 2;
+			else if (token == "*" || token == "~") 
+				precThis = 1;
+			else
+				precThis = 0;
+
 			while (true) {
 				if (opStack.empty()) {
 					opStack.push(token);
@@ -141,14 +147,19 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, union and intersect. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
-	std::list<std::string> rpnQuery = infixToRPN(stemmify(userQuery));
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedIndex &idx) {
+	std::list<std::string> infix;
+	infix.push_back("Hello");
+	infix.push_back("~");
+	infix.push_back("World");
+
+	std::list<std::string> rpnQuery = infixToRPN(infix); // stemmify(userQuery)
 	
 	// insert getPostings, union and intersect as many times until all postings are merged into one. 
 	std::stack<std::list<DocInfo>> result;
 	std::list<DocInfo> left, right;
 	for (auto token : rpnQuery) {
-		if (token == "*" || token == "+") {
+		if (token == "*" || token == "+" || token == "~" || token == "`") {
 			right = result.top();
 			result.pop();
 
@@ -158,7 +169,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
 			if (token == "*") 
 				result.push(AND(left, right)); // AND
 			if (token == "+") 
-				result.push(AND(left, right)); // OR
+				result.push(OR(left, right)); // OR
 			if (token == "~") // insert operator for and not
 				result.push(ANDNOT(left, right)); // ANDNOT
 			if (token == "`") 
@@ -167,7 +178,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery) {
 				//result.push(XOR(left, right));
 		}
 		else 
-			result.push(_invIndex.getPostings(token));
+			result.push(idx.getPostings(token));
 	}
 
 	// while rpnStack is not empty, pop 2 operands and 1 operator, perform merge,

@@ -27,7 +27,7 @@ public:
 	QEngine(const InvertedIndex &idx);
 	~QEngine();
 
-	std::list<DocInfo> processQuery(std::string &stemmed);
+	std::list<DocInfo> processQuery(std::string &userQuery, const InvertedIndex &idx);
 
 	InvertedIndex getIndex();
 

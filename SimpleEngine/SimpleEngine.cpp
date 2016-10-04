@@ -84,6 +84,19 @@ int main() {
 	std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
 	queryEngine.printQueryTest(idx);
 
+
+
+	std::string teststr("Hello * World");
+	std::cout << "\n\n\n\n PROCESSQUERY...\n";
+	std::list<DocInfo> output = queryEngine.processQuery(teststr, idx);
+	for (auto di : output) {
+		std::cout << di.getDocName() << ":\n";
+		for (auto i : di.getPositions()) {
+			std::cout << i << " ";
+		}
+		std::cout << std::endl;
+	}
+
 	// close test.txt file
 	file.close();
 	
