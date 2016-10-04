@@ -1,5 +1,7 @@
 #include "QEngine.h"
+#include "PorterStemmer.h"
 #include <iostream>
+#include <boost/algorithm/string.hpp>
 QEngine::QEngine(const InvertedIndex &idx) : _invIndex(idx) { } //
 QEngine::~QEngine() { }
 
@@ -117,29 +119,53 @@ void QEngine::printInfixRpn2() {
  * This method takes a string query and returns a list of the stemmed tokens, including operators. 
  */
 std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
-	// @TODO: Aleks Kivul. Please implement the stemiify operation (implement it however you would like).
 	std::list<std::string> infix;
+	std::vector<std::string> strs;
+	boost::split(strs, "string to split", boost::is_any_of(" "));
+	PorterStemmer stemmer;
 
-	// This funciton will CALL the Utility Class (Porter Stemmer) and individually stem each token. 
-	// We will probably have to #include "PorterStemmer" -OR- we can make a private class inside QEngine. 
-	// It will look like this: 
-
-	/* QEngine header file:
-	class QEngine {
-
-		// The class should be a static class with static functions (utility class) 
-		// The class should ONLY be visible to QEngine because... there should be no other reason to accesss 
-		// The Porter Stemmer from outside...
-		static class PorterStemmer { 
-			//define private static methods here
-		};
-
-	public:
-		//blah...
-	};
-
-	*/
-
+	bool onLiteral = false, onPlus = false;
+	for (auto str : strs) {
+		if (onLiteral) {
+			if (str.at(str.length()-1) == '"') {
+				onLiteral = false;
+			}
+			infix.push_back("`");
+			infix.push_back(stemmer.stem(str.substr(0,str.length()-1)));
+			
+		}
+		else if (str.at(0) == '"') {
+			onLiteral = true;
+			if (onPlus) {
+				infix.push_back("+");
+				onPlus = false;
+			}
+			else {
+				infix.push_back("*");
+			}
+			infix.push_back(stemmer.stem(str.substr(1, std::string::npos)));
+		}
+		else if (str.at(0) == '-') {
+			if (str.at(1) == '"') {
+				onLiteral = true;
+			}
+			infix.push_back("~");
+			infix.push_back(stemmer.stem(str.substr(1,std::string::npos)));
+		}
+		else if (str.at(0) == '+') {
+			onPlus = true;
+		}
+		else {
+			if (!onPlus) {
+				infix.push_back("*");
+			}
+			else {
+				infix.push_back("+");
+				onPlus = false;
+			}
+			infix.push_back(stemmer.stem(str));
+		}
+	}
 	return infix;
 }
 
