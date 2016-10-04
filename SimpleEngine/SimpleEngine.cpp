@@ -57,20 +57,6 @@ int main() {
 
 
 	system("pause");
-	
-
-	// Sanity check for proper getPostings method
-	std::cout << "For term Hello:\n";
-	std::list<DocInfo> docList = idx.getPostings("Hello");
-	for (auto DOC : docList) {
-		std::cout << DOC.getDocName() << ":\n";
-		for (auto innerVal : DOC.getPositions()) 
-			std::cout << innerVal << " ";
-		std::cout << '\n';
-	}
-
-
-	system("pause");
 
 
 	//initializes dummy values for term insertion
@@ -82,18 +68,6 @@ int main() {
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
 	idx.addTerm(term, docName, pos);
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
-
-	// Sanity check for proper getPostings method
-	std::cout << "For term Random Term:\n";
-	docList = idx.getPostings(term);
-	for (auto DOC : docList) {
-		std::cout << DOC.getDocName() << ":\n";
-		for (auto innerVal : DOC.getPositions())
-			std::cout << innerVal << " ";
-		std::cout << '\n';
-	}
-
-	// final sanity check
 	idx.printIndex();
 
 	// close test.txt file

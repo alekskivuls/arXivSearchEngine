@@ -115,6 +115,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="InvertedIndex.cpp" />
+    <ClCompile Include="QEngine.cpp" />
     <ClCompile Include="SimpleEngine.cpp" />
     <ClCompile Include="DocInfo.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="InvertedIndex.h" />
     <ClInclude Include="DocInfo.h" />
+    <ClInclude Include="QEngine.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TokenStream.h" />
   </ItemGroup>

@@ -10,7 +10,7 @@ class Tokenizer : public TokenStream {
 	std::fstream _file;
 	std::string _buffer;
 	bool isFileTokenizer;
-	int pos;
+	unsigned int pos;
 
 public:
 	// variable byte and gap encoding (bytes -> .json files)
@@ -18,8 +18,6 @@ public:
 	// parsing string by tokens into k-grams
 	Tokenizer(const std::string &s);
 	~Tokenizer();
-
-
 
 	bool nextToken(std::string &token);
 

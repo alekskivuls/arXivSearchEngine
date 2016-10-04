@@ -13,18 +13,18 @@
  * occurences of the term that occurs for that document.
  */
 class InvertedIndex {
+	friend class QEngine;
 	// The hashmap that represents the entire inverted index.
 	std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
-
-	// Returns the postings list for the requested term.
-	// <cut and paste getPostings here>
-
-public:
+	
 	// This method is used to check if a term exists. Instead of catching an out of 
 	// bounds error everytime, we can check to avoid the expensive try/ catch overhead.
 	bool hasPostings(const std::string &term);
+	
+	// Returns the postings list for the requested term.
+	std::list<DocInfo> getPostings(const std::string &term);
 
-	std::list<DocInfo> getPostings(const std::string &term); // change this to private later.
+public:
 	InvertedIndex();
 
 	// Adds an instance of the stemmed term to the document.

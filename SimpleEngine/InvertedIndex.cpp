@@ -5,6 +5,14 @@
 InvertedIndex::InvertedIndex() { }
 
 /*
+ * Returns whether the postings list associated with the term exists in the inverted index. 
+ * Throws and out of range exception if the key (term) is not found in the index.
+ */
+bool InvertedIndex::hasPostings(const std::string &term) {
+	return _mIndex.find(term) != _mIndex.end();
+}
+
+/*
  * Returns the postings list from the inverted index.
  * Throws and out of range exception if the key (term) is not found in the index.
  */
