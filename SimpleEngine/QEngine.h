@@ -20,6 +20,9 @@ public:
 	~QEngine();
 
 	std::list<DocInfo> processQuery(std::string &stemmed);
+
+	void printInfixRpn();
+	void printInfixRpn2();
 };
 
 #endif

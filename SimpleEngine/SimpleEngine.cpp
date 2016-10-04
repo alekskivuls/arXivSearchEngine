@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
+#include "QEngine.h"
 #include "DocInfo.h"
 #include <algorithm>
 #include <iostream>
@@ -12,6 +13,8 @@
 #include <fstream>
 #include <vector>
 #include <list>
+
+
 
 /*
  * This method has a fully functional and tested inverted index. We only need to change the 
@@ -43,6 +46,13 @@ int main() {
 
 	// creates an inverted index
 	InvertedIndex idx;
+	// QEngine RPN Test:
+	QEngine queryEngine(idx);
+	queryEngine.printInfixRpn();
+	queryEngine.printInfixRpn2();
+	system("pause");
+
+
 
 	//initializes dummy values for term insertion
 	std::string term = "Hello";
