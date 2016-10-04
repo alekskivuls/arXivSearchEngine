@@ -29,8 +29,11 @@ public:
 
 	std::list<DocInfo> processQuery(std::string &stemmed);
 
+	InvertedIndex getIndex();
+
 	void printInfixRpn();
 	void printInfixRpn2();
+	void printQueryTest(InvertedIndex &idx);
 };
 
 #endif

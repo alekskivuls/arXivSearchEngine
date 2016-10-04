@@ -22,7 +22,7 @@ class InvertedIndex {
 	bool hasPostings(const std::string &term);
 	
 	// Returns the postings list for the requested term.
-	std::list<DocInfo> getPostings(const std::string &term);
+	std::list<DocInfo> getPostings(const std::string &term) const;
 
 public:
 	InvertedIndex();

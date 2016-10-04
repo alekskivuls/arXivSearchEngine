@@ -54,7 +54,7 @@ int main() {
 
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
 	std::cout << "Adding Hello Terms...\n";
-	idx.addTerm("Hello", "Article1.json", 1);
+	idx.addTerm("Hello", "Article1.json", 1); // 
 	idx.addTerm("Hello", "Article1.json", 2);
 	idx.addTerm("Hello", "Article1.json", 3);
 	idx.addTerm("Hello", "Article1.json", 10);
@@ -79,6 +79,10 @@ int main() {
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
 	
 	idx.printIndex();
+	system("pause");
+
+	std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
+	queryEngine.printQueryTest(idx);
 
 	// close test.txt file
 	file.close();

@@ -1,6 +1,6 @@
 #include "QEngine.h"
 #include <iostream>
-QEngine::QEngine(const InvertedIndex &idx) : _invIndex(idx) { }
+QEngine::QEngine(const InvertedIndex &idx) : _invIndex(idx) { } //
 QEngine::~QEngine() { }
 
 /*
@@ -186,15 +186,34 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 		min = right;
 		max = left;
 	}
+
+	std::cout << "Print test order list...\n";
+	for (auto di : left) {
+		std::cout << di.getDocName() << ":\n";
+		for (auto i : di.getPositions())
+			std::cout << i << ' ';
+		std::cout << "\n";
+	}
+	std::cout << "\n";
+		
+
+	for (auto di : right) {
+		std::cout << di.getDocName() << ":\n";
+		for (auto i : di.getPositions())
+			std::cout << i << ' ';
+		std::cout << "\n";
+	}
+
 	
 	auto iIter = min.begin(), jIter = max.begin();
-	while (iIter != min.end() || jIter != max.end()) {
-
+	while (iIter != min.end() && jIter != max.end()) {
+		std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
 		if ((*iIter).getDocName() > (*jIter).getDocName()) 
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName())
 			++iIter;
 		else {
+			std::cout << (*iIter).getDocName() << " did not appear...\n";
 			result.push_back(DocInfo((*iIter).getDocName()));
 			++iIter;
 			++jIter;
@@ -222,7 +241,7 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
 	}
 
 	auto iIter = min.begin(), jIter = max.begin();
-	while (iIter != min.end() || jIter != max.end()) {
+	while (iIter != min.end() && jIter != max.end()) {
 
 		if ((*iIter).getDocName() > (*jIter).getDocName()) {
 			result.push_back(DocInfo((*jIter).getDocName()));
@@ -276,4 +295,46 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 	std::list<DocInfo> result;
 
 	return result;
+}
+
+// we can refacor this later. I still want to keep the index hidden.
+InvertedIndex QEngine::getIndex() {
+	return _invIndex;
+}
+
+void QEngine::printQueryTest(InvertedIndex &idx) {
+	std::list<DocInfo> left = idx.getPostings("Hello");
+	std::list<DocInfo> right = idx.getPostings("World");
+
+	std::cout << "Left = " << left.size() << '\n';
+	std::cout << "Right = " << right.size() << '\n';
+
+	std::cout << "AND Query:\n";
+	std::list<DocInfo> andQuery = AND(left, right);
+	for (auto doc : andQuery) {
+		std::cout << doc.getDocName() << ":\n\t";
+		for (auto i : doc.getPositions()) 
+			std::cout << i << ' ';
+	}
+	std::cout << '\n';
+
+	std::cout << "ANDNOT Query:\n";
+	std::list<DocInfo> andNotQuery = ANDNOT(left, right);
+	for (auto doc : andNotQuery) {
+		std::cout << doc.getDocName() << ":\n\t";
+		for (auto i : doc.getPositions())
+			std::cout << i << ' ';
+	}
+	std::cout << '\n';
+
+	std::cout << "OR Query:\n";
+	std::list<DocInfo> orQuery = OR(left, right);
+	for (auto doc : orQuery) {
+		std::cout << doc.getDocName() << ":\n\t";
+		for (auto i : doc.getPositions())
+			std::cout << i << ' ';
+	}
+	std::cout << '\n';
+
+	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
 }

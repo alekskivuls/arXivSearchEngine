@@ -1,7 +1,6 @@
 #include "InvertedIndex.h"
 #include <algorithm>
 #include <iostream>
-
 InvertedIndex::InvertedIndex() { }
 
 /*
@@ -16,7 +15,7 @@ bool InvertedIndex::hasPostings(const std::string &term) {
  * Returns the postings list from the inverted index.
  * Throws and out of range exception if the key (term) is not found in the index.
  */
-std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) {
+std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
 	return _mIndex.at(term);
 }
 
@@ -29,7 +28,6 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) {
  */
 void InvertedIndex::addTerm(const std::string &term, const std::string &docName, const int &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
-		std::cout << "Term does not exists: " << term << '\n';
 		std::list<DocInfo> postingsList; // create postings list
 
 		DocInfo DI(docName); // create new DocInfo
@@ -40,22 +38,19 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 		_mIndex[term] = postingsList; // populate
 	}
 	else { // TERM DOES EXIST
-		std::cout << "Term does exist: " << term << '\n';
 		std::list<DocInfo> postingsList = _mIndex[term];
 
 		// Search list of Docs associated with "term"
 		auto it = postingsList.begin();
 		for (; it != postingsList.end(); ++it) {
 			if ((*it).getDocName() == docName) {
-				std::cout << "Doc Name does exist: " << (*it).getDocName() << '\n';
 				(*it).addPosition(pos); // DOCNAME DOES EXIST. UPDATE/ INSERT POS INTO EXISTING DOCLIST.
 				_mIndex[term] = postingsList;
 				return;
 			}
-			else if ((*it).getDocName() < docName) // i did not check for edge case... if docList is empty
+			else if ((*it).getDocName() > docName) // i did not check for edge case... if docList is empty
 				break;
 		}
-		std::cout << "Doc Name does NOT exist: " << docName << " pos-> " << pos << '\n';
 		DocInfo DI(docName);
 		DI.addPosition(pos);
 		postingsList.insert(it, DI);
