@@ -21,22 +21,12 @@ std::string PorterStemmer::stem(std::string &token)
 	//Step 1b
 	boost::smatch list;
 	bool extra1b = false;
-	if (boost::algorithm::ends_with(token, "eed")) {
-		if (boost::regex_search(token.substr(0, token.length() - 3), list, mGr0)) {
-			token = token.substr(0, token.length() - 2);
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ed")) {
-		if (boost::regex_search(token.substr(0, token.length() - 2), list, vowel)) {
-			token = token.substr(0, token.length() - 2);
-			extra1b = true;
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ing")) {
-		if (boost::regex_search(token.substr(0, token.length() - 3), list, vowel)) {
-		token = token.substr(0, token.length() - 3);
+	if (trim(token, std::string("eed"), std::string("ee"), mGr0)) {}
+	else if (trim(token, std::string("ed"), std::string(""), vowel)) {
 		extra1b = true;
-		}
+	}
+	else if (trim(token, std::string("ing"), std::string(""), vowel)) {
+		extra1b = true;
 	}
 
 	if (extra1b) {
@@ -56,105 +46,25 @@ std::string PorterStemmer::stem(std::string &token)
 		token = token.substr(0, token.length() - 1) + 'i';
 
 	//Step 2
-	if (boost::algorithm::ends_with(token, "ational")) {
-		if (boost::regex_search(token.substr(0, token.length() - 7), mGr0)) {
-			token = token.substr(0, token.length() - 7) + "ate";
-		}
-	} else if (boost::algorithm::ends_with(token, "tional")) {
-		if (boost::regex_search(token.substr(0, token.length() - 6), mGr0)) {
-			token = token.substr(0, token.length() - 6) + "tion";
-		}
-	}
-	else if(boost::algorithm::ends_with(token, "enci")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "ence";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "anci")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "ance";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "izer")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "ize";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "abli")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "able";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "alli")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "al";
-		}
-	} 
-	else if (boost::algorithm::ends_with(token, "entli")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "ent";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "eli")) {
-		if (boost::regex_search(token.substr(0, token.length() - 3), mGr0)) {
-			token = token.substr(0, token.length() - 3) + "e";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ousli")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "ous";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ization")) {
-		if (boost::regex_search(token.substr(0, token.length() - 7), mGr0)) {
-			token = token.substr(0, token.length() - 7) + "ize";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ation")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "ate";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ator")) {
-		if (boost::regex_search(token.substr(0, token.length() - 4), mGr0)) {
-			token = token.substr(0, token.length() - 4) + "ate";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "alism")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "al";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "iveness")) {
-		if (boost::regex_search(token.substr(0, token.length() - 7), mGr0)) {
-			token = token.substr(0, token.length() - 7) + "ive";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "fulness")) {
-		if (boost::regex_search(token.substr(0, token.length() - 7), mGr0)) {
-			token = token.substr(0, token.length() - 7) + "ful";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "ousness")) {
-		if (boost::regex_search(token.substr(0, token.length() - 7), mGr0)) {
-			token = token.substr(0, token.length() - 7) + "ous";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "aliti")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "al";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "iviti")) {
-		if (boost::regex_search(token.substr(0, token.length() - 5), mGr0)) {
-			token = token.substr(0, token.length() - 5) + "ive";
-		}
-	}
-	else if (boost::algorithm::ends_with(token, "biliti")) {
-		if (boost::regex_search(token.substr(0, token.length() - 6), mGr0)) {
-			token = token.substr(0, token.length() - 6) + "ble";
-		}
-	}
+	if (trim(token, std::string("ational"), std::string("ate"), mGr0)) {}
+	else if(trim(token, std::string("tional"), std::string("tion"), mGr0)) {}
+	else if (trim(token, std::string("enci"), std::string("ence"), mGr0)) {}
+	else if (trim(token, std::string("anci"), std::string("ance"), mGr0)) {}
+	else if (trim(token, std::string("izer"), std::string("ize"), mGr0)) {}
+	else if (trim(token, std::string("abli"), std::string("al"), mGr0)) {}
+	else if (trim(token, std::string("entli"), std::string("ent"), mGr0)) {}
+	else if (trim(token, std::string("eli"), std::string("e"), mGr0)) {}
+	else if (trim(token, std::string("ousli"), std::string("ous"), mGr0)) {}
+	else if (trim(token, std::string("ization"), std::string("ize"), mGr0)) {}
+	else if (trim(token, std::string("ation"), std::string("ate"), mGr0)) {}
+	else if (trim(token, std::string("ator"), std::string("ate"), mGr0)) {}
+	else if (trim(token, std::string("alism"), std::string("al"), mGr0)) {}
+	else if (trim(token, std::string("iveness"), std::string("ive"), mGr0)) {}
+	else if (trim(token, std::string("fulness"), std::string("ful"), mGr0)) {}
+	else if (trim(token, std::string("ousness"), std::string("ous"), mGr0)) {}
+	else if (trim(token, std::string("aliti"), std::string("al"), mGr0)) {}
+	else if (trim(token, std::string("iviti"), std::string("ive"), mGr0)) {}
+	else if (trim(token, std::string("biliti"), std::string("ble"), mGr0)) {}
 
 	//Step 3
 	if (trim(token, std::string("icate"), std::string("ic"), mGr0)) {}
