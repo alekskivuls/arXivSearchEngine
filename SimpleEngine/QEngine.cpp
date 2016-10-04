@@ -146,7 +146,6 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 	//boost::algorithm::split(strs, userQuery, std::string(" "));
 	split(userQuery, ' ', strs);
 	PorterStemmer stemmer;
-	/*
 	bool onLiteral = false, onPlus = false;
 	for (auto str : strs) {
 		if (onLiteral) {
@@ -188,7 +187,7 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 			}
 			infix.push_back(stemmer.stem(str));
 		}
-	}*/
+	}
 	return infix;
 }
 
