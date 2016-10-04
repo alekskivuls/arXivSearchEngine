@@ -16,7 +16,7 @@
 #include <vector>
 #include <list>
 
-
+#pragma warning(disable:4996)
 
 /*
  * This method has a fully functional and tested inverted index. We only need to change the

@@ -1,6 +1,7 @@
 #include "QEngine.h"
 #include "PorterStemmer.h"
 #include <iostream>
+#include <vector>
 #include <boost/algorithm/string.hpp>
 QEngine::QEngine(const InvertedIndex &idx) : _invIndex(idx) { } //
 QEngine::~QEngine() { }
@@ -121,15 +122,31 @@ void QEngine::printInfixRpn2() {
 	std::cout << "\n";
 }
 
+void split(const std::string& s, char c,
+	std::vector<std::string>& v) {
+	std::string::size_type i = 0;
+	std::string::size_type j = s.find(c);
+
+	while (j != std::string::npos) {
+		v.push_back(s.substr(i, j - i));
+		i = ++j;
+		j = s.find(c, j);
+
+		if (j == std::string::npos)
+			v.push_back(s.substr(i, s.length()));
+	}
+}
+
 /*
  * This method takes a string query and returns a list of the stemmed tokens, including operators. 
  */
 std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 	std::list<std::string> infix;
 	std::vector<std::string> strs;
-	boost::split(strs, "string to split", boost::is_any_of(" "));
+	//boost::algorithm::split(strs, userQuery, std::string(" "));
+	split(userQuery, ' ', strs);
 	PorterStemmer stemmer;
-
+	/*
 	bool onLiteral = false, onPlus = false;
 	for (auto str : strs) {
 		if (onLiteral) {
@@ -171,7 +188,7 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 			}
 			infix.push_back(stemmer.stem(str));
 		}
-	}
+	}*/
 	return infix;
 }
 
