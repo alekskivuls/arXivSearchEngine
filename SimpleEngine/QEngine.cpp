@@ -341,17 +341,24 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-		//std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
 		if ((*iIter).getDocName() > (*jIter).getDocName())
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName())
 			++iIter;
-		else {
-			//std::cout << (*iIter).getDocName() << " did not appear...\n";
-			DocInfo merge;
-
-			// insert actual dist, phrase query algorithm here
-			// merge IF there is an instance of dist right(post) - left(pos) == dist
+		else { // same file/ doc name
+			DocInfo merge((*iIter).getDocName());
+			auto leftPos = (*iIter).getPositions(), rightPos = (*jIter).getPositions();
+			auto i = leftPos.begin(), j = rightPos.begin();
+			while (i != leftPos.end() && j != rightPos.end()) {
+				if ((*i + dist) == *j) {
+					merge.addPosition(*(i++));
+					++j;
+				}
+				else if ((*i + dist) > *j)
+					++j;
+				else
+					++i;
+			}
 
 			result.push_back(merge);
 			++iIter;
