@@ -116,8 +116,7 @@ void QEngine::printInfixRpn2() {
 	std::cout << "\n";
 }
 
-void split(const std::string& s, char c,
-	std::vector<std::string>& v) {
+void QEngine::split(const std::string& s, char c, std::vector<std::string>& v) {
 	std::string::size_type i = 0;
 	std::string::size_type j = s.find(c);
 
