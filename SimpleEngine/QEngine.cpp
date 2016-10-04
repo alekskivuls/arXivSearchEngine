@@ -63,7 +63,7 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 
 void QEngine::printInfixRpn() {
 	std::list<std::string> infix, rpn;
-	infix.push_back("Hello");
+	/*infix.push_back("Hello");
 	infix.push_back("+");
 	infix.push_back("World");
 	infix.push_back("+");
@@ -75,7 +75,7 @@ void QEngine::printInfixRpn() {
 	infix.push_back("*");
 	infix.push_back("This");
 	infix.push_back("*");
-	infix.push_back("String");
+	infix.push_back("String");*/
 
 	rpn = infixToRPN(infix);
 
@@ -150,16 +150,18 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedIndex &idx) {
 	std::list<std::string> infix;
 	infix.push_back("Hello");
-	infix.push_back("~");
+	infix.push_back("`");
 	infix.push_back("World");
 
 	std::list<std::string> rpnQuery = infixToRPN(infix); // stemmify(userQuery)
-	
+	int dist = 1;
+	bool prevIsPhrase;
 	// insert getPostings, union and intersect as many times until all postings are merged into one. 
 	std::stack<std::list<DocInfo>> result;
 	std::list<DocInfo> left, right;
 	for (auto token : rpnQuery) {
 		if (token == "*" || token == "+" || token == "~" || token == "`") {
+			prevIsPhrase = false;
 			right = result.top();
 			result.pop();
 
@@ -172,8 +174,14 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedI
 				result.push(OR(left, right)); // OR
 			if (token == "~") // insert operator for and not
 				result.push(ANDNOT(left, right)); // ANDNOT
-			if (token == "`") 
-				result.push(PHRASE(left, right));
+			if (token == "`") {
+				prevIsPhrase = true;
+				if (prevIsPhrase)
+					++dist;
+				else
+					dist = 1;
+				result.push(PHRASE(left, right, dist));
+			}
 			//if (token == "^") // possibly cool future operator (assuming it makes sense)?
 				//result.push(XOR(left, right));
 		}
@@ -292,10 +300,38 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
 	return result;
 }
 
-std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
+std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist) {
 	std::list<DocInfo> result;
 
-	// TODO
+	std::list<DocInfo> min, max;
+	if (left.size() < right.size()) {
+		min = left;
+		max = right;
+	}
+	else {
+		min = right;
+		max = left;
+	}
+
+	auto iIter = min.begin(), jIter = max.begin();
+	while (iIter != min.end() && jIter != max.end()) {
+		//std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
+		if ((*iIter).getDocName() > (*jIter).getDocName())
+			++jIter;
+		else if ((*jIter).getDocName() > (*iIter).getDocName())
+			++iIter;
+		else {
+			//std::cout << (*iIter).getDocName() << " did not appear...\n";
+			DocInfo merge;
+
+			// insert actual dist, phrase query algorithm here
+			// merge IF there is an instance of dist right(post) - left(pos) == dist
+
+			result.push_back(merge);
+			++iIter;
+			++jIter;
+		}
+	}
 
 	return result;
 }
