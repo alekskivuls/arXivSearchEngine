@@ -33,8 +33,14 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 					break;
 				}
 
-				precOther = (opStack.top() == "*") ? 1 : 0;
-				if (precThis <= precOther) {
+				if (opStack.top() == "`")
+					precOther = 2;
+				else if (opStack.top() == "*" || opStack.top() == "~")
+					precOther = 1;
+				else
+					precOther = 0;
+
+				if (precThis < precOther) {
 					rpnQuery.push_back(opStack.top());
 					opStack.pop();
 				}
@@ -66,7 +72,7 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 
 void QEngine::printInfixRpn() {
 	std::list<std::string> infix, rpn;
-	/*infix.push_back("Hello");
+	infix.push_back("Hello");
 	infix.push_back("+");
 	infix.push_back("World");
 	infix.push_back("+");
@@ -78,7 +84,7 @@ void QEngine::printInfixRpn() {
 	infix.push_back("*");
 	infix.push_back("This");
 	infix.push_back("*");
-	infix.push_back("String");*/
+	infix.push_back("String");
 
 	rpn = infixToRPN(infix);
 
@@ -139,7 +145,6 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 	//boost::algorithm::split(strs, userQuery, std::string(" "));
 	split(userQuery, ' ', strs);
 	PorterStemmer stemmer;
-	/*
 	bool onLiteral = false, onPlus = false;
 	for (auto str : strs) {
 		if (onLiteral) {
@@ -181,7 +186,7 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 			}
 			infix.push_back(stemmer.stem(str));
 		}
-	}*/
+	}
 	return infix;
 }
 
@@ -190,12 +195,12 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
  * This method will be responsible for invoking getPostings, union and intersect. 
  */
 std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedIndex &idx) {
-	std::list<std::string> infix;
-	infix.push_back("Hello");
-	infix.push_back("`");
-	infix.push_back("World");
-
-	std::list<std::string> rpnQuery = infixToRPN(infix); // stemmify(userQuery)
+	//std::list<std::string> infix;
+	//infix.push_back("Hello");
+	//infix.push_back("`");
+	//infix.push_back("World");
+	//infix.push_back("`");
+	std::list<std::string> rpnQuery = infixToRPN(stemmify(userQuery)); // 
 	int dist = 1;
 	bool prevIsPhrase;
 	// insert getPostings, union and intersect as many times until all postings are merged into one. 
@@ -217,12 +222,12 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedI
 			if (token == "~") // insert operator for and not
 				result.push(ANDNOT(left, right)); // ANDNOT
 			if (token == "`") {
-				prevIsPhrase = true;
 				if (prevIsPhrase)
 					++dist;
 				else
 					dist = 1;
 				result.push(PHRASE(left, right, dist));
+				prevIsPhrase = true;
 			}
 			//if (token == "^") // possibly cool future operator (assuming it makes sense)?
 				//result.push(XOR(left, right));
@@ -247,34 +252,14 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 		min = right;
 		max = left;
 	}
-
-	/*std::cout << "Print test order list...\n";
-	for (auto di : left) {
-		std::cout << di.getDocName() << ":\n";
-		for (auto i : di.getPositions())
-			std::cout << i << ' ';
-		std::cout << "\n";
-	}
-	std::cout << "\n";
-		
-
-	for (auto di : right) {
-		std::cout << di.getDocName() << ":\n";
-		for (auto i : di.getPositions())
-			std::cout << i << ' ';
-		std::cout << "\n";
-	}*/
-
 	
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-		//std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
 		if ((*iIter).getDocName() > (*jIter).getDocName()) 
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName())
 			++iIter;
 		else {
-			//std::cout << (*iIter).getDocName() << " did not appear...\n";
 			result.push_back(DocInfo((*iIter).getDocName()));
 			++iIter;
 			++jIter;
@@ -344,16 +329,7 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
 
 std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist) {
 	std::list<DocInfo> result;
-
-	std::list<DocInfo> min, max;
-	if (left.size() < right.size()) {
-		min = left;
-		max = right;
-	}
-	else {
-		min = right;
-		max = left;
-	}
+	std::list<DocInfo> min = left, max = right;
 
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
@@ -364,6 +340,7 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 		else { // same file/ doc name
 			DocInfo merge((*iIter).getDocName());
 			auto leftPos = (*iIter).getPositions(), rightPos = (*jIter).getPositions();
+
 			auto i = leftPos.begin(), j = rightPos.begin();
 			while (i != leftPos.end() && j != rightPos.end()) {
 				if ((*i + dist) == *j) {
@@ -381,13 +358,39 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 			++jIter;
 		}
 	}
-
+	
 	return result;
 }
 
 // we can refacor this later. I still want to keep the index hidden.
 InvertedIndex QEngine::getIndex() {
 	return _invIndex;
+}
+
+void QEngine::printQueryTest2(InvertedIndex &idx) {
+	idx.addTerm("Hello", "Article1.json", 1);
+	idx.addTerm("Hello", "Article1.json", 2);
+
+	idx.addTerm("Hello", "Article2.json", 1);
+	idx.addTerm("Hello", "Article2.json", 3);
+	idx.addTerm("Hello", "Article2.json", 5);
+
+	idx.addTerm("World", "Article2.json", 2);
+	idx.addTerm("World", "Article2.json", 6);
+
+	idx.addTerm("World", "Article3.json", 1);
+	idx.addTerm("World", "Article3.json", 1);
+
+	idx.addTerm("Aleks", "Article2.json", 3);
+	idx.addTerm("Aleks", "Article2.json", 7);
+
+	auto docList = processQuery(std::string("Hello ` World"), idx);
+	for (auto di : docList) {
+		std::cout << di.getDocName() << ":\n";
+		for (auto i : di.getPositions()) 
+			std::cout << i << " ";
+		std::cout << '\n';
+	}
 }
 
 void QEngine::printQueryTest(InvertedIndex &idx) {

@@ -32,7 +32,6 @@
  * that call getPostings.
  */
 int main() {
-
 	//Get folder to parse documents of
 	std::string filepath;
 	std::cout << "Enter directory of corpus" << std::endl;

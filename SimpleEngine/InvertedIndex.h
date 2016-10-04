@@ -13,6 +13,7 @@
  * occurences of the term that occurs for that document.
  */
 class InvertedIndex {
+	// FUTURE implementations of the QEngine will include hiding the InvertedIndex from the scope of main.
 	friend class QEngine;
 	// The hashmap that represents the entire inverted index.
 	std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
