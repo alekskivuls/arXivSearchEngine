@@ -1,12 +1,14 @@
 #include <boost\algorithm\string\predicate.hpp>
 #include <boost\lambda\lambda.hpp>
 #include <boost\filesystem.hpp>
+#include <boost\foreach.hpp>
 #include "InvertedIndex.h"
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
+#include "PorterStemmer.h"
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
@@ -17,88 +19,111 @@
 
 
 /*
- * This method has a fully functional and tested inverted index. We only need to change the 
- * tokenizer methods for suitable parsing (single terms, k-grams and splitting hyphenated 
+ * This method has a fully functional and tested inverted index. We only need to change the
+ * tokenizer methods for suitable parsing (single terms, k-grams and splitting hyphenated
  * words into 3 terms). The following main has sample uses of the functions.
- * 
- * At the end of the day, the terms must be properly processed (stemmed) BEFORE they are 
+ *
+ * At the end of the day, the terms must be properly processed (stemmed) BEFORE they are
  * inserted into the inverted index.
  *
- * IMPORTANT NOTE: the following functions need to be removed AND the getPostings method 
- * must also be changed from public to private. This is to ensure data integrity. There is 
- * absolutely no need for the main to be public. There should be higher level funciton calls 
+ * IMPORTANT NOTE: the following functions need to be removed AND the getPostings method
+ * must also be changed from public to private. This is to ensure data integrity. There is
+ * absolutely no need for the main to be public. There should be higher level funciton calls
  * that call getPostings.
  */
 int main() {
-	// opens sample test.txt file
-	std::fstream file;
-	file.open("test.txt", std::fstream::in | std::fstream::out | std::fstream::app);
 
-	// tokenizes sample test.txt file
+	//Get folder to parse documents of
+	std::string filepath;
+	std::cout << "Enter directory of corpus" << std::endl;
+	std::cin >> filepath;
+
+	boost::filesystem::path dir(filepath);
+	boost::filesystem::directory_iterator it(dir), eod;
+
+	InvertedIndex idx;
+	QEngine queryEngine(idx);
+	PorterStemmer stemmer;
+
 	std::string input;
-	while (std::getline(file, input)) {
-		Tokenizer tkzr(input);
-
-		std::string token;
-		while (tkzr.nextToken(token)) // while not end of file.
-			std::cout << token << '\n';
+	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
+	{
+		if (boost::filesystem::is_regular_file(p))
+		{
+			std::fstream file;
+			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
+			std::string input;
+			int posIndex = 0;
+			while (std::getline(file, input)) {
+				Tokenizer tkzr(input);
+				std::string token;
+				while (tkzr.nextToken(token)) {// while not end of file.
+					idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+					posIndex++;
+				}
+			}
+			file.close();
+		}
 	}
 
-	// creates an inverted index
-	InvertedIndex idx;
-	// QEngine RPN Test:
-	QEngine queryEngine(idx);
-	queryEngine.printInfixRpn();
-	queryEngine.printInfixRpn2();
+	std::cout << "idx size = " << idx.getTermCount() << '\n';
 	system("pause");
-
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	std::cout << "Adding Hello Terms...\n";
-	idx.addTerm("Hello", "Article1.json", 1); // 
-	idx.addTerm("Hello", "Article1.json", 2);
-	idx.addTerm("Hello", "Article1.json", 3);
-	idx.addTerm("Hello", "Article1.json", 10);
-
-	idx.addTerm("Hello", "Article2.json", 4);
-	idx.addTerm("Hello", "Article2.json", 6);
-	idx.addTerm("Hello", "Article2.json", 8);
-	idx.addTerm("Hello", "Article2.json", 30);
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	std::cout << "Adding World Terms...\n";
-	idx.addTerm("World", "Article2.json", 5);
-	idx.addTerm("World", "Article2.json", 10);
-	idx.addTerm("World", "Article2.json", 20);
-	idx.addTerm("World", "Article2.json", 25);
-
-	idx.addTerm("World", "Article3.json", 3);
-	idx.addTerm("World", "Article3.json", 4);
-	idx.addTerm("World", "Article3.json", 19);
-	idx.addTerm("World", "Article3.json", 31);
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	
 	idx.printIndex();
 	system("pause");
-
 	std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
-	queryEngine.printQueryTest(idx);
-
-
-
-	std::string teststr("Hello * World");
-	std::cout << "\n\n\n\n PROCESSQUERY...\n";
-	std::list<DocInfo> output = queryEngine.processQuery(teststr, idx);
-	for (auto di : output) {
-		std::cout << di.getDocName() << ":\n";
-		for (auto i : di.getPositions()) {
-			std::cout << i << " ";
-		}
-		std::cout << std::endl;
-	}
-
-	// close test.txt file
-	file.close();
-	
+	queryEngine.printQueryTest(idx); //BROKEN?
 	system("pause");
+
+	while (true) {
+		std::cout << "Enter a query:" << std::endl;
+		std::cin >> input;
+		if (input.compare(":q") == 0) {
+			break;
+		}
+		else if (input.substr(0, 6).compare(":stem ") == 0) {
+			std::cout << stemmer.stem(input.substr(6, std::string::npos));
+		}
+		else if (input.compare(":vocab") == 0) {
+			idx.printIndex(); //Not quite right
+		}
+		else if (input.substr(0, 7).compare(":index ") == 0) {
+			filepath = input.substr(7, std::string::npos);
+			boost::filesystem::path dir(filepath);
+			boost::filesystem::directory_iterator it(dir), eod;
+
+			//NEED TO EMPTY AND REST INDEX
+			//InvertedIndex idx;
+			//QEngine queryEngine(idx);
+
+			BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
+			{
+				if (boost::filesystem::is_regular_file(p))
+				{
+					std::fstream file;
+					file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
+					std::string input;
+					int posIndex = 0;
+					while (std::getline(file, input)) {
+						Tokenizer tkzr(input);
+						std::string token;
+						while (tkzr.nextToken(token)) {// while not end of file.
+							idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+							posIndex++;
+						}
+					}
+					file.close();
+				}
+			}
+		}
+		else { //Query
+			std::list<DocInfo> output = queryEngine.processQuery(input, idx);
+			for (auto di : output) {
+				std::cout << di.getDocName() << ":\n";
+				for (auto i : di.getPositions()) {
+					std::cout << i << " ";
+				}
+				std::cout << std::endl;
+			}
+		}
+	}
 }
