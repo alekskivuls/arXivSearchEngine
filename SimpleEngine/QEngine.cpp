@@ -187,7 +187,7 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 		max = left;
 	}
 
-	std::cout << "Print test order list...\n";
+	/*std::cout << "Print test order list...\n";
 	for (auto di : left) {
 		std::cout << di.getDocName() << ":\n";
 		for (auto i : di.getPositions())
@@ -202,18 +202,18 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 		for (auto i : di.getPositions())
 			std::cout << i << ' ';
 		std::cout << "\n";
-	}
+	}*/
 
 	
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-		std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
+		//std::cout << "left: " << (*iIter).getDocName() << " right: " << (*jIter).getDocName() << '\n';
 		if ((*iIter).getDocName() > (*jIter).getDocName()) 
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName())
 			++iIter;
 		else {
-			std::cout << (*iIter).getDocName() << " did not appear...\n";
+			//std::cout << (*iIter).getDocName() << " did not appear...\n";
 			result.push_back(DocInfo((*iIter).getDocName()));
 			++iIter;
 			++jIter;
@@ -242,31 +242,21 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
 
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-
-		if ((*iIter).getDocName() > (*jIter).getDocName()) {
-			result.push_back(DocInfo((*jIter).getDocName()));
-			++jIter;
-		}
-		else if ((*jIter).getDocName() > (*iIter).getDocName()) {
-			result.push_back(DocInfo((*iIter).getDocName()));
-			++iIter;
-		}
+		if ((*iIter).getDocName() > (*jIter).getDocName()) 
+			result.push_back(DocInfo((*(jIter++)).getDocName()));
+		else if ((*jIter).getDocName() > (*iIter).getDocName()) 
+			result.push_back(DocInfo((*(iIter++)).getDocName()));
 		else {
-			result.push_back(DocInfo((*iIter).getDocName()));
-			++iIter;
+			result.push_back(DocInfo((*(iIter++)).getDocName()));
 			++jIter;
 		}
 	}
 
-	while (iIter != min.end()) {
-		result.push_back(DocInfo((*iIter++).getDocName()));
-		++iIter;
-	}
+	while (iIter != min.end()) 
+		result.push_back(DocInfo((*(iIter++)).getDocName()));
 
-	while (jIter != max.end()) {
-		result.push_back(DocInfo((*jIter).getDocName()));
-		++jIter;
-	}
+	while (jIter != max.end()) 
+		result.push_back(DocInfo((*(jIter++)).getDocName()));
 
 	return result;
 }
@@ -274,7 +264,7 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
 std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
 	std::list<DocInfo> result;
 
-	std::list<DocInfo>::const_iterator iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
+	auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
 	while (iIter != left.end()) {
 		if ((*iIter).getDocName() > (*jIter).getDocName())
 			++jIter;
@@ -294,6 +284,8 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
 std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
 	std::list<DocInfo> result;
 
+	// TODO
+
 	return result;
 }
 
@@ -312,27 +304,30 @@ void QEngine::printQueryTest(InvertedIndex &idx) {
 	std::cout << "AND Query:\n";
 	std::list<DocInfo> andQuery = AND(left, right);
 	for (auto doc : andQuery) {
-		std::cout << doc.getDocName() << ":\n\t";
+		std::cout << doc.getDocName() << ":\n";
 		for (auto i : doc.getPositions()) 
 			std::cout << i << ' ';
+		std::cout << '\n';
 	}
 	std::cout << '\n';
 
 	std::cout << "ANDNOT Query:\n";
 	std::list<DocInfo> andNotQuery = ANDNOT(left, right);
 	for (auto doc : andNotQuery) {
-		std::cout << doc.getDocName() << ":\n\t";
+		std::cout << doc.getDocName() << ":\n";
 		for (auto i : doc.getPositions())
 			std::cout << i << ' ';
+		std::cout << '\n';
 	}
 	std::cout << '\n';
 
 	std::cout << "OR Query:\n";
 	std::list<DocInfo> orQuery = OR(left, right);
 	for (auto doc : orQuery) {
-		std::cout << doc.getDocName() << ":\n\t";
+		std::cout << doc.getDocName() << ":\n";
 		for (auto i : doc.getPositions())
 			std::cout << i << ' ';
+		std::cout << '\n';
 	}
 	std::cout << '\n';
 
