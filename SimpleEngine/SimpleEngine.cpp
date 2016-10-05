@@ -28,10 +28,14 @@
  *
  * IMPORTANT NOTE: the following functions need to be removed AND the getPostings method
  * must also be changed from public to private. This is to ensure data integrity. There is
- * absolutely no need for the main to be public. There should be higher level funciton calls
- * that call getPostings.
+ * absolutely no need for getPostings to be public. There should be higher level funcition 
+ * calls that call getPostings.
  */
 int main() {
+	/*InvertedIndex idx;
+	QEngine QE(idx);
+	QE.printQueryTest2(idx);
+	system("pause");*/
 	//Get folder to parse documents of
 	std::string filepath;
 	std::cout << "Enter directory of corpus" << std::endl;
