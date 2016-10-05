@@ -1,3 +1,8 @@
+/**
+ *	@Authors: Paul Kim, Aleks Kivul, Cherie Woo
+ *	@Course: CECS 429 - Search Engine Technology
+ */
+
 #include <boost\algorithm\string\predicate.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -21,19 +26,11 @@
 #pragma warning(disable:4996)
 
 
-
-
-
 /*****************************************FUNCTION PROTOTYPE*****************************************/
-void readJsonFiles(const std::vector<std::string> &mPathList);
-
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx);
 
-void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory);
+void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
 /****************************************************************************************************/
-
-
-
 
 
 /*
@@ -50,80 +47,56 @@ void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::
  * calls that call getPostings.
  */
 int main() {
-	//Get folder to parse documents of
+	// Variable declarations
+	boost::filesystem::path dir;
 	std::string filepath;
-	std::cout << "Enter directory of corpus" << std::endl;
-	std::getline(std::cin, filepath);
-
-	boost::filesystem::path dir(filepath);
-	
-
-	//****************************************************************************************************
-	std::vector<std::string> mPathList;
-	getPathNames(mPathList, dir);
-	int i;
-	for (i = 0; i < mPathList.size(); ++i) 
-		std::cout << ".json i: " << i << " = " << mPathList[i] << '\n';
-	std::cout << "Number of .json files: " << mPathList.size() << '\n\n\n';
-
-	readJsonFiles(mPathList);
-	//****************************************************************************************************
-	system("pause");
-
 	InvertedIndex *idx;
 	PorterStemmer stemmer;
 	QEngine queryEngine;
 
-	// calls new... make sure you properly deallocate memory space from the heap
+
+	// Set file directory
+	std::cout << "Enter directory of corpus" << std::endl;
+	std::getline(std::cin, filepath);
+	dir = boost::filesystem::path(filepath);
+
+
+	// Initialization
 	idx = new InvertedIndex();
 	populateIndex(dir, stemmer, idx);
 	std::cout << "idx size = " << idx->getTermCount() << '\n';
 
 	
+	// Main loop
 	std::string input;
 	while (true) {
 		std::cout << "Enter a query:" << std::endl;
 		std::getline(std::cin, input);
-		if (input.compare(":q") == 0) {
+
+		if (input.compare(":q") == 0) 
 			break;
-		}
-		else if (input.substr(0, 6).compare(":stem ") == 0) {
+
+		else if (input.substr(0, 6).compare(":stem ") == 0) 
 			std::cout << stemmer.stem(input.substr(6, std::string::npos));
-		}
-		else if (input.compare(":vocab") == 0) {
-			idx->printIndex(); //Not quite right
-		}
+
+		else if (input.compare(":vocab") == 0) 
+			idx->vocab();
+
 		else if (input.substr(0, 7).compare(":index ") == 0) {
 			filepath = input.substr(7, std::string::npos);
 			boost::filesystem::path dir(filepath);
 			boost::filesystem::directory_iterator it(dir), eod;
 
-			//NEED TO EMPTY AND REST INDEX
-			//InvertedIndex idx;
-			//QEngine queryEngine(idx);
+			std::cout << "Enter directory of corpus" << std::endl;
+			std::getline(std::cin, filepath);
+			dir = boost::filesystem::path(filepath);
 
-			// 
-
-			BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
-			{
-				if (boost::filesystem::is_regular_file(p))
-				{
-					std::fstream file;
-					file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
-					std::string input;
-					int posIndex = 0;
-					while (std::getline(file, input)) {
-						Tokenizer tkzr(input);
-						std::string token;
-						while (tkzr.nextToken(token)) {// while not end of file.
-							idx->addTerm(stemmer.stem(token), p.string(), posIndex);
-							posIndex++;
-						}
-					}
-					file.close();
-				}
-			}
+			delete idx;
+			idx = new InvertedIndex();
+			populateIndex(dir, stemmer, idx);
+			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
+
 		else { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) {
@@ -135,13 +108,22 @@ int main() {
 		}
 	}
 
-	delete idx; // remove this later
-} // p.stem() <- this function for boost::filesystem::path may be useful for indexing
+	delete idx;
+}
 
-void readJsonFiles(const std::vector<std::string> &mPathList) {
-	boost::filesystem::path dir;
+/*
+ * Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that 
+ * is allocated on the heap. This method feeds the text file into a stringstream and passes the 
+ * stringstream into a boost, json property tree. The tokens are individually transformed to 
+ * lowercase and stemmed before being put into the inverted index. 
+ */
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *&idx) {
+	boost::filesystem::directory_iterator it(dir), eod;
+
+	std::vector<std::string> mPathList;
+	getPathNames(dir, mPathList);
 	for (auto p : mPathList) {
-		dir = boost::filesystem::path(p);
+		// reads json file into stringstream and populates a json tree
 		std::ifstream file(p);
 		std::stringstream ss;
 		ss << file.rdbuf();
@@ -151,41 +133,31 @@ void readJsonFiles(const std::vector<std::string> &mPathList) {
 		boost::property_tree::read_json(ss, pt);
 
 		// iterate through .json tree
-		std::cout << "Reading " << dir.filename() << ":\n";
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
-			std::cout << "{ " << pair.first <<" : ";
-			std::cout << pair.second.get_value<std::string>() << " }\n";
-		}
-		std::cout << "\n\n\n";
-	}
-}
-
-void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *&idx) {
-	boost::filesystem::directory_iterator it(dir), eod;
-	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
-	{
-		if (boost::filesystem::is_regular_file(p))
-		{
-			std::fstream file;
-			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
-			std::string input;
-			int posIndex = 0;
-			while (std::getline(file, input)) {
+			if (pair.first == "body" || pair.first == "title") { // if author... get json array and process the authors as well.
+				std::string input = pair.second.get_value<std::string>();
 				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+				
+				boost::filesystem::path dir(p);
 				Tokenizer tkzr(input);
-
 				std::string token;
+				int posIndex = 0;
+				
 				while (tkzr.nextToken(token)) {// while not end of file.
-					idx->addTerm(stemmer.stem(token), p.string(), posIndex);
+					idx->addTerm(stemmer.stem(token), dir.stem().string(), posIndex);
 					posIndex++;
 				}
 			}
-			file.close();
 		}
 	}
 }
 
-void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory) {
+/*
+ * This method goes to a path and walks through the directory searching for all files that end 
+ * with the .json extension. The method will put all full file paths into a vector that is passed 
+ * by reference.
+ */
+void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
 	boost::filesystem::directory_iterator end_itr;
 	std::unordered_set<std::string> fileSet;
 
