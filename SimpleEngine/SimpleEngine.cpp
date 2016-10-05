@@ -18,6 +18,18 @@
 
 #pragma warning(disable:4996)
 
+
+
+
+
+/*****************************************FUNCTION PROTOTYPE*****************************************/
+void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory);
+/****************************************************************************************************/
+
+
+
+
+
 /*
  * This method has a fully functional and tested inverted index. We only need to change the
  * tokenizer methods for suitable parsing (single terms, k-grams and splitting hyphenated
@@ -39,6 +51,16 @@ int main() {
 
 	boost::filesystem::path dir(filepath);
 	boost::filesystem::directory_iterator it(dir), eod;
+
+	//****************************************************************************************************
+	std::vector<std::string> mPathList;
+	getPathNames(mPathList, dir);
+	int i;
+	for (i = 0; i < mPathList.size(); ++i) 
+		std::cout << ".json i: " << i << " = " << mPathList[i] << '\n';
+	std::cout << "Number of .json files: " << mPathList.size() << '\n';
+	//****************************************************************************************************
+	system("pause");
 
 	InvertedIndex *idx = new InvertedIndex();
 	QEngine queryEngine;
@@ -90,6 +112,8 @@ int main() {
 			//InvertedIndex idx;
 			//QEngine queryEngine(idx);
 
+			// 
+
 			BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
 			{
 				if (boost::filesystem::is_regular_file(p))
@@ -124,3 +148,60 @@ int main() {
 
 	delete idx; // remove this later
 }
+
+void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory) {
+	boost::filesystem::directory_iterator end_itr;
+	std::unordered_set<std::string> fileSet;
+
+	for (boost::filesystem::directory_iterator itr(directory); itr != end_itr; ++itr) {
+		if (is_regular_file(itr->path())) {
+			std::string s = itr->path().string();
+			if (boost::algorithm::ends_with(s, ".json")) {
+				std::replace(s.begin(), s.end(), '\\', '/');
+				std::cout << s << '\n';
+				fileSet.insert(s);
+			}
+		}
+	}
+
+	mPathList.resize(fileSet.size());
+	int i = 0;
+	for (auto s : fileSet) 
+		mPathList[i++] = s;
+}
+
+
+/*
+void getFileNames(std::vector<std::string> &mPathList, std::vector<std::string> &mFileList) {
+	//boost::filesystem::path p("c:/dir/dir/file.ext");
+	//std::cout << "filename and extension : " << p.filename() << std::endl; // file.ext
+	//std::cout << "filename only          : " << p.stem() << std::endl;     // file
+	boost::filesystem::path p("C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/NaiveIndex/NaiveIndex");
+	boost::filesystem::directory_iterator end_itr;
+
+	std::unordered_set<std::string> fileSet;
+
+	for (boost::filesystem::directory_iterator itr(p); itr != end_itr; ++itr) {
+		if (is_regular_file(itr->path())) {
+			std::string s = itr->path().string();
+			if (boost::algorithm::ends_with(s, ".txt")) {
+				std::replace(s.begin(), s.end(), '\\', '/');
+				fileSet.insert(s);
+			}
+
+		}
+	}
+
+	mFileList.resize(fileSet.size());
+	mPathList.resize(fileSet.size());
+	int i = 0;
+	for (auto s : fileSet) {
+
+
+		boost::filesystem::path p(s);
+		mPathList[i] = s;
+		mFileList[i++] = p.filename().string();
+	}
+}
+
+*/
