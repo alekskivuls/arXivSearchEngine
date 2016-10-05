@@ -102,3 +102,7 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	REQUIRE(stemmer.stem(std::string("controll")).compare(std::string("control")) == 0);
 	REQUIRE(stemmer.stem(std::string("roll")).compare(std::string("roll")) == 0);
 }
+
+TEST_CASE("Positional Inverted Index", "[stemmer]") {
+
+}
