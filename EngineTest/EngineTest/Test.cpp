@@ -142,6 +142,7 @@ TEST_CASE("Positional Inverted Index", "[stemmer]") {
 			file.close();
 		}
 	}
+	idx.vocab();
 }
 
 TEST_CASE("Query Processing", "[qengine]") {

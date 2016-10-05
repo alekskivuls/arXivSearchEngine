@@ -62,6 +62,10 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 	}
 }
 
+void InvertedIndex::getVocabList() const {
+	
+}
+
 /*
  * This method prints all terms and DocInfos associated to each term to the console.
  */
