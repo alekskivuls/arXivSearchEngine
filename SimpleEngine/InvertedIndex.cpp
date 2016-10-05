@@ -16,10 +16,11 @@ bool InvertedIndex::hasPostings(const std::string &term) const {
  * Throws and out of range exception if the key (term) is not found in the index.
  */
 std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
-	if(hasPostings(term)) 
+	std::list<DocInfo> empty;
+	if (hasPostings(term))
 		return _mIndex.at(term);
-	else 
-		throw std::out_of_range("The following term does not exist: " + term);
+	else
+		return empty;
 }
 
 /* 

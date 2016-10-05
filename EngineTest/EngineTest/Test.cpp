@@ -145,5 +145,16 @@ TEST_CASE("Positional Inverted Index", "[stemmer]") {
 }
 
 TEST_CASE("Query Processing", "[qengine]") {
-
+	QEngine queryEngine;
+	InvertedIndex *idx;
+	idx = new InvertedIndex();
+	try {
+		std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
+		for (auto di : output)
+			std::cout << di.getDocName() << ' ';
+		std::cout << std::endl;
+	}
+	catch (std::out_of_range e) {
+		std::cout << e.what() << std::endl;
+	}
 }
