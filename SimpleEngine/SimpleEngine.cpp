@@ -9,6 +9,7 @@
 #include <boost\lambda\lambda.hpp>
 #include <boost\filesystem.hpp>
 #include <boost\foreach.hpp>
+#include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_map>
@@ -115,7 +116,9 @@ int main() {
  * lowercase and stemmed before being put into the inverted index. 
  */
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
-	clock_t start = clock();
+	boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
+	totalStart = boost::chrono::high_resolution_clock::now();
+	double elapsedTime = 0, stemTime = 0;
 
 	std::unordered_map<std::string, std::string> cache;
 	boost::filesystem::directory_iterator it(dir), eod;
@@ -145,8 +148,11 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				
 				while (tkzr.nextToken(token)) {// while not end of file.
 					// Get stem the token or retrieve the value from a cache
+					start = boost::chrono::high_resolution_clock::now();
 					std::string stemmedToken = (cache.find(token) != cache.end()) 
 						? cache[token] : stemmer.stem(token);
+					finish = boost::chrono::high_resolution_clock::now();
+					stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
 					idx->addTerm(stemmedToken, dir.stem().string(), posIndex);
 					posIndex++;
@@ -155,9 +161,10 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 		}
 	}
 
-	clock_t finish = clock();
-	double elapsedTime = ((finish - start) / 1000000.0);
-	std::cout << "Elapsed Time: " << elapsedTime << " ms." << std::endl;
+	totalFinish = boost::chrono::high_resolution_clock::now();
+	elapsedTime = (boost::chrono::duration_cast<boost::chrono::nanoseconds>(totalFinish - totalStart).count() / 1000000.0);
+	std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
+	std::cout << "Total elapsed time for Populate Index: " << elapsedTime << " ms." << std::endl;
 }
 
 /*

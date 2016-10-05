@@ -269,6 +269,9 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
  */
 std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
 	std::list<DocInfo> result;
+	if (right.size() == 0)
+		return left;
+
 	auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
 	while (iIter != left.end()) {
 		if ((*iIter).getDocName() > (*jIter).getDocName()) 
