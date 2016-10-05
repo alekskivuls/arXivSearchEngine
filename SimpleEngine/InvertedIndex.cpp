@@ -61,19 +61,10 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 /*
  * This method prints all terms and DocInfos associated to each term to the console.
  */
-void InvertedIndex::printIndex() {
-	for (auto pair : _mIndex) {
-		std::cout << "Term: " << pair.first << "\n\t";
-		for (auto inner : pair.second) { // list<DocInfo>
-			std::cout << inner.getDocName() << ":\n\t\t";
-			for (auto pos : inner.getPositions()) {
-				std::cout << pos << ' ';
-			}
-			std::cout << '\n';
-		}
-		std::cout << '\n';
-	}
-	std::cout << '\n';
+void InvertedIndex::vocab() const {
+	for (auto pair : _mIndex) 
+		std::cout << pair.first << '\n';
+	std::cout << getTermCount() << '\n';
 }
 
 /*
