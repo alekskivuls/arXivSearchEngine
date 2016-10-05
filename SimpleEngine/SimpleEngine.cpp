@@ -1,14 +1,16 @@
 #include <boost\algorithm\string\predicate.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <boost\lambda\lambda.hpp>
 #include <boost\filesystem.hpp>
 #include <boost\foreach.hpp>
+#include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
-#include "PorterStemmer.h"
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
@@ -23,6 +25,10 @@
 
 
 /*****************************************FUNCTION PROTOTYPE*****************************************/
+void readJsonFiles(const std::vector<std::string> &mPathList);
+
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx);
+
 void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory);
 /****************************************************************************************************/
 
@@ -50,7 +56,7 @@ int main() {
 	std::getline(std::cin, filepath);
 
 	boost::filesystem::path dir(filepath);
-	boost::filesystem::directory_iterator it(dir), eod;
+	
 
 	//****************************************************************************************************
 	std::vector<std::string> mPathList;
@@ -58,39 +64,23 @@ int main() {
 	int i;
 	for (i = 0; i < mPathList.size(); ++i) 
 		std::cout << ".json i: " << i << " = " << mPathList[i] << '\n';
-	std::cout << "Number of .json files: " << mPathList.size() << '\n';
+	std::cout << "Number of .json files: " << mPathList.size() << '\n\n\n';
+
+	readJsonFiles(mPathList);
 	//****************************************************************************************************
 	system("pause");
 
-	InvertedIndex *idx = new InvertedIndex();
-	QEngine queryEngine;
+	InvertedIndex *idx;
 	PorterStemmer stemmer;
+	QEngine queryEngine;
 
-	std::string input;
-	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
-	{
-		if (boost::filesystem::is_regular_file(p))
-		{
-			std::fstream file;
-			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
-			std::string input;
-			int posIndex = 0;
-			while (std::getline(file, input)) {
-				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-				Tokenizer tkzr(input);
-				
-				std::string token;
-				while (tkzr.nextToken(token)) {// while not end of file.
-					idx->addTerm(stemmer.stem(token), p.string(), posIndex);
-					posIndex++;
-				}
-			}
-			file.close();
-		}
-	}
-
+	// calls new... make sure you properly deallocate memory space from the heap
+	idx = new InvertedIndex();
+	populateIndex(dir, stemmer, idx);
 	std::cout << "idx size = " << idx->getTermCount() << '\n';
 
+	
+	std::string input;
 	while (true) {
 		std::cout << "Enter a query:" << std::endl;
 		std::getline(std::cin, input);
@@ -138,15 +128,61 @@ int main() {
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) {
 				std::cout << di.getDocName() << ":\n";
-				for (auto i : di.getPositions()) {
+				for (auto i : di.getPositions()) 
 					std::cout << i << " ";
-				}
 				std::cout << std::endl;
 			}
 		}
 	}
 
 	delete idx; // remove this later
+} // p.stem() <- this function for boost::filesystem::path may be useful for indexing
+
+void readJsonFiles(const std::vector<std::string> &mPathList) {
+	boost::filesystem::path dir;
+	for (auto p : mPathList) {
+		dir = boost::filesystem::path(p);
+		std::ifstream file(p);
+		std::stringstream ss;
+		ss << file.rdbuf();
+		file.close();
+
+		boost::property_tree::ptree pt;
+		boost::property_tree::read_json(ss, pt);
+
+		// iterate through .json tree
+		std::cout << "Reading " << dir.filename() << ":\n";
+		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
+			std::cout << "{ " << pair.first <<" : ";
+			std::cout << pair.second.get_value<std::string>() << " }\n";
+		}
+		std::cout << "\n\n\n";
+	}
+}
+
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *&idx) {
+	boost::filesystem::directory_iterator it(dir), eod;
+	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
+	{
+		if (boost::filesystem::is_regular_file(p))
+		{
+			std::fstream file;
+			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
+			std::string input;
+			int posIndex = 0;
+			while (std::getline(file, input)) {
+				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+				Tokenizer tkzr(input);
+
+				std::string token;
+				while (tkzr.nextToken(token)) {// while not end of file.
+					idx->addTerm(stemmer.stem(token), p.string(), posIndex);
+					posIndex++;
+				}
+			}
+			file.close();
+		}
+	}
 }
 
 void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::path &directory) {
@@ -169,39 +205,3 @@ void getPathNames(std::vector<std::string> &mPathList, const boost::filesystem::
 	for (auto s : fileSet) 
 		mPathList[i++] = s;
 }
-
-
-/*
-void getFileNames(std::vector<std::string> &mPathList, std::vector<std::string> &mFileList) {
-	//boost::filesystem::path p("c:/dir/dir/file.ext");
-	//std::cout << "filename and extension : " << p.filename() << std::endl; // file.ext
-	//std::cout << "filename only          : " << p.stem() << std::endl;     // file
-	boost::filesystem::path p("C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/NaiveIndex/NaiveIndex");
-	boost::filesystem::directory_iterator end_itr;
-
-	std::unordered_set<std::string> fileSet;
-
-	for (boost::filesystem::directory_iterator itr(p); itr != end_itr; ++itr) {
-		if (is_regular_file(itr->path())) {
-			std::string s = itr->path().string();
-			if (boost::algorithm::ends_with(s, ".txt")) {
-				std::replace(s.begin(), s.end(), '\\', '/');
-				fileSet.insert(s);
-			}
-
-		}
-	}
-
-	mFileList.resize(fileSet.size());
-	mPathList.resize(fileSet.size());
-	int i = 0;
-	for (auto s : fileSet) {
-
-
-		boost::filesystem::path p(s);
-		mPathList[i] = s;
-		mFileList[i++] = p.filename().string();
-	}
-}
-
-*/
