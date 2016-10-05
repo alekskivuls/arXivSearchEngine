@@ -5,8 +5,8 @@
 #include <vector>
 #include <boost/algorithm/string.hpp>
 
-// future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main
-QEngine::QEngine() { } // future implementation will pass index into constructor: const InvertedIndex &idx
+// future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
+QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 QEngine::~QEngine() { }
 
 /*
@@ -75,9 +75,19 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 	// to: 
 	// [stem1, stem2, *, stem3, +] 
 
+	for (auto i = rpnQuery.begin(); i != rpnQuery.end(); ++i) {
+		if (i !=rpnQuery.begin()) 
+			std::cout << ", ";
+		std::cout << *i;
+	}
+	std::cout << std::endl;
+
 	return rpnQuery;
 }
 
+/*
+ * Splits a std::string (query) into a vector of std::strings (tokens) based on all white space
+ */
 std::vector<std::string> QEngine::split(std::string const &input) {
 	std::istringstream buffer(input);
 	std::vector<std::string> ret((std::istream_iterator<std::string>(buffer)),

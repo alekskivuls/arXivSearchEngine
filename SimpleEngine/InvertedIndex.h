@@ -21,7 +21,7 @@ class InvertedIndex {
 	
 	// This method is used to check if a term exists. Instead of catching an out of 
 	// bounds error everytime, we can check to avoid the expensive try/ catch overhead.
-	bool hasPostings(const std::string &term);
+	bool hasPostings(const std::string &term) const;
 	
 	// Returns the postings list for the requested term.
 	std::list<DocInfo> getPostings(const std::string &term) const;

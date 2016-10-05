@@ -98,12 +98,14 @@ int main() {
 		}
 
 		else { //Query
-			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
-			for (auto di : output) {
-				std::cout << di.getDocName() << ":\n";
-				for (auto i : di.getPositions()) 
-					std::cout << i << " ";
+			try {
+				std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
+				for (auto di : output)
+					std::cout << di.getDocName() << ' ';
 				std::cout << std::endl;
+			} 
+			catch (std::out_of_range e) {
+				std::cout << e.what() << std::endl;
 			}
 		}
 	}
@@ -117,11 +119,12 @@ int main() {
  * stringstream into a boost, json property tree. The tokens are individually transformed to 
  * lowercase and stemmed before being put into the inverted index. 
  */
-void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *&idx) {
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
+	std::unordered_map<std::string, std::string> cache;
 	boost::filesystem::directory_iterator it(dir), eod;
-
 	std::vector<std::string> mPathList;
 	getPathNames(dir, mPathList);
+	
 	for (auto p : mPathList) {
 		// reads json file into stringstream and populates a json tree
 		std::ifstream file(p);
@@ -144,7 +147,11 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				int posIndex = 0;
 				
 				while (tkzr.nextToken(token)) {// while not end of file.
-					idx->addTerm(stemmer.stem(token), dir.stem().string(), posIndex);
+					// Get stem the token or retrieve the value from a cache
+					std::string stemmedToken = (cache.find(token) != cache.end()) 
+						? cache[token] : stemmer.stem(token);
+
+					idx->addTerm(stemmedToken, dir.stem().string(), posIndex);
 					posIndex++;
 				}
 			}
