@@ -112,8 +112,8 @@ bool PorterStemmer::trim(std::string &token, std::string &suffix, std::string &r
 	if (boost::algorithm::ends_with(token, suffix)) {
 		if (boost::regex_search(token.substr(0, (token.length() - suffix.length())), reg)) {
 			token = token.substr(0, token.length() - suffix.length()) + replacement;
-			return true;
+			//return true;
 		}
 	}
-	return false;
+	return true;
 }

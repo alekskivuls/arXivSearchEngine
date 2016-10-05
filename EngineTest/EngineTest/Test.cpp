@@ -1,6 +1,8 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
 #include <string>
+#include <boost\foreach.hpp>
+#include <boost\filesystem.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include "Tokenizer.h"
@@ -19,6 +21,7 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	//1b
 	REQUIRE(stemmer.stem(std::string("feed")).compare(std::string("feed")) == 0);
 	REQUIRE(stemmer.stem(std::string("agreed")).compare(std::string("agree")) == 0);
+	std::cout << stemmer.stem(std::string("plastered")) << std::endl;
 	REQUIRE(stemmer.stem(std::string("plastered")).compare(std::string("plaster")) == 0);
 	REQUIRE(stemmer.stem(std::string("bled")).compare(std::string("bled")) == 0);
 	REQUIRE(stemmer.stem(std::string("motoring")).compare(std::string("motor")) == 0);
@@ -104,5 +107,33 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 }
 
 TEST_CASE("Positional Inverted Index", "[stemmer]") {
+	std::string filepath = "testFiles";
+	boost::filesystem::path dir(filepath);
+	boost::filesystem::directory_iterator it(dir), eod;
+	InvertedIndex idx;
+	PorterStemmer stemmer;
+	std::string input;
+	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
+	{
+		if (boost::filesystem::is_regular_file(p))
+		{
+			std::fstream file;
+			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
+			std::string input;
+			int posIndex = 0;
+			while (std::getline(file, input)) {
+				Tokenizer tkzr(input);
+				std::string token;
+				while (tkzr.nextToken(token)) {
+					idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+					posIndex++;
+				}
+			}
+			file.close();
+		}
+	}
+}
+
+TEST_CASE("Query Processing", "[qengine]") {
 
 }
