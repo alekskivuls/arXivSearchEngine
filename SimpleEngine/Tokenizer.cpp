@@ -4,7 +4,6 @@ Tokenizer::Tokenizer(const boost::filesystem::path &p) : isFileTokenizer(true) {
 	_file.open(p.c_str(), std::fstream::in | std::fstream::out | std::fstream::app);
 }
 
-// entire pair.second value
 Tokenizer::Tokenizer(const std::string &s) 
 	: isFileTokenizer(false), _buffer(s), pos(0) { }
 
@@ -67,7 +66,7 @@ else {
 }
 */
 
-// Cannot complete this method until compression is complete.
+// FUTURE IMPLEMENTATION: Cannot complete this method until compression is complete.
 std::string Tokenizer::nextToken(std::string token, const int &gram) {
 	return "";
 }

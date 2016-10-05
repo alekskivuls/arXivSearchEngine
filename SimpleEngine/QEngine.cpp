@@ -4,7 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <boost/algorithm/string.hpp>
-QEngine::QEngine(const InvertedIndex &idx) : _invIndex(idx) { } //
+
+// future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main
+QEngine::QEngine() { } // future implementation will pass index into constructor: const InvertedIndex &idx
 QEngine::~QEngine() { }
 
 /*
@@ -76,58 +78,6 @@ std::list<std::string> QEngine::infixToRPN(std::list<std::string> &invQuery) {
 	return rpnQuery;
 }
 
-void QEngine::printInfixRpn() {
-	std::list<std::string> infix, rpn;
-	infix.push_back("Hello");
-	infix.push_back("+");
-	infix.push_back("World");
-	infix.push_back("+");
-	infix.push_back("Hello");
-	infix.push_back("*");
-	infix.push_back("World");
-	infix.push_back("+");
-	infix.push_back("Query");
-	infix.push_back("*");
-	infix.push_back("This");
-	infix.push_back("*");
-	infix.push_back("String");
-
-	rpn = infixToRPN(infix);
-
-	std::cout << "Size of infix = " << infix.size() << "\n";
-	for (auto s : infix)
-		std::cout << s << " ";
-	std::cout << "\n";
-
-	std::cout << "Size of rpn = " << rpn.size() << "\n";
-	for (auto s : rpn)
-		std::cout << s << " ";
-	std::cout << "\n";
-}
-
-void QEngine::printInfixRpn2() {
-	std::list<std::string> infix, rpn;
-	infix.push_back("A");
-	infix.push_back("+");
-	infix.push_back("B");
-	infix.push_back("*");
-	infix.push_back("C");
-	infix.push_back("+");
-	infix.push_back("D");
-
-	rpn = infixToRPN(infix);
-
-	std::cout << "Size of infix = " << infix.size() << "\n";
-	for (auto s : infix)
-		std::cout << s << " ";
-	std::cout << "\n";
-
-	std::cout << "Size of rpn = " << rpn.size() << "\n";
-	for (auto s : rpn)
-		std::cout << s << " ";
-	std::cout << "\n";
-}
-
 std::vector<std::string> QEngine::split(std::string const &input) {
 	std::istringstream buffer(input);
 	std::vector<std::string> ret((std::istream_iterator<std::string>(buffer)),
@@ -138,24 +88,17 @@ std::vector<std::string> QEngine::split(std::string const &input) {
 /*
  * This method takes a string query and returns a list of the stemmed tokens, including operators. 
  */
-std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
-	using boost::is_any_of;
+std::list<std::string> QEngine::stemmify(std::string &userQuery) {
+	std::transform(userQuery.begin(), userQuery.end(), userQuery.begin(), ::tolower);
+	std::vector<std::string> strs = split(userQuery);
 	std::list<std::string> infix;
-	std::vector<std::string> strs;
-	std::cout << "SIZE OF STRS BEFORE = " << strs.size() << '\n';
-	std::cout << userQuery << '\n';
-	strs = split(userQuery);
-	std::cout << "SIZE OF STRS AFTER = " << strs.size() << '\n';
-	system("pause");
-
 	
 	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false;
 	for (auto str : strs) {
 		if (onLiteral) {
-			if (str.at(str.length()-1) == '"') {
+			if (str.at(str.length()-1) == '"') 
 				onLiteral = false;
-			}
 			infix.push_back("`");
 			infix.push_back(stemmer.stem(str.substr(0,str.length()-1)));
 			
@@ -172,9 +115,8 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 			infix.push_back(stemmer.stem(str.substr(1, std::string::npos)));
 		}
 		else if (str.at(0) == '-') {
-			if (str.at(1) == '"') {
+			if (str.at(1) == '"') 
 				onLiteral = true;
-			}
 			infix.push_back("~");
 			infix.push_back(stemmer.stem(str.substr(1,std::string::npos)));
 		}
@@ -182,9 +124,8 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 			onPlus = true;
 		}
 		else {
-			if (!onPlus) {
+			if (!onPlus) 
 				infix.push_back("*");
-			}
 			else {
 				infix.push_back("+");
 				onPlus = false;
@@ -197,32 +138,17 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 
 /*
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
- * This method will be responsible for invoking getPostings, union and intersect. 
+ * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedIndex &idx) {
-	system("pause");
-	std::cout << "BEFORE STEMMIFY\n";
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *& const idx) {
 	std::list<std::string> infix = stemmify(userQuery);
-	std::cout << "SIZE OF INFIX = " << infix.size() << '\n';
-	std::cout << "AFTER STEMMIFY\n";
 
-	for (auto s : infix) 
-		std::cout << s << '\n';
+	if (infix.size() == 1) 
+		return idx->getPostings(infix.front());
 
-	/*infix.push_back("Hello");
-	infix.push_back("`");
-	infix.push_back("World");
-	infix.push_back("`");
-	infix.push_back("Aleks");*/
-
-
-	system("pause");
-
-	std::list<std::string> rpnQuery = infixToRPN(infix); // infix
-
+	std::list<std::string> rpnQuery = infixToRPN(infix);
 	int dist;
 	bool prevIsPhrase = false;
-	// insert getPostings, union and intersect as many times until all postings are merged into one. 
 	std::stack<std::list<DocInfo>> result;
 	std::list<DocInfo> left, right;
 	for (auto token : rpnQuery) {
@@ -251,17 +177,17 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedI
 				//result.push(XOR(left, right));
 		}
 		else 
-			result.push(idx.getPostings(token));
+			result.push(idx->getPostings(token));
 	}
-
-	// while rpnStack is not empty, pop 2 operands and 1 operator, perform merge,
 	return result.top();
 }
 
+/*
+ * Merges 2 postings list and returns the resulting postings list. The postingslist do not need to
+ * know the positions; therefore, a simple AND merge will only copy the document name/ id.
+ */
 std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
-	std::list<DocInfo> result;
-	
-	std::list<DocInfo> min, max;
+	std::list<DocInfo> result, min, max;
 	if (left.size() < right.size()) {
 		min = left;
 		max = right;
@@ -288,13 +214,11 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 }
 
 /*
- * Merges 2 postings list. The postingslist do not need to know the positions; therefore, a simple 
- * OR merge will only copy the document name/ id.
+ * Merges 2 postings list and returns the resulting postings list. The postingslist do not need to 
+ * know the positions; therefore, a simple OR merge will only copy the document name/ id.
  */
 std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
-	std::list<DocInfo> result;
-
-	std::list<DocInfo> min, max;
+	std::list<DocInfo> result, min, max;
 	if (left.size() < right.size()) {
 		min = left;
 		max = right;
@@ -325,12 +249,15 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
 	return result;
 }
 
+/*
+ * Merges 2 postings list and returns the resulting postings list. The postingslist do not need to
+ * know the positions; therefore, a simple ANDNOT merge will only copy the document name/ id.
+ */
 std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
 	std::list<DocInfo> result;
-
 	auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
 	while (iIter != left.end()) {
-		if ((*iIter).getDocName() > (*jIter).getDocName())
+		if ((*iIter).getDocName() > (*jIter).getDocName()) 
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName()) {
 			result.push_back(DocInfo((*iIter).getDocName()));
@@ -345,23 +272,26 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
 	return result;
 }
 
+/*
+ * Merges 2 postings list and returns the resulting postings list. The postingslist DO need to
+ * know the positions; therefore, this algorithm performs 2 walks: 
+ *		1)	one walk along term names like the AND query.
+ *		2)	one walk along the positions for each matching docId
+ */
 std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist) {
 	std::list<DocInfo> result;
-	std::list<DocInfo> min = left, max = right;
-
-	auto iIter = min.begin(), jIter = max.begin();
-	while (iIter != min.end() && jIter != max.end()) {
+	auto iIter = left.begin(), jIter = right.begin();
+	while (iIter != left.end() && jIter != right.end()) {
 		if ((*iIter).getDocName() > (*jIter).getDocName())
 			++jIter;
 		else if ((*jIter).getDocName() > (*iIter).getDocName())
 			++iIter;
-		else { // same file/ doc name
+		else {
 			DocInfo merge((*iIter).getDocName());
 			auto leftPos = (*iIter).getPositions(), rightPos = (*jIter).getPositions();
 
 			auto i = leftPos.begin(), j = rightPos.begin();
 			while (i != leftPos.end() && j != rightPos.end()) {
-
 				if ((*i + dist) == *j) {
 					merge.addPosition(*(i++));
 					++j;
@@ -371,7 +301,6 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 				else
 					++i;
 			}
-
 			result.push_back(merge);
 			++iIter;
 			++jIter;
@@ -381,40 +310,37 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 	return result;
 }
 
-// we can refactor this later. I still want to keep the index hidden.
-InvertedIndex QEngine::getIndex() {
-	return _invIndex;
-}
+// Query Test 2
+void QEngine::printQueryTest2(InvertedIndex *& const idx) {
+	idx->addTerm("Hello", "Article1.json", 1);
+	idx->addTerm("Hello", "Article1.json", 2);
 
-void QEngine::printQueryTest2(InvertedIndex &idx) {
-	idx.addTerm("Hello", "Article1.json", 1);
-	idx.addTerm("Hello", "Article1.json", 2);
+	idx->addTerm("Hello", "Article2.json", 1);
+	idx->addTerm("Hello", "Article2.json", 3);
+	idx->addTerm("Hello", "Article2.json", 5);
 
-	idx.addTerm("Hello", "Article2.json", 1);
-	idx.addTerm("Hello", "Article2.json", 3);
-	idx.addTerm("Hello", "Article2.json", 5);
+	idx->addTerm("World", "Article2.json", 2);
+	idx->addTerm("World", "Article2.json", 6);
 
-	idx.addTerm("World", "Article2.json", 2);
-	idx.addTerm("World", "Article2.json", 6);
+	idx->addTerm("World", "Article3.json", 1);
+	idx->addTerm("World", "Article3.json", 1);
 
-	idx.addTerm("World", "Article3.json", 1);
-	idx.addTerm("World", "Article3.json", 1);
+	idx->addTerm("Aleks", "Article2.json", 3);
+	idx->addTerm("Aleks", "Article2.json", 7);
 
-	idx.addTerm("Aleks", "Article2.json", 3);
-	idx.addTerm("Aleks", "Article2.json", 7);
-
-	auto docList = processQuery(std::string("Hello ` World"), idx);
-	for (auto di : docList) {
+	//auto docList = processQuery(std::string("Hello ` World"), idx); // deprecated use of processQuery
+	/*for (auto di : docList) {
 		std::cout << di.getDocName() << ":\n";
 		for (auto i : di.getPositions()) 
 			std::cout << i << " ";
 		std::cout << '\n';
-	}
+	}*/
 }
 
-void QEngine::printQueryTest(InvertedIndex &idx) {
-	std::list<DocInfo> left = idx.getPostings("Hello");
-	std::list<DocInfo> right = idx.getPostings("World");
+// Query Test 1
+void QEngine::printQueryTest(InvertedIndex *& const idx) {
+	std::list<DocInfo> left = idx->getPostings("Hello");
+	std::list<DocInfo> right = idx->getPostings("World");
 
 	std::cout << "Left = " << left.size() << '\n';
 	std::cout << "Right = " << right.size() << '\n';
@@ -450,4 +376,58 @@ void QEngine::printQueryTest(InvertedIndex &idx) {
 	std::cout << '\n';
 
 	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
+}
+
+// Infix, rpn test 1
+void QEngine::printInfixRpn() {
+	std::list<std::string> infix, rpn;
+	infix.push_back("Hello");
+	infix.push_back("+");
+	infix.push_back("World");
+	infix.push_back("+");
+	infix.push_back("Hello");
+	infix.push_back("*");
+	infix.push_back("World");
+	infix.push_back("+");
+	infix.push_back("Query");
+	infix.push_back("*");
+	infix.push_back("This");
+	infix.push_back("*");
+	infix.push_back("String");
+
+	rpn = infixToRPN(infix);
+
+	std::cout << "Size of infix = " << infix.size() << "\n";
+	for (auto s : infix)
+		std::cout << s << " ";
+	std::cout << "\n";
+
+	std::cout << "Size of rpn = " << rpn.size() << "\n";
+	for (auto s : rpn)
+		std::cout << s << " ";
+	std::cout << "\n";
+}
+
+// Infix, rpn test 2
+void QEngine::printInfixRpn2() {
+	std::list<std::string> infix, rpn;
+	infix.push_back("A");
+	infix.push_back("+");
+	infix.push_back("B");
+	infix.push_back("*");
+	infix.push_back("C");
+	infix.push_back("+");
+	infix.push_back("D");
+
+	rpn = infixToRPN(infix);
+
+	std::cout << "Size of infix = " << infix.size() << "\n";
+	for (auto s : infix)
+		std::cout << s << " ";
+	std::cout << "\n";
+
+	std::cout << "Size of rpn = " << rpn.size() << "\n";
+	for (auto s : rpn)
+		std::cout << s << " ";
+	std::cout << "\n";
 }

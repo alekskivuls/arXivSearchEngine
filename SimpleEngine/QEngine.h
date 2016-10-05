@@ -5,7 +5,10 @@
 #include <stack>
 
 class QEngine {
-	InvertedIndex _invIndex;
+	//InvertedIndex _invIndex; // future implementation for singleton design
+
+	// private method used to split queries into tokens for processing
+	std::vector<std::string> split(std::string const &input);
 
 	// A member function tha takes an existing, stemmed inverse notation query of 
 	// types std::list<std::string> and returns the reverse polish notation query 
@@ -13,7 +16,7 @@ class QEngine {
 
 	// Takes a std::string query, stems each token in the query, and returns a list 
 	// of stemmed tokens and operators in inverse notation. 
-	std::list<std::string> stemmify(const std::string &userQuery);
+	std::list<std::string> stemmify(std::string &userQuery);
 
 	std::list<DocInfo> AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
 
@@ -24,18 +27,17 @@ class QEngine {
 	std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist);
 
 public:
-	QEngine(const InvertedIndex &idx);
+	QEngine();
 	~QEngine();
 
-	std::list<DocInfo> processQuery(std::string &userQuery, const InvertedIndex &idx);
+	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex *& const idx);
 
-	InvertedIndex getIndex();
-
+	// The methods below are used for TestDrivenDevelopment debugging.
 	void printInfixRpn();
 	void printInfixRpn2();
-	std::vector<std::string> split(std::string const &input);
-	void printQueryTest(InvertedIndex &idx);
-	void printQueryTest2(InvertedIndex &idx);
+	
+	void printQueryTest(InvertedIndex *& const idx);
+	void printQueryTest2(InvertedIndex *& const idx);
 };
 
 #endif

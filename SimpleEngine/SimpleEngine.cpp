@@ -32,21 +32,16 @@
  * calls that call getPostings.
  */
 int main() {
-	/*InvertedIndex idx;
-	QEngine QE(idx);
-	QE.printQueryTest2(idx);
-	system("pause");*/
 	//Get folder to parse documents of
 	std::string filepath;
 	std::cout << "Enter directory of corpus" << std::endl;
-	//std::cin >> filepath;
-	filepath = "C:/testFiles";
+	std::getline(std::cin, filepath);
 
 	boost::filesystem::path dir(filepath);
 	boost::filesystem::directory_iterator it(dir), eod;
 
-	InvertedIndex idx;
-	QEngine queryEngine(idx);
+	InvertedIndex *idx = new InvertedIndex();
+	QEngine queryEngine;
 	PorterStemmer stemmer;
 
 	std::string input;
@@ -59,10 +54,12 @@ int main() {
 			std::string input;
 			int posIndex = 0;
 			while (std::getline(file, input)) {
+				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 				Tokenizer tkzr(input);
+				
 				std::string token;
 				while (tkzr.nextToken(token)) {// while not end of file.
-					idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+					idx->addTerm(stemmer.stem(token), p.string(), posIndex);
 					posIndex++;
 				}
 			}
@@ -70,13 +67,7 @@ int main() {
 		}
 	}
 
-	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	//system("pause");
-	//idx.printIndex();
-	//system("pause");
-	//std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
-	//queryEngine.printQueryTest(idx); //BROKEN?
-	//system("pause");
+	std::cout << "idx size = " << idx->getTermCount() << '\n';
 
 	while (true) {
 		std::cout << "Enter a query:" << std::endl;
@@ -88,7 +79,7 @@ int main() {
 			std::cout << stemmer.stem(input.substr(6, std::string::npos));
 		}
 		else if (input.compare(":vocab") == 0) {
-			idx.printIndex(); //Not quite right
+			idx->printIndex(); //Not quite right
 		}
 		else if (input.substr(0, 7).compare(":index ") == 0) {
 			filepath = input.substr(7, std::string::npos);
@@ -111,7 +102,7 @@ int main() {
 						Tokenizer tkzr(input);
 						std::string token;
 						while (tkzr.nextToken(token)) {// while not end of file.
-							idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+							idx->addTerm(stemmer.stem(token), p.string(), posIndex);
 							posIndex++;
 						}
 					}
@@ -120,7 +111,7 @@ int main() {
 			}
 		}
 		else { //Query
-			std::list<DocInfo> output = queryEngine.processQuery(input, idx);
+			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) {
 				std::cout << di.getDocName() << ":\n";
 				for (auto i : di.getPositions()) {
@@ -130,4 +121,6 @@ int main() {
 			}
 		}
 	}
+
+	delete idx; // remove this later
 }
