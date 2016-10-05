@@ -69,7 +69,7 @@ int main() {
 	system("pause");
 	idx.printIndex();
 	system("pause");
-	std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
+	//std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
 	queryEngine.printQueryTest(idx); //BROKEN?
 	system("pause");
 

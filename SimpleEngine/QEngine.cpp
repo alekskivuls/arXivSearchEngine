@@ -142,7 +142,6 @@ void QEngine::split(const std::string& s, char c, std::vector<std::string>& v) {
 std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 	std::list<std::string> infix;
 	std::vector<std::string> strs;
-	//boost::algorithm::split(strs, userQuery, std::string(" "));
 	split(userQuery, ' ', strs);
 	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false;

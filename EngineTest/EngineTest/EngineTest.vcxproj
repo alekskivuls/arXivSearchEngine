@@ -149,9 +149,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\SimpleEngine\DocInfo.cpp" />
+    <ClCompile Include="..\..\SimpleEngine\InvertedIndex.cpp" />
+    <ClCompile Include="..\..\SimpleEngine\PorterStemmer.cpp" />
+    <ClCompile Include="..\..\SimpleEngine\QEngine.cpp" />
+    <ClCompile Include="..\..\SimpleEngine\Tokenizer.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\SimpleEngine\catch.hpp" />
+    <ClInclude Include="..\..\SimpleEngine\DocInfo.h" />
+    <ClInclude Include="..\..\SimpleEngine\InvertedIndex.h" />
+    <ClInclude Include="..\..\SimpleEngine\PorterStemmer.h" />
+    <ClInclude Include="..\..\SimpleEngine\QEngine.h" />
+    <ClInclude Include="..\..\SimpleEngine\Tokenizer.h" />
+    <ClInclude Include="..\..\SimpleEngine\TokenStream.h" />
     <ClInclude Include="..\catch.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
