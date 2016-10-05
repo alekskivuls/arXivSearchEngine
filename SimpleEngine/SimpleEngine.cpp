@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
+#include "Time.h"
 #include <list>
 
 #pragma warning(disable:4996)
@@ -73,13 +74,13 @@ int main() {
 		std::cout << "Enter a query:" << std::endl;
 		std::getline(std::cin, input);
 
-		if (input.compare(":q") == 0) 
+		if (input.compare(":q") == 0)
 			break;
 
-		else if (input.substr(0, 6).compare(":stem ") == 0) 
+		else if (input.substr(0, 6).compare(":stem ") == 0)
 			std::cout << stemmer.stem(input.substr(6, std::string::npos)) << std::endl;
 
-		else if (input.compare(":vocab") == 0) 
+		else if (input.compare(":vocab") == 0)
 			idx->vocab();
 
 		else if (input.substr(0, 7).compare(":index ") == 0) {
@@ -98,12 +99,12 @@ int main() {
 		}
 
 		else { //Query
-				std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
-				for (auto di : output)
-					std::cout << di.getDocName() << ' ';
-				std::cout << std::endl;
+			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
+			for (auto di : output)
+				std::cout << di.getDocName() << ' ';
+			std::cout << std::endl;
 		}
-
+	}
 	delete idx;
 }
 
