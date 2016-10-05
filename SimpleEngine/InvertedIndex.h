@@ -14,6 +14,7 @@
  */
 class InvertedIndex {
 	// FUTURE implementations of the QEngine will include hiding the InvertedIndex from the scope of main.
+	// To understand the purpose of listing QEngine as a friend, please refer to the constructor in QEngine.cpp
 	friend class QEngine;
 	// The hashmap that represents the entire inverted index.
 	std::unordered_map<std::string, std::list<DocInfo>> _mIndex;

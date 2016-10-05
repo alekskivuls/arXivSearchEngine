@@ -19,26 +19,11 @@ public:
 	Tokenizer(const std::string &s);
 	~Tokenizer();
 
+	// Retrieves the next token in the string or file depending on which 
+	// constructor was used. This method should be used like scanf. 
 	bool nextToken(std::string &token);
 
 	std::string nextToken(std::string token, const int &gram);
 };
-
-// ignore all of this... these are side comments for future methods that may be used for 
-// implementation of k gram tokenizer
-
-
-
-//file.clear();
-//file.seekg(0, std::ios::end);
-//long size = file.tellg();
-
-//moves "get" pointer of file reader to beginning of next graycode
-//file.seekg(j);
-//prints to the end of the file
-//std::getline(file, line);
-//moves "put" pointer of file reader to the end of the file
-//file.seekp(0, std::ios::end);
-
 
 #endif

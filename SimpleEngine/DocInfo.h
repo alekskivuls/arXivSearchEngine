@@ -27,7 +27,7 @@ public:
 	std::string getDocName() const;
 
 	// Returns the list of the term's occurence.
-	std::list<int> DocInfo::getPositions();
+	std::list<int> DocInfo::getPositions() const;
 };
 
 #endif
