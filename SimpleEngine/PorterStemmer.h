@@ -17,7 +17,7 @@ private:
 	boost::regex mGr0{"^(" + C + ")?" + V + C };
 	boost::regex mEq1{"^(" + C + ")?(" + V + C + "){1}(" + V + ")?$" };
 	boost::regex mGr1{"^(" + C + ")?(" + V + C + "){2,}(" + V + ")?$" };
-	boost::regex vowel{ "^(" + C + ")?" + V };
+	boost::regex vowel{".*" + V + ".*"};
 	boost::regex mEq1cvc{ "^(" + C + V + ")(?=[^wxy])(" + C + "){1}$" };
 	boost::regex mEq1Ncvc{ "^(" + C + V + ")(?=[wxy])(" + C + "){1}$|" };
 

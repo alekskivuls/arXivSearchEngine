@@ -23,18 +23,22 @@ std::string PorterStemmer::stem(std::string &token)
 	bool extra1b = false;
 	if (trim(token, std::string("eed"), std::string("ee"), mGr0)) {}
 	else if (trim(token, std::string("ed"), std::string(""), vowel)) {
-		extra1b = true;
+		if(!boost::algorithm::ends_with(token, std::string("ed")))
+			extra1b = true;
 	}
 	else if (trim(token, std::string("ing"), std::string(""), vowel)) {
-		extra1b = true;
+		if (!boost::algorithm::ends_with(token, std::string("ing")))
+			extra1b = true;
 	}
 
 	if (extra1b) {
 		if (boost::algorithm::ends_with(token, "at") || boost::algorithm::ends_with(token, "bl") || boost::algorithm::ends_with(token, "iz")) {
 			token = token + "e";
 		}
-		else if ((token.at(token.length() - 2)) == (token.at(token.length() - 1)) && (token.at(token.length() - 1) != 'l' && (token.at(token.length() - 1) != 's') && (token.at(token.length() - 1) != 'z'))) {
-			token = token.substr(0, token.length() - 1);
+		else if ((token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
+			if ((token.at(token.length() - 1) != 'l' && (token.at(token.length() - 1) != 's') && (token.at(token.length() - 1) != 'z'))) {
+				token = token.substr(0, token.length() - 1);
+			}
 		}
 		else if (boost::regex_search(token, list, mEq1cvc)) {
 			token = token + "e";
@@ -95,11 +99,11 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, std::string("iti"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ous"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ive"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("ize"), std::string(""), mEq1Ncvc)) {}
+	else if (trim(token, std::string("ize"), std::string(""), mGr1)) {}
 	
 	//Step 5a
 	if (trim(token, std::string("e"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("ent"), std::string(""), mEq1)) {}
+	else if (trim(token, std::string("ent"), std::string(""), mEq1Ncvc)) {}
 	
 	//Step 5b
 	if (trim(token, std::string("ll"), std::string(""), mGr1)) {} 
@@ -112,8 +116,8 @@ bool PorterStemmer::trim(std::string &token, std::string &suffix, std::string &r
 	if (boost::algorithm::ends_with(token, suffix)) {
 		if (boost::regex_search(token.substr(0, (token.length() - suffix.length())), reg)) {
 			token = token.substr(0, token.length() - suffix.length()) + replacement;
-			//return true;
 		}
+		return true;
 	}
-	return true;
+	return false;
 }

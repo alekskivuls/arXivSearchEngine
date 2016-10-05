@@ -94,7 +94,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	std::list<std::string> infix;
 	
 	PorterStemmer stemmer;
-	bool onLiteral = false, onPlus = false;
+	bool onLiteral = false, onPlus = false, first = true;
 	for (auto str : strs) {
 		if (onLiteral) {
 			if (str.at(str.length()-1) == '"') 
@@ -131,6 +131,10 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				onPlus = false;
 			}
 			infix.push_back(stemmer.stem(str));
+		}
+		if (first) {
+			infix.pop_front();
+			first = false;
 		}
 	}
 	return infix;
