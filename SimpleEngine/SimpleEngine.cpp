@@ -120,6 +120,8 @@ int main() {
  * lowercase and stemmed before being put into the inverted index. 
  */
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
+	clock_t start = clock();
+
 	std::unordered_map<std::string, std::string> cache;
 	boost::filesystem::directory_iterator it(dir), eod;
 	std::vector<std::string> mPathList;
@@ -157,6 +159,10 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 			}
 		}
 	}
+
+	clock_t finish = clock();
+	double elapsedTime = ((finish - start) / 1000000.0);
+	std::cout << "Elapsed Time: " << elapsedTime << " ms." << std::endl;
 }
 
 /*
@@ -173,7 +179,7 @@ void getPathNames(const boost::filesystem::path &directory, std::vector<std::str
 			std::string s = itr->path().string();
 			if (boost::algorithm::ends_with(s, ".json")) {
 				std::replace(s.begin(), s.end(), '\\', '/');
-				std::cout << s << '\n';
+				//std::cout << s << '\n';
 				fileSet.insert(s);
 			}
 		}
