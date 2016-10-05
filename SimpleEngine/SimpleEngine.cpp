@@ -124,8 +124,14 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	boost::filesystem::directory_iterator it(dir), eod;
 	std::vector<std::string> mPathList;
 	getPathNames(dir, mPathList);
-	
+	//int i = 0;
 	for (auto p : mPathList) {
+		//++i;
+		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
+			//std::cout << "Processing Article" << i << ".json" << std::endl;
+
+		std::cout << "Processing Article" << boost::filesystem::path(p).stem() << ".json" << std::endl;
+
 		// reads json file into stringstream and populates a json tree
 		start = boost::chrono::high_resolution_clock::now();
 		std::ifstream file(p);
@@ -145,7 +151,7 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 
 		// iterate through .json tree
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
-			if (pair.first == "body" || pair.first == "title") { // if author... get json array and process the authors as well.
+			if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
 				std::string input = pair.second.get_value<std::string>();
 				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 				
