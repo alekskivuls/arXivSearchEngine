@@ -56,6 +56,7 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, std::string("anci"), std::string("ance"), mGr0)) {}
 	else if (trim(token, std::string("izer"), std::string("ize"), mGr0)) {}
 	else if (trim(token, std::string("abli"), std::string("al"), mGr0)) {}
+	else if (trim(token, std::string("alli"), std::string("al"), mGr0)) {}
 	else if (trim(token, std::string("entli"), std::string("ent"), mGr0)) {}
 	else if (trim(token, std::string("eli"), std::string("e"), mGr0)) {}
 	else if (trim(token, std::string("ousli"), std::string("ous"), mGr0)) {}
@@ -82,7 +83,7 @@ std::string PorterStemmer::stem(std::string &token)
 	//Step 4
 	if (trim(token, std::string("al"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ance"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("encee"), std::string(""), mGr1)) {}
+	else if (trim(token, std::string("ence"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("er"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ic"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("able"), std::string(""), mGr1)) {}
@@ -91,8 +92,9 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, std::string("ement"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ment"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ent"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("sion"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("tion"), std::string(""), mGr1)) {}
+	else if (boost::algorithm::ends_with(token, "sion") || boost::algorithm::ends_with(token, "tion")) { 
+		trim(token, std::string("ion"), std::string(""), mGr1);
+	}
 	else if (trim(token, std::string("ou"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ism"), std::string(""), mGr1)) {}
 	else if (trim(token, std::string("ate"), std::string(""), mGr1)) {}
@@ -103,12 +105,18 @@ std::string PorterStemmer::stem(std::string &token)
 	
 	//Step 5a
 	if (trim(token, std::string("e"), std::string(""), mGr1)) {}
-	else if (trim(token, std::string("ent"), std::string(""), mEq1Ncvc)) {}
+	if (trim(token, std::string("e"), std::string("e"), mEq1)) {
+		if (!boost::regex_search(token.substr(0, (token.length() - std::string("e").length())), mEq1cvc)) {
+			trim(token, std::string("e"), std::string(""), mEq1);
+		}
+	}
 	
 	//Step 5b
-	if (trim(token, std::string("ll"), std::string(""), mGr1)) {} 
-	else if (trim(token, std::string("dd"), std::string(""), mGr1)) {}
-
+	if (boost::regex_search(token.substr(0, (token.length() - 1)), mGr1)) {
+		if (boost::algorithm::ends_with(token, "ll")) {
+			token = token.substr(0, token.length() - 1);
+		}
+	}
 	return token;
 }
 

@@ -12,7 +12,7 @@
 TEST_CASE("Porter Stemming", "[stemmer]") {
 	PorterStemmer stemmer;
 
-	std::cout << stemmer.stem(std::string("radicalli")) << std::endl;
+	std::cout << stemmer.stem(std::string("falling")) << std::endl;
 
 	//1a
 	REQUIRE(stemmer.stem(std::string("caresses")).compare(std::string("caress"))==0);
@@ -23,7 +23,7 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	
 	//1b
 	REQUIRE(stemmer.stem(std::string("feed")).compare(std::string("feed")) == 0);
-	REQUIRE(stemmer.stem(std::string("agreed")).compare(std::string("agree")) == 0);
+	REQUIRE(stemmer.stem(std::string("agreed")).compare(std::string("agre")) == 0);//agree
 	REQUIRE(stemmer.stem(std::string("plastered")).compare(std::string("plaster")) == 0);
 	REQUIRE(stemmer.stem(std::string("bled")).compare(std::string("bled")) == 0);
 	REQUIRE(stemmer.stem(std::string("motoring")).compare(std::string("motor")) == 0);
@@ -47,33 +47,33 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 
 	//step2
 	REQUIRE(stemmer.stem(std::string("relational")).compare(std::string("relat")) == 0);//relate
-	REQUIRE(stemmer.stem(std::string("conditional")).compare(std::string("condition")) == 0);
+	REQUIRE(stemmer.stem(std::string("conditional")).compare(std::string("condit")) == 0);//condition
 	REQUIRE(stemmer.stem(std::string("rational")).compare(std::string("ration")) == 0);//rational
 	REQUIRE(stemmer.stem(std::string("valenci")).compare(std::string("valenc")) == 0);//valence
 	REQUIRE(stemmer.stem(std::string("hesitanci")).compare(std::string("hesit")) == 0);//hesitance
 	REQUIRE(stemmer.stem(std::string("digitizer")).compare(std::string("digit")) == 0);//digitize
 	REQUIRE(stemmer.stem(std::string("conformabli")).compare(std::string("conform")) == 0);//conformable
 	REQUIRE(stemmer.stem(std::string("radicalli")).compare(std::string("radic")) == 0);//radical
-	REQUIRE(stemmer.stem(std::string("differentli")).compare(std::string("different")) == 0);
+	REQUIRE(stemmer.stem(std::string("differentli")).compare(std::string("differ")) == 0);//different
 	REQUIRE(stemmer.stem(std::string("vileli")).compare(std::string("vile")) == 0);
-	REQUIRE(stemmer.stem(std::string("analogousli")).compare(std::string("analogous")) == 0);
-	REQUIRE(stemmer.stem(std::string("vietnamization")).compare(std::string("vietnamize")) == 0);
-	REQUIRE(stemmer.stem(std::string("predication")).compare(std::string("predicate")) == 0);
-	REQUIRE(stemmer.stem(std::string("operator")).compare(std::string("operate")) == 0);
+	REQUIRE(stemmer.stem(std::string("analogousli")).compare(std::string("analog")) == 0);//analogous
+	REQUIRE(stemmer.stem(std::string("vietnamization")).compare(std::string("vietnam")) == 0);//vietnam
+	REQUIRE(stemmer.stem(std::string("predication")).compare(std::string("predic")) == 0);//predicate
+	REQUIRE(stemmer.stem(std::string("operator")).compare(std::string("oper")) == 0);//operate
 	REQUIRE(stemmer.stem(std::string("feudalism")).compare(std::string("feudal")) == 0);
-	REQUIRE(stemmer.stem(std::string("decisiveness")).compare(std::string("decisive")) == 0);
-	REQUIRE(stemmer.stem(std::string("hopefulness")).compare(std::string("hopeful")) == 0);
+	REQUIRE(stemmer.stem(std::string("decisiveness")).compare(std::string("decis")) == 0);//decisive
+	REQUIRE(stemmer.stem(std::string("hopefulness")).compare(std::string("hope")) == 0);//hopeful
 	REQUIRE(stemmer.stem(std::string("callousness")).compare(std::string("callous")) == 0);
 	REQUIRE(stemmer.stem(std::string("formaliti")).compare(std::string("formal")) == 0);
-	REQUIRE(stemmer.stem(std::string("sensitiviti")).compare(std::string("sensitive")) == 0);
-	REQUIRE(stemmer.stem(std::string("sensibiliti")).compare(std::string("sensible")) == 0);
+	REQUIRE(stemmer.stem(std::string("sensitiviti")).compare(std::string("sensit")) == 0);//sensitive
+	REQUIRE(stemmer.stem(std::string("sensibiliti")).compare(std::string("sensibl")) == 0);//sensible
 
 	//step3
 	REQUIRE(stemmer.stem(std::string("triplicate")).compare(std::string("triplic")) == 0);
 	REQUIRE(stemmer.stem(std::string("formative")).compare(std::string("form")) == 0);
 	REQUIRE(stemmer.stem(std::string("formalize")).compare(std::string("formal")) == 0);
-	REQUIRE(stemmer.stem(std::string("electriciti")).compare(std::string("electric")) == 0);
-	REQUIRE(stemmer.stem(std::string("electrical")).compare(std::string("electric")) == 0);
+	REQUIRE(stemmer.stem(std::string("electriciti")).compare(std::string("electr")) == 0);//electric
+	REQUIRE(stemmer.stem(std::string("electrical")).compare(std::string("electr")) == 0);//electric
 	REQUIRE(stemmer.stem(std::string("hopeful")).compare(std::string("hope")) == 0);
 	REQUIRE(stemmer.stem(std::string("goodness")).compare(std::string("good")) == 0);
 
