@@ -77,7 +77,7 @@ int main() {
 			break;
 
 		else if (input.substr(0, 6).compare(":stem ") == 0) 
-			std::cout << stemmer.stem(input.substr(6, std::string::npos));
+			std::cout << stemmer.stem(input.substr(6, std::string::npos)) << std::endl;
 
 		else if (input.compare(":vocab") == 0) 
 			idx->vocab();
