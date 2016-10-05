@@ -1,5 +1,6 @@
 #include "QEngine.h"
 #include "PorterStemmer.h"
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <boost/algorithm/string.hpp>
@@ -127,27 +128,27 @@ void QEngine::printInfixRpn2() {
 	std::cout << "\n";
 }
 
-void QEngine::split(const std::string& s, char c, std::vector<std::string>& v) {
-	std::string::size_type i = 0;
-	std::string::size_type j = s.find(c);
-
-	while (j != std::string::npos) {
-		v.push_back(s.substr(i, j - i));
-		i = ++j;
-		j = s.find(c, j);
-
-		if (j == std::string::npos)
-			v.push_back(s.substr(i, s.length()));
-	}
+std::vector<std::string> QEngine::split(std::string const &input) {
+	std::istringstream buffer(input);
+	std::vector<std::string> ret((std::istream_iterator<std::string>(buffer)),
+		std::istream_iterator<std::string>());
+	return ret;
 }
 
 /*
  * This method takes a string query and returns a list of the stemmed tokens, including operators. 
  */
 std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
+	using boost::is_any_of;
 	std::list<std::string> infix;
 	std::vector<std::string> strs;
-	split(userQuery, ' ', strs);
+	std::cout << "SIZE OF STRS BEFORE = " << strs.size() << '\n';
+	std::cout << userQuery << '\n';
+	strs = split(userQuery);
+	std::cout << "SIZE OF STRS AFTER = " << strs.size() << '\n';
+	system("pause");
+
+	
 	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false;
 	for (auto str : strs) {
@@ -199,14 +200,25 @@ std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
  * This method will be responsible for invoking getPostings, union and intersect. 
  */
 std::list<DocInfo> QEngine::processQuery(std::string &userQuery, const InvertedIndex &idx) {
-	/*std::list<std::string> infix;
-	infix.push_back("Hello");
+	system("pause");
+	std::cout << "BEFORE STEMMIFY\n";
+	std::list<std::string> infix = stemmify(userQuery);
+	std::cout << "SIZE OF INFIX = " << infix.size() << '\n';
+	std::cout << "AFTER STEMMIFY\n";
+
+	for (auto s : infix) 
+		std::cout << s << '\n';
+
+	/*infix.push_back("Hello");
 	infix.push_back("`");
 	infix.push_back("World");
 	infix.push_back("`");
 	infix.push_back("Aleks");*/
 
-	std::list<std::string> rpnQuery = infixToRPN(stemmify(userQuery)); // infix
+
+	system("pause");
+
+	std::list<std::string> rpnQuery = infixToRPN(infix); // infix
 
 	int dist;
 	bool prevIsPhrase = false;

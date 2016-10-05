@@ -39,7 +39,8 @@ int main() {
 	//Get folder to parse documents of
 	std::string filepath;
 	std::cout << "Enter directory of corpus" << std::endl;
-	std::cin >> filepath;
+	//std::cin >> filepath;
+	filepath = "C:/testFiles";
 
 	boost::filesystem::path dir(filepath);
 	boost::filesystem::directory_iterator it(dir), eod;
@@ -70,16 +71,16 @@ int main() {
 	}
 
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
-	system("pause");
-	idx.printIndex();
-	system("pause");
+	//system("pause");
+	//idx.printIndex();
+	//system("pause");
 	//std::cout << "Printing AND, OR, ANDNOT, and PHRASE Query tests:\n";
-	queryEngine.printQueryTest(idx); //BROKEN?
-	system("pause");
+	//queryEngine.printQueryTest(idx); //BROKEN?
+	//system("pause");
 
 	while (true) {
 		std::cout << "Enter a query:" << std::endl;
-		std::cin >> input;
+		std::getline(std::cin, input);
 		if (input.compare(":q") == 0) {
 			break;
 		}

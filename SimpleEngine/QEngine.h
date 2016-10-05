@@ -33,7 +33,7 @@ public:
 
 	void printInfixRpn();
 	void printInfixRpn2();
-	void split(const std::string & s, char c, std::vector<std::string>& v);
+	std::vector<std::string> split(std::string const &input);
 	void printQueryTest(InvertedIndex &idx);
 	void printQueryTest2(InvertedIndex &idx);
 };
