@@ -12,7 +12,7 @@
 TEST_CASE("Porter Stemming", "[stemmer]") {
 	PorterStemmer stemmer;
 
-	std::cout << stemmer.stem(std::string("falling")) << std::endl;
+	//std::cout << stemmer.stem(std::string("caresses")) << std::endl;
 
 	//1a
 	REQUIRE(stemmer.stem(std::string("caresses")).compare(std::string("caress"))==0);
@@ -101,7 +101,7 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	//step5a
 	REQUIRE(stemmer.stem(std::string("probate")).compare(std::string("probat")) == 0);
 	REQUIRE(stemmer.stem(std::string("rate")).compare(std::string("rate")) == 0);
-	REQUIRE(stemmer.stem(std::string("cease")).compare(std::string("ceas")) == 0);
+	REQUIRE(stemmer.stem(std::string("cease")).compare(std::string("cease")) == 0);//ceas
 
 	//step5b
 	REQUIRE(stemmer.stem(std::string("controll")).compare(std::string("control")) == 0);
@@ -148,13 +148,10 @@ TEST_CASE("Query Processing", "[qengine]") {
 	QEngine queryEngine;
 	InvertedIndex *idx;
 	idx = new InvertedIndex();
-	try {
-		std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
-		for (auto di : output)
-			std::cout << di.getDocName() << ' ';
-		std::cout << std::endl;
-	}
-	catch (std::out_of_range e) {
-		std::cout << e.what() << std::endl;
-	}
+
+	std::string query("test");
+	std::list<DocInfo> output = queryEngine.processQuery(query, idx);
+	for (auto di : output)
+		std::cout << di.getDocName() << ' ';
+	std::cout << std::endl;
 }

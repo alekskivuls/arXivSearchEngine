@@ -118,7 +118,7 @@ int main() {
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
 	boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
 	totalStart = boost::chrono::high_resolution_clock::now();
-	double elapsedTime = 0, stemTime = 0;
+	double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0;
 
 	std::unordered_map<std::string, std::string> cache;
 	boost::filesystem::directory_iterator it(dir), eod;
@@ -127,13 +127,21 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	
 	for (auto p : mPathList) {
 		// reads json file into stringstream and populates a json tree
+		start = boost::chrono::high_resolution_clock::now();
 		std::ifstream file(p);
 		std::stringstream ss;
 		ss << file.rdbuf();
 		file.close();
+		finish = boost::chrono::high_resolution_clock::now();
+		fileReadTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
+
+		start = boost::chrono::high_resolution_clock::now();
 		boost::property_tree::ptree pt;
 		boost::property_tree::read_json(ss, pt);
+		finish = boost::chrono::high_resolution_clock::now();
+		treeTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
+		
 
 		// iterate through .json tree
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
@@ -163,6 +171,9 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 
 	totalFinish = boost::chrono::high_resolution_clock::now();
 	elapsedTime = (boost::chrono::duration_cast<boost::chrono::nanoseconds>(totalFinish - totalStart).count() / 1000000.0);
+
+	std::cout << "Total elapsed time for File Read Time: " << fileReadTime << " ms." << std::endl;
+	std::cout << "Total elapsed time to fill Json Tree: " << treeTime << " ms." << std::endl;
 	std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
 	std::cout << "Total elapsed time for Populate Index: " << elapsedTime << " ms." << std::endl;
 }
