@@ -127,8 +127,7 @@ void QEngine::printInfixRpn2() {
 	std::cout << "\n";
 }
 
-void split(const std::string& s, char c,
-	std::vector<std::string>& v) {
+void QEngine::split(const std::string& s, char c, std::vector<std::string>& v) {
 	std::string::size_type i = 0;
 	std::string::size_type j = s.find(c);
 
@@ -148,7 +147,6 @@ void split(const std::string& s, char c,
 std::list<std::string> QEngine::stemmify(const std::string &userQuery) {
 	std::list<std::string> infix;
 	std::vector<std::string> strs;
-	//boost::algorithm::split(strs, userQuery, std::string(" "));
 	split(userQuery, ' ', strs);
 	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false;
