@@ -118,7 +118,7 @@ int main() {
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
 	boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
 	totalStart = boost::chrono::high_resolution_clock::now();
-	double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0;
+	double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0, stringTime = 0.0;
 
 	std::unordered_map<std::string, std::string> cache;
 	boost::filesystem::directory_iterator it(dir), eod;
@@ -126,8 +126,8 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	getPathNames(dir, mPathList);
 	int i = 0;
 	for (auto p : mPathList) {
-		if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
-			continue;
+		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article9741.json") 
+			//continue;
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
@@ -135,26 +135,23 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 		std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 
 		// reads json file into stringstream and populates a json tree
-		start = boost::chrono::high_resolution_clock::now();
 		std::ifstream file(p);
 		std::stringstream ss;
 		ss << file.rdbuf();
 		file.close();
-		finish = boost::chrono::high_resolution_clock::now();
-		fileReadTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
-		start = boost::chrono::high_resolution_clock::now();
 		boost::property_tree::ptree pt;
 		boost::property_tree::read_json(ss, pt);
-		finish = boost::chrono::high_resolution_clock::now();
-		treeTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
-		std::cout << "json to map...\n";
+		//std::cout << "json to map...\n";
 		// iterate through .json tree
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
 			if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
+				//start = boost::chrono::high_resolution_clock::now();
 				std::string input = pair.second.get_value<std::string>();
 				std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+				//finish = boost::chrono::high_resolution_clock::now();
+				//stringTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 				
 				boost::filesystem::path dir(p);
 				Tokenizer tkzr(input);
@@ -163,26 +160,28 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				
 				while (tkzr.nextToken(token)) {// while not end of file.
 					// Get stem the token or retrieve the value from a cache
-					start = boost::chrono::high_resolution_clock::now();
+					//start = boost::chrono::high_resolution_clock::now();
 					std::string stemmedToken = (cache.find(token) != cache.end()) 
 						? cache[token] : stemmer.stem(token);
-					finish = boost::chrono::high_resolution_clock::now();
-					stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
+					//finish = boost::chrono::high_resolution_clock::now();
+					//stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
-					idx->addTerm(stemmedToken, dir.stem().string(), posIndex);
+					idx->addTerm(stemmedToken, dir.stem().string(), posIndex); // stemmedToken
 					posIndex++;
 				}
 			}
 		}
-		system("pause");
+		//system("pause");
 	}
 
 	totalFinish = boost::chrono::high_resolution_clock::now();
 	elapsedTime = (boost::chrono::duration_cast<boost::chrono::nanoseconds>(totalFinish - totalStart).count() / 1000000.0);
 
-	std::cout << "Total elapsed time for File Read Time: " << fileReadTime << " ms." << std::endl;
-	std::cout << "Total elapsed time to fill Json Tree: " << treeTime << " ms." << std::endl;
-	std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
+	
+	//std::cout << "Total elapsed time for string time: " << stringTime << " ms." << std::endl;
+	//std::cout << "Total elapsed time for File Read Time: " << fileReadTime << " ms." << std::endl;
+	//std::cout << "Total elapsed time to fill Json Tree: " << treeTime << " ms." << std::endl;
+	//std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
 	std::cout << "Total elapsed time for Populate Index: " << elapsedTime << " ms." << std::endl;
 }
 

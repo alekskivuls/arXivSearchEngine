@@ -36,7 +36,7 @@ std::string PorterStemmer::stem(std::string &token)
 		if (boost::algorithm::ends_with(token, "at") || boost::algorithm::ends_with(token, "bl") || boost::algorithm::ends_with(token, "iz")) {
 			token = token + "e";
 		}
-		else if ((token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
+		else if (token.length() >= 2 && (token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
 			if ((token.at(token.length() - 1) != 'l' && (token.at(token.length() - 1) != 's') && (token.at(token.length() - 1) != 'z'))) {
 				token = token.substr(0, token.length() - 1);
 			}
