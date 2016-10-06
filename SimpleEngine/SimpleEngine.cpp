@@ -26,10 +26,8 @@
 #include "Time.h"
 #include <list>
 
-#pragma warning(disable:4996)
 
-
-/*****************************************FUNCTION PROTOTYPE*****************************************/
+/*****************************************FUNCTION PROTOTYPE*****************************************
 void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx, 
 	std::unordered_map<unsigned int, std::string> *idTable);
 
@@ -70,7 +68,7 @@ int main() {
 	// Initialization
 	idTable = new std::unordered_map<unsigned int, std::string>();
 	idx = new InvertedIndex();
-	populateIndex(dir, stemmer, idx, idTable);
+	SimpleEngine::populateIndex(dir, stemmer, idx, idTable);
 	std::cout << "idx size = " << idx->getTermCount() << '\n';
 
 	
@@ -98,7 +96,7 @@ int main() {
 			delete idTable;
 			idTable = new std::unordered_map<unsigned int, std::string>();
 			idx = new InvertedIndex();
-			populateIndex(dir, stemmer, idx, idTable);
+			SimpleEngine::populateIndex(dir, stemmer, idx, idTable);
 			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
 

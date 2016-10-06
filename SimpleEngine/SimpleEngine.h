@@ -38,7 +38,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-	void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx,
+	static void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx,
 		std::unordered_map<unsigned int, std::string> *idTable) {
 
 		boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
@@ -125,7 +125,7 @@ public:
 	* with the .json extension. The method will put all full file paths into a vector that is passed
 	* by reference.
 	*/
-	void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
+	static void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
 		boost::filesystem::directory_iterator end_itr;
 		std::unordered_set<std::string> fileSet;
 
@@ -146,7 +146,7 @@ public:
 			mPathList[i++] = s;
 	}
 
-	std::vector<std::string> split(std::string token) {
+	static std::vector<std::string> split(std::string token) {
 		std::vector<std::string> vect;
 		std::stringstream ss(token);
 
