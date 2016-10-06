@@ -157,8 +157,17 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *& const idx) {
 	std::list<std::string> infix = stemmify(userQuery);
 
-	if (infix.size() == 1) 
+	if (infix.size() == 1) {
+		for (auto d : idx->getPostings(infix.front())) {
+			std::cout << d.getDocName() << ":\n";
+			for (auto i : d.getPositions()) {
+				std::cout << i << " ";
+			}
+			std::cout << "\n";
+		}
+		std::cout << "\n";
 		return idx->getPostings(infix.front());
+	}
 
 	std::list<std::string> rpnQuery = infixToRPN(infix);
 	int dist;

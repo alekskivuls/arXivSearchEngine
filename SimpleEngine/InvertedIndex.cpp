@@ -41,29 +41,24 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 
 		_mIndex[term] = postingsList; // populate
 	}
-	else { // TERM DOES EXIST
+	else { // TERM DOES EXIST DOC ALREADY HAD TERM
 		std::list<DocInfo> postingsList = _mIndex[term];
-
-		// Search list of Docs associated with "term"
-		auto it = postingsList.begin();
-		for (; it != postingsList.end(); ++it) {
-			if ((*it).getDocName() == docName) {
-				(*it).addPosition(pos); // DOCNAME DOES EXIST. UPDATE/ INSERT POS INTO EXISTING DOCLIST.
-				_mIndex[term] = postingsList;
-				return;
-			}
-			else if ((*it).getDocName() > docName) // i did not check for edge case... if docList is empty
-				break;
+		if (postingsList.back().getDocName() == docName) {
+			//postingsList.back().addPosition(pos);
+			postingsList.back().getPositions().push_back(pos);
 		}
-		DocInfo DI(docName);
-		DI.addPosition(pos);
-		postingsList.insert(it, DI);
-		_mIndex[term] = postingsList;
+		else { // TERM DOES EXIST BUT DOC DOES NOT CONTAIN TERM
+			DocInfo DI(docName);
+			DI.addPosition(pos);
+			postingsList.push_back(DI);
+			_mIndex[term] = postingsList;
+		}
 	}
 }
 
-void InvertedIndex::getVocabList() const {
-	
+void InvertedIndex::getVocabList() const
+{
+
 }
 
 /*

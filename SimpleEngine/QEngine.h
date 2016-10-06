@@ -16,7 +16,7 @@ class QEngine {
 
 	// Takes a std::string query, stems each token in the query, and returns a list 
 	// of stemmed tokens and operators in inverse notation. 
-	std::list<std::string> stemmify(std::string &userQuery);
+	//std::list<std::string> stemmify(std::string &userQuery);
 
 	std::list<DocInfo> AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
 
@@ -31,6 +31,10 @@ public:
 	~QEngine();
 
 	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex *& const idx);
+
+	// Takes a std::string query, stems each token in the query, and returns a list 
+	// of stemmed tokens and operators in inverse notation. 
+	std::list<std::string> stemmify(std::string &userQuery);
 
 	// The methods below are used for TestDrivenDevelopment debugging.
 	void printInfixRpn();
