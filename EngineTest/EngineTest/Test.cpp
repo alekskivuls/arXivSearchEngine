@@ -132,8 +132,8 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 
 TEST_CASE("Positional Inverted Index", "[invertedIndex]") {
 	// Variable declarations
-	boost::filesystem::path dir;
 	std::string filepath = "testFiles";
+	boost::filesystem::path dir(filepath);
 	InvertedIndex *idx;
 	PorterStemmer stemmer;
 	QEngine queryEngine;
@@ -143,7 +143,6 @@ TEST_CASE("Positional Inverted Index", "[invertedIndex]") {
 	idx = new InvertedIndex();
 	SimpleEngine engine;
 	engine.SimpleEngine::populateIndex(dir, stemmer, idx, idTable);
-	std::cout << "idx size = " << idx->getTermCount() << '\n';
 }
 
 TEST_CASE("Query Processing", "[qengine]") {
