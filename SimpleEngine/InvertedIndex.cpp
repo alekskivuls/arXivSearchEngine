@@ -53,9 +53,13 @@ void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, 
 	}
 }
 
-void InvertedIndex::getVocabList() const
+void InvertedIndex::hyphenFix() const
 {
-
+	for (auto pair : _mIndex)
+		if (pair.first.find('-') != std::string::npos) {
+			std::cout << pair.first.substring() << std::endl;
+			//addTerm();
+		}
 }
 
 /*

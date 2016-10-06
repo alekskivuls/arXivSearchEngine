@@ -33,7 +33,7 @@ public:
 	// A new DocInfo is created if the term is first encountered in that document.
 	void addTerm(const std::string &term, const unsigned int &docId, const int &pos); // maybe create a remove term?
 
-	void getVocabList() const;
+	void hyphenFix() const;
 
 	void vocab() const;
 

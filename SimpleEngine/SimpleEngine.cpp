@@ -80,20 +80,16 @@ int main() {
 		if (input.compare(":q") == 0)
 			break;
 
-		else if (input.substr(0, 6).compare(":stem ") == 0)
+		else if (boost::algorithm::starts_with(input, ":stem "))
 			std::cout << stemmer.stem(input.substr(6, std::string::npos)) << std::endl;
 
 		else if (input.compare(":vocab") == 0)
 			idx->vocab();
 
-		else if (input.substr(0, 7).compare(":index ") == 0) {
+		else if (boost::algorithm::starts_with(input, ":index ")) {
 			filepath = input.substr(7, std::string::npos);
 			boost::filesystem::path dir(filepath);
 			boost::filesystem::directory_iterator it(dir), eod;
-
-			std::cout << "Enter directory of corpus" << std::endl;
-			std::getline(std::cin, filepath);
-			dir = boost::filesystem::path(filepath);
 
 			delete idx;
 			delete idTable;
@@ -103,11 +99,14 @@ int main() {
 			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
 
-		else { //Query
+		else if(input.at(0) != ':') { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) 
 				std::cout << idTable->at(di.getDocId()) << '\t';
 			std::cout << std::endl;
+		}
+		else {
+			std::cout << "Incorrect command usage" << std::endl;
 		}
 	}
 	delete idx;
@@ -180,6 +179,7 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				}
 			}
 		}
+		//InvertedIndex::hyphenFix();
 		//system("pause");
 	}
 
