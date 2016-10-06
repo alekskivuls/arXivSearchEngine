@@ -32,27 +32,23 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
  */
 void InvertedIndex::addTerm(const std::string &term, const std::string &docName, const int &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
-		std::list<DocInfo> postingsList; // create postings list
+		std::list<DocInfo> postings; // create postings list
 
-		DocInfo DI(docName); // create new DocInfo
-		DI.getPositions().push_back(pos);
-		//DI.addPosition(pos);
-		
-		postingsList.push_back(DI); // insert into postings list
+		postings.push_back(DocInfo(docName)); // create new DocInfo
+		postings.back().getPositions().push_back(pos); // insert into postings list
 
-		_mIndex[term] = postingsList; // populate
+		_mIndex[term] = postings; // populate
 	}
-	else { // TERM DOES EXIST DOC ALREADY HAD TERM
-		std::list<DocInfo> &postingsList = _mIndex[term];
-		if (postingsList.back().getDocName() == docName) {
-			//postingsList.back().addPosition(pos);
-			postingsList.back().getPositions().push_back(pos);
+	else { // TERM DOES EXIST
+		std::list<DocInfo> &postings = _mIndex[term]; // get postings of existing term
+
+		if (postings.back().getDocName() == docName) { // TERM ALREADY ASSOCIATED WITH DOC
+			postings.back().getPositions().push_back(pos);
 		}
 		else { // TERM DOES EXIST BUT DOC DOES NOT CONTAIN TERM
-			DocInfo DI(docName);
-			DI.addPosition(pos);
-			postingsList.push_back(DI);
-			//_mIndex[term] = postingsList;
+			postings.push_back(DocInfo(docName));
+
+			postings.back().getPositions().push_back(pos);
 		}
 	}
 }

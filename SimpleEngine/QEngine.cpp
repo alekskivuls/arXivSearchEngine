@@ -319,7 +319,7 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 			auto i = leftPos.begin(), j = rightPos.begin();
 			while (i != leftPos.end() && j != rightPos.end()) {
 				if ((*i + dist) == *j) {
-					merge.addPosition(*(i++));
+					merge.addPosition(*(i++)); // add position
 					++j;
 				}
 				else if ((*i + dist) > *j)

@@ -124,13 +124,15 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	boost::filesystem::directory_iterator it(dir), eod;
 	std::vector<std::string> mPathList;
 	getPathNames(dir, mPathList);
-	//int i = 0;
+	int i = 0;
 	for (auto p : mPathList) {
+		if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
+			continue;
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
 
-		//std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+		std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 
 		// reads json file into stringstream and populates a json tree
 		start = boost::chrono::high_resolution_clock::now();
@@ -141,14 +143,13 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 		finish = boost::chrono::high_resolution_clock::now();
 		fileReadTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
-
 		start = boost::chrono::high_resolution_clock::now();
 		boost::property_tree::ptree pt;
 		boost::property_tree::read_json(ss, pt);
 		finish = boost::chrono::high_resolution_clock::now();
 		treeTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
-		
 
+		std::cout << "json to map...\n";
 		// iterate through .json tree
 		BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
 			if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
@@ -173,6 +174,7 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				}
 			}
 		}
+		system("pause");
 	}
 
 	totalFinish = boost::chrono::high_resolution_clock::now();

@@ -12,7 +12,8 @@ std::string PorterStemmer::stem(std::string &token)
 
 	//Step 1a
 	if (boost::algorithm::ends_with(token, "sses"))
-		token = token.substr(0, token.length() - 2);
+		token.erase(token.end() - 2, token.end());
+		//token = token.substr(0, token.length() - 2);
 	else if (boost::algorithm::ends_with(token, "ies"))
 		token = token.substr(0, token.length() - 2);
 	else if (!boost::algorithm::ends_with(token, "ss") && boost::algorithm::ends_with(token, "s"))
@@ -41,7 +42,7 @@ std::string PorterStemmer::stem(std::string &token)
 			}
 		}
 		else if (boost::regex_search(token, list, mEq1cvc)) {
-			token = token + "e";
+			token.append("e");// = token + "e";
 		}
 	}
 

@@ -20,8 +20,7 @@ public:
 	DocInfo();
 	DocInfo(const std::string &docName);
 
-	// Adds a positional occurence of the "term" to this document.
-	void addPosition(const int &pos);
+	void DocInfo::addPosition(const int &pos);
 
 	// Returns the name of the document (json file name).
 	std::string getDocName() const;
