@@ -12,7 +12,8 @@ Tokenizer::~Tokenizer() {
 }
 
 // should pass in an empty string to populate the tokenizer variable 
-bool Tokenizer::nextToken(std::string &token) {
+bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
+	hyphen = false;
 	token = "";
 	char c;
 	if (isFileTokenizer) { // use file tokenizer logic... read byte? 
@@ -25,8 +26,12 @@ bool Tokenizer::nextToken(std::string &token) {
 			c = _buffer[pos++];
 			// valid character for token
 			if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-				|| (c >= '0' && c <= '9') || c == '-')
+				|| (c >= '0' && c <= '9') || c == '-') {
+				
+				if (c == '-')
+					hyphen = true;
 				token += c;
+			}
 			// invalid character for token
 			else if (token != "") 
 				return true;

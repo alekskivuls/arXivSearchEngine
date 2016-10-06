@@ -53,15 +53,6 @@ void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, 
 	}
 }
 
-void InvertedIndex::hyphenFix() const
-{
-	for (auto pair : _mIndex)
-		if (pair.first.find('-') != std::string::npos) {
-			std::cout << pair.first.substring() << std::endl;
-			//addTerm();
-		}
-}
-
 /*
  * This method prints all terms and DocInfos associated to each term to the console.
  */

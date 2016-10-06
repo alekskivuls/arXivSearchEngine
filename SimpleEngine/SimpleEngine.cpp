@@ -33,6 +33,8 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	std::unordered_map<unsigned int, std::string> *idTable);
 
 void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
+
+std::vector<std::string> split(std::string token);
 /****************************************************************************************************/
 
 
@@ -165,16 +167,20 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				Tokenizer tkzr(input);
 				std::string token;
 				int posIndex = 0;
-				
-				while (tkzr.nextToken(token)) {// while not end of file.
+				bool hyphen = false;
+				while (tkzr.nextToken(token, hyphen)) {// while not end of file.
 					// Get stem the token or retrieve the value from a cache
 					//start = boost::chrono::high_resolution_clock::now();
-					std::string stemmedToken = (cache.find(token) != cache.end()) 
-						? cache[token] : stemmer.stem(token);
-					//finish = boost::chrono::high_resolution_clock::now();
-					//stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
-					//dir.filename().string();
-					idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
+					if (!hyphen) {
+						std::string stemmedToken = (cache.find(token) != cache.end())
+							? cache[token] : stemmer.stem(token);
+						idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
+					}
+					else {
+						for (auto s : split(token)) 
+							idx->addTerm(stemmer.stem(s), i, posIndex);
+					}
+					
 					posIndex++;
 				}
 			}
@@ -218,4 +224,23 @@ void getPathNames(const boost::filesystem::path &directory, std::vector<std::str
 	int i = 0;
 	for (auto s : fileSet) 
 		mPathList[i++] = s;
+}
+
+std::vector<std::string> split(std::string token) {
+	std::vector<std::string> vect;
+	std::stringstream ss(token);
+
+	char c;
+	std::string str = "";
+	while (ss >> c)
+	{
+		if (c != '-') // if NOT hyphen
+			str += c;
+		else {
+			vect.push_back(str);
+			str = "";
+		}
+	}
+
+	return vect;
 }

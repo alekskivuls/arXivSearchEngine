@@ -12,7 +12,7 @@ public:
 	// and true otherwise. This method IS subject to change according to 
 	// our group requirements and definitions of a tokenized word. This 
 	// method will also change when we implement a tokenizer for file reading.
-	virtual bool nextToken(std::string &token) = 0;
+	virtual bool nextToken(std::string &token, bool &hyphen) = 0;
 
 
 
