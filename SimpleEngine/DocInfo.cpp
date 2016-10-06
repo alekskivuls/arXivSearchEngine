@@ -6,12 +6,12 @@ DocInfo::DocInfo(const std::string &docName) : _docName(docName) { }
 
 // Adds a positional occurence of the "term" to this document.
 void DocInfo::addPosition(const int &pos) {
-	for (auto it = _posList.begin(); it != _posList.end(); ++it) {
+	/*for (auto it = _posList.begin(); it != _posList.end(); ++it) {
 		if (pos < *it) {
 			_posList.insert(it, pos);
 			return;
 		}
-	}
+	}*/
 	_posList.push_back(pos);
 }
 

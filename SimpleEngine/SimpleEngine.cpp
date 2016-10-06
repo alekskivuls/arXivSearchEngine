@@ -124,13 +124,13 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	boost::filesystem::directory_iterator it(dir), eod;
 	std::vector<std::string> mPathList;
 	getPathNames(dir, mPathList);
-	int i = 0;
+	//int i = 0;
 	for (auto p : mPathList) {
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
 
-		std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+		//std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 
 		// reads json file into stringstream and populates a json tree
 		start = boost::chrono::high_resolution_clock::now();

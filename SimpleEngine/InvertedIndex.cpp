@@ -35,7 +35,8 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 		std::list<DocInfo> postingsList; // create postings list
 
 		DocInfo DI(docName); // create new DocInfo
-		DI.addPosition(pos);
+		DI.getPositions().push_back(pos);
+		//DI.addPosition(pos);
 		
 		postingsList.push_back(DI); // insert into postings list
 
