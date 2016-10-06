@@ -153,28 +153,24 @@ TEST_CASE("Query Processing", "[qengine]") {
 	std::string result("");
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
-	//std::cout << result << std::endl;
 	REQUIRE(result.compare("test") == 0);
 
 	query = std::string("test test");
 	result = std::string("");
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
-	//std::cout << result << std::endl;
 	REQUIRE(result.compare("test*test") == 0);
 
 	query = std::string("test + test");
 	result = std::string("");
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
-	//std::cout << result << std::endl;
 	REQUIRE(result.compare("test+test") == 0);
 
 	query = std::string("test -test");
 	result = std::string("");
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
-	//std::cout << result << std::endl;
 	REQUIRE(result.compare("test~test") == 0);
 
 	query = std::string("\"test test\"");
@@ -182,9 +178,4 @@ TEST_CASE("Query Processing", "[qengine]") {
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
 	REQUIRE(result.compare("test`test") == 0);
-
-	//std::list<DocInfo> output = queryEngine.processQuery(query, idx);
-	//for (auto di : output)
-	//	std::cout << di.getDocName() << ' ';
-	//std::cout << std::endl;
 }

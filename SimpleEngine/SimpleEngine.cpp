@@ -126,8 +126,8 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	getPathNames(dir, mPathList);
 	int i = 0;
 	for (auto p : mPathList) {
-		if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
-			continue;
+		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
+		//	continue;
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
@@ -174,7 +174,7 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				}
 			}
 		}
-		system("pause");
+		//system("pause");
 	}
 
 	totalFinish = boost::chrono::high_resolution_clock::now();
