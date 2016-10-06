@@ -89,7 +89,7 @@ int main() {
 			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
 
-		else if(input.at(0) != ':') { //Query
+		else if(!boost::algorithm::starts_with(input, ":")) { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) 
 				std::cout << idTable->at(di.getDocId()) << '\t';

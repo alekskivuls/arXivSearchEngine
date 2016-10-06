@@ -179,4 +179,10 @@ TEST_CASE("Query Processing", "[qengine]") {
 	for (auto token : queryEngine.QEngine::stemmify(query))
 		result += token;
 	REQUIRE(result.compare("test`test") == 0);
+
+	query = std::string("");
+	result = std::string("");
+	for (auto token : queryEngine.QEngine::stemmify(query))
+		result += token;
+	REQUIRE(result.compare("") == 0);
 }
