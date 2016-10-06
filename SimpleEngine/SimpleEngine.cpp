@@ -91,7 +91,7 @@ int main() {
 
 		else if(!boost::algorithm::starts_with(input, ":")) { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
-			for (auto di : output) 
+			for (auto di : output)
 				std::cout << idTable->at(di.getDocId()) << '\t';
 			std::cout << std::endl << output.size() << std::endl;
 			std::cout << std::endl;

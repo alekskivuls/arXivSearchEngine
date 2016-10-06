@@ -3,7 +3,9 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
@@ -106,12 +108,20 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false, first = true;
 	for (auto str : strs) {
+		std::string procStr = str;
+		if (str.find("-") && !boost::algorithm::starts_with(str,"-")) {
+			boost::erase_all(procStr, "-");
+		}
+		else if (boost::algorithm::starts_with(str, "-")) {
+			procStr = procStr.substr(1, std::string::npos);
+			boost::erase_all(procStr, "-");
+		}
+
 		if (onLiteral) {
 			if (str.at(str.length()-1) == '"') 
 				onLiteral = false;
 			infix.push_back("`");
-			infix.push_back(stemmer.stem(str.substr(0,str.length()-1)));
-			
+			infix.push_back(stemmer.stem(procStr.substr(0,str.length()-1)));
 		}
 		else if (str.at(0) == '"') {
 			onLiteral = true;
@@ -122,13 +132,13 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 			else {
 				infix.push_back("*");
 			}
-			infix.push_back(stemmer.stem(str.substr(1, std::string::npos)));
+			infix.push_back(stemmer.stem(procStr.substr(1, std::string::npos)));
 		}
 		else if (str.at(0) == '-') {
 			if (str.at(1) == '"') 
 				onLiteral = true;
 			infix.push_back("~");
-			infix.push_back(stemmer.stem(str.substr(1,std::string::npos)));
+			infix.push_back(stemmer.stem(procStr.substr(0,std::string::npos)));
 		}
 		else if (str.at(0) == '+') {
 			onPlus = true;
@@ -140,7 +150,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				infix.push_back("+");
 				onPlus = false;
 			}
-			infix.push_back(stemmer.stem(str));
+			infix.push_back(stemmer.stem(procStr));
 		}
 		if (first) {
 			infix.pop_front();
