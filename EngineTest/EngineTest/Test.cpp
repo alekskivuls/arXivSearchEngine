@@ -12,7 +12,7 @@
 TEST_CASE("Porter Stemming", "[stemmer]") {
 	PorterStemmer stemmer;
 
-	//std::cout << stemmer.stem(std::string("caresses")) << std::endl;
+	//std::cout << stemmer.stem(std::string("troubled")) << std::endl;
 
 	//1a
 	REQUIRE(stemmer.stem(std::string("caresses")).compare(std::string("caress"))==0);
@@ -31,14 +31,14 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 
 	//1bextra
 	REQUIRE(stemmer.stem(std::string("conflated")).compare(std::string("conflat")) == 0);//conflate
-	REQUIRE(stemmer.stem(std::string("troubled")).compare(std::string("trouble")) == 0);
+	REQUIRE(stemmer.stem(std::string("troubled")).compare(std::string("troubl")) == 0);//trouble
 	REQUIRE(stemmer.stem(std::string("sized")).compare(std::string("size")) == 0);
 	REQUIRE(stemmer.stem(std::string("hopping")).compare(std::string("hop")) == 0);
 	REQUIRE(stemmer.stem(std::string("tanned")).compare(std::string("tan")) == 0);
 	REQUIRE(stemmer.stem(std::string("falling")).compare(std::string("fall")) == 0);
 	REQUIRE(stemmer.stem(std::string("hissing")).compare(std::string("hiss")) == 0);
 	REQUIRE(stemmer.stem(std::string("fizzed")).compare(std::string("fizz")) == 0);
-	REQUIRE(stemmer.stem(std::string("failing")).compare(std::string("faile")) == 0);//fail
+	REQUIRE(stemmer.stem(std::string("failing")).compare(std::string("fail")) == 0);
 	REQUIRE(stemmer.stem(std::string("filing")).compare(std::string("file")) == 0);
 
 	//step1c
@@ -101,7 +101,7 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	//step5a
 	REQUIRE(stemmer.stem(std::string("probate")).compare(std::string("probat")) == 0);
 	REQUIRE(stemmer.stem(std::string("rate")).compare(std::string("rate")) == 0);
-	REQUIRE(stemmer.stem(std::string("cease")).compare(std::string("cease")) == 0);//ceas
+	REQUIRE(stemmer.stem(std::string("cease")).compare(std::string("ceas")) == 0);
 
 	//step5b
 	REQUIRE(stemmer.stem(std::string("controll")).compare(std::string("control")) == 0);
@@ -123,6 +123,7 @@ TEST_CASE("Positional Inverted Index", "[stemmer]") {
 	InvertedIndex idx;
 	PorterStemmer stemmer;
 	std::string input;
+	int i = 0;
 	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
 	{
 		if (boost::filesystem::is_regular_file(p))
@@ -131,11 +132,12 @@ TEST_CASE("Positional Inverted Index", "[stemmer]") {
 			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
 			std::string input;
 			int posIndex = 0;
+			i++;
 			while (std::getline(file, input)) {
 				Tokenizer tkzr(input);
 				std::string token;
 				while (tkzr.nextToken(token)) {
-					idx.addTerm(stemmer.stem(token), p.string(), posIndex);
+					idx.addTerm(stemmer.stem(token), i, posIndex);
 					posIndex++;
 				}
 			}
