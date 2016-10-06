@@ -126,6 +126,7 @@
     <ClInclude Include="DocInfo.h" />
     <ClInclude Include="PorterStemmer.h" />
     <ClInclude Include="QEngine.h" />
+    <ClInclude Include="SimpleEngine.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TokenStream.h" />
   </ItemGroup>

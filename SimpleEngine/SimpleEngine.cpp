@@ -12,6 +12,7 @@
 #include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
+#include "SimpleEngine.h"
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
@@ -105,6 +106,7 @@ int main() {
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output) 
 				std::cout << idTable->at(di.getDocId()) << '\t';
+			std::cout << std::endl << output.size() << std::endl;
 			std::cout << std::endl;
 		}
 		else {
@@ -189,7 +191,6 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				}
 			}
 		}
-		//InvertedIndex::hyphenFix();
 		//system("pause");
 	}
 
