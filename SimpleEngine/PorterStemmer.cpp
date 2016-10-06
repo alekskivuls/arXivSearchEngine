@@ -15,9 +15,9 @@ std::string PorterStemmer::stem(std::string &token)
 		token.erase(token.end() - 2, token.end());
 		//token = token.substr(0, token.length() - 2);
 	else if (boost::algorithm::ends_with(token, "ies"))
-		token = token.substr(0, token.length() - 2);
+		token.erase(token.end() - 2, token.end());
 	else if (!boost::algorithm::ends_with(token, "ss") && boost::algorithm::ends_with(token, "s"))
-		token = token.substr(0, token.length() - 1);
+		token.erase(token.end() - 1, token.end());
 
 	//Step 1b
 	boost::smatch list;
@@ -34,11 +34,11 @@ std::string PorterStemmer::stem(std::string &token)
 
 	if (extra1b) {
 		if (boost::algorithm::ends_with(token, "at") || boost::algorithm::ends_with(token, "bl") || boost::algorithm::ends_with(token, "iz")) {
-			token = token + "e";
+			token.append("e");
 		}
 		else if (token.length() >= 2 && (token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
 			if ((token.at(token.length() - 1) != 'l' && (token.at(token.length() - 1) != 's') && (token.at(token.length() - 1) != 'z'))) {
-				token = token.substr(0, token.length() - 1);
+				token.erase(token.end() - 1, token.end());
 			}
 		}
 		else if (boost::regex_search(token, list, mEq1cvc)) {
@@ -47,8 +47,10 @@ std::string PorterStemmer::stem(std::string &token)
 	}
 
 	//Step 1c
-	if (boost::regex_search(token.substr(0, token.length() - 1), vowel) && (token.at(token.length() - 1) == 'y'))
-		token = token.substr(0, token.length() - 1) + 'i';
+	if (boost::regex_search(token.substr(0, token.length() - 1), vowel) && (token.at(token.length() - 1) == 'y')) {
+		token.erase(token.end() - 1, token.end());
+		token.append("i");
+	}
 
 	//Step 2
 	if (trim(token, std::string("ational"), std::string("ate"), mGr0)) {}
@@ -115,7 +117,7 @@ std::string PorterStemmer::stem(std::string &token)
 	//Step 5b
 	if (boost::regex_search(token.substr(0, (token.length() - 1)), mGr1)) {
 		if (boost::algorithm::ends_with(token, "ll")) {
-			token = token.substr(0, token.length() - 1);
+			token.erase(token.end() - 1, token.end());
 		}
 	}
 	return token;
@@ -124,7 +126,9 @@ std::string PorterStemmer::stem(std::string &token)
 bool PorterStemmer::trim(std::string &token, std::string &suffix, std::string &replacement, boost::regex &reg) {
 	if (boost::algorithm::ends_with(token, suffix)) {
 		if (boost::regex_search(token.substr(0, (token.length() - suffix.length())), reg)) {
-			token = token.substr(0, token.length() - suffix.length()) + replacement;
+			//token = token.substr(0, token.length() - suffix.length()) + replacement;
+			token.erase(token.end() - suffix.length(), token.end());
+			token.append(replacement);
 		}
 		return true;
 	}

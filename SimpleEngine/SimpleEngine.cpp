@@ -126,8 +126,13 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	getPathNames(dir, mPathList);
 	int i = 0;
 	for (auto p : mPathList) {
+<<<<<<< HEAD
 		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article9741.json") 
 			//continue;
+=======
+		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
+		//	continue;
+>>>>>>> 438e84d8d997c1bc38b264973c9b22d547a38ba4
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
