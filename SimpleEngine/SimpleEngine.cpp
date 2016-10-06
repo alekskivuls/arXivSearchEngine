@@ -170,12 +170,12 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				while (tkzr.nextToken(token)) {// while not end of file.
 					// Get stem the token or retrieve the value from a cache
 					//start = boost::chrono::high_resolution_clock::now();
-					//std::string stemmedToken = (cache.find(token) != cache.end()) 
-						//? cache[token] : stemmer.stem(token);
+					std::string stemmedToken = (cache.find(token) != cache.end()) 
+						? cache[token] : stemmer.stem(token);
 					//finish = boost::chrono::high_resolution_clock::now();
 					//stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 					//dir.filename().string();
-					idx->addTerm(token, i, posIndex); // stemmedToken
+					idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
 					posIndex++;
 				}
 			}
