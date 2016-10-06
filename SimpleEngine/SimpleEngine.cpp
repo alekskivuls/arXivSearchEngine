@@ -177,12 +177,8 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 						idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
 					}
 					else {
-						std::string total = "";
-						for (auto s : split(token)) {
+						for (auto s : split(token)) 
 							idx->addTerm(stemmer.stem(s), i, posIndex);
-							total += s;
-						}
-						idx->addTerm(stemmer.stem(total), i, posIndex);
 					}
 					
 					posIndex++;
@@ -245,7 +241,6 @@ std::vector<std::string> split(std::string token) {
 			str = "";
 		}
 	}
-	vect.push_back(str);
 
 	return vect;
 }
