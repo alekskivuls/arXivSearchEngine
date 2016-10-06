@@ -167,6 +167,7 @@
     <ClInclude Include="..\..\SimpleEngine\InvertedIndex.h" />
     <ClInclude Include="..\..\SimpleEngine\PorterStemmer.h" />
     <ClInclude Include="..\..\SimpleEngine\QEngine.h" />
+    <ClInclude Include="..\..\SimpleEngine\SimpleEngine.h" />
     <ClInclude Include="..\..\SimpleEngine\Tokenizer.h" />
     <ClInclude Include="..\..\SimpleEngine\TokenStream.h" />
     <ClInclude Include="..\catch.hpp" />

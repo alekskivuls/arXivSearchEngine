@@ -59,5 +59,8 @@
     <ClInclude Include="..\..\SimpleEngine\TokenStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\SimpleEngine\SimpleEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,13 +1,27 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
-#include <string>
-#include <boost\foreach.hpp>
+#include <boost\algorithm\string\predicate.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost\lambda\lambda.hpp>
 #include <boost\filesystem.hpp>
+#include <boost\foreach.hpp>
+#include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
+#include "SimpleEngine.h"
+#include <unordered_map>
+#include <unordered_set>
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
+#include <algorithm>
+#include <iostream>
+#include <stdio.h>
+#include <fstream>
+#include <vector>
+#include "Time.h"
+#include <list>
 
 TEST_CASE("Porter Stemming", "[stemmer]") {
 	PorterStemmer stemmer;
@@ -116,34 +130,20 @@ TEST_CASE("Porter Stemming", "[stemmer]") {
 	REQUIRE(stemmer.stem(std::string("radically")).compare(std::string("radic")) == 0);
 }
 
-TEST_CASE("Positional Inverted Index", "[stemmer]") {
+TEST_CASE("Positional Inverted Index", "[invertedIndex]") {
+	// Variable declarations
+	boost::filesystem::path dir;
 	std::string filepath = "testFiles";
-	boost::filesystem::path dir(filepath);
-	boost::filesystem::directory_iterator it(dir), eod;
-	InvertedIndex idx;
+	InvertedIndex *idx;
 	PorterStemmer stemmer;
-	std::string input;
-	int i = 0;
-	BOOST_FOREACH(boost::filesystem::path const &p, std::make_pair(it, eod))
-	{
-		if (boost::filesystem::is_regular_file(p))
-		{
-			std::fstream file;
-			file.open(p.string(), std::fstream::in | std::fstream::out | std::fstream::app);
-			std::string input;
-			int posIndex = 0;
-			i++;
-			while (std::getline(file, input)) {
-				Tokenizer tkzr(input);
-				std::string token;
-				while (tkzr.nextToken(token)) {
-					idx.addTerm(stemmer.stem(token), i, posIndex);
-					posIndex++;
-				}
-			}
-			file.close();
-		}
-	}
+	QEngine queryEngine;
+	std::unordered_map<unsigned int, std::string> *idTable;
+	// Initialization
+	idTable = new std::unordered_map<unsigned int, std::string>();
+	idx = new InvertedIndex();
+	SimpleEngine engine;
+	engine.SimpleEngine::populateIndex(dir, stemmer, idx, idTable);
+	std::cout << "idx size = " << idx->getTermCount() << '\n';
 }
 
 TEST_CASE("Query Processing", "[qengine]") {
