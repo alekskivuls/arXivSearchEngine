@@ -11,19 +11,19 @@
  */
 class DocInfo {
 	// The document name that is associated with the stemmed term in the index.
-	std::string _docName;
+	unsigned int _docId;
 
 	// A list of positional occurences of the term associated with the document.
 	std::list<int> _posList;
 
 public:
 	DocInfo();
-	DocInfo(const std::string &docName);
+	DocInfo(const unsigned int &docId);
 
 	void DocInfo::addPosition(const int &pos);
 
 	// Returns the name of the document (json file name).
-	std::string getDocName() const;
+	unsigned int getDocId() const;
 
 	// Returns the list of the term's occurence.
 	std::list<int> DocInfo::getPositions() const;

@@ -24,17 +24,17 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
 }
 
 /* 
- * Adds the "term", found in the corresponding "docName" at position "int pos", 
+ * Adds the "term", found in the corresponding "docId" at position "int pos", 
  * into the inverted index.
  * 
  * Side note: maybe we should store all of the information as compressed bytes 
  * later? this way, we can put more on RAM
  */
-void InvertedIndex::addTerm(const std::string &term, const std::string &docName, const int &pos) {
+void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, const int &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
 		std::list<DocInfo> postings; // create postings list
 
-		postings.push_back(DocInfo(docName)); // create new DocInfo
+		postings.push_back(DocInfo(docId)); // create new DocInfo
 		postings.back().getPositions().push_back(pos); // insert into postings list
 
 		_mIndex[term] = postings; // populate
@@ -42,11 +42,11 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 	else { // TERM DOES EXIST
 		std::list<DocInfo> &postings = _mIndex[term]; // get postings of existing term
 
-		if (postings.back().getDocName() == docName) { // TERM ALREADY ASSOCIATED WITH DOC
+		if (postings.back().getDocId() == docId) { // TERM ALREADY ASSOCIATED WITH DOC
 			postings.back().getPositions().push_back(pos);
 		}
 		else { // TERM DOES EXIST BUT DOC DOES NOT CONTAIN TERM
-			postings.push_back(DocInfo(docName));
+			postings.push_back(DocInfo(docId));
 
 			postings.back().getPositions().push_back(pos);
 		}

@@ -2,7 +2,7 @@
 
 // Default constructors and destructors
 DocInfo::DocInfo() { }
-DocInfo::DocInfo(const std::string &docName) : _docName(docName) { }
+DocInfo::DocInfo(const unsigned int &docId) : _docId(docId) { }
 
 void DocInfo::addPosition(const int &pos) {
 	for (auto it = _posList.begin(); it != _posList.end(); ++it) {
@@ -15,8 +15,8 @@ void DocInfo::addPosition(const int &pos) {
 }
 
 // Getter method for Document Name (a.k.a. id)
-std::string DocInfo::getDocName() const {
-	return _docName;
+unsigned int DocInfo::getDocId() const {
+	return _docId;
 }
 
 // Getter method for the list of all positional occurences of the term 

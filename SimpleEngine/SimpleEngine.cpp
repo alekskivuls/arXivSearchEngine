@@ -29,7 +29,8 @@
 
 
 /*****************************************FUNCTION PROTOTYPE*****************************************/
-void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx);
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx, 
+	std::unordered_map<unsigned int, std::string> *idTable);
 
 void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
 /****************************************************************************************************/
@@ -55,7 +56,7 @@ int main() {
 	InvertedIndex *idx;
 	PorterStemmer stemmer;
 	QEngine queryEngine;
-
+	std::unordered_map<unsigned int, std::string> *idTable;
 
 	// Set file directory
 	std::cout << "Enter directory of corpus" << std::endl;
@@ -64,8 +65,9 @@ int main() {
 
 
 	// Initialization
+	idTable = new std::unordered_map<unsigned int, std::string>();
 	idx = new InvertedIndex();
-	populateIndex(dir, stemmer, idx);
+	populateIndex(dir, stemmer, idx, idTable);
 	std::cout << "idx size = " << idx->getTermCount() << '\n';
 
 	
@@ -94,19 +96,22 @@ int main() {
 			dir = boost::filesystem::path(filepath);
 
 			delete idx;
+			delete idTable;
+			idTable = new std::unordered_map<unsigned int, std::string>();
 			idx = new InvertedIndex();
-			populateIndex(dir, stemmer, idx);
+			populateIndex(dir, stemmer, idx, idTable);
 			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
 
 		else { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
-			for (auto di : output)
-				std::cout << di.getDocName() << ' ';
+			for (auto di : output) 
+				std::cout << idTable->at(di.getDocId()) << '\t';
 			std::cout << std::endl;
 		}
 	}
 	delete idx;
+	delete idTable;
 }
 
 /*
@@ -115,7 +120,9 @@ int main() {
  * stringstream into a boost, json property tree. The tokens are individually transformed to 
  * lowercase and stemmed before being put into the inverted index. 
  */
-void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx) {
+void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx, 
+	std::unordered_map<unsigned int, std::string> *idTable) {
+
 	boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
 	totalStart = boost::chrono::high_resolution_clock::now();
 	double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0, stringTime = 0.0;
@@ -124,20 +131,15 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 	boost::filesystem::directory_iterator it(dir), eod;
 	std::vector<std::string> mPathList;
 	getPathNames(dir, mPathList);
+	std::sort(mPathList.begin(), mPathList.end());
+
 	int i = 0;
 	for (auto p : mPathList) {
-<<<<<<< HEAD
-		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article9741.json") 
-			//continue;
-=======
-		//if(p != "C:/Users/Paul Kim/Documents/Visual Studio 2015/Projects/SimpleEngine/SimpleEngine/documents/article31994.json") 
-		//	continue;
->>>>>>> 438e84d8d997c1bc38b264973c9b22d547a38ba4
 		//++i;
 		//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
 			//std::cout << "Processing Article" << i << ".json" << std::endl;
 
-		std::cout << "Processing Article (" << (++i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+		std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 
 		// reads json file into stringstream and populates a json tree
 		std::ifstream file(p);
@@ -147,6 +149,8 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 
 		boost::property_tree::ptree pt;
 		boost::property_tree::read_json(ss, pt);
+		boost::filesystem::path dir(p);
+		(*idTable)[i] = dir.stem().string();
 
 		//std::cout << "json to map...\n";
 		// iterate through .json tree
@@ -158,7 +162,7 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				//finish = boost::chrono::high_resolution_clock::now();
 				//stringTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 				
-				boost::filesystem::path dir(p);
+				
 				Tokenizer tkzr(input);
 				std::string token;
 				int posIndex = 0;
@@ -166,12 +170,12 @@ void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, I
 				while (tkzr.nextToken(token)) {// while not end of file.
 					// Get stem the token or retrieve the value from a cache
 					//start = boost::chrono::high_resolution_clock::now();
-					std::string stemmedToken = (cache.find(token) != cache.end()) 
-						? cache[token] : stemmer.stem(token);
+					//std::string stemmedToken = (cache.find(token) != cache.end()) 
+						//? cache[token] : stemmer.stem(token);
 					//finish = boost::chrono::high_resolution_clock::now();
 					//stemTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
-
-					idx->addTerm(stemmedToken, dir.stem().string(), posIndex); // stemmedToken
+					//dir.filename().string();
+					idx->addTerm(token, i, posIndex); // stemmedToken
 					posIndex++;
 				}
 			}

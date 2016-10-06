@@ -159,7 +159,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *
 
 	if (infix.size() == 1) {
 		for (auto d : idx->getPostings(infix.front())) {
-			std::cout << d.getDocName() << ":\n";
+			std::cout << d.getDocId() << ":\n";
 			for (auto i : d.getPositions()) {
 				std::cout << i << " ";
 			}
@@ -222,12 +222,12 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
 	
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-		if ((*iIter).getDocName() > (*jIter).getDocName()) 
+		if ((*iIter).getDocId() > (*jIter).getDocId()) 
 			++jIter;
-		else if ((*jIter).getDocName() > (*iIter).getDocName())
+		else if ((*jIter).getDocId() > (*iIter).getDocId())
 			++iIter;
 		else {
-			result.push_back(DocInfo((*iIter).getDocName()));
+			result.push_back(DocInfo((*iIter).getDocId()));
 			++iIter;
 			++jIter;
 		}
@@ -253,21 +253,21 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
 
 	auto iIter = min.begin(), jIter = max.begin();
 	while (iIter != min.end() && jIter != max.end()) {
-		if ((*iIter).getDocName() > (*jIter).getDocName()) 
-			result.push_back(DocInfo((*(jIter++)).getDocName()));
-		else if ((*jIter).getDocName() > (*iIter).getDocName()) 
-			result.push_back(DocInfo((*(iIter++)).getDocName()));
+		if ((*iIter).getDocId() > (*jIter).getDocId()) 
+			result.push_back(DocInfo((*(jIter++)).getDocId()));
+		else if ((*jIter).getDocId() > (*iIter).getDocId()) 
+			result.push_back(DocInfo((*(iIter++)).getDocId()));
 		else {
-			result.push_back(DocInfo((*(iIter++)).getDocName()));
+			result.push_back(DocInfo((*(iIter++)).getDocId()));
 			++jIter;
 		}
 	}
 
 	while (iIter != min.end()) 
-		result.push_back(DocInfo((*(iIter++)).getDocName()));
+		result.push_back(DocInfo((*(iIter++)).getDocId()));
 
 	while (jIter != max.end()) 
-		result.push_back(DocInfo((*(jIter++)).getDocName()));
+		result.push_back(DocInfo((*(jIter++)).getDocId()));
 
 	return result;
 }
@@ -283,10 +283,10 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
 
 	auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
 	while (iIter != left.end()) {
-		if ((*iIter).getDocName() > (*jIter).getDocName()) 
+		if ((*iIter).getDocId() > (*jIter).getDocId()) 
 			++jIter;
-		else if ((*jIter).getDocName() > (*iIter).getDocName()) {
-			result.push_back(DocInfo((*iIter).getDocName()));
+		else if ((*jIter).getDocId() > (*iIter).getDocId()) {
+			result.push_back(DocInfo((*iIter).getDocId()));
 			++iIter;
 		}
 		else {
@@ -308,12 +308,12 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 	std::list<DocInfo> result;
 	auto iIter = left.begin(), jIter = right.begin();
 	while (iIter != left.end() && jIter != right.end()) {
-		if ((*iIter).getDocName() > (*jIter).getDocName())
+		if ((*iIter).getDocId() > (*jIter).getDocId())
 			++jIter;
-		else if ((*jIter).getDocName() > (*iIter).getDocName())
+		else if ((*jIter).getDocId() > (*iIter).getDocId())
 			++iIter;
 		else {
-			DocInfo merge((*iIter).getDocName());
+			DocInfo merge((*iIter).getDocId());
 			auto leftPos = (*iIter).getPositions(), rightPos = (*jIter).getPositions();
 
 			auto i = leftPos.begin(), j = rightPos.begin();
@@ -338,25 +338,25 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 
 // Query Test 2
 void QEngine::printQueryTest2(InvertedIndex *& const idx) {
-	idx->addTerm("Hello", "Article1.json", 1);
-	idx->addTerm("Hello", "Article1.json", 2);
+	idx->addTerm("Hello", (unsigned int)1, 1);
+	idx->addTerm("Hello", (unsigned int)1, 2);
 
-	idx->addTerm("Hello", "Article2.json", 1);
-	idx->addTerm("Hello", "Article2.json", 3);
-	idx->addTerm("Hello", "Article2.json", 5);
+	idx->addTerm("Hello", (unsigned int)2, 1);
+	idx->addTerm("Hello", (unsigned int)2, 3);
+	idx->addTerm("Hello", (unsigned int)2, 5);
 
-	idx->addTerm("World", "Article2.json", 2);
-	idx->addTerm("World", "Article2.json", 6);
+	idx->addTerm("World", (unsigned int)2, 2);
+	idx->addTerm("World", (unsigned int)2, 6);
 
-	idx->addTerm("World", "Article3.json", 1);
-	idx->addTerm("World", "Article3.json", 1);
+	idx->addTerm("World", (unsigned int)3, 1);
+	idx->addTerm("World", (unsigned int)3, 1);
 
-	idx->addTerm("Aleks", "Article2.json", 3);
-	idx->addTerm("Aleks", "Article2.json", 7);
+	idx->addTerm("Aleks", (unsigned int)2, 3);
+	idx->addTerm("Aleks", (unsigned int)2, 7);
 
 	//auto docList = processQuery(std::string("Hello ` World"), idx); // deprecated use of processQuery
 	/*for (auto di : docList) {
-		std::cout << di.getDocName() << ":\n";
+		std::cout << di.getDocId() << ":\n";
 		for (auto i : di.getPositions()) 
 			std::cout << i << " ";
 		std::cout << '\n';
@@ -374,7 +374,7 @@ void QEngine::printQueryTest(InvertedIndex *& const idx) {
 	std::cout << "AND Query:\n";
 	std::list<DocInfo> andQuery = AND(left, right);
 	for (auto doc : andQuery) {
-		std::cout << doc.getDocName() << ":\n";
+		std::cout << doc.getDocId() << ":\n";
 		for (auto i : doc.getPositions()) 
 			std::cout << i << ' ';
 		std::cout << '\n';
@@ -384,7 +384,7 @@ void QEngine::printQueryTest(InvertedIndex *& const idx) {
 	std::cout << "ANDNOT Query:\n";
 	std::list<DocInfo> andNotQuery = ANDNOT(left, right);
 	for (auto doc : andNotQuery) {
-		std::cout << doc.getDocName() << ":\n";
+		std::cout << doc.getDocId() << ":\n";
 		for (auto i : doc.getPositions())
 			std::cout << i << ' ';
 		std::cout << '\n';
@@ -394,7 +394,7 @@ void QEngine::printQueryTest(InvertedIndex *& const idx) {
 	std::cout << "OR Query:\n";
 	std::list<DocInfo> orQuery = OR(left, right);
 	for (auto doc : orQuery) {
-		std::cout << doc.getDocName() << ":\n";
+		std::cout << doc.getDocId() << ":\n";
 		for (auto i : doc.getPositions())
 			std::cout << i << ' ';
 		std::cout << '\n';

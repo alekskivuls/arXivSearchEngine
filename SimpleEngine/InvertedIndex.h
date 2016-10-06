@@ -31,7 +31,7 @@ public:
 
 	// Adds an instance of the stemmed term to the document.
 	// A new DocInfo is created if the term is first encountered in that document.
-	void addTerm(const std::string &term, const std::string &docName, const int &pos); // maybe create a remove term?
+	void addTerm(const std::string &term, const unsigned int &docId, const int &pos); // maybe create a remove term?
 
 	void getVocabList() const;
 
