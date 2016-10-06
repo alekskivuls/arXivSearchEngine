@@ -43,7 +43,7 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 		_mIndex[term] = postingsList; // populate
 	}
 	else { // TERM DOES EXIST DOC ALREADY HAD TERM
-		std::list<DocInfo> postingsList = _mIndex[term];
+		std::list<DocInfo> &postingsList = _mIndex[term];
 		if (postingsList.back().getDocName() == docName) {
 			//postingsList.back().addPosition(pos);
 			postingsList.back().getPositions().push_back(pos);
@@ -52,7 +52,7 @@ void InvertedIndex::addTerm(const std::string &term, const std::string &docName,
 			DocInfo DI(docName);
 			DI.addPosition(pos);
 			postingsList.push_back(DI);
-			_mIndex[term] = postingsList;
+			//_mIndex[term] = postingsList;
 		}
 	}
 }
