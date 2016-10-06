@@ -107,10 +107,14 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	bool onLiteral = false, onPlus = false, first = true;
 	for (auto str : strs) {
 		if (onLiteral) {
-			if (str.at(str.length()-1) == '"') 
-				onLiteral = false;
 			infix.push_back("`");
-			infix.push_back(stemmer.stem(str.substr(0,str.length()-1)));
+			if (str.at(str.length() - 1) == '"') {
+				onLiteral = false;
+				infix.push_back(stemmer.stem(str.substr(0, str.length() - 1)));
+			}
+			else {
+				infix.push_back(stemmer.stem(str));
+			}
 			
 		}
 		else if (str.at(0) == '"') {
@@ -353,14 +357,6 @@ void QEngine::printQueryTest2(InvertedIndex *& const idx) {
 
 	idx->addTerm("Aleks", (unsigned int)2, 3);
 	idx->addTerm("Aleks", (unsigned int)2, 7);
-
-	//auto docList = processQuery(std::string("Hello ` World"), idx); // deprecated use of processQuery
-	/*for (auto di : docList) {
-		std::cout << di.getDocId() << ":\n";
-		for (auto i : di.getPositions()) 
-			std::cout << i << " ";
-		std::cout << '\n';
-	}*/
 }
 
 // Query Test 1
@@ -400,8 +396,6 @@ void QEngine::printQueryTest(InvertedIndex *& const idx) {
 		std::cout << '\n';
 	}
 	std::cout << '\n';
-
-	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
 }
 
 // Infix, rpn test 1

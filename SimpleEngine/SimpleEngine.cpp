@@ -26,17 +26,6 @@
 #include "Time.h"
 #include <list>
 
-
-/*****************************************FUNCTION PROTOTYPE*****************************************
-void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx, 
-	std::unordered_map<unsigned int, std::string> *idTable);
-
-void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
-
-std::vector<std::string> split(std::string token);
-/****************************************************************************************************/
-
-
 /*
  * This method has a fully functional and tested inverted index. We only need to change the
  * tokenizer methods for suitable parsing (single terms, k-grams and splitting hyphenated
