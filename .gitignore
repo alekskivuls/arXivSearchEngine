@@ -87,4 +87,8 @@ ClientBin/
 node_modules/
 orleans.codegen.cs
 
+#Corpus location
 SimpleEngine/documents/*
+
+#Build directory
+build/
