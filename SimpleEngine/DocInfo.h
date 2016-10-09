@@ -20,13 +20,24 @@ public:
 	DocInfo();
 	DocInfo(const unsigned int &docId);
 
+<<<<<<< Updated upstream
 	void DocInfo::addPosition(const int &pos);
+=======
+	void addPosition(const int &pos);
+>>>>>>> Stashed changes
 
 	// Returns the name of the document (json file name).
 	unsigned int getDocId() const;
 
 	// Returns the list of the term's occurence.
+<<<<<<< Updated upstream
 	std::list<int> DocInfo::getPositions() const;
 };
 
 #endif
+=======
+	std::list<int> getPositions() const;
+};
+
+#endif
+>>>>>>> Stashed changes
