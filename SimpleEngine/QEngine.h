@@ -3,6 +3,7 @@
 
 #include "InvertedIndex.h"
 #include <stack>
+#include <vector>
 
 class QEngine {
 	//InvertedIndex _invIndex; // future implementation for singleton design
@@ -24,13 +25,13 @@ class QEngine {
 
 	std::list<DocInfo> ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
 
-	std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist);
+	std::list<DocInfo> PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist);
 
 public:
 	QEngine();
 	~QEngine();
 
-	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex *& const idx);
+	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex *& idx);
 
 	// Takes a std::string query, stems each token in the query, and returns a list 
 	// of stemmed tokens and operators in inverse notation. 
@@ -40,8 +41,8 @@ public:
 	void printInfixRpn();
 	void printInfixRpn2();
 	
-	void printQueryTest(InvertedIndex *& const idx);
-	void printQueryTest2(InvertedIndex *& const idx);
+	void printQueryTest(InvertedIndex *& idx);
+	void printQueryTest2(InvertedIndex *& idx);
 };
 
 #endif

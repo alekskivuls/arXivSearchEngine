@@ -4,12 +4,12 @@
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 
-#include <boost\algorithm\string\predicate.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost\lambda\lambda.hpp>
-#include <boost\filesystem.hpp>
-#include <boost\foreach.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
 #include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
@@ -24,10 +24,10 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
-#include "Time.h"
+//#include "Time.h"
 #include <list>
 
-#include "boost\filesystem\path.hpp"
+#include "boost/filesystem/path.hpp"
 
 class SimpleEngine {
 

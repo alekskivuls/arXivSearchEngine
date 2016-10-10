@@ -3,12 +3,12 @@
  *	@Course: CECS 429 - Search Engine Technology
  */
 
-#include <boost\algorithm\string\predicate.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
-#include <boost\lambda\lambda.hpp>
-#include <boost\filesystem.hpp>
-#include <boost\foreach.hpp>
+#include <boost/lambda/lambda.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
 #include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
-#include "Time.h"
+//#include "Time.h"
 #include <list>
 
 /*
@@ -67,15 +67,16 @@ int main() {
 		std::cout << "Enter a query:" << std::endl;
 		std::getline(std::cin, input);
 
-		if (input.compare(":q") == 0)
+		if (input.compare(":q") == 0) {
 			break;
-
-		else if (boost::algorithm::starts_with(input, ":stem "))
-			std::cout << stemmer.stem(input.substr(6, std::string::npos)) << std::endl;
-
-		else if (input.compare(":vocab") == 0)
+		}
+		else if (boost::algorithm::starts_with(input, ":stem ")) {
+			std::string substr = input.substr(6, std::string::npos);
+			std::cout << stemmer.stem(substr) << std::endl;
+		}
+		else if (input.compare(":vocab") == 0) {
 			idx->vocab();
-
+		}
 		else if (boost::algorithm::starts_with(input, ":index ")) {
 			filepath = input.substr(7, std::string::npos);
 			boost::filesystem::path dir(filepath);
@@ -88,7 +89,6 @@ int main() {
 			SimpleEngine::populateIndex(dir, stemmer, idx, idTable);
 			std::cout << "idx size = " << idx->getTermCount() << '\n';
 		}
-
 		else if(!boost::algorithm::starts_with(input, ":")) { //Query
 			std::list<DocInfo> output = queryEngine.processQuery(input, idx); // processQuery(, const InvertedIndex &idx)
 			for (auto di : output)

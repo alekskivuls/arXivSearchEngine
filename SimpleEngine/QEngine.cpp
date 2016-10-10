@@ -121,7 +121,8 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 			if (str.at(str.length()-1) == '"') 
 				onLiteral = false;
 			infix.push_back("`");
-			infix.push_back(stemmer.stem(procStr.substr(0,str.length()-1)));
+			std::string substr = procStr.substr(0,str.length()-1);
+			infix.push_back(stemmer.stem(substr));
 		}
 		else if (str.at(0) == '"') {
 			onLiteral = true;
@@ -132,13 +133,15 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 			else {
 				infix.push_back("*");
 			}
-			infix.push_back(stemmer.stem(procStr.substr(1, std::string::npos)));
+			std::string substr = procStr.substr(1, std::string::npos);
+			infix.push_back(stemmer.stem(substr));
 		}
 		else if (str.at(0) == '-') {
 			if (str.at(1) == '"') 
 				onLiteral = true;
 			infix.push_back("~");
-			infix.push_back(stemmer.stem(procStr.substr(0,std::string::npos)));
+			std::string substr = procStr.substr(0,std::string::npos);
+			infix.push_back(stemmer.stem(substr));
 		}
 		else if (str.at(0) == '+') {
 			onPlus = true;
@@ -164,7 +167,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *& const idx) {
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *& idx) {
 	std::list<std::string> infix = stemmify(userQuery);
 
 	if (infix.size() == 0) {
@@ -351,7 +354,7 @@ std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::li
 }
 
 // Query Test 2
-void QEngine::printQueryTest2(InvertedIndex *& const idx) {
+void QEngine::printQueryTest2(InvertedIndex *& idx) {
 	idx->addTerm("Hello", (unsigned int)1, 1);
 	idx->addTerm("Hello", (unsigned int)1, 2);
 
@@ -378,7 +381,7 @@ void QEngine::printQueryTest2(InvertedIndex *& const idx) {
 }
 
 // Query Test 1
-void QEngine::printQueryTest(InvertedIndex *& const idx) {
+void QEngine::printQueryTest(InvertedIndex *& idx) {
 	std::list<DocInfo> left = idx->getPostings("Hello");
 	std::list<DocInfo> right = idx->getPostings("World");
 

@@ -2,7 +2,7 @@
 #define PORTER_STEMMER_H
 
 #include <string>
-#include <boost\regex.hpp>
+#include <boost/regex.hpp>
 
 class PorterStemmer {
 public:

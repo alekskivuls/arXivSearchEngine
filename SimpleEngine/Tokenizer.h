@@ -3,7 +3,7 @@
 
 #include "TokenStream.h"
 
-#include <boost\filesystem.hpp>
+#include <boost/filesystem.hpp>
 #include <fstream>
 
 class Tokenizer : public TokenStream {
@@ -21,7 +21,7 @@ public:
 
 	// Retrieves the next token in the string or file depending on which 
 	// constructor was used. This method should be used like scanf. 
-	bool Tokenizer::nextToken(std::string &token, bool &hyphen);
+	bool nextToken(std::string &token, bool &hyphen);
 
 	std::string nextToken(std::string token, const int &gram);
 };
