@@ -83,6 +83,7 @@ public:
 
 					Tokenizer tkzr(input);
 					std::string token;
+					//token.reserve(100);
 					int posIndex = 0;
 					bool hyphen = false;
 					while (tkzr.nextToken(token, hyphen)) {// while not end of file.
