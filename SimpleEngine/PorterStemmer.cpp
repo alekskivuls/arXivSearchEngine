@@ -96,7 +96,7 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, ment, blank, mGr1)) {}
 	else if (trim(token, ent, blank, mGr1)) {}
 	else if (boost::algorithm::ends_with(token, sion) || boost::algorithm::ends_with(token, tion)) { 
-		trim(token, std::string(ion), std::string(""), mGr1);
+		trim(token, ion, "", mGr1);
 	}
 	else if (trim(token, ou, blank, mGr1)) {}
 	else if (trim(token, ism, blank, mGr1)) {}
@@ -107,10 +107,10 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, ize, blank, mGr1)) {}
 	
 	//Step 5a
-	if (trim(token, std::string("e"), std::string(""), mGr1)) {}
-	if (trim(token, std::string("e"), std::string("e"), mEq1)) {
-		if (!boost::regex_search(token.substr(0, (token.length() - std::string("e").length())), mEq1cvc)) {
-			trim(token, std::string("e"), std::string(""), mEq1);
+	if (trim(token, "e", "", mGr1)) {}
+	if (trim(token, "e", "e", mEq1)) {
+		if (!boost::regex_search(token.substr(0, (token.length() - 1)), mEq1cvc)) {
+			trim(token, "e", "", mEq1);
 		}
 	}
 	

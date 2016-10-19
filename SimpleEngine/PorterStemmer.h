@@ -16,8 +16,8 @@ private:
 
 	const boost::regex mGr0{"^(" + C + ")?" + V + C };
 	const boost::regex mEq1{"^(" + C + ")?(" + V + C + "){1}(" + V + ")?$" };
-	const boost::regex mGr1{"^(" + C + ")?(" + V + C + "){2,}(" + V + ")?$" };
-	const boost::regex vowel{".*" + V + ".*"};
+	const boost::regex mGr1{ "^(" + C + ")?(" + V + C + V + C + ")"};///"){2,}(" + V + ")?$" };
+	const boost::regex vowel{V};
 	const boost::regex mEq1cvc{ "^(" + c + v + ")(?=[^wxy])(" + c + "){1}$" };
 
 	bool trim(std::string&, const std::string&, const std::string&, const boost::regex&);

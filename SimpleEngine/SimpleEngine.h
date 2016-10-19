@@ -83,12 +83,14 @@ public:
 
 					Tokenizer tkzr(input);
 					std::string token;
-					//token.reserve(100);
+					token.reserve(200);
 					int posIndex = 0;
 					bool hyphen = false;
-					while (tkzr.nextToken(token, hyphen)) {// while not end of file.
-														   // Get stem the token or retrieve the value from a cache
-														   //start = boost::chrono::high_resolution_clock::now();
+					while (tkzr.nextToken(token, hyphen)) {
+						// while not end of file.
+						// Get stem the token or retrieve the value from a cache
+						//start = boost::chrono::high_resolution_clock::now();
+						token.reserve(200);
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
 								? cache[token] : stemmer.stem(token);
