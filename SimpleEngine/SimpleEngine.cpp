@@ -9,7 +9,6 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
-#include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include "SimpleEngine.h"
@@ -23,7 +22,6 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
-//#include "Time.h"
 #include <list>
 
 /*

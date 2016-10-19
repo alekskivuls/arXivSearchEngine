@@ -10,7 +10,6 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/foreach.hpp>
-#include <boost/chrono.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include "SimpleEngine.h"
@@ -24,7 +23,8 @@
 #include <stdio.h>
 #include <fstream>
 #include <vector>
-//#include "Time.h"
+#include <chrono>
+#include <ctime>
 #include <list>
 
 #include "boost/filesystem/path.hpp"
@@ -41,8 +41,8 @@ public:
 	static void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx,
 		std::unordered_map<unsigned int, std::string> *idTable) {
 
-		boost::chrono::high_resolution_clock::time_point totalStart, totalFinish, start, finish;
-		totalStart = boost::chrono::high_resolution_clock::now();
+		std::chrono::time_point<std::chrono::system_clock> totalStart, totalFinish, start, finish;
+		totalStart = std::chrono::system_clock::now();
 		double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0, stringTime = 0.0;
 
 		std::unordered_map<std::string, std::string> cache;
@@ -74,11 +74,8 @@ public:
 			// iterate through .json tree
 			BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
 				if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
-											//start = boost::chrono::high_resolution_clock::now();
 					std::string input = pair.second.get_value<std::string>();
 					std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-					//finish = boost::chrono::high_resolution_clock::now();
-					//stringTime += (boost::chrono::duration_cast<boost::chrono::nanoseconds>(finish - start).count() / 1000000.0);
 
 
 					Tokenizer tkzr(input);
@@ -89,7 +86,7 @@ public:
 					while (tkzr.nextToken(token, hyphen)) {
 						// while not end of file.
 						// Get stem the token or retrieve the value from a cache
-						//start = boost::chrono::high_resolution_clock::now();
+						//start = std::chrono::system_clock::now();
 						token.reserve(200);
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
@@ -112,15 +109,14 @@ public:
 			//system("pause");
 		}
 
-		totalFinish = boost::chrono::high_resolution_clock::now();
-		elapsedTime = (boost::chrono::duration_cast<boost::chrono::nanoseconds>(totalFinish - totalStart).count() / 1000000.0);
-
+		totalFinish = std::chrono::system_clock::now();
+		std::chrono::duration<double> elapsed_seconds = totalFinish-totalStart;
 
 		//std::cout << "Total elapsed time for string time: " << stringTime << " ms." << std::endl;
 		//std::cout << "Total elapsed time for File Read Time: " << fileReadTime << " ms." << std::endl;
 		//std::cout << "Total elapsed time to fill Json Tree: " << treeTime << " ms." << std::endl;
 		//std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
-		std::cout << "Total elapsed time for Populate Index: " << elapsedTime << " ms." << std::endl;
+		std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 	}
 
 	/*

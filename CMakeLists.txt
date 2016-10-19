@@ -15,7 +15,7 @@ set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-FIND_PACKAGE(Boost 1.50.0 COMPONENTS regex system filesystem chrono REQUIRED) 
+FIND_PACKAGE(Boost 1.50.0 COMPONENTS regex system filesystem REQUIRED) 
 if(Boost_FOUND)
 	include_directories(${Boost_INCLUDE_DIRS})
 	add_executable(SimpleEngine ${SOURCES})
