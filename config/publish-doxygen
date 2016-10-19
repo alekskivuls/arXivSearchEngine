@@ -1,4 +1,6 @@
-ettings
+#!/bin/bash -e
+
+# Settings
 REPO_PATH=git@github.com:alekskivuls/arXivSearchEngine.git
 HTML_PATH=build/doc/html
 COMMIT_USER="Documentation Builder"
