@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>arXivSearchEngine: Main Page</title>
+<title>arXivSearchEngine: TokenStream Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,8 +37,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -58,7 +58,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+    </ul>
+  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -73,11 +79,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+</div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classTokenStream-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">arXivSearchEngine Documentation</div>  </div>
+<div class="title">TokenStream Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for TokenStream:</div>
+<div class="dyncontent">
+<div class="center"><img src="classTokenStream__inherit__graph.png" border="0" usemap="#TokenStream_inherit__map" alt="Inheritance graph"/></div>
+<map name="TokenStream_inherit__map" id="TokenStream_inherit__map">
+<area shape="rect" id="node2" href="classTokenizer.html" title="Tokenizer" alt="" coords="16,80,95,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a22b52393bf6188df560bf9cabf255b84"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22b52393bf6188df560bf9cabf255b84"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>nextToken</b> (std::string &amp;token, bool &amp;hyphen)=0</td></tr>
+<tr class="separator:a22b52393bf6188df560bf9cabf255b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb4ac5dda9f0e7d98a38976ce39d474d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb4ac5dda9f0e7d98a38976ce39d474d"></a>
+virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><b>nextToken</b> (std::string token, const int &amp;gram)=0</td></tr>
+<tr class="separator:afb4ac5dda9f0e7d98a38976ce39d474d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>SimpleEngine/<a class="el" href="TokenStream_8h_source.html">TokenStream.h</a></li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
