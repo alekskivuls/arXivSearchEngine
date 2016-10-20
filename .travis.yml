@@ -12,6 +12,7 @@ script:
 - cd build
 - cmake ..
 - make
+- cd ..
 after_success:
 - sudo apt-get install doxygen graphviz
 - openssl aes-256-cbc
