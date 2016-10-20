@@ -23,4 +23,5 @@ after_success:
   -d
 - chmod 0600 config/travisci_rsa
 - cp config/travisci_rsa ~/.ssh/id_rsa
+- chmod u+x ./config/publish-doxygen
 - ./config/publish-doxygen
