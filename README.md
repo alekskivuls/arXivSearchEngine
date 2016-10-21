@@ -14,7 +14,7 @@ cd build
 cmake ..
 make
 ```
-Executable generated in build directory `./Engine` to run
+Executable generated in build directory `./Engine` to run.
 When making changes to source only need to run `make` again to regenerate executable 
 
 ##Clean Build

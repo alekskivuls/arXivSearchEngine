@@ -2,7 +2,90 @@
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <string>
-#include <iostream>
+	
+	//Regex patterns
+	const std::string PorterStemmer::c = "[^aeiou]";
+	const std::string PorterStemmer::v = "[aeiouy]";
+	const std::string PorterStemmer::C = PorterStemmer::c + "[^aeiouy]*";
+	const std::string PorterStemmer::V = PorterStemmer::v + "[aeiou]*";
+
+	const boost::regex PorterStemmer::mGr0{"^(" + C + ")?" + V + C };
+	const boost::regex PorterStemmer::mEq1{"^(" + C + ")?(" + V + C + "){1}(" + V + ")?$" };
+	const boost::regex PorterStemmer::mGr1{ "^(" + C + ")?(" + V + C + V + C + ")"};///"){2,}(" + V + ")?$" };
+	const boost::regex PorterStemmer::vowel{V};
+	const boost::regex PorterStemmer::mEq1cvc{ "^(" + c + v + ")(?=[^wxy])(" + c + "){1}$" };
+
+	//Suffix patterns
+	//Step 1 patters
+	const std::string PorterStemmer::blank = "";
+	const std::string PorterStemmer::sses = "sses";
+	const std::string PorterStemmer::ies = "ies";
+	const std::string PorterStemmer::ss = "ss";
+	const std::string PorterStemmer::s = "s";
+	const std::string PorterStemmer::eed = "eed";
+	const std::string PorterStemmer::ee = "ee";
+	const std::string PorterStemmer::ed = "ed";
+	const std::string PorterStemmer::ing = "ing";
+	const std::string PorterStemmer::at = "at";
+	const std::string PorterStemmer::bl = "bl";
+	const std::string PorterStemmer::iz = "iz";
+	const std::string PorterStemmer::e = "e";
+	const std::string PorterStemmer::i = "i";
+
+	//Step 2 patterns
+	const std::string PorterStemmer::ational = "ational";
+	const std::string PorterStemmer::ate = "ate";
+	const std::string PorterStemmer::tional = "tional";
+	const std::string PorterStemmer::tion = "tion";
+	const std::string PorterStemmer::enci = "enci";
+	const std::string PorterStemmer::ence = "ence";
+	const std::string PorterStemmer::anci = "anci";
+	const std::string PorterStemmer::ance = "ance";	
+	const std::string PorterStemmer::izer = "izer";
+	const std::string PorterStemmer::ize = "ize";
+	const std::string PorterStemmer::abli = "abli";
+	const std::string PorterStemmer::al = "al";
+	const std::string PorterStemmer::alli = "alli";
+	const std::string PorterStemmer::entli = "entli";
+	const std::string PorterStemmer::ent = "ent";
+	const std::string PorterStemmer::eli = "eli";
+	const std::string PorterStemmer::ousli = "ousli";
+	const std::string PorterStemmer::ous = "ous";
+	const std::string PorterStemmer::ization = "ization";
+	const std::string PorterStemmer::ation = "ation";
+	const std::string PorterStemmer::ator = "ator";
+	const std::string PorterStemmer::alism = "alism";
+	const std::string PorterStemmer::iveness = "iveness";
+	const std::string PorterStemmer::ive = "ive";
+	const std::string PorterStemmer::fulness = "fulness";
+	const std::string PorterStemmer::ful = "ful";
+	const std::string PorterStemmer::ousness = "ousness";
+	const std::string PorterStemmer::aliti = "aliti";
+	const std::string PorterStemmer::iviti = "iviti";
+	const std::string PorterStemmer::biliti = "biliti";
+	const std::string PorterStemmer::ble = "ble";
+
+	//Step 3 patterns
+	const std::string PorterStemmer::icate = "icate";
+	const std::string PorterStemmer::ative = "ative";
+	const std::string PorterStemmer::alize = "alize";
+	const std::string PorterStemmer::iciti = "iciti";
+	const std::string PorterStemmer::ic = "ic";
+	const std::string PorterStemmer::ical = "ical";
+	const std::string PorterStemmer::ness = "ness";
+	
+	//Step 4 patterns
+	const std::string PorterStemmer::er = "er";
+	const std::string PorterStemmer::able = "able";
+	const std::string PorterStemmer::ible = "ible";
+	const std::string PorterStemmer::ant = "ant";
+	const std::string PorterStemmer::ement = "ement";
+	const std::string PorterStemmer::ment = "ment";
+	const std::string PorterStemmer::sion = "sion";
+	const std::string PorterStemmer::ion = "ion";
+	const std::string PorterStemmer::ou = "ou";
+	const std::string PorterStemmer::ism = "ism";
+	const std::string PorterStemmer::iti = "iti";
 
 std::string PorterStemmer::stem(std::string &token)
 {

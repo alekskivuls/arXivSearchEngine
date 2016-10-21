@@ -1,9 +1,3 @@
-#ifndef SIMPLE_ENGINE_H
-#define SIMPLE_ENGINE_H
-
-#include "PorterStemmer.h"
-#include "InvertedIndex.h"
-
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -12,34 +6,67 @@
 #include <boost/foreach.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
-#include "SimpleEngine.h"
+#include "Engine.h"
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
 #include <algorithm>
-#include <iostream>
 #include <stdio.h>
+#include <string>
 #include <fstream>
 #include <vector>
-#include <chrono>
-#include <ctime>
 #include <list>
 
-#include "boost/filesystem/path.hpp"
+// Default constructors and destructors
+Engine::Engine() { 
+	idTable = new std::unordered_map<unsigned int, std::string>();
+	idx = new InvertedIndex();
+}
 
-class SimpleEngine {
+	void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
+		boost::filesystem::directory_iterator end_itr;
+		std::unordered_set<std::string> fileSet;
 
-public:
-	/*
-	* Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that
-	* is allocated on the heap. This method feeds the text file into a stringstream and passes the
-	* stringstream into a boost, json property tree. The tokens are individually transformed to
-	* lowercase and stemmed before being put into the inverted index.
-	*/
-	static void populateIndex(const boost::filesystem::path &dir, PorterStemmer &stemmer, InvertedIndex *& idx,
-		std::unordered_map<unsigned int, std::string> *idTable) {
+		for (boost::filesystem::directory_iterator itr(directory); itr != end_itr; ++itr) {
+			if (is_regular_file(itr->path())) {
+				std::string s = itr->path().string();
+				if (boost::algorithm::ends_with(s, ".json")) {
+					std::replace(s.begin(), s.end(), '\\', '/');
+					//std::cout << s << '\n';
+					fileSet.insert(s);
+				}
+			}
+		}
+
+		mPathList.resize(fileSet.size());
+		int i = 0;
+		for (auto s : fileSet)
+			mPathList[i++] = s;
+	}
+
+	std::vector<std::string> split(std::string token) {
+		std::vector<std::string> vect;
+		std::stringstream ss(token);
+
+		char c;
+		std::string str = "";
+		while (ss >> c)
+		{
+			if (c != '-') // if NOT hyphen
+				str += c;
+			else {
+				vect.push_back(str);
+				str = "";
+			}
+		}
+		vect.push_back(str);
+
+		return vect;
+	}
+
+	void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex *& idx, std::unordered_map<unsigned int, std::string> *idTable) {
 
 		std::chrono::time_point<std::chrono::system_clock> totalStart, totalFinish, start, finish;
 		totalStart = std::chrono::system_clock::now();
@@ -53,10 +80,6 @@ public:
 
 		int i = 0;
 		for (auto p : mPathList) {
-			//++i;
-			//if (i == 100 || i == 5000 || i == 10000 || i == 15000) 
-			//std::cout << "Processing Article" << i << ".json" << std::endl;
-
 			std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 
 			// reads json file into stringstream and populates a json tree
@@ -90,16 +113,16 @@ public:
 						token.reserve(200);
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
-								? cache[token] : stemmer.stem(token);
+								? cache[token] : PorterStemmer::stem(token);
 							idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
 						}
 						else {
 							std::string total = "";
 							for (auto s : split(token)) {
-								idx->addTerm(stemmer.stem(s), i, posIndex);
+								idx->addTerm(PorterStemmer::stem(s), i, posIndex);
 								total += s;
 							}
-							idx->addTerm(stemmer.stem(total), i, posIndex);
+							idx->addTerm(PorterStemmer::stem(total), i, posIndex);
 						}
 
 						posIndex++;
@@ -119,51 +142,30 @@ public:
 		std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 	}
 
-	/*
-	* This method goes to a path and walks through the directory searching for all files that end
-	* with the .json extension. The method will put all full file paths into a vector that is passed
-	* by reference.
-	*/
-	static void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
-		boost::filesystem::directory_iterator end_itr;
-		std::unordered_set<std::string> fileSet;
+void Engine::index(const std::string &filepath) {
+	boost::filesystem::path dir(filepath);
+	boost::filesystem::directory_iterator it(dir), eod;
 
-		for (boost::filesystem::directory_iterator itr(directory); itr != end_itr; ++itr) {
-			if (is_regular_file(itr->path())) {
-				std::string s = itr->path().string();
-				if (boost::algorithm::ends_with(s, ".json")) {
-					std::replace(s.begin(), s.end(), '\\', '/');
-					//std::cout << s << '\n';
-					fileSet.insert(s);
-				}
-			}
-		}
+	delete idx;
+	delete idTable;
+	idTable = new std::unordered_map<unsigned int, std::string>();
+	idx = new InvertedIndex();
+	Engine::populateIndex(dir, idx, idTable);
+	std::cout << "idx size = " << idx->getTermCount() << '\n';
+}
 
-		mPathList.resize(fileSet.size());
-		int i = 0;
-		for (auto s : fileSet)
-			mPathList[i++] = s;
-	}
+void Engine::printVocab() {
+	idx->vocab();
+}
 
-	static std::vector<std::string> split(std::string token) {
-		std::vector<std::string> vect;
-		std::stringstream ss(token);
+std::string Engine::stem(std::string &token) {
+	return PorterStemmer::stem(token);
+}
 
-		char c;
-		std::string str = "";
-		while (ss >> c)
-		{
-			if (c != '-') // if NOT hyphen
-				str += c;
-			else {
-				vect.push_back(str);
-				str = "";
-			}
-		}
-		vect.push_back(str);
-
-		return vect;
-	}
-};
-
-#endif
+void Engine::printQuery(std::string &query) {
+std::list<DocInfo> output = queryEngine.processQuery(query, idx);
+			for (auto di : output)
+				std::cout << idTable->at(di.getDocId()) << '\t';
+			std::cout << std::endl << output.size() << std::endl;
+			std::cout << std::endl;
+}

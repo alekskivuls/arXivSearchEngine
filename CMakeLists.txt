@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.7)
-project (SimpleEngine)
+project (arXivSearchEngine)
 
 #Bring the headers into the project
-include_directories(SimpleEngine/*.h)
+include_directories(Engine/*.h)
 
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "SimpleEngine/*.cpp")
+file(GLOB SOURCES "Engine/*.cpp")
 
 #C++11 flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -18,6 +18,6 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 FIND_PACKAGE(Boost 1.50.0 COMPONENTS regex system filesystem REQUIRED) 
 if(Boost_FOUND)
 	include_directories(${Boost_INCLUDE_DIRS})
-	add_executable(SimpleEngine ${SOURCES})
-	TARGET_LINK_LIBRARIES(SimpleEngine ${Boost_LIBRARIES})
+	add_executable(arxivSearchEngine ${SOURCES})
+	TARGET_LINK_LIBRARIES(arxivSearchEngine ${Boost_LIBRARIES})
 endif()
