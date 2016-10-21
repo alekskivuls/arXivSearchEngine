@@ -6,6 +6,7 @@
 
 class PorterStemmer {
 public:
+	/**Apply the Porter stemmer to the token and return the result */
 	static std::string stem(std::string&);
 
 private:

@@ -13,14 +13,14 @@ class Tokenizer : public TokenStream {
 	unsigned int pos;
 
 public:
-	// variable byte and gap encoding (bytes -> .json files)
+	/** variable byte and gap encoding (bytes -> .json files)*/
 	Tokenizer(const boost::filesystem::path &p);
-	// parsing string by tokens into k-grams
+	/** parsing string by tokens into k-grams*/
 	Tokenizer(const std::string &s);
 	~Tokenizer();
 
-	// Retrieves the next token in the string or file depending on which 
-	// constructor was used. This method should be used like scanf. 
+	/** Retrieves the next token in the string or file depending on which 
+	 * constructor was used. This method should be used like scanf.*/
 	bool nextToken(std::string &token, bool &hyphen);
 
 	std::string nextToken(std::string token, const int &gram);

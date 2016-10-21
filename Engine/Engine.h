@@ -27,7 +27,7 @@ class Engine {
 public:
 	Engine();
 	
-	/*
+	/**
 	* Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that
 	* is allocated on the heap. This method feeds the text file into a stringstream and passes the
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
@@ -36,7 +36,7 @@ public:
 	void populateIndex(const boost::filesystem::path &dir, InvertedIndex *& idx,
 		std::unordered_map<unsigned int, std::string> *idTable);
 
-	/*
+	/**
 	* This method goes to a path and walks through the directory searching for all files that end
 	* with the .json extension. The method will put all full file paths into a vector that is passed
 	* by reference.
