@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>arXivSearchEngine: Main Page</title>
+<title>arXivSearchEngine: Engine/InvertedIndex.h Source File</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -46,9 +46,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -67,13 +67,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">arXivSearchEngine Documentation</div>  </div>
+<div class="title">Engine/InvertedIndex.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-</div><!-- contents -->
+<div class="fragment"><pre class="fragment"><a name="l00001"></a>00001 <span class="preprocessor">#ifndef INVERTED_INDEX_H</span>
+<a name="l00002"></a>00002 <span class="preprocessor"></span><span class="preprocessor">#define INVERTED_INDEX_H</span>
+<a name="l00003"></a>00003 <span class="preprocessor"></span>
+<a name="l00004"></a>00004 <span class="preprocessor">#include &lt;unordered_map&gt;</span>
+<a name="l00005"></a>00005 <span class="preprocessor">#include &quot;DocInfo.h&quot;</span>
+<a name="l00006"></a>00006 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00007"></a>00007 <span class="preprocessor">#include &lt;list&gt;</span>
+<a name="l00008"></a>00008 
+<a name="l00015"></a><a class="code" href="classInvertedIndex.html">00015</a> <span class="keyword">class </span><a class="code" href="classInvertedIndex.html">InvertedIndex</a> {
+<a name="l00018"></a><a class="code" href="classInvertedIndex.html#a0f12dd10b61d0f5fb2b65339f139e8c2">00018</a>     <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classQEngine.html">QEngine</a>;
+<a name="l00020"></a>00020     std::unordered_map&lt;std::string, std::list&lt;DocInfo&gt;&gt; _mIndex;
+<a name="l00021"></a>00021     
+<a name="l00024"></a>00024     <span class="keywordtype">bool</span> hasPostings(<span class="keyword">const</span> std::string &amp;term) <span class="keyword">const</span>;
+<a name="l00025"></a>00025     
+<a name="l00027"></a>00027     std::list&lt;DocInfo&gt; getPostings(<span class="keyword">const</span> std::string &amp;term) <span class="keyword">const</span>;
+<a name="l00028"></a>00028 
+<a name="l00029"></a>00029 <span class="keyword">public</span>:
+<a name="l00030"></a>00030     <a class="code" href="classInvertedIndex.html">InvertedIndex</a>();
+<a name="l00031"></a>00031 
+<a name="l00034"></a>00034     <span class="keywordtype">void</span> <a class="code" href="classInvertedIndex.html#a5d0b45920eed2580d4256c0cd625b58d">addTerm</a>(<span class="keyword">const</span> std::string &amp;term, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> &amp;docId, <span class="keyword">const</span> <span class="keywordtype">int</span> &amp;pos); <span class="comment">// maybe create a remove term?</span>
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036     <span class="keywordtype">void</span> vocab() <span class="keyword">const</span>;
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getTermCount() <span class="keyword">const</span>;
+<a name="l00039"></a>00039 };
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041 <span class="preprocessor">#endif</span>
+</pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"

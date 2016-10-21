@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<title>arXivSearchEngine: Main Page</title>
+<title>arXivSearchEngine: Member List</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -46,8 +46,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -67,13 +67,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
+    </ul>
+  </div>
 </div>
 <div class="header">
   <div class="headertitle">
-<div class="title">arXivSearchEngine Documentation</div>  </div>
+<div class="title">Engine Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
-</div><!-- contents -->
+This is the complete list of members for <a class="el" href="classEngine.html">Engine</a>, including all inherited members.<table>
+  <tr bgcolor="#f0f0f0"><td><b>Engine</b>() (defined in <a class="el" href="classEngine.html">Engine</a>)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classEngine.html#a28311049f0c0052394f65bb480335f3b">getPathNames</a>(const boost::filesystem::path &amp;directory, std::vector&lt; std::string &gt; &amp;mPathList)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>index</b>(const std::string &amp;filepath) (defined in <a class="el" href="classEngine.html">Engine</a>)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr class="memlist"><td><a class="el" href="classEngine.html#a6db30ee41c9cf2c88a289d5880658f38">populateIndex</a>(const boost::filesystem::path &amp;dir, InvertedIndex *&amp;idx, std::unordered_map&lt; unsigned int, std::string &gt; *idTable)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>printQuery</b>(std::string &amp;query) (defined in <a class="el" href="classEngine.html">Engine</a>)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>printVocab</b>() (defined in <a class="el" href="classEngine.html">Engine</a>)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+  <tr bgcolor="#f0f0f0"><td><b>stem</b>(std::string &amp;token) (defined in <a class="el" href="classEngine.html">Engine</a>)</td><td><a class="el" href="classEngine.html">Engine</a></td><td></td></tr>
+</table></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
