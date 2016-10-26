@@ -6,13 +6,13 @@
 #include <boost/foreach.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
-#include "Engine.h"
 #include <unordered_map>
 #include <unordered_set>
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
 #include <algorithm>
+#include "Engine.h"
 #include <stdio.h>
 #include <string>
 #include <fstream>

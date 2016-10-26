@@ -95,3 +95,6 @@ build/
 
 #Executables
 *.exe
+
+#Vim editing
+*.swp
