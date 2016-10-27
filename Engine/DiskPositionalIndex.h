@@ -1,6 +1,6 @@
 #ifndef __DISKPOSITIONALINDEX_H
 #define __DISKPOSITIONALINDEX_H
-#include "PositionalInvertedIndex.h"
+#include "InvertedIndex.h"
 #include <string>
 #include <fstream>
 #include <vector>

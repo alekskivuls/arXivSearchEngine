@@ -20,7 +20,7 @@
 
 class Engine {
 	boost::filesystem::path dir;
-	InvertedIndex *idx;
+	InvertedIndex idx;
 	QEngine queryEngine;
 	std::unordered_map<unsigned int, std::string> *idTable;
 

@@ -11,11 +11,13 @@ Tokenizer::~Tokenizer() {
 	_file.close();
 }
 
+////Method needs to be refactored and bug fixed
 // should pass in an empty string to populate the tokenizer variable 
 bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 	hyphen = false;
 	token = "";
 	char c;
+    ////Excess branching on commonly called method
 	if (isFileTokenizer) { // use file tokenizer logic... read byte? 
 		// future implementation of variable byte encoding, etc. 
 		// (reading directly from a compressed .json file) 
@@ -25,6 +27,7 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 			// get next char in sequence
 			c = _buffer[pos++];
 			// valid character for token
+            //// Bug in tokenizing refer to milestone 1 for tokenization
 			if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
 				|| (c >= '0' && c <= '9') || c == '-') {
 				

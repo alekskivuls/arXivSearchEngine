@@ -68,9 +68,8 @@ Engine::Engine() {
 
 	void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex *& idx, std::unordered_map<unsigned int, std::string> *idTable) {
 
-		std::chrono::time_point<std::chrono::system_clock> totalStart, totalFinish, start, finish;
+		std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
 		totalStart = std::chrono::system_clock::now();
-		double elapsedTime = 0.0, stemTime = 0.0, fileReadTime = 0.0, treeTime = 0.0, lowerTime = 0.0, stringTime = 0.0;
 
 		std::unordered_map<std::string, std::string> cache;
 		boost::filesystem::directory_iterator it(dir), eod;
@@ -109,8 +108,6 @@ Engine::Engine() {
 					while (tkzr.nextToken(token, hyphen)) {
 						// while not end of file.
 						// Get stem the token or retrieve the value from a cache
-						//start = std::chrono::system_clock::now();
-						token.reserve(200);
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
 								? cache[token] : PorterStemmer::stem(token);
@@ -129,16 +126,10 @@ Engine::Engine() {
 					}
 				}
 			}
-			//system("pause");
 		}
 
-		totalFinish = std::chrono::system_clock::now();
-		std::chrono::duration<double> elapsed_seconds = totalFinish-totalStart;
-
-		//std::cout << "Total elapsed time for string time: " << stringTime << " ms." << std::endl;
-		//std::cout << "Total elapsed time for File Read Time: " << fileReadTime << " ms." << std::endl;
-		//std::cout << "Total elapsed time to fill Json Tree: " << treeTime << " ms." << std::endl;
-		//std::cout << "Total elapsed time for Porter Stemmer: " << stemTime << " ms." << std::endl;
+        totalEnd = std::chrono::system_clock::now();
+		std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
 		std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 	}
 
