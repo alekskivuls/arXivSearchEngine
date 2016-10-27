@@ -21,8 +21,8 @@
 
 // Default constructors and destructors
 Engine::Engine() { 
-	idTable = new std::unordered_map<unsigned int, std::string>();
-	idx = new InvertedIndex();
+	idTable = std::unordered_map<unsigned int, std::string>();
+	idx = InvertedIndex();
 }
 
 	void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
@@ -66,7 +66,7 @@ Engine::Engine() {
 		return vect;
 	}
 
-	void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex *& idx, std::unordered_map<unsigned int, std::string> *idTable) {
+	void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<unsigned int, std::string> &idTable) {
 
 		std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
 		totalStart = std::chrono::system_clock::now();
@@ -90,7 +90,7 @@ Engine::Engine() {
 			boost::property_tree::ptree pt;
 			boost::property_tree::read_json(ss, pt);
 			boost::filesystem::path dir(p);
-			(*idTable)[i] = dir.stem().string();
+			(idTable)[i] = dir.stem().string();
 
 			//std::cout << "json to map...\n";
 			// iterate through .json tree
@@ -111,15 +111,15 @@ Engine::Engine() {
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
 								? cache[token] : PorterStemmer::stem(token);
-							idx->addTerm(stemmedToken, i, posIndex); // stemmedToken
+							idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
 						}
 						else {
 							std::string total = "";
 							for (auto s : split(token)) {
-								idx->addTerm(PorterStemmer::stem(s), i, posIndex);
+								idx.addTerm(PorterStemmer::stem(s), i, posIndex);
 								total += s;
 							}
-							idx->addTerm(PorterStemmer::stem(total), i, posIndex);
+							idx.addTerm(PorterStemmer::stem(total), i, posIndex);
 						}
 
 						posIndex++;
@@ -137,16 +137,14 @@ void Engine::index(const std::string &filepath) {
 	boost::filesystem::path dir(filepath);
 	boost::filesystem::directory_iterator it(dir), eod;
 
-	delete idx;
-	delete idTable;
-	idTable = new std::unordered_map<unsigned int, std::string>();
-	idx = new InvertedIndex();
+	idTable = std::unordered_map<unsigned int, std::string>();
+	idx = InvertedIndex();
 	Engine::populateIndex(dir, idx, idTable);
-	std::cout << "idx size = " << idx->getTermCount() << '\n';
+	std::cout << "idx size = " << idx.getTermCount() << '\n';
 }
 
 void Engine::printVocab() {
-	idx->vocab();
+	idx.vocab();
 }
 
 std::string Engine::stem(std::string &token) {
@@ -156,7 +154,7 @@ std::string Engine::stem(std::string &token) {
 void Engine::printQuery(std::string &query) {
 std::list<DocInfo> output = queryEngine.processQuery(query, idx);
 			for (auto di : output)
-				std::cout << idTable->at(di.getDocId()) << '\t';
+				std::cout << idTable.at(di.getDocId()) << '\t';
 			std::cout << std::endl << output.size() << std::endl;
 			std::cout << std::endl;
 }

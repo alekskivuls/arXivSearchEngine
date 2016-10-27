@@ -167,15 +167,15 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *& idx) {
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &idx) {
 	std::list<std::string> infix = stemmify(userQuery);
 
 	if (infix.size() == 0) {
-		return idx->getPostings("");
+		return idx.getPostings("");
 	}
 
 	if (infix.size() == 1) {
-		for (auto d : idx->getPostings(infix.front())) {
+		for (auto d : idx.getPostings(infix.front())) {
 			std::cout << d.getDocId() << ":\n";
 			for (auto i : d.getPositions()) {
 				std::cout << i << " ";
@@ -183,7 +183,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *
 			std::cout << "\n";
 		}
 		std::cout << "\n";
-		return idx->getPostings(infix.front());
+		return idx.getPostings(infix.front());
 	}
 
 	std::list<std::string> rpnQuery = infixToRPN(infix);
@@ -217,7 +217,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex *
 				//result.push(XOR(left, right));
 		}
 		else 
-			result.push(idx->getPostings(token));
+			result.push(idx.getPostings(token));
 	}
 	return result.top();
 }

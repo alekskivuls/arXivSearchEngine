@@ -31,7 +31,7 @@ public:
 	QEngine();
 	~QEngine();
 
-	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex *& idx);
+	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex &idx);
 
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */
