@@ -14,33 +14,38 @@ Tokenizer::~Tokenizer() {
 ////Method needs to be refactored and bug fixed
 // should pass in an empty string to populate the tokenizer variable 
 bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
+	bool start = false, tempHyphen = false, alphaNum;
+	std::string tempBuf = "";
 	hyphen = false;
 	token = "";
 	char c;
-    ////Excess branching on commonly called method
-	if (isFileTokenizer) { // use file tokenizer logic... read byte? 
-		// future implementation of variable byte encoding, etc. 
-		// (reading directly from a compressed .json file) 
-	}
-	else {
-		while (pos < _buffer.size()) {
-			// get next char in sequence
-			c = _buffer[pos++];
-			// valid character for token
-            //// Bug in tokenizing refer to milestone 1 for tokenization
-			if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-				|| (c >= '0' && c <= '9') || c == '-') {
-				
-				if (c == '-')
-					hyphen = true;
-				token += c;
+	while (pos < _buffer.size()) {
+		// get next char in sequence
+		c = _buffer[pos++];
+		alphaNum = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+
+		if (alphaNum) {
+			if (start) {
+				if (tempHyphen) hyphen = true;
+				token += tempBuf;
 			}
-			// invalid character for token
-			else if (token != "") 
-				return true;
+			else start = true;
+
+			if (tempBuf.size() != 0)
+				tempBuf = "";
+
+			token += c;
+		}
+		else {
+			if (c == ' ')
+				break; // DONE
+			else {
+				if (c == '-') tempHyphen = true;
+				tempBuf += c; // truly some dank, random-ass char
+			}
 		}
 	}
-	return false; // no more tokens to process from 
+	return token.size() != 0; // no more tokens to process from 
 }
 
 // ignore the following block of comment. I may end up creating a new library for k-grams, 
