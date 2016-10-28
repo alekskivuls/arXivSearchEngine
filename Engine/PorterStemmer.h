@@ -94,6 +94,8 @@ private:
 	static const std::string iti;
 
 	static bool trim(std::string&, const std::string&, const std::string&, const boost::regex&);
+
+    static inline bool ends_with(std::string const & value, std::string const & ending);
 };
 
 #endif

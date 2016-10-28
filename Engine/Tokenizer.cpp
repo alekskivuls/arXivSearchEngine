@@ -17,7 +17,6 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 	hyphen = false;
 	token = "";
 	char c;
-    ////Excess branching on commonly called method
 	if (isFileTokenizer) { // use file tokenizer logic... read byte? 
 		// future implementation of variable byte encoding, etc. 
 		// (reading directly from a compressed .json file) 

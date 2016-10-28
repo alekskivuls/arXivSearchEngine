@@ -1,6 +1,5 @@
 #include "PorterStemmer.h"
 #include <boost/regex.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 #include <string>
 	
 	//Regex patterns
@@ -94,12 +93,12 @@ std::string PorterStemmer::stem(std::string &token)
 		return token;
 
 	//Step 1a
-	if (boost::algorithm::ends_with(token, sses))
+	if (ends_with(token, sses))
 		token.erase(token.end() - 2, token.end());
 		//token = token.substr(0, token.length() - 2);
-	else if (boost::algorithm::ends_with(token, ies))
+	else if (ends_with(token, ies))
 		token.erase(token.end() - 2, token.end());
-	else if (!boost::algorithm::ends_with(token, ss) && boost::algorithm::ends_with(token, s))
+	else if (!ends_with(token, ss) && ends_with(token, s))
 		token.erase(token.end() - 1, token.end());
 
 	//Step 1b
@@ -107,16 +106,16 @@ std::string PorterStemmer::stem(std::string &token)
 	bool extra1b = false;
 	if (trim(token, eed, ee, mGr0)) {}
 	else if (trim(token, ed, blank, vowel)) {
-		if(!boost::algorithm::ends_with(token, ed))
+		if(!ends_with(token, ed))
 			extra1b = true;
 	}
 	else if (trim(token, ing, blank, vowel)) {
-		if (!boost::algorithm::ends_with(token, ing))
+		if (!ends_with(token, ing))
 			extra1b = true;
 	}
 
 	if (extra1b) {
-		if (boost::algorithm::ends_with(token, at) || boost::algorithm::ends_with(token, bl) || boost::algorithm::ends_with(token, iz)) {
+		if (ends_with(token, at) || ends_with(token, bl) || ends_with(token, iz)) {
 			token.append(e);
 		}
 		else if (token.length() >= 2 && (token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
@@ -178,7 +177,7 @@ std::string PorterStemmer::stem(std::string &token)
 	else if (trim(token, ement, blank, mGr1)) {}
 	else if (trim(token, ment, blank, mGr1)) {}
 	else if (trim(token, ent, blank, mGr1)) {}
-	else if (boost::algorithm::ends_with(token, sion) || boost::algorithm::ends_with(token, tion)) { 
+	else if (ends_with(token, sion) || ends_with(token, tion)) { 
 		trim(token, ion, "", mGr1);
 	}
 	else if (trim(token, ou, blank, mGr1)) {}
@@ -199,7 +198,7 @@ std::string PorterStemmer::stem(std::string &token)
 	
 	//Step 5b
 	if (boost::regex_search(token.substr(0, (token.length() - 1)), mGr1)) {
-		if (boost::algorithm::ends_with(token, "ll")) {
+		if (ends_with(token, "ll")) {
 			token.erase(token.end() - 1, token.end());
 		}
 	}
@@ -207,7 +206,7 @@ std::string PorterStemmer::stem(std::string &token)
 }
 
 bool PorterStemmer::trim(std::string &token, const std::string &suffix, const std::string &replacement, const boost::regex &reg) {
-	if (boost::algorithm::ends_with(token, suffix)) {
+	if (ends_with(token, suffix)) {
 		std::string prefix = token.substr(0, (token.length() - suffix.length()));
 		if (boost::regex_search(prefix, reg)) {
 			//token = token.substr(0, token.length() - suffix.length()) + replacement;
@@ -217,4 +216,10 @@ bool PorterStemmer::trim(std::string &token, const std::string &suffix, const st
 		return true;
 	}
 	return false;
+}
+
+inline bool PorterStemmer::ends_with(std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }
