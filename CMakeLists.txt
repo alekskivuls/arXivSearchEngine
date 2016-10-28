@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 2.8.7)
 project (arXivSearchEngine)
 
 #Bring the headers into the project
-include_directories(Engine/*.h)
+include_directories(arXivSearchEngine/*.h)
 
 #However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "Engine/*.cpp")
+file(GLOB SOURCES "arXivSearchEngine/*.cpp")
 
 #C++11 flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
