@@ -15,54 +15,49 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SimpleEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InvertedIndex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
+    <ClCompile Include="ConsoleEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DocInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="QEngine.cpp">
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InvertedIndex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PorterStemmer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="QEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tokenizer.h">
+    <ClInclude Include="DocInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InvertedIndex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TokenStream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DocInfo.h">
+    <ClInclude Include="PorterStemmer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PorterStemmer.h">
+    <ClInclude Include="Tokenizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleEngine.h">
+    <ClInclude Include="TokenStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="test.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="..\CMakeLists.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>
