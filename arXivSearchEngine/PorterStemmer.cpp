@@ -265,6 +265,10 @@ std::string PorterStemmer::stem(std::string &token)
 	return token;
 }
 
+/**
+ * This method will trim the token.
+ */
+
 bool PorterStemmer::trim(std::string &token, const std::string &suffix, const std::string &replacement, const boost::regex &reg) {
 	if (ends_with(token, suffix)) {
 		std::string prefix = token.substr(0, (token.length() - suffix.length()));
@@ -277,6 +281,10 @@ bool PorterStemmer::trim(std::string &token, const std::string &suffix, const st
 	}
 	return false;
 }
+
+/**
+ * This method will check if the string ends with the given ending.
+ */
 
 inline bool PorterStemmer::ends_with(std::string const & value, std::string const & ending)
 {
