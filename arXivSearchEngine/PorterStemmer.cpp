@@ -1,8 +1,7 @@
 #include "PorterStemmer.h"
 #include <boost/regex.hpp>
-#include <boost/algorithm/string/predicate.hpp>
 #include <string>
-	
+
 	//Regex patterns
 	const std::string PorterStemmer::c = "[^aeiou]";
 	const std::string PorterStemmer::v = "[aeiouy]";
@@ -94,29 +93,28 @@ std::string PorterStemmer::stem(std::string &token)
 		return token;
 
 	//Step 1a
-	if (boost::algorithm::ends_with(token, sses))
+	if (ends_with(token, sses))
 		token.erase(token.end() - 2, token.end());
 		//token = token.substr(0, token.length() - 2);
-	else if (boost::algorithm::ends_with(token, ies))
+	else if (ends_with(token, ies))
 		token.erase(token.end() - 2, token.end());
-	else if (!boost::algorithm::ends_with(token, ss) && boost::algorithm::ends_with(token, s))
+	else if (!ends_with(token, ss) && ends_with(token, s))
 		token.erase(token.end() - 1, token.end());
 
 	//Step 1b
-	boost::smatch list;
 	bool extra1b = false;
 	if (trim(token, eed, ee, mGr0)) {}
 	else if (trim(token, ed, blank, vowel)) {
-		if(!boost::algorithm::ends_with(token, ed))
+		if(!ends_with(token, ed))
 			extra1b = true;
 	}
 	else if (trim(token, ing, blank, vowel)) {
-		if (!boost::algorithm::ends_with(token, ing))
+		if (!ends_with(token, ing))
 			extra1b = true;
 	}
 
 	if (extra1b) {
-		if (boost::algorithm::ends_with(token, at) || boost::algorithm::ends_with(token, bl) || boost::algorithm::ends_with(token, iz)) {
+		if (ends_with(token, at) || ends_with(token, bl) || ends_with(token, iz)) {
 			token.append(e);
 		}
 		else if (token.length() >= 2 && (token.at(token.length() - 2)) == (token.at(token.length() - 1))) {
@@ -124,9 +122,12 @@ std::string PorterStemmer::stem(std::string &token)
 				token.erase(token.end() - 1, token.end());
 			}
 		}
-		else if (boost::regex_search(token, list, mEq1cvc)) {
-			token.append(e);// = token + "e";
-		}
+		else {
+        	boost::smatch list;
+            if (boost::regex_search(token, list, mEq1cvc)) {
+    			token.append(e);// = token + "e";
+    		}
+        }
 	}
 
 	//Step 1c
@@ -136,59 +137,117 @@ std::string PorterStemmer::stem(std::string &token)
 	}
 
 	//Step 2
-	if (trim(token, ational, ate, mGr0)) {}
-	else if(trim(token, tional, tion, mGr0)) {}
-	else if (trim(token, enci, ence, mGr0)) {}
-	else if (trim(token, anci, ance, mGr0)) {}
-	else if (trim(token, izer, ize, mGr0)) {}
-	else if (trim(token, abli, al, mGr0)) {}
-	else if (trim(token, alli, al, mGr0)) {}
-	else if (trim(token, entli, ent, mGr0)) {}
-	else if (trim(token, eli, e, mGr0)) {}
-	else if (trim(token, ousli, ous, mGr0)) {}
-	else if (trim(token, ization, ize, mGr0)) {}
-	else if (trim(token, ation, ate, mGr0)) {}
-	else if (trim(token, ator, ate, mGr0)) {}
-	else if (trim(token, alism, al, mGr0)) {}
-	else if (trim(token, iveness, ive, mGr0)) {}
-	else if (trim(token, fulness, ful, mGr0)) {}
-	else if (trim(token, ousness, ous, mGr0)) {}
-	else if (trim(token, aliti, al, mGr0)) {}
-	else if (trim(token, iviti, ive, mGr0)) {}
-	else if (trim(token, biliti, ble, mGr0)) {}
+    if(token.length() > 5) {
+        switch(token.at(token.length()-2)) {
+            case 'a':
+                if (trim(token, ational, ate, mGr0)) {}
+	            else if(trim(token, tional, tion, mGr0)) {}
+                break;
+            case 'c':
+                if (trim(token, enci, ence, mGr0)) {}
+	            else if (trim(token, anci, ance, mGr0)) {}
+                break;
+            case 'e':
+                if (trim(token, izer, ize, mGr0)) {}
+                break;
+            case 'l':
+                if (trim(token, abli, al, mGr0)) {}
+	            else if (trim(token, alli, al, mGr0)) {}
+	            else if (trim(token, entli, ent, mGr0)) {}
+	            else if (trim(token, eli, e, mGr0)) {}
+	            else if (trim(token, ousli, ous, mGr0)) {}
+                break;
+            case 'o':
+                if (trim(token, ization, ize, mGr0)) {}
+	            else if (trim(token, ation, ate, mGr0)) {}
+	            else if (trim(token, ator, ate, mGr0)) {}
+                break;
+            case 's':
+                if (trim(token, alism, al, mGr0)) {}
+	            else if (trim(token, iveness, ive, mGr0)) {}
+	            else if (trim(token, fulness, ful, mGr0)) {}
+	            else if (trim(token, ousness, ous, mGr0)) {}
+                break;
+            case 't':
+                if (trim(token, aliti, al, mGr0)) {}
+	            else if (trim(token, iviti, ive, mGr0)) {}
+	            else if (trim(token, biliti, ble, mGr0)) {}
+                break;
+        }
+    }
 
 	//Step 3
-	if (trim(token, icate, ic, mGr0)) {}
-	else if (trim(token, ative, blank, mGr0)) {}
-	else if (trim(token, alize, al, mGr0)) {}
-	else if (trim(token, iciti, ic, mGr0)) {}
-	else if (trim(token, ical, ic, mGr0)) {}
-	else if (trim(token, ful, blank, mGr0)) {}
-	else if (trim(token, ness, blank, mGr0)) {}
+    if(token.length() > 5) {
+        switch(token.at(token.length()-1)) {
+	        case 'e':
+                if (trim(token, icate, ic, mGr0)) {}
+	            else if (trim(token, ative, blank, mGr0)) {}
+	            else if (trim(token, alize, al, mGr0)) {}
+                break;
+            case 'i':
+                if (trim(token, iciti, ic, mGr0)) {}
+                break;
+            case 'l':
+                if (trim(token, ical, ic, mGr0)) {}
+	            else if (trim(token, ful, blank, mGr0)) {}
+                break;
+            case 's':
+                 if (trim(token, ness, blank, mGr0)) {}
+                 break;
+        }
+    }
 
 	//Step 4
-	if (trim(token, al, blank, mGr1)) {}
-	else if (trim(token, ance, blank, mGr1)) {}
-	else if (trim(token, ence, blank, mGr1)) {}
-	else if (trim(token, er, blank, mGr1)) {}
-	else if (trim(token, ic, blank, mGr1)) {}
-	else if (trim(token, able, blank, mGr1)) {}
-	else if (trim(token, ible, blank, mGr1)) {}
-	else if (trim(token, ant, blank, mGr1)) {}
-	else if (trim(token, ement, blank, mGr1)) {}
-	else if (trim(token, ment, blank, mGr1)) {}
-	else if (trim(token, ent, blank, mGr1)) {}
-	else if (boost::algorithm::ends_with(token, sion) || boost::algorithm::ends_with(token, tion)) { 
-		trim(token, ion, "", mGr1);
-	}
-	else if (trim(token, ou, blank, mGr1)) {}
-	else if (trim(token, ism, blank, mGr1)) {}
-	else if (trim(token, ate, blank, mGr1)) {}
-	else if (trim(token, iti, blank, mGr1)) {}
-	else if (trim(token, ous, blank, mGr1)) {}
-	else if (trim(token, ive, blank, mGr1)) {}
-	else if (trim(token, ize, blank, mGr1)) {}
-	
+    if(token.length() > 6) {
+        switch(token.at(token.length()-2)) {
+            case 'a':
+                if (trim(token, al, blank, mGr1)) {}
+                break;
+            case 'c':
+                if (trim(token, ance, blank, mGr1)) {}
+	            else if (trim(token, ence, blank, mGr1)) {}
+                break;
+            case 'r':
+                if (trim(token, er, blank, mGr1)) {}
+                break;
+            case 'i':
+                if (trim(token, ic, blank, mGr1)) {}
+                break;
+            case 'l':
+                if (trim(token, able, blank, mGr1)) {}
+	            else if (trim(token, ible, blank, mGr1)) {}
+                break;
+            case 'n':
+                if (trim(token, ant, blank, mGr1)) {}
+                else if (trim(token, ement, blank, mGr1)) {}
+	            else if (trim(token, ment, blank, mGr1)) {}
+	            else if (trim(token, ent, blank, mGr1)) {}
+                break;
+            case 'o':
+                if (ends_with(token, sion) || ends_with(token, tion)) { 
+		            trim(token, ion, "", mGr1);
+	            }
+	            else if (trim(token, ou, blank, mGr1)) {}
+                break;
+            case 's':
+                if (trim(token, ism, blank, mGr1)) {}
+                break;
+            case 't':
+                if (trim(token, ate, blank, mGr1)) {}
+	            else if (trim(token, iti, blank, mGr1)) {}
+                break;
+            case 'u':
+                if (trim(token, ous, blank, mGr1)) {}
+                break;
+            case 'v':
+                if (trim(token, ive, blank, mGr1)) {}
+                break;
+            case 'z':
+                if (trim(token, ize, blank, mGr1)) {}
+                break;
+        }	 
+    }	
+
 	//Step 5a
 	if (trim(token, "e", "", mGr1)) {}
 	if (trim(token, "e", "e", mEq1)) {
@@ -199,15 +258,19 @@ std::string PorterStemmer::stem(std::string &token)
 	
 	//Step 5b
 	if (boost::regex_search(token.substr(0, (token.length() - 1)), mGr1)) {
-		if (boost::algorithm::ends_with(token, "ll")) {
+		if (ends_with(token, "ll")) {
 			token.erase(token.end() - 1, token.end());
 		}
 	}
 	return token;
 }
 
+/**
+ * This method will trim the token.
+ */
+
 bool PorterStemmer::trim(std::string &token, const std::string &suffix, const std::string &replacement, const boost::regex &reg) {
-	if (boost::algorithm::ends_with(token, suffix)) {
+	if (ends_with(token, suffix)) {
 		std::string prefix = token.substr(0, (token.length() - suffix.length()));
 		if (boost::regex_search(prefix, reg)) {
 			//token = token.substr(0, token.length() - suffix.length()) + replacement;
@@ -217,4 +280,14 @@ bool PorterStemmer::trim(std::string &token, const std::string &suffix, const st
 		return true;
 	}
 	return false;
+}
+
+/**
+ * This method will check if the string ends with the given ending.
+ */
+
+inline bool PorterStemmer::ends_with(std::string const & value, std::string const & ending)
+{
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }

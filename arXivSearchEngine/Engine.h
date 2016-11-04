@@ -20,9 +20,9 @@
 
 class Engine {
 	boost::filesystem::path dir;
-	InvertedIndex *idx;
+	InvertedIndex idx;
 	QEngine queryEngine;
-	std::unordered_map<unsigned int, std::string> *idTable;
+	std::unordered_map<unsigned int, std::string> idTable;
 
 public:
 	Engine();
@@ -33,8 +33,8 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-	void populateIndex(const boost::filesystem::path &dir, InvertedIndex *& idx,
-		std::unordered_map<unsigned int, std::string> *idTable);
+	void populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx,
+		std::unordered_map<unsigned int, std::string> &idTable);
 
 	/**
 	* This method goes to a path and walks through the directory searching for all files that end
