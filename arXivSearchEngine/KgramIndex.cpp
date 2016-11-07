@@ -13,6 +13,10 @@ bool KgramIndex::hasKgram(const std::string &kgram) const {
 	return _mIndex.find(kgram) != _mIndex.end();
 }
 
+/** This method, getTerms will, given a string kgram (key), return the list<string> (value) of
+ * terms associates with that kgram from the _mIndex
+ */
+
 std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
 	std::list<std::string*> empty;
 	if (hasKgram(kgram))
@@ -22,12 +26,12 @@ std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
 }
 
 /**
-This method, addKgram will, given a string kgram and a string term,
-push_back that string term into the list (value) and map it to the provided 
-kgram (key), and save that into the _mIndex.
-
-This method is utilized by (dependency) addTerm.
-*/
+ * This method, addKgram will, given a string kgram and a string term,
+ * push_back that string term into the list (value) and map it to the provided 
+ * kgram (key), and save that into the _mIndex.
+ * 
+ * This method is utilized by (dependency) addTerm.
+ */
 
 // TODO: Potential optimation if we change to unordered set type.
 void KgramIndex::addKgram(const std::string &kgram, const std::string &term) {
@@ -89,6 +93,8 @@ void KgramIndex::addTerm(const std::string &term) {
 }
 
 /**
+ *
+ * How to use this public method: 
  * std::string term = "hello";
  * std::list<std:string> &refToList = getGrams(hello);
  */

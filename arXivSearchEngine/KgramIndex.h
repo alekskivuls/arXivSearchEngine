@@ -15,6 +15,7 @@
 class KgramIndex {
 
 	int _kgramSize;
+	
 	/** The hashmap that represents the entire inverted index.*/
 	std::unordered_map<std::string, std::list<std::string*>> _mIndex;
 	// Where do I store this.
@@ -30,8 +31,10 @@ class KgramIndex {
 	void addKgram(const std::string &kgram, const std::string &term);
 
 public:
-	//Constructor
-	KgramIndex(int kSize); //1, 2, 3.
+	/**Constructor where the kSize is the k in kgram.
+	 * Designed to support k = 1 - 3; however may support more than 3.
+	 */
+	KgramIndex(int kSize);
 
 	void addTerm(const std::string &kgram, const std::string &term); //add kgram to string into index
 
