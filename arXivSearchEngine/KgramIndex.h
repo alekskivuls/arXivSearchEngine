@@ -27,7 +27,7 @@ class KgramIndex {
 	 * i.e. getPostings('$st')
 	 * will return the list of all the string terms that apply that Kgram
 	 */
-	void KgramIndex::addKgram(const std::string &kgram, const std::string &term);
+	void addKgram(const std::string &kgram, const std::string &term);
 
 public:
 	//Constructor
@@ -36,6 +36,8 @@ public:
 	void addTerm(const std::string &kgram, const std::string &term); //add kgram to string into index
 
 	void vocab() const;
+
+	std::list<std::string> getGrams(const std::string &term)
 
 	unsigned int getTermCount() const;
 

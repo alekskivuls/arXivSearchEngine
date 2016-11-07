@@ -5,7 +5,7 @@ KgramIndex::KgramIndex(int kSize) : _kgramSize(kSize) { }
 //why is this returning errors?
 
 //variable
-std::unordered_map<std::string, std::list<std::string>> _mIndex;
+std::unordered_map<std::string, std::list<std::string*>> _mIndex;
 
 //returns true or false if the kgram is in the index.
 //private method.
@@ -21,13 +21,15 @@ std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
 		return empty;
 }
 
-/*
-you give it a string term  and kgram and it will break the term into the n-gram and save the kgrams
-into the index and the word into each of thse kgram indexes.
-//fills the index
+/**
+This method, addKgram will, given a string kgram and a string term,
+push_back that string term into the list (value) and map it to the provided 
+kgram (key), and save that into the _mIndex.
+
+This method is utilized by (dependency) addTerm.
 */
 
-// TODO: gunna change to unordered set.
+// TODO: Potential optimation if we change to unordered set type.
 void KgramIndex::addKgram(const std::string &kgram, const std::string &term) {
 	if (_mIndex.find(kgram) == _mIndex.end()) { //if kgram is new or not in index already
 		std::list<std::string> terms; //list of kgrams
@@ -90,7 +92,7 @@ void KgramIndex::addTerm(const std::string &term) {
  * std::string term = "hello";
  * std::list<std:string> &refToList = getGrams(hello);
  */
-std::list<std::string> getGrams(const std::string &term) {
+std::list<std::string> KgramIndex::getGrams(const std::string &term) {
 	// inside the function... does blah, returns a list of all kgrams of term
 	int i;
 	std::string gram;
@@ -116,7 +118,7 @@ void KgramIndex::vocab() const {
 /*
  * returns the number of kgrams that exist in the inverted index.
  */
-unsigned int getTermCount() const{
+unsigned int KgramIndex::getTermCount() const{
 	return _mIndex.size();
 }
 
