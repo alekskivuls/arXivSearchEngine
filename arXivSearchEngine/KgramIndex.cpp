@@ -8,12 +8,13 @@ KgramIndex::KgramIndex(int kSize) : _kgramSize(kSize) { }
 std::unordered_map<std::string, std::list<std::string*>> _mIndex;
 
 //returns true or false if the kgram is in the index.
-//private method.
+//private method; used in getTerms (dependency).
+//
 bool KgramIndex::hasKgram(const std::string &kgram) const { 
 	return _mIndex.find(kgram) != _mIndex.end();
 }
 
-/** This method, getTerms will, given a string kgram (key), return the list<string> (value) of
+/** This (public) method, getTerms will, given a string kgram (key), return the list<string> (value) of
  * terms associates with that kgram from the _mIndex
  */
 
@@ -26,7 +27,7 @@ std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
 }
 
 /**
- * This method, addKgram will, given a string kgram and a string term,
+ * This (private) method, addKgram will, given a string kgram and a string term,
  * push_back that string term into the list (value) and map it to the provided 
  * kgram (key), and save that into the _mIndex.
  * 
@@ -52,31 +53,23 @@ void KgramIndex::addKgram(const std::string &kgram, const std::string &term) {
 	}
 }
 
-/*
-this will use the addKgram method and separate the term into kgrams and use the
-addKgram to add that kgram key to term pair. 
+/** This (public) method will separate the term into kgrams (of the size passed in constructor)
+ * and use the addKgram (private) to add that kgram key to term pair into the _mIndex.
 */
 void KgramIndex::addTerm(const std::string &term) {
 	int i;
-	if(_kgramSize != 1) {
-		//if you want 2 or 3 kgrams you can add $
+	if(_kgramSize != 1) { //if you want 2 or 3 kgrams you can add $
 		bool first, last;
 		std::string gram;
-		int end = term.size() + _kgramSize;
-		for (i = 0; i < end; ++i) {
+		int end = term.size() + _kgramSize; //why?
+		for (i = 0; i < end; ++i) { //do you not get the numer of kgram for letter
 			first = i == 0;
 			last = i == end;
 
 			if (first) gram += '$';
-			int j, whatev;
-			// if(first || last) {
-			// 	whatev = _kgramSize - 1;
-			// }
-			// else {
-			// 	whatev = _kgramSize;
-			// }
-			whatev = (first || last) ? _kgramSize - 1 : _kgramSize;
-			for(j = 0; j < whatev; ++j) { // append character term[j]
+			int j, remainingK;
+			remainingK = (first || last) ? _kgramSize - 1 : _kgramSize;
+			for(j = 0; j < remainingK; ++j) { // append character term[j]
 				gram += term[i + j]; //gram is your gram.
 				//in the last and first case this will only cut 2.
 				//read into gram so 
@@ -94,22 +87,36 @@ void KgramIndex::addTerm(const std::string &term) {
 
 /**
  *
- * How to use this public method: 
+ * How to use this (public) method: 
  * std::string term = "hello";
  * std::list<std:string> &refToList = getGrams(hello);
  */
 std::list<std::string> KgramIndex::getGrams(const std::string &term) {
 	// inside the function... does blah, returns a list of all kgrams of term
 	int i;
-	std::string gram;
-	for (i = 0; i < term.size(); i++) {
-		if(i == 0) gram += '$';
-
-		
-
-		if(i == term.size()-1) gram += '$';
-
+	std::list<std::string> grams;
+	if(_kgramSize != 1) {
+		bool first, last;
+		for (i = 0; i < term.size(); i++) {
+			first = i == 0;
+			last = i == end;
+			std::string gram;
+			
+			if(i == 0) gram += '$';
+			int j, remainingK; //if it was first or last you will have kSize - 1 remaining letters
+			remainingK = (first || last) ? _kgramSize - 1 : _kgramSize;
+			
+			for(j = 0; j < remainingK; ++j) gram += term[i + j];
+	
+			if(last) gram += '$';
+			grams.push_back(gram); //adding our gram onto grams list
+		}
+	} else { //1-gram
+		for (i = 0; i < term.size(); i++) {
+			grams.push_back(term[i]);
+		}
 	}
+	return grams;
 }
 
 /*
@@ -124,7 +131,7 @@ void KgramIndex::vocab() const {
 /*
  * returns the number of kgrams that exist in the inverted index.
  */
-unsigned int KgramIndex::getTermCount() const{
+unsigned int KgramIndex::getGramCount() const{
 	return _mIndex.size();
 }
 
