@@ -37,13 +37,15 @@ file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 enable_testing()
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
-include_directories(${GTEST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${COMMON_INCLUDES})
-
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
-add_dependencies(${PROJECT_TEST_NAME} googletest)
+include_directories(${GTEST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${COMMON_INCLUDES} ${CMAKE_SOURCE_DIR}/${PROJECT_NAME_STR})
 
 add_executable(${PROJECT_NAME_STR} ${SOURCES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME_STR} ${Boost_LIBRARIES})
+
+list(REMOVE_ITEM SOURCES "${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ConsoleEngine.cpp")
+
+add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES} ${SOURCES})
+add_dependencies(${PROJECT_TEST_NAME} googletest)
 TARGET_LINK_LIBRARIES(${PROJECT_TEST_NAME} ${Boost_LIBRARIES})
 
 
