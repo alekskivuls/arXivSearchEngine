@@ -25,6 +25,8 @@ class KEngine {
 
 
 public:
+    // In the future we would like to make a list on indicies. void addIndex(int kgramSize);
+
 	KEngine();
 
 	/** This will use the KgramIndex and break the mispelled word into

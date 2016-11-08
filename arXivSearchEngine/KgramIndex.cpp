@@ -129,6 +129,7 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 /*
  * This method prints all kgrams and terms associated to each kgram to the console.
  */
+
 void KgramIndex::vocab() const {
 	for (auto pair : _mIndex) std::cout << pair.first << '\n';
 	std::cout << getGramCount() << '\n';
