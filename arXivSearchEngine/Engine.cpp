@@ -108,6 +108,7 @@ Engine::Engine() {
 					while (tkzr.nextToken(token, hyphen)) {
 						// while not end of file.
 						// Get stem the token or retrieve the value from a cache
+                        kInd3.addTerm(token);
 						if (!hyphen) {
 							std::string stemmedToken = (cache.find(token) != cache.end())
 								? cache[token] : PorterStemmer::stem(token);
@@ -157,4 +158,12 @@ std::list<DocInfo> output = queryEngine.processQuery(query, idx);
 				std::cout << idTable.at(di.getDocId()) << '\t';
 			std::cout << std::endl << output.size() << std::endl;
 			std::cout << std::endl;
+}
+
+void Engine::correctSpelling(std::string &token) {
+    kInd3.vocab();
+    auto list = kEngine.CorrectSpelling(token, kInd3);
+    for(auto element : list) {
+        std::cout << element << std::endl;
+    }
 }
