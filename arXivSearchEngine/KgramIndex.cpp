@@ -1,16 +1,15 @@
 #include "KgramIndex.h"
+#include <algorithm>
+#include <iostream>
 
 //probably right.
 KgramIndex::KgramIndex(int kSize) : _kgramSize(kSize) { }
 //why is this returning errors?
 
-//variable
-std::unordered_map<std::string, std::list<std::string*>> _mIndex;
-
 //returns true or false if the kgram is in the index.
 //private method; used in getTerms (dependency).
 //
-bool KgramIndex::hasKgram(const std::string &kgram) const { 
+bool KgramIndex::hasKgram(std::string &kgram) const { 
 	return _mIndex.find(kgram) != _mIndex.end();
 }
 
@@ -18,10 +17,10 @@ bool KgramIndex::hasKgram(const std::string &kgram) const {
  * terms associates with that kgram from the _mIndex
  */
 
-std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
-	std::list<std::string*> empty;
+std::list<std::string> KgramIndex::getTerms(std::string &kgram) const {
+	std::list<std::string> empty;
 	if (hasKgram(kgram))
-		return _mIndex.at(kgram);
+		return _mIndex.at(kgram); //at returns pointer to where that thing is at.
 	else
 		return empty;
 }
@@ -35,18 +34,19 @@ std::list<std::string> KgramIndex::getTerms(const std::string &kgram) const {
  */
 
 // TODO: Potential optimation if we change to unordered set type.
-void KgramIndex::addKgram(const std::string &kgram, const std::string &term) {
+void KgramIndex::addKgram(std::string &kgram, std::string &term) {
 	if (_mIndex.find(kgram) == _mIndex.end()) { //if kgram is new or not in index already
-		std::list<std::string> terms; //list of kgrams
+		std::list<std::string*> terms; //list of kgrams
 		//map kgram to list of string term
-		terms.push_back(term); // kgrams is the array of words put term into array
+		std::string* ptr_term = &term;
+		terms.push_back(ptr_term); // kgrams is the array of words put term into array
 		//i just want to put the list with just one string into the kgram
 		_mIndex[kgram] = terms;
 	}
 	else { //kgram is already made
 		std::list<std::string*> &terms = _mIndex[kgram]; //index[kg] is the array of ptrs to the words that apply
 
-		if (!(terms.back().contains(term))){ //if term already associated with the kgram, dont put again.
+		if (!(terms.contains(term))){ //if term already associated with the kgram, dont put again.
 			//if the term is not in the kgram key 
 			_mIndex[kgram].back().push_back(term);
 		}
@@ -56,13 +56,13 @@ void KgramIndex::addKgram(const std::string &kgram, const std::string &term) {
 /** This (public) method will separate the term into kgrams (of the size passed in constructor)
  * and use the addKgram (private) to add that kgram key to term pair into the _mIndex.
 */
-void KgramIndex::addTerm(const std::string &term) {
+void KgramIndex::addTerm(std::string &term) {
 	int i;
 	if(_kgramSize != 1) { //if you want 2 or 3 kgrams you can add $
 		bool first, last;
-		std::string gram;
 		int end = term.size() + _kgramSize; //why?
 		for (i = 0; i < end; ++i) { //do you not get the numer of kgram for letter
+			std::string gram;
 			first = i == 0;
 			last = i == end;
 
@@ -80,24 +80,25 @@ void KgramIndex::addTerm(const std::string &term) {
 		}
 	} else { //1-gram would be stupid...
 		for (i = 0; i < term.size(); i++) {
-			addKgram(term[i], term);
+			std::string gram = (std::string)term[i]; //there is likely a better way to do this.
+			addKgram(gram, term);
 		}
 	}
 }
 
 /**
- *
  * How to use this (public) method: 
  * std::string term = "hello";
  * std::list<std:string> &refToList = getGrams(hello);
  */
-std::list<std::string> KgramIndex::getGrams(const std::string &term) {
+std::list<std::string> KgramIndex::getGrams(std::string &term) {
 	// inside the function... does blah, returns a list of all kgrams of term
 	int i;
 	std::list<std::string> grams;
 	if(_kgramSize != 1) {
 		bool first, last;
-		for (i = 0; i < term.size(); i++) {
+		int end = term.size();
+		for (i = 0; i < end; i++) {
 			first = i == 0;
 			last = i == end;
 			std::string gram;
@@ -113,7 +114,8 @@ std::list<std::string> KgramIndex::getGrams(const std::string &term) {
 		}
 	} else { //1-gram
 		for (i = 0; i < term.size(); i++) {
-			grams.push_back(term[i]);
+			std::string gram = term[i];
+			grams.push_back(gram);
 		}
 	}
 	return grams;
@@ -123,9 +125,8 @@ std::list<std::string> KgramIndex::getGrams(const std::string &term) {
  * This method prints all kgrams and terms associated to each kgram to the console.
  */
 void KgramIndex::vocab() const {
-	for (auto pair : _mIndex) 
-		std::cout << pair.first << '\n';
-	std::cout << getTermCount() << '\n';
+	for (auto pair : _mIndex) std::cout << pair.first << '\n';
+	std::cout << getGramCount() << '\n';
 }
 
 /*
