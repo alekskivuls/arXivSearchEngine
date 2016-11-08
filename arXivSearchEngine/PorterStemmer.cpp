@@ -207,7 +207,7 @@ std::string PorterStemmer::stem(std::string &token)
                 if (trim(token, ance, blank, mGr1)) {}
 	            else if (trim(token, ence, blank, mGr1)) {}
                 break;
-            case 'r':
+            case 'e':
                 if (trim(token, er, blank, mGr1)) {}
                 break;
             case 'i':

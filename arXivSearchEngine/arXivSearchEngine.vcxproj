@@ -150,20 +150,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="ConsoleEngine.cpp" />
+    <ClCompile Include="DiskInvertedIndex.cpp" />
     <ClCompile Include="DocInfo.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="InvertedIndex.cpp" />
     <ClCompile Include="PorterStemmer.cpp" />
     <ClCompile Include="QEngine.cpp" />
+    <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compressor.h" />
+    <ClInclude Include="DiskInvertedIndex.h" />
     <ClInclude Include="DocInfo.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="InvertedIndex.h" />
     <ClInclude Include="PorterStemmer.h" />
     <ClInclude Include="QEngine.h" />
+    <ClInclude Include="Serializer.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TokenStream.h" />
   </ItemGroup>
