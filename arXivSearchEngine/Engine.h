@@ -45,6 +45,8 @@ public:
 
 	void index(const std::string &filepath);
 
+	void diskWriteTest(const std::string &filepath);
+
 	void printVocab();
 
 	void printQuery(std::string &query);

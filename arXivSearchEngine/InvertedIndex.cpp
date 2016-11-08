@@ -62,6 +62,10 @@ void InvertedIndex::vocab() const {
 	std::cout << getTermCount() << '\n';
 }
 
+std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() const {
+	return _mIndex;
+}
+
 /*
  * returns the number of unique terms that exist in the inverted index.
  */
