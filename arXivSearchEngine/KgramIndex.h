@@ -19,7 +19,7 @@ class KgramIndex {
 	
 	/** The hashmap that represents the entire inverted index.
 	 * Possible future optimization is to do <std::string*> */
-	std::unordered_map<std::string, std::list<std::string>> _mIndex;
+    std::unordered_map<std::string, std::list<std::string>> _mIndex;
 	// Where do I store this.
 
 	/**This method is used to check if a kgram exists. Instead of catching an out of 
@@ -32,14 +32,16 @@ class KgramIndex {
 	void addKgram(std::string &kgram, std::string &term);
 
 public:
-	
+
+    int getKSize();
+
 	/**Constructor where the kSize is the k in kgram.
 	 * Designed to support k = 1 - 3; however may support more than 3.*/
 	KgramIndex(int kSize);
 
 	//need to add a wildcard method.
 
-	std::list<std::string> getTerms(std::string &kgram) const;
+    std::list<std::string> getTerms(std::string &kgram) const;
 
 	void addTerm(std::string &term); //add kgram to string into index
 
@@ -47,7 +49,7 @@ public:
 
 	/** This (public) method is independent of the Index.
 	 * It is intended to be used for query terms, so the user can get the kgrams of the term.*/
-	std::list<std::string> getGrams(std::string &term); //should this all be <std::string*> or no *
+    static std::list<std::string> getGrams(std::string &term, int kSize); //should this all be <std::string*> or no *
 
 	unsigned int getGramCount() const;
 
