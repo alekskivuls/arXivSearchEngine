@@ -3,6 +3,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/filesystem.hpp>
+#include "DiskInvertedIndex.h"
 #include <boost/foreach.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
@@ -147,8 +148,8 @@ void Engine::index(const std::string &filepath) {
 }
 
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK
-	std::string input = "C:/Users/pkim7/Desktop/corpus"; // // change to your input directory
-	boost::filesystem::path dir(input); // change input back to: filepath
+	std::string file = "C:/Users/pkim7/Desktop/corpus"; // // change to your input directory
+	boost::filesystem::path dir(file); // change input back to: filepath
 	boost::filesystem::directory_iterator it(dir), eod;
 
 	idTable = std::unordered_map<unsigned int, std::string>();
@@ -164,6 +165,29 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 	std::cout << "size of index: " << idx.getIndex().size() << std::endl;
 
 	//Engine::printIndex();
+
+	DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
+	PorterStemmer stemmer;
+	std::string input = "This";
+	std::string stemmedToken = "mannual"; // stemmer.stem(input)
+	std::vector<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken);
+
+	std::list<DocInfo> postingsMemory = idx.getPostings(stemmedToken);
+
+	if (postingsFile.size() == postingsMemory.size()) {
+		std::cout << "postings lists are same size!" << std::endl;
+		std::cout << "file size: " << postingsFile.size() << std::endl; // should be 9...
+		std::cout << "memory size: " << postingsMemory.size() << std::endl;
+
+		unsigned char i = 0;
+		for (const DocInfo &doc : postingsMemory) {
+			std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
+			std::cout << "LFILE DocInfo ID(" << postingsFile[i++].getDocId() << ")" << std::endl;
+		}
+	}
+	else {
+		std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
+	}
 }
 
 void Engine::printIndex() {

@@ -47,11 +47,11 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
 
 
-	std::cout << "num documents: " << auxIdx.getIndex().size() << std::endl;
+	std::cout << "num terms: " << auxIdx.getIndex().size() << std::endl;
 	int vocabIndex = 0; // FOR EVERY TERM
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
-		std::cout << "term" << element.first << std::endl;
+		//std::cout << "term " << element.first << std::endl;
 		const std::list<DocInfo> &postings = auxIdx.getPostings(element.first);
 
 		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
@@ -81,19 +81,19 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 	std::size_t docFreq = Reverse(postings.size());// UNCOMMENT FOR LINUX
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
 
-	std::cout << "doc gaps: ";
+	//std::cout << "doc gaps: ";
 	uint32_t lastDocId = 0;
 	for (const DocInfo &currDoc : postings) {
 		// write document ID gap.
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
 		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // UNCOMMENT FOR LINUX
-		std::cout << docIdGap << ' ';
+		//std::cout << docIdGap << ' ';
 
 		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));
 		lastDocId = currDoc.getDocId();
 	}
-	std::cout << std::endl;
+	//std::cout << std::endl;
 }
 
 
@@ -108,9 +108,11 @@ std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &file
 	std::ofstream vocabFile(vocabPath.append("/vocabList.bin").string(), 
 		std::ios::out | std::ios::binary);
 
+	//std::cout << "PRINTING TERM?" << std::endl;
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
 		positions[vocabIndex] = vocabFile.tellp();
+		//std::cout << element.first.c_str() << std::endl;
 		vocabFile.write(element.first.c_str(), sizeof(char) * element.first.length());
 		vocabIndex++;
 	}
