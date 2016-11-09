@@ -15,8 +15,8 @@ extern double_t Reverse(double_t);
 uint32_t ReadInt(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
-	//return Reverse(value); // UNCOMMENT FOR WINDDOWS
-	return value;
+	return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	//return value;
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
@@ -54,6 +54,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 
 		// Again, you may not need the reverse calls.
 		vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
+		//vocabTable.emplace_back(buffer, buffer2);// UNCOMMENT FOR LINUX
 	}
 
 	for (VocabEntry entry : vocabTable) {
@@ -125,7 +126,8 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 			//    the gap and put it in the array.
 
 		}*/
-		posts[i] = DocInfo(encoded + lastDocId);
+		posts.push_back(DocInfo(encoded + lastDocId));
+		//posts[i] = ;
 		lastDocId = encoded;
 		// repeat until all postings are read.
 	}
@@ -168,5 +170,5 @@ std::vector<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) con
 }
 
 DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {
-
+	return DocInfo();
 }
