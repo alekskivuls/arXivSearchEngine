@@ -35,7 +35,7 @@ public:
 
 	void vocab() const;
 
-	std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() const;
+    std::unordered_map<std::string, std::list<DocInfo>> getIndex() const;
 
 	unsigned int getTermCount() const;
 };
