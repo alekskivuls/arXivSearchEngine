@@ -61,29 +61,23 @@ int KgramIndex::getKSize(){
 /** This (public) method will separate the term into kgrams (of the size passed in constructor)
  * and use the addKgram (private) to add that kgram key to term pair into the _mIndex.
 */
-void KgramIndex::addTerm(std::string &term) {
+void KgramIndex::addTerm(std::string &term) { //TODO: fix addTerm logic
 	int i;
-	if(_kgramSize != 1) { //if you want 2 or 3 kgrams you can add $
-		bool first, last;
-		int end = term.size() + _kgramSize; //why?
-		for (i = 0; i < end; ++i) { //do you not get the numer of kgram for letter
-			std::string gram;
-			first = i == 0;
-			last = i == end;
-
-			if (first) gram += '$';
-			int j, remainingK;
-			remainingK = (first || last) ? _kgramSize - 1 : _kgramSize;
-			for(j = 0; j < remainingK; ++j) { // append character term[j]
-				gram += term[i + j]; //gram is your gram.
-				//in the last and first case this will only cut 2.
-				//read into gram so 
-			}
-			if(last) gram += '$'; 
-			//gram is n letters here. 
-			addKgram(gram, term); //add the gram
-		}
-	} else { //1-gram would be stupid...
+    if(_kgramSize > 1) { //add $ for more than 1
+        std::string kterm;
+        kterm += '$';
+        kterm += term;
+        kterm += '$';
+        for (i = 0; i < term.size(); ++i) { //do you not get the numer of kgram for letter
+            std::string gram;
+            int j;
+            for(j = 0; j < _kgramSize; ++j) { // append character term[j]
+                gram += kterm[i + j];
+            }
+            //gram is n letters here.
+            addKgram(gram, term); //add the gram
+        }
+    } else {
         for (char letter : term) {
             std::string strl = std::string(1,letter);
             addKgram(strl, term);
@@ -100,7 +94,7 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 	// inside the function... does blah, returns a list of all kgrams of term
 	int i;
 	std::list<std::string> grams;
-    if(kSize != 1) {
+    if(kSize > 1) {
         std::string kterm;
         kterm += '$';
         kterm += term;

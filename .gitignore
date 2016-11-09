@@ -98,3 +98,6 @@ build/
 
 #Vim editing
 *.swp
+
+#Autosaves
+*.autosave
