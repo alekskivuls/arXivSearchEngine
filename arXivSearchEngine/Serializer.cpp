@@ -43,7 +43,8 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		std::ios::out | std::ios::binary);
 
 	// the first thing we must write to the vocabTable file is the number of vocab terms.
-	int64_t termCount = Reverse(auxIdx.getIndex().size());// UNCOMMENT FOR LINUX
+	//int64_t termCount = Reverse(auxIdx.getIndex().size()); // UNCOMMENT FOR WINDOWS
+	int64_t termCount = (int64_t) auxIdx.getIndex().size();
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
 
 
@@ -57,9 +58,11 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
 		// and the byte location of the postings for the term in the postings file.
 
-		uint64_t vPosition = Reverse(vocabPositions[vocabIndex]);// UNCOMMENT FOR LINUX
+		//uint64_t vPosition = Reverse(vocabPositions[vocabIndex]); // UNCOMMENT FOR WINDOWS
+		const uint64_t &vPosition = vocabPositions[vocabIndex]; // I WANT TO STOP REVERSE ^ (THE LINE ABOVE) AND USE THIS CODE INSTEAD
 		vocabTable.write((const char*)&vPosition, sizeof(vPosition));
-		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp());// UNCOMMENT FOR LINUX
+		//uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp()); // UNCOMMENT FOR WINDOWS
+		const uint64_t &pPosition = (uint64_t)postingsFile.tellp();
 		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
 
 		// write the postings file for this term. 
@@ -78,7 +81,8 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings) { //const PostingList &postings
 	// positionalposting: pair (documentID, a vector of positions (uint32_t))
 	// Write the document frequency.
-	std::size_t docFreq = Reverse(postings.size());// UNCOMMENT FOR LINUX
+	//std::size_t docFreq = Reverse(postings.size()); // UNCOMMENT FOR WINDOWS
+	std::size_t docFreq = postings.size();
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
 
 	//std::cout << "doc gaps: ";
@@ -87,7 +91,8 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 		// write document ID gap.
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
-		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // UNCOMMENT FOR LINUX
+		//uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // UNCOMMENT FOR WINDOWS
+		uint32_t docIdGap = currDoc.getDocId() - lastDocId;
 		//std::cout << docIdGap << ' ';
 
 		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));

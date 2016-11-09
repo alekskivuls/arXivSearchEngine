@@ -15,7 +15,8 @@ extern double_t Reverse(double_t);
 uint32_t ReadInt(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
-	return Reverse(value);// UNCOMMENT FOR LINUX
+	//return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	return value;
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
@@ -66,30 +67,38 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 }
 
 VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) const { // const icu::UnicodeString &term
-	std::size_t i = 0, j = mVocabTable.size() - 1;
+	std::size_t i = 0, j = mVocabTable.size() - 1; //  THIS MIGHT BE BROKEN?!?!
 	while (i <= j) {
 		std::size_t m = i + (j - i) / 2;
 
-		std::cout << "ReadVocabStringAtPosition(m) returned: " << ReadVocabStringAtPosition(m) << std::endl;
+		
 		std::string uniStr = ReadVocabStringAtPosition(m);
+		std::cout << "ReadVocabStringAtPosition(m) returned: " << ReadVocabStringAtPosition(m) << std::endl;
+		std::cout << "uniStr returned: " << uniStr << std::endl;
 
 		int comp = term.compare(uniStr);
 		if (comp == 0) {
 			return mVocabTable[m];
 		}
 		else if (comp < 0) {
-			if (m == 0)
+			if (m == 0) {
+				std::cout << "Oh no... it got here..." << std::endl;
 				return VocabEntry(-1, -1);
+			}
+				
 			j = m - 1;
 		}
 		else {
 			i = m + 1;
 		}
 	}
+	std::cout << "Oh no... it got here..." << std::endl;
 	return VocabEntry(-1, -1);;
 }
 
 std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint64_t postingsPosition) {
+	std::cout << "postingsPosition = " << postingsPosition << std::endl;
+
 	// seek the specified position in the file
 	postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
 					  // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
@@ -97,6 +106,7 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 
 	// Read the document frequency.
 	uint32_t docFreq = ReadInt(postings);
+	std::cout << "docFreq = " << docFreq << std::endl;
 	// initialize the vector of document IDs to return.
 	std::vector<DocInfo> posts;
 	posts.reserve(docFreq);
@@ -104,10 +114,10 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 	// read 4 bytes at a time from the file, until you have read as many
 	//    postings as the document frequency promised.
 	uint32_t lastDocId = 0;
-	int i;
-	unsigned char j, byte;
+	uint32_t i;
+	//unsigned char j, byte;
 	for (i = 0; i < docFreq; ++i) {
-		uint32_t encoded = ReadInt(postings);
+		const uint32_t &encoded = ReadInt(postings);
 		/*for (j = 0; j < 4; ++j) { // i MAY want to call readInt... uncomment this for now
 			byte = (j * 8) & 0xFF;
 			// after each read, convert the bytes to an int posting. this value
@@ -135,7 +145,7 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
 		termLength = end;
 	}
 	else {
-		termLength = mVocabTable[i + 1].StringPosition - entry.StringPosition;
+		termLength = (uint32_t) (mVocabTable[i + 1].StringPosition - entry.StringPosition);
 	}
 	mVocabList.clear();
 	mVocabList.seekg(entry.StringPosition, mVocabList.beg);
@@ -149,9 +159,14 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
 
 std::vector<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const { // const icu::UnicodeString &term
 	VocabEntry entry = BinarySearchVocabulary(term);
+	
 	std::cout << "entry.PostingPosition != -1 && entry.StringPosition != -1 is " 
 		<< (entry.PostingPosition != -1 && entry.StringPosition != -1) << std::endl;
 	if (entry.PostingPosition != -1 && entry.StringPosition != -1)
 		return ReadPostingsFromFile(mPostings, entry.PostingPosition);
 	return std::vector<DocInfo>();
+}
+
+DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {
+
 }

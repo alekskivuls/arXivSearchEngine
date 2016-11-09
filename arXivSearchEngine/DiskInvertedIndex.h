@@ -31,7 +31,7 @@ class DiskInvertedIndex : public InvertedIndex {
 	static std::vector<VocabEntry> ReadVocabTable(const boost::filesystem::path &path);
 
 	VocabEntry BinarySearchVocabulary(const std::string &term) const;
-	static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId);
+	static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
 
 	std::string ReadVocabStringAtPosition(size_t index) const;
 

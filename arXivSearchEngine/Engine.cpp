@@ -168,25 +168,29 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 
 	DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
 	PorterStemmer stemmer;
-	std::string input = "This";
-	std::string stemmedToken = "mannual"; // stemmer.stem(input)
+	std::string input = "breed";
+	std::string stemmedToken = stemmer.stem(input);
+	//std::string stemmedToken = "mannual";
 	std::vector<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken);
 
 	std::list<DocInfo> postingsMemory = idx.getPostings(stemmedToken);
 
-	if (postingsFile.size() == postingsMemory.size()) {
+	if (postingsFile.size() == postingsMemory.size()) 
 		std::cout << "postings lists are same size!" << std::endl;
-		std::cout << "file size: " << postingsFile.size() << std::endl; // should be 9...
-		std::cout << "memory size: " << postingsMemory.size() << std::endl;
-
-		unsigned char i = 0;
-		for (const DocInfo &doc : postingsMemory) {
-			std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
-			std::cout << "LFILE DocInfo ID(" << postingsFile[i++].getDocId() << ")" << std::endl;
-		}
-	}
-	else {
+	else 
 		std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
+
+	std::cout << "file size: " << postingsFile.size() << std::endl; // should be 9...
+	std::cout << "memory size: " << postingsMemory.size() << std::endl;
+
+	unsigned char i = 0;
+	for (const DocInfo &doc : postingsMemory) {
+		std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
+
+		if (i < postingsFile.size())
+			std::cout << "FILE DocInfo ID(" << postingsFile[i++].getDocId() << ")" << std::endl;
+		else
+			std::cout << "No more DocInfos" << std::endl;
 	}
 }
 
