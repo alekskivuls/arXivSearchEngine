@@ -63,69 +63,11 @@ std::vector<std::string> split(std::string token) {
 	}
 	vect.push_back(str);
 
-<<<<<<< HEAD
-	void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<unsigned int, std::string> &idTable) {
-
-		std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
-		totalStart = std::chrono::system_clock::now();
-
-		std::unordered_map<std::string, std::string> cache;
-		boost::filesystem::directory_iterator it(dir), eod;
-		std::vector<std::string> mPathList;
-		getPathNames(dir, mPathList);
-		std::sort(mPathList.begin(), mPathList.end());
-
-		int i = 0;
-		for (auto p : mPathList) {
-			std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-
-			// reads json file into stringstream and populates a json tree
-			std::ifstream file(p);
-			std::stringstream ss;
-			ss << file.rdbuf();
-			file.close();
-
-			boost::property_tree::ptree pt;
-			boost::property_tree::read_json(ss, pt);
-			boost::filesystem::path dir(p);
-			(idTable)[i] = dir.stem().string();
-
-			//std::cout << "json to map...\n";
-			// iterate through .json tree
-			BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
-				if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
-					std::string input = pair.second.get_value<std::string>();
-					std::transform(input.begin(), input.end(), input.begin(), ::tolower);
-
-
-					Tokenizer tkzr(input);
-					std::string token;
-					token.reserve(200);
-					int posIndex = 0;
-					bool hyphen = false;
-					while (tkzr.nextToken(token, hyphen)) {
-						// while not end of file.
-						// Get stem the token or retrieve the value from a cache
-                        kInd3.addTerm(token);
-						if (!hyphen) {
-							std::string stemmedToken = (cache.find(token) != cache.end())
-								? cache[token] : PorterStemmer::stem(token);
-							idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
-						}
-						else {
-							std::string total = "";
-							for (auto s : split(token)) {
-								idx.addTerm(PorterStemmer::stem(s), i, posIndex);
-								total += s;
-							}
-							idx.addTerm(PorterStemmer::stem(total), i, posIndex);
-						}
-=======
 	return vect;
 }
 
 void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<unsigned int, std::string> &idTable) {
->>>>>>> origin
+
 
 	std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
 	totalStart = std::chrono::system_clock::now();
@@ -247,7 +189,6 @@ std::list<DocInfo> output = queryEngine.processQuery(query, idx);
 				std::cout << idTable.at(di.getDocId()) << '\t';
 			std::cout << std::endl << output.size() << std::endl;
 			std::cout << std::endl;
-<<<<<<< HEAD
 }
 
 void Engine::correctSpelling(std::string &token) {
@@ -257,6 +198,3 @@ void Engine::correctSpelling(std::string &token) {
         std::cout << element << std::endl;
     }
 }
-=======
-}
->>>>>>> origin

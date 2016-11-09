@@ -19,7 +19,7 @@ public:
 	static void buildPostings(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, 
 		const std::vector<uint64_t> &vocabPositions);
 
-	static void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
+    static void WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
 };
 
 

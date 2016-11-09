@@ -26,8 +26,8 @@ inline uint64_t Reverse(uint64_t value) {
 void Serializer::buildIndex(const boost::filesystem::path &filePath, InvertedIndex &auxIdx) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
 
-	std::vector<uint64_t> &vocabPositions = buildVocab(filePath, auxIdx); // NECESSARY
-	buildPostings(filePath, auxIdx, vocabPositions); // NECESSARY
+    //std::vector<uint64_t> &vocabPositions = buildVocab(filePath, auxIdx); // NECESSARY
+    //buildPostings(filePath, auxIdx, vocabPositions); // NECESSARY
 }
 
 void Serializer::buildPostings(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx,
