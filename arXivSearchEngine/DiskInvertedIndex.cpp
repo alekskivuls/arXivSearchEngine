@@ -13,7 +13,7 @@ extern double_t Reverse(double_t);
 uint32_t ReadInt(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
-	return Reverse(value);
+	return Reverse(value);// UNCOMMENT FOR LINUX
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
@@ -39,7 +39,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 		std::ios::in | std::ios::binary);
 	uint64_t buffer, buffer2;
 	tableFile.read((char *)&buffer, sizeof(buffer));
-	buffer = Reverse(buffer);
+	buffer = Reverse(buffer);// UNCOMMENT FOR LINUX
 
 	int tableIndex = 0;
 
@@ -50,7 +50,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 		tableFile.read((char*)&buffer2, sizeof(buffer2));
 
 		// Again, you may not need the reverse calls.
-		vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));
+		vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
 	}
 
 	return vocabTable;

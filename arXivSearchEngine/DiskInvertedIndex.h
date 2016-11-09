@@ -4,6 +4,7 @@
 
 #include "InvertedIndex.h"
 #include "DocInfo.h"
+#include <cstdint>
 #include <string>
 #include <fstream>
 #include <vector>

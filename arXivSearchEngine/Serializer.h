@@ -3,6 +3,7 @@
 
 #include "InvertedIndex.h"
 #include <boost/filesystem.hpp>
+#include <cstdint>
 #include <fstream>
 #include <vector>
 
