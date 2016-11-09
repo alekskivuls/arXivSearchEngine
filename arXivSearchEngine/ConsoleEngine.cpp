@@ -6,23 +6,22 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "Engine.h"
 
-int main() {
+void pktest() {
 	// Paul's test code. just ignore it.
 	//Initialize Engine
 	Engine engine;
-	
+
 	// Set file directory
 	//std::string filepath;
 	std::cout << "Writing to Disk: " << std::endl;
 	//std::getline(std::cin, filepath);
 	engine.diskWriteTest("hello"); // should create 3 files
-	return 0;
+}
 
-
-
-
+int main() {
+	//pktest(); //  do not delete yet
 	//Initialize Engine
-	//Engine engine;
+	Engine engine;
 
 	// Set file directory
 	std::string filepath;
