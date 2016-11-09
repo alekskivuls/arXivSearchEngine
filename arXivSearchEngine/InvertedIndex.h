@@ -18,13 +18,6 @@ class InvertedIndex {
 	friend class QEngine;
 	/** The hashmap that represents the entire inverted index.*/
 	std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
-	
-	/**This method is used to check if a term exists. Instead of catching an out of 
-	 * bounds error everytime, we can check to avoid the expensive try/ catch overhead.*/
-	bool hasPostings(const std::string &term) const;
-	
-	/**Returns the postings list for the requested term.*/
-	std::list<DocInfo> getPostings(const std::string &term) const;
 
 public:
 	InvertedIndex();
@@ -33,7 +26,16 @@ public:
 	 * A new DocInfo is created if the term is first encountered in that document.*/
 	void addTerm(const std::string &term, const unsigned int &docId, const int &pos); // maybe create a remove term?
 
+	/**This method is used to check if a term exists. Instead of catching an out of
+	* bounds error everytime, we can check to avoid the expensive try/ catch overhead.*/
+	bool hasPostings(const std::string &term) const;
+
+	/**Returns the postings list for the requested term.*/
+	std::list<DocInfo> getPostings(const std::string &term) const;
+
 	void vocab() const;
+
+	std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() const;
 
 	unsigned int getTermCount() const;
 };
