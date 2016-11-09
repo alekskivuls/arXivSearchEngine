@@ -23,7 +23,7 @@ inline uint64_t Reverse(uint64_t value) {
 // at this point, "index" contains the in-memory inverted index 
 // now we save the index to disk, building three files: the postings index,
 // the vocabulary list, and the vocabulary table.
-void Serializer::buildIndex(const boost::filesystem::path &filePath, InvertedIndex &auxIdx) {
+void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
 
 	std::vector<uint64_t> &vocabPositions = Serializer::buildVocab(filePath, auxIdx);

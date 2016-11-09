@@ -13,7 +13,7 @@ class Serializer {
 public:
 
 	// this method MUST pass in a populated auxilary index ready to encode (vbe & gap) AND 
-	static void buildIndex(const boost::filesystem::path &filePath, InvertedIndex &auxIdx);
+	static void buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
 
 	static std::vector<uint64_t> buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
 
