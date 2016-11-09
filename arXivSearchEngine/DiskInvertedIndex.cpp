@@ -41,6 +41,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 	ifstream tableFile(tablePath.append("/vocabTable.bin").string(),
 		std::ios::in | std::ios::binary);
 	uint64_t buffer, buffer2;
+	//tableFile.read((char *)&buffer, sizeof(buffer));
 	tableFile.read((char *)&buffer, sizeof(buffer));
 	buffer = Reverse(buffer);// UNCOMMENT FOR LINUX
 
@@ -57,10 +58,10 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 		//vocabTable.emplace_back(buffer, buffer2);// UNCOMMENT FOR LINUX
 	}
 
-	for (VocabEntry entry : vocabTable) {
+	/*for (VocabEntry entry : vocabTable) {
 		std::cout << "PostingPosition = " <<entry.PostingPosition << " ";
 		std::cout << "StringPosition = " << entry.StringPosition << std::endl;
-	}
+	}*/
 
 	std::cout << "size of vocabTable: " << vocabTable.size() << std::endl;
 
@@ -74,18 +75,14 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 
 		
 		std::string uniStr = ReadVocabStringAtPosition(m);
-		std::cout << "ReadVocabStringAtPosition(m) returned: " << ReadVocabStringAtPosition(m) << std::endl;
-		std::cout << "uniStr returned: " << uniStr << std::endl;
 
 		int comp = term.compare(uniStr);
 		if (comp == 0) {
 			return mVocabTable[m];
 		}
 		else if (comp < 0) {
-			if (m == 0) {
-				std::cout << "Oh no... it got here..." << std::endl;
+			if (m == 0) 
 				return VocabEntry(-1, -1);
-			}
 				
 			j = m - 1;
 		}
@@ -93,7 +90,6 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 			i = m + 1;
 		}
 	}
-	std::cout << "Oh no... it got here..." << std::endl;
 	return VocabEntry(-1, -1);;
 }
 
@@ -117,6 +113,7 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 	uint32_t lastDocId = 0;
 	uint32_t i;
 	//unsigned char j, byte;
+	std::cout << "printing doc gaps: ";
 	for (i = 0; i < docFreq; ++i) {
 		const uint32_t &encoded = ReadInt(postings);
 		/*for (j = 0; j < 4; ++j) { // i MAY want to call readInt... uncomment this for now
@@ -126,11 +123,14 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 			//    the gap and put it in the array.
 
 		}*/
-		posts.push_back(DocInfo(encoded + lastDocId));
+		uint32_t currId = encoded + lastDocId;
+		posts.push_back(DocInfo(currId));
+		std::cout << currId << ' ';
 		//posts[i] = ;
 		lastDocId = encoded;
 		// repeat until all postings are read.
 	}
+	std::cout << std::endl;
 	
 	return posts;
 }

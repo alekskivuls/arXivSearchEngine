@@ -180,7 +180,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 	else 
 		std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
 
-	std::cout << "file size: " << postingsFile.size() << std::endl; // should be 9...
+	std::cout << "file size: " << postingsFile.size() << std::endl;
 	std::cout << "memory size: " << postingsMemory.size() << std::endl;
 
 	unsigned char i = 0;

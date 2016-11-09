@@ -1,5 +1,6 @@
 #include "Serializer.h"
 #include <iostream>
+#include <iomanip>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -49,7 +50,7 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 
 	std::cout << "num terms: " << auxIdx.getIndex().size() << std::endl;
-	int vocabIndex = 0; // FOR EVERY TERM
+	int64_t vocabIndex = 0; // FOR EVERY TERM
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
 		//std::cout << "term " << element.first << std::endl;
@@ -59,10 +60,10 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		// and the byte location of the postings for the term in the postings file.
 
 		uint64_t vPosition = Reverse(vocabPositions[vocabIndex]); // UNCOMMENT FOR WINDOWS
-		//const uint64_t &vPosition = vocabPositions[vocabIndex]; // I WANT TO STOP REVERSE ^ (THE LINE ABOVE) AND USE THIS CODE INSTEAD
+		//uint64_t vPosition = vocabPositions[vocabIndex]; // I WANT TO STOP REVERSE ^ (THE LINE ABOVE) AND USE THIS CODE INSTEAD
 		vocabTable.write((const char*)&vPosition, sizeof(vPosition));
 		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp()); // UNCOMMENT FOR WINDOWS
-		//const uint64_t &pPosition = (uint64_t)postingsFile.tellp();
+		//uint64_t pPosition = (uint64_t)postingsFile.tellp();
 		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
 
 		// write the postings file for this term. 
@@ -85,20 +86,27 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 	//std::size_t docFreq = postings.size();
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
 
-	//std::cout << "doc gaps: ";
+	//std::cout << "docids(" << postings.size() << "): ";
+	//for (const DocInfo &currDoc : postings) {
+		//std::cout << currDoc.getDocId() << ' ';
+	//}
+	//std::cout << std::endl;
+
+	std::cout << "doc gaps(" << postings.size() << "): ";
 	uint32_t lastDocId = 0;
 	for (const DocInfo &currDoc : postings) {
 		// write document ID gap.
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
-		int32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // UNCOMMENT FOR WINDOWS
+		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // UNCOMMENT FOR WINDOWS
+		//std::cout << std::hex << docIdGap << ' ';
 		//uint32_t docIdGap = currDoc.getDocId() - lastDocId;
-		//std::cout << docIdGap << ' ';
+		std::cout << Reverse(docIdGap) << ' ';
 
 		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));
-		lastDocId = currDoc.getDocId();
+		lastDocId = (uint32_t)currDoc.getDocId();
 	}
-	//std::cout << std::endl;
+	std::cout << std::endl;
 }
 
 
