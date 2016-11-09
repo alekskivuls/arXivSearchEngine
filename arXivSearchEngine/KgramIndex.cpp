@@ -101,23 +101,22 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 	int i;
 	std::list<std::string> grams;
     if(kSize != 1) {
-		bool first, last;
-		int end = term.size();
-		for (i = 0; i < end; i++) {
-			first = i == 0;
-			last = i == end;
-			std::string gram;
-			
-			if(i == 0) gram += '$';
-			int j, remainingK; //if it was first or last you will have kSize - 1 remaining letters
-            remainingK = (first || last) ? kSize - 1 : kSize;
-			
-			for(j = 0; j < remainingK; ++j) gram += term[i + j];
-	
-            if(last) gram += '$';
-			grams.push_back(gram); //adding our gram onto grams list
-		}
-	} else { //1-gram
+        std::string kterm;
+        kterm += '$';
+        kterm += term;
+        kterm += '$';
+        for (i = 0; i < term.size(); i++) { //the term.size is the same as # of kgrams
+            std::string gram;
+            int j;
+            for(j = 0; j < kSize; ++j) {
+                gram += kterm[i + j];
+                //std::cout << i+j << term.at(i + j) << std::endl;
+            }
+            //std::cout << gram << std::endl;
+            grams.push_back(gram); //adding our gram onto grams list
+            std::cout << gram << std::endl;
+        }
+    } else { //1-gram
         for (char letter : term) {
             std::string strl = std::string(1,letter);
             grams.push_back(strl);
