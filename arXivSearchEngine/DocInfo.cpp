@@ -21,6 +21,10 @@ unsigned int DocInfo::getDocId() const {
 
 // Getter method for the list of all positional occurences of the term 
 // related to this DocInfo. 
-std::list<int> DocInfo::getPositions() const {
+std::list<int> DocInfo::getPositions() {
 	return _posList;
+}
+
+void DocInfo::addPosition(int &value) {
+	_posList.push_back(value);
 }

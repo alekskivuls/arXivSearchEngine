@@ -1,5 +1,5 @@
 #include "Serializer.h"
-
+#include <iostream>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -26,8 +26,8 @@ inline uint64_t Reverse(uint64_t value) {
 void Serializer::buildIndex(const boost::filesystem::path &filePath, InvertedIndex &auxIdx) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
 
-	std::vector<uint64_t> &vocabPositions = buildVocab(filePath, auxIdx); // NECESSARY
-	buildPostings(filePath, auxIdx, vocabPositions); // NECESSARY
+	std::vector<uint64_t> &vocabPositions = Serializer::buildVocab(filePath, auxIdx);
+	Serializer::buildPostings(filePath, auxIdx, vocabPositions);
 }
 
 void Serializer::buildPostings(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx,
@@ -47,9 +47,11 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
 
 
+	std::cout << "num documents: " << auxIdx.getIndex().size() << std::endl;
 	int vocabIndex = 0; // FOR EVERY TERM
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
+		std::cout << "term" << element.first << std::endl;
 		const std::list<DocInfo> &postings = auxIdx.getPostings(element.first);
 
 		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
@@ -61,7 +63,7 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
 
 		// write the postings file for this term. 
-		WritePostings(postingsFile, postings); // define later...
+		Serializer::WritePostings(postingsFile, postings); // define later...
 
 		vocabIndex++;
 	}
@@ -75,22 +77,23 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 // Currently writes only the document frequency (size of list) and each document ID as a gap.
 void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings) { //const PostingList &postings
 	// positionalposting: pair (documentID, a vector of positions (uint32_t))
-
 	// Write the document frequency.
 	std::size_t docFreq = Reverse(postings.size());
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
 
+	std::cout << "doc gaps: ";
 	uint32_t lastDocId = 0;
 	for (const DocInfo &currDoc : postings) {
 		// write document ID gap.
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
 		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId);
+		std::cout << docIdGap << ' ';
 
 		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));
-
 		lastDocId = currDoc.getDocId();
 	}
+	std::cout << std::endl;
 }
 
 

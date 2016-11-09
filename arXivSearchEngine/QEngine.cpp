@@ -321,7 +321,7 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
  *		1)	one walk along term names like the AND query.
  *		2)	one walk along the positions for each matching docId
  */
-std::list<DocInfo> QEngine::PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist) {
+std::list<DocInfo> QEngine::PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist) {
 	std::list<DocInfo> result;
 	auto iIter = left.begin(), jIter = right.begin();
 	while (iIter != left.end() && jIter != right.end()) {

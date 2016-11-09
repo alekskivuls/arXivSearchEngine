@@ -49,6 +49,8 @@ public:
 
 	void printVocab();
 
+	void printIndex();
+
 	void printQuery(std::string &query);
 
 	std::string stem(std::string &token);

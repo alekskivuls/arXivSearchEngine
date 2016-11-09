@@ -26,7 +26,9 @@ public:
 	unsigned int getDocId() const;
 
 	/**Returns the list of the term's occurence.*/
-	std::list<int> getPositions() const;
+	std::list<int> getPositions();
+
+	void addPosition(int &value);
 };
 
 #endif

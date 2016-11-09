@@ -29,27 +29,29 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
  * 
  * Side note: maybe we should store all of the information as compressed bytes 
  * later? this way, we can put more on RAM
+ *
+ * _mIndex.find may be redundant....replace later with _mIndex[term]
  */
 void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, const int &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
-		std::list<DocInfo> postings; // create postings list
+		_mIndex.insert(std::pair<std::string, std::list<DocInfo>>(term, std::list<DocInfo>())); // create postings list
+		std::list<DocInfo> &postings = _mIndex.at(term);
+		//_mIndex[term] = postings; // populate
+		postings.push_back(DocInfo(docId));
 
-		postings.push_back(DocInfo(docId)); // create new DocInfo
-		postings.back().getPositions().push_back(pos); // insert into postings list
 
-		_mIndex[term] = postings; // populate
+		DocInfo &doc = postings.back();
+		doc.addPosition(pos);
 	}
 	else { // TERM DOES EXIST
-		std::list<DocInfo> &postings = _mIndex[term]; // get postings of existing term
+		std::list<DocInfo> &postings = _mIndex.at(term); // get postings of existing term
 
-		if (postings.back().getDocId() == docId) { // TERM ALREADY ASSOCIATED WITH DOC
-			postings.back().getPositions().push_back(pos);
-		}
-		else { // TERM DOES EXIST BUT DOC DOES NOT CONTAIN TERM
+		// TERM ALREADY ASSOCIATED WITH DOC, DO NOTHING
+		if (postings.back().getDocId() != docId) // TERM DOES EXIST BUT DOC DOES NOT CONTAIN TERM
 			postings.push_back(DocInfo(docId));
 
-			postings.back().getPositions().push_back(pos);
-		}
+		DocInfo &doc = postings.back();
+		doc.addPosition(pos);
 	}
 }
 

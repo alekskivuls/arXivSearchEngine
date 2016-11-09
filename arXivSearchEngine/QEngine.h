@@ -25,7 +25,7 @@ class QEngine {
 
 	std::list<DocInfo> ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
 
-	std::list<DocInfo> PHRASE(const std::list<DocInfo> &left, const std::list<DocInfo> &right, const int &dist);
+	std::list<DocInfo> PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist);
 
 public:
 	QEngine();

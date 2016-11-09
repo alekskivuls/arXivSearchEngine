@@ -142,6 +142,8 @@ void Engine::index(const std::string &filepath) {
 	idx = InvertedIndex();
 	Engine::populateIndex(dir, idx, idTable);
 	std::cout << "idx size = " << idx.getTermCount() << '\n';
+
+	printIndex();
 }
 
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK
@@ -161,19 +163,22 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 	std::cout << "Printing index: " << std::endl;
 	std::cout << "size of index: " << idx.getIndex().size() << std::endl;
 
+	//Engine::printIndex();
+}
+
+void Engine::printIndex() {
 	typedef std::pair<std::string, std::list<DocInfo>> pair;
 	for (const pair &p : idx.getIndex()) {
-		std::cout << "Term " << p.first << " if found in the following documents:" << std::endl;
-		for (auto doc : p.second) { // list of positions
-			std::cout << "Document id " << doc.getDocId() << " positions: " << std::endl;
-			for (auto pos : doc.getPositions()) 
+		std::cout << "Term (" << p.first << ") found in the following documents:" << std::endl;
+		for (DocInfo doc : p.second) { // list of positions
+			std::cout << "Document id " << doc.getDocId() << " positions(" << doc.getPositions().size() << "): " << std::endl;
+			for (int &pos : doc.getPositions())
 				std::cout << pos << " ";
-			std::cout  << std::endl;
+			std::cout << std::endl;
 		}
 		std::cout << std::endl;
 	}
 }
-
 
 void Engine::printVocab() {
 	idx.vocab();

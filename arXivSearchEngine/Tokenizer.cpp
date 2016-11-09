@@ -1,4 +1,5 @@
 #include "Tokenizer.h"
+#include "ctype.h"
 
 Tokenizer::Tokenizer(const boost::filesystem::path &p) : isFileTokenizer(true) {
 	_file.open(p.c_str(), std::fstream::in | std::fstream::out | std::fstream::app);
@@ -37,7 +38,7 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 			token += c;
 		}
 		else {
-			if (c == ' ')
+			if (c > 0 && isspace(c)) // c == ' '
 				break; // DONE
 			else {
 				if (c == '-') tempHyphen = true;
@@ -45,7 +46,7 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 			}
 		}
 	}
-	return token.size() != 0; // no more tokens to process from 
+	return pos < _buffer.size();//token.size() != 0; // no more tokens to process from 
 }
 
 // ignore the following block of comment. I may end up creating a new library for k-grams, 
