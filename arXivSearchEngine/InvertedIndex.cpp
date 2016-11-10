@@ -32,7 +32,7 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
  *
  * _mIndex.find may be redundant....replace later with _mIndex[term]
  */
-void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, const int &pos) {
+void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, const unsigned int &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
 		_mIndex.insert(std::pair<std::string, std::list<DocInfo>>(term, std::list<DocInfo>())); // create postings list
 		std::list<DocInfo> &postings = _mIndex.at(term);

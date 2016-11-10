@@ -23,29 +23,32 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 	while (pos < _buffer.size()) {
 		// get next char in sequence
 		c = _buffer[pos++];
-		alphaNum = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+		if (c != '\'') {
+			alphaNum = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
 
-		if (alphaNum) {
-			if (start) {
-				if (tempHyphen) hyphen = true;
-				token += tempBuf;
+			if (alphaNum) {
+				if (start) {
+					if (tempHyphen) hyphen = true;
+					token += tempBuf;
+				}
+				else start = true;
+
+				if (tempBuf.size() != 0)
+					tempBuf = "";
+
+				token += c;
 			}
-			else start = true;
-
-			if (tempBuf.size() != 0)
-				tempBuf = "";
-
-			token += c;
-		}
-		else {
-			if (c > 0 && isspace(c)) // c == ' '
-				break; // DONE
 			else {
-				if (c == '-') tempHyphen = true;
-				tempBuf += c; // truly some dank, random-ass char
+				if (c > 0 && isspace(c)) // c == ' '
+					break; // DONE
+				else {
+					if (c == '-') tempHyphen = true;
+					tempBuf += c; // truly some dank, random-ass char
+				}
 			}
 		}
 	}
+
 	return pos < _buffer.size();//token.size() != 0; // no more tokens to process from 
 }
 

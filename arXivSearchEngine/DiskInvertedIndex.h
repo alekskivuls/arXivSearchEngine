@@ -21,6 +21,10 @@ struct VocabEntry {
 
 
 class DiskInvertedIndex : public InvertedIndex {
+public:
+	static uint32_t ReadInt(std::ifstream &stream);
+	static uint64_t ReadInt64(std::ifstream &stream);
+
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
 	mutable std::ifstream mPostings;
@@ -35,7 +39,7 @@ class DiskInvertedIndex : public InvertedIndex {
 
 	std::string ReadVocabStringAtPosition(size_t index) const;
 
-public:
+//public:
 	DiskInvertedIndex(const boost::filesystem::path  &path);
 
 	std::vector<DocInfo> GetPostings(const std::string &term) const;
