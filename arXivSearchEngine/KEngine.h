@@ -14,12 +14,6 @@ class KEngine {
 
 	std::unordered_map<std::string, float> jaccarded;
 
-	/** This method will run the Jaccard coefficient on the two terms
-	 * and then return the integer value it gets from the formula */
-    float Jaccard(std::string &term1, std::string &term2, int kSize);
-
-	int editDistDP(std::string term1, std::string term2);
-
 	int min(int x, int y, int z);
 
 
@@ -33,7 +27,15 @@ public:
 	 * kgrams.
 	 *
 	 * The returned string is the word that has the highest JC. */
-	std::list<std::string> CorrectSpelling(std::string &mispelled, KgramIndex &idx);
+	std::list<std::string> correctSpelling(std::string &mispelled, KgramIndex &idx);
+
+	/** This method will run the Jaccard coefficient on the two terms
+	 * and then return the integer value it gets from the formula.
+	 * Public for unit testing.
+	 */
+    float jaccard(std::string &term1, std::string &term2, int kSize);
+
+    int editDistDP(std::string term1, std::string term2);
 };
 
 #endif

@@ -41,7 +41,7 @@ public:
 
 	//need to add a wildcard method.
 
-    std::list<std::string> getTerms(std::string &kgram) const;
+    std::list<std::string> getTerms(std::string &kgram);
 
 	void addTerm(std::string &term); //add kgram to string into index
 

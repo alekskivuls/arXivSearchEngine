@@ -17,7 +17,7 @@ bool KgramIndex::hasKgram(std::string &kgram) const {
  * terms associates with that kgram from the _mIndex
  */
 
-std::list<std::string> KgramIndex::getTerms(std::string &kgram) const {
+std::list<std::string> KgramIndex::getTerms(std::string &kgram) {
 	std::list<std::string> empty;
 	if (hasKgram(kgram))
 		return _mIndex.at(kgram); //at returns pointer to where that thing is at.
@@ -106,9 +106,8 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
                 gram += kterm[i + j];
                 //std::cout << i+j << term.at(i + j) << std::endl;
             }
-            //std::cout << gram << std::endl;
             grams.push_back(gram); //adding our gram onto grams list
-            std::cout << gram << std::endl;
+            //std::cout << gram << std::endl;
         }
     } else { //1-gram
         for (char letter : term) {

@@ -10,35 +10,43 @@
 KEngine::KEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 
 //inefficient code.
-float KEngine::Jaccard(std::string &term1, std::string &term2, int kSize){
+//change to using private _ksize?
+float KEngine::jaccard(std::string &term1, std::string &term2, int kSize){
     const std::list<std::string> &grams1 = KgramIndex::getGrams(term1, kSize);
     const std::list<std::string> &grams2 = KgramIndex::getGrams(term2, kSize);
-    float count;
+    float count = 0; //compiler auto reused did not put on stack.
 
 	//The number of kgrams that are in both 1 and 2.
 	if(grams1.size() > grams2.size()){
 		for(auto grams : grams2){
-            if((std::find(grams1.begin(), grams1.end(), grams)) != grams1.end()) count+=1.0;
+            if((std::find(grams1.begin(), grams1.end(), grams)) != grams1.end()) {
+                //std::cout << grams << std::endl; //nothing fell here
+                count+=1.0;
+            }
             //if(grams1.contains(grams)) count+=1.0;
 		}
 	} else {
 		for(auto grams : grams1){ //versus i...
-            if((std::find(grams2.begin(), grams2.end(), grams)) != grams2.end()) count+=1.0;
+            if((std::find(grams2.begin(), grams2.end(), grams)) != grams2.end()) {
+                //std::cout << grams << std::endl;
+                count+=1.0;
+            }
             //if(grams2.contains(grams)) count+=1.0;
 		}
 	}
 
 	//count is A intersect B
+    //std::cout << count << std::endl;
+    //std::cout << count/((term1.size() + term2.size()) - count) << std::endl;
 	return count/((term1.size() + term2.size()) - count);
 }
 
-std::list<std::string> KEngine::CorrectSpelling(std::string &mispelled, KgramIndex &idx) {
+std::list<std::string> KEngine::correctSpelling(std::string &mispelled, KgramIndex &idx) {
     const std::list<std::string> &mispgrams = KgramIndex::getGrams(mispelled, idx.getKSize());
 	std::list<std::string> potentialterms;
 	std::list<std::string> final;
 	int i;
-	int highest = 0;
-	float threshold = 3.0/7.0;
+    int lowest = 20;
 
 	for(auto grams : mispgrams){ //grabs all the term list values from the key grams
         const std::list<std::string> loopterms = idx.getTerms(grams);
@@ -52,30 +60,34 @@ std::list<std::string> KEngine::CorrectSpelling(std::string &mispelled, KgramInd
 		}
 	}
 
+
+    float threshold = 1.0/4.0; //binary to cut everytime there is less.
+    float jc; //storage for the jc.
+
 	//potentialterms should have all of the term
     for(auto pterms : potentialterms) {
+        jc = jaccard(mispelled, pterms, idx.getKSize());
 		//compare potential terms to the mispelled word.
-        if(Jaccard(mispelled, pterms, idx.getKSize()) >= threshold)
-            jaccarded[pterms] = Jaccard(mispelled, pterms, idx.getKSize());
+        if(jc >= threshold)
+            jaccarded[pterms] = jc;
 	}
 
 	//get only the ones above the threshold and then throw into editdistance.
-	for(auto qualifiers : jaccarded) {
-        if(editDistDP(mispelled, qualifiers.first) >= highest){
-
+    for(auto qualifiers : jaccarded) { //each term in jaccarded is a qual.
+        if(editDistDP(mispelled, qualifiers.first) <= lowest){
             if(final.empty()){
                 final.push_back(qualifiers.first);
 			} else {
-				//final not empty; empty if ed > highest
-                if(editDistDP(mispelled, qualifiers.first) > highest) {
+                //final not empty; empty if ed < lowest
+                if(editDistDP(mispelled, qualifiers.first) < lowest) {
 					final.clear();
                     final.push_back(qualifiers.first);
 				} else {
-					//ed == highest and its not empty, just add to final
+                    //ed == lowest and its not empty, just add to final
                     final.push_back(qualifiers.first);
 				}
 			}
-            highest = editDistDP(mispelled, qualifiers.first);
+            lowest = editDistDP(mispelled, qualifiers.first);
 		}
 	}
 

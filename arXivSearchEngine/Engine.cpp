@@ -193,7 +193,7 @@ std::list<DocInfo> output = queryEngine.processQuery(query, idx);
 
 void Engine::correctSpelling(std::string &token) {
     kInd3.vocab();
-    auto list = kEngine.CorrectSpelling(token, kInd3);
+    auto list = kEngine.correctSpelling(token, kInd3);
     for(auto element : list) {
         std::cout << element << std::endl;
     }
