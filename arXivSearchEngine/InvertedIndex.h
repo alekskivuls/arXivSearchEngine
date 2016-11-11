@@ -5,6 +5,7 @@
 #include "DocInfo.h"
 #include <string>
 #include <list>
+#include <vector>
 
 /**
  * This data structure represents the inverted index. It incapsulates a set of stemmed 
@@ -34,6 +35,8 @@ public:
 	std::list<DocInfo> getPostings(const std::string &term) const;
 
 	void vocab() const;
+
+    std::vector<std::string> getVocab() const;
 
     std::unordered_map<std::string, std::list<DocInfo>> getIndex() const;
 

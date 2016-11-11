@@ -49,6 +49,8 @@ public:
 
 	void printVocab();
 
+    std::vector<std::string> getVocab();
+
 	void printIndex();
 
 	void printQuery(std::string &query);

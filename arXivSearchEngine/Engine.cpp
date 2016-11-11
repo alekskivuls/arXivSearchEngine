@@ -280,6 +280,10 @@ void Engine::printVocab() {
 	idx.vocab();
 }
 
+std::vector<std::string> Engine::getVocab() {
+    return idx.getVocab();
+}
+
 std::string Engine::stem(std::string &token) {
 	return PorterStemmer::stem(token);
 }

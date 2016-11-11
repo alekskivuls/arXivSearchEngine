@@ -64,6 +64,19 @@ void InvertedIndex::vocab() const {
 	std::cout << getTermCount() << '\n';
 }
 
+/*
+ * This method returns the strings of all terms and DocInfos associated to each
+ * term to the console.
+ */
+std::vector<std::string> InvertedIndex::getVocab() const {
+    std::vector<std::string> keys;
+    keys.reserve(_mIndex.size());
+    for (auto kv : _mIndex)
+        keys.push_back(kv.first);
+    return keys;
+}
+
+
 std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() const {
 	return _mIndex;
 }
