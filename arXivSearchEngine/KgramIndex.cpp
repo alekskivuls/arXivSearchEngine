@@ -46,7 +46,7 @@ void KgramIndex::addKgram(std::string &kgram, std::string &term) {
 	else { //kgram is already made
         std::list<std::string> &terms = _mIndex[kgram]; //index[kg] is the array of ptrs to the words that apply
 
-        if (!((std::find(terms.begin(), terms.end(), term)) != terms.end())){
+        if (std::find(terms.begin(), terms.end(), term) == terms.end()){
         //if (!(terms.contains(term))){ //if term already associated with the kgram, dont put again.
 			//if the term is not in the kgram key 
             _mIndex[kgram].push_back(term);
@@ -88,7 +88,7 @@ void KgramIndex::addTerm(std::string &term) { //TODO: fix addTerm logic
 /**
  * How to use this (public) method: 
  * std::string term = "hello";
- * std::list<std:string> &refToList = getGrams(hello);
+ * std::list<std::string> &refToList = getGrams(hello);
  */
 std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 	// inside the function... does blah, returns a list of all kgrams of term
@@ -121,10 +121,18 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 /*
  * This method prints all kgrams and terms associated to each kgram to the console.
  */
-
-void KgramIndex::vocab() const {
-	for (auto pair : _mIndex) std::cout << pair.first << '\n';
+void KgramIndex::vocab() const { //vocab = grams here
+    for (auto pair : _mIndex) std::cout << pair.first << '\n'; //first is the kgrams
 	std::cout << getGramCount() << '\n';
+}
+
+std::list<std::string> KgramIndex::getVocab() {
+    std::list<std::string> ret;
+    for (auto pair : _mIndex) {
+        for (auto value : pair.second)
+            ret.push_back(value);
+    }
+    return ret;
 }
 
 /*

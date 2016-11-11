@@ -31,4 +31,6 @@ TEST_F(KengineTest, kgram_getgrams3)
     EXPECT_EQ(res.front(), hello);
 }
 
-//Document feq to break tie.
+//Document feq to break tie; implement that logic in engine main.
+
+
