@@ -4,17 +4,18 @@ language: cpp
 
 before_install:
 - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test 
-- sudo apt-add-repository -y ppa:llvm
 - sudo apt-add-repository -y ppa:george-edison55/precise-backports
 - sudo apt-add-repository --yes ppa:boost-latest/ppa
+- sudo sh -c 'echo "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main" >> /etc/apt/sources.list'
 - sudo apt-get update -qq
 install:
-- sudo apt-get install -y libboost1.58-all-dev cmake valgrind g++-4.8
+- sudo apt-get install -y libboost1.55-all-dev cmake valgrind g++-4.8
 script:
 - mkdir build
 - cd build
 - cmake ..
 - make
+- ctest
 - cd ..
 after_success:
 - sudo apt-get install doxygen graphviz
