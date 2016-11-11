@@ -9,7 +9,6 @@
 
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
-QEngine::~QEngine() { }
 
 /*
  * Takes a stemmed string query in inverse notation and parses it into a list formatted in RPN. 

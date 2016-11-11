@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include "DocInfo.h"
 #include <string>
-#include <list>
 #include <vector>
+#include <list>
+
 
 /**
  * This data structure represents the inverted index. It incapsulates a set of stemmed 
