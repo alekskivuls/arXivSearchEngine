@@ -1,6 +1,8 @@
 sudo: required
 dist: precise
 language: cpp
+notifications:
+  email: false
 
 before_install:
 - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test 
