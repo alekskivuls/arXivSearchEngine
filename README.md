@@ -14,11 +14,17 @@ cd build
 cmake ..
 make
 ```
-Executable generated in build directory `./Engine` to run.
-When making changes to source only need to run `make` again to regenerate executable 
+Executables are generated in build directory 
+
+Console Engine: `arXivSearchEngine`
+Web Engine: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `arXivSearchEngineWeb`
+Unit tests: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arXivSearchEngine_test`
+When making changes to source only need to run `make` again to regenerate executables
 
 ##Clean Build
 From top level directory
 ```
 rm -r build
 ```
+
+##Vagrant

@@ -67,10 +67,12 @@ find_library(wt wt)
 find_library(wthttp wthttp)
 if(wt)
   message(MESSAGE "wt not found")
-  add_executable(arXivSearchEngineWeb ${PROJECT_NAME_STR}/Wt.cpp ${SOURCES})
+  add_executable(${PROJECT_NAME_STR}Web ${PROJECT_NAME_STR}/Wt.cpp ${SOURCES})
   target_link_libraries(arXivSearchEngineWeb
                         ${Boost_LIBRARIES}
                         wt wthttp)
+  set_property(TARGET ${PROJECT_NAME_STR}Web PROPERTY CXX_STANDARD 11)
+  set_property(TARGET ${PROJECT_NAME_STR}Web PROPERTY CXX_STANDARD_REQUIRED ON)
 endif()
 
 #------
@@ -94,3 +96,9 @@ endif()
 
 target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 add_test(test1 ${PROJECT_TEST_NAME})
+
+#C++11 Flags
+set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD 11)
+set_property(TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)

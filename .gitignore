@@ -75,6 +75,17 @@ ipch/
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
 
+# Vagrant stuff
+acceptance_config.yml
+boxes/*
+/.vagrant
+/website/.vagrant
+/website/build
+/vagrant-spec.config.rb
+/.cache
+/.bash_history
+/.profile
+
 # Others
 ClientBin/
 ~$*
@@ -86,9 +97,6 @@ ClientBin/
 *.publishsettings
 node_modules/
 orleans.codegen.cs
-
-#Corpus location
-SimpleEngine/documents/*
 
 #Build directory
 build/

@@ -9,7 +9,7 @@ namespace fs = boost::filesystem;
 
 extern uint32_t Reverse(uint32_t);
 extern uint64_t Reverse(uint64_t);
-extern double_t Reverse(double_t);
+//extern double_t Reverse(double_t);
 
 
 uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {

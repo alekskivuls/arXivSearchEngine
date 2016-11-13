@@ -38,9 +38,9 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 	// simultaneously build the vocabulary table on disk, mapping a term index to a 
 	// file location in the postings file.
-	std::ofstream postingsFile(postingsPath.append("/postings.bin").string(),
+    std::ofstream postingsFile(postingsPath.append("/postings.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
-	std::ofstream vocabTable(tablePath.append("/vocabTable.bin").string(),
+    std::ofstream vocabTable(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
 
 	// the first thing we must write to the vocabTable file is the number of vocab terms.
@@ -110,7 +110,7 @@ std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &file
 	int vocabPos = 0;
 
 	boost::filesystem::path vocabPath = filePath;
-	std::ofstream vocabFile(vocabPath.append("/vocabList.bin").string(),
+    std::ofstream vocabFile(vocabPath.append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
 
 	std::cout << "WRITING TO FILE" << std::endl;
