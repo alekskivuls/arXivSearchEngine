@@ -4,7 +4,7 @@ language: cpp
 notifications:
   email: false
 env:
-- CORPUS_TEST_DIR=$TRAVIS_BUILD_DIR/alekskivuls/arXivSearchEngine/test/documents/testCorpus
+- CORPUS_TEST_DIR=/home/travis/build/alekskivuls/arXivSearchEngine/test/documents/testCorpus
 addons:
     code_climate:
         repo_token: 44bac5901f28e82c74f8645323e090e88083c61b3be296fbadf5e1867e04697c
