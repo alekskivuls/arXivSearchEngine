@@ -26,9 +26,9 @@ uint64_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
-	mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin").string(),
+    mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios_base::in | std::ios_base::binary);
-	mPostings.open(boost::filesystem::path(mPath).append("/postings.bin").string(),
+    mPostings.open(boost::filesystem::path(mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios_base::in | std::ios_base::binary);
 
 	// open the vocabulary table and read it into memory. 
@@ -51,7 +51,7 @@ DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPat
 std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path) { // THIS FUNCTION IS HUNDO PERCENT BROKEN
 	fs::path tablePath = path;
 
-	ifstream tableFile(tablePath.append("/vocabTable.bin").string(),
+    ifstream tableFile(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::in | std::ios::binary);
 	uint64_t buffer, buffer2;
 	//uint32_t buffer, buffer2; // uint64_t uint32_t

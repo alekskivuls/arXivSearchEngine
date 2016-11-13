@@ -234,7 +234,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 
 
     auxIdx.mPostings.close();
-    auxIdx.mPostings.open(boost::filesystem::path(auxIdx.mPath).append("/postings.bin").string(),
+    auxIdx.mPostings.open(boost::filesystem::path(auxIdx.mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
                           std::ios_base::in | std::ios_base::binary);
     std::cout << "READING FROM FILE: " << std::endl;
     uint32_t val, itr = 0, count = 0, total = 0; // when reading... use int32_t or uint32_t... use the safer of 2 or the one that works.

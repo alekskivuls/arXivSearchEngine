@@ -3,7 +3,8 @@ dist: precise
 language: cpp
 notifications:
   email: false
-
+env:
+- CORPUS_TEST_DIR=$TRAVIS_BUILD_DIR/alekskivuls/arXivSearchEngine/test/documents/testCorpus
 before_install:
 - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test 
 - sudo apt-add-repository -y ppa:george-edison55/precise-backports
