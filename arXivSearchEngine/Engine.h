@@ -18,11 +18,19 @@
 #include <chrono>
 #include <list>
 
+#include "KEngine.h"
+#include "KgramIndex.h"
+
+
 class Engine {
 	boost::filesystem::path dir;
 	InvertedIndex idx;
 	QEngine queryEngine;
 	std::unordered_map<unsigned int, std::string> idTable;
+    KEngine kEngine;
+    KgramIndex kInd1 = KgramIndex(1);
+    KgramIndex kInd2 = KgramIndex(2);
+    KgramIndex kInd3 = KgramIndex(3);
 
 public:
 	Engine();
@@ -58,6 +66,8 @@ public:
     std::vector<std::string> getQuery(std::string &query);
 
 	std::string stem(std::string &token);
+
+    void correctSpelling(std::string &token);
 };
 
 #endif

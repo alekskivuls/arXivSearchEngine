@@ -9,7 +9,6 @@
 #include <unordered_set>
 #include "Serializer.h"
 #include "Tokenizer.h"
-#include "QEngine.h"
 #include "DocInfo.h"
 #include "Engine.h"
 
@@ -282,11 +281,19 @@ std::string Engine::stem(std::string &token) {
 }
 
 void Engine::printQuery(std::string &query) {
-    std::list<DocInfo> output = queryEngine.processQuery(query, idx);
-    for (auto di : output)
-        std::cout << idTable.at(di.getDocId()) << '\t';
-    std::cout << std::endl << output.size() << std::endl;
-    std::cout << std::endl;
+std::list<DocInfo> output = queryEngine.processQuery(query, idx);
+			for (auto di : output)
+				std::cout << idTable.at(di.getDocId()) << '\t';
+			std::cout << std::endl << output.size() << std::endl;
+			std::cout << std::endl;
+}
+
+void Engine::correctSpelling(std::string &token) {
+    kInd3.vocab();
+    auto list = kEngine.correctSpelling(token, kInd3);
+    for(auto element : list) {
+        std::cout << element << std::endl;
+    }
 }
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
