@@ -20,6 +20,11 @@ inline uint32_t Reverse(uint32_t value) {
 		(value & 0x00000000000000FF) << 56;
 }*/
 
+inline double_t Reverse(double_t value) {
+	auto result = Reverse(*reinterpret_cast<uint32_t*>(&value));
+	return *reinterpret_cast<double_t*>(&result);
+}
+
 // at this point, "index" contains the in-memory inverted index 
 // now we save the index to disk, building three files: the postings index,
 // the vocabulary list, and the vocabulary table.
