@@ -47,12 +47,12 @@ public:
 
 	void vocab() const;
 
-	std::list<std::string> getKgramList() {
+    //std::list<std::string> getKgramList() {
 
 
     /** This (public) method is independent of the Index.
      * It is intended to be used for query terms, so the user can get the kgrams of the term.*/
-    std::list<std::string> getGrams(std::string &term, int kSize); //should this all be <std::string*> or no *
+    static std::list<std::string> getGrams(std::string &term, int kSize); //should this all be <std::string*> or no *
 
     unsigned int getGramCount();
 
