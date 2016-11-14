@@ -15,10 +15,10 @@ public:
 	// this method MUST pass in a populated auxilary index ready to encode (vbe & gap) AND 
 	static void buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
 
-	static std::vector<uint64_t> buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
+	static std::vector<uint32_t> buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
 
 	static void buildPostings(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, 
-		const std::vector<uint64_t> &vocabPositions);
+		const std::vector<uint32_t> &vocabPositions);
 
     static void WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
 };

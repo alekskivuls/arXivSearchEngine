@@ -142,10 +142,20 @@ std::list<std::string> KgramIndex::getVocab() {
     return ret;
 }
 
+std::list<std::string> KgramIndex::getKgramList() {
+    std::list<std::string> ret;
+    for (auto pair : _mIndex) {
+        for (auto value : pair.first)
+            ret.push_back(value);
+    }
+    return ret;
+}
+
+
 /*
  * returns the number of kgrams that exist in the inverted index.
  */
-unsigned int KgramIndex::getGramCount() const{
+unsigned int KgramIndex::getGramCount() {
 	return _mIndex.size();
 }
 

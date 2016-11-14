@@ -37,7 +37,7 @@ public:
 
 	/**Constructor where the kSize is the k in kgram.
 	 * Designed to support k = 1 - 3; however may support more than 3.*/
-	KgramIndex(int kSize);
+    KgramIndex(int kSize);
 
 	//need to add a wildcard method.
 
@@ -47,13 +47,14 @@ public:
 
 	void vocab() const;
 
-	std::list<std::string> getVocab();
+	std::list<std::string> getKgramList() {
 
-	/** This (public) method is independent of the Index.
-	 * It is intended to be used for query terms, so the user can get the kgrams of the term.*/
-    static std::list<std::string> getGrams(std::string &term, int kSize); //should this all be <std::string*> or no *
 
-	unsigned int getGramCount() const;
+    /** This (public) method is independent of the Index.
+     * It is intended to be used for query terms, so the user can get the kgrams of the term.*/
+    std::list<std::string> getGrams(std::string &term, int kSize); //should this all be <std::string*> or no *
+
+    unsigned int getGramCount();
 
 };
 

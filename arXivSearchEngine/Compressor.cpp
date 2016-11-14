@@ -6,7 +6,7 @@
  * Future implementation must include gap encoding to reduce the amount of bytes consumed.
  * Return a smaller data type later...
  */
-std::list<unsigned char> Compressor::encodeNumber(uint64_t source) { // pass in string
+std::list<unsigned char> Compressor::encodeNumber(uint32_t source) { // pass in string
 	std::list<unsigned char> output;
 	unsigned char i, c = 0, pos = 0;
 
