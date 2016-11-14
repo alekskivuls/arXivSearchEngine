@@ -142,7 +142,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
 	return posts;
 }
 
-std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
+std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
 	auto &entry = mVocabTable[i];
 	
 	uint32_t termLength;

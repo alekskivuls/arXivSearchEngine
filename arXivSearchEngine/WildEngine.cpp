@@ -13,14 +13,9 @@
  * @param index2 : Passing in the reference of the KgramIndex object of size 2.
  * @param index3 : Passing in the reference of the KgramIndex object of size 3.
  */
-WildEngine::WildEngine(KgramIndex &index1,
+WildEngine::WildEngine(){ }/*KgramIndex &index1,
                        KgramIndex &index2,
-                       KgramIndex &index3) : kindex1(index1), kindex2(index2), kindex3(index3) { }
-
-std::list<std::string> WildEngine::vocab(){ //need to use WildEngine:: or wont be declared in scope.
-    std::cout << &kindex1 << std::endl;
-    return kindex1.getVocab(); //assuming all 3 index have same words stored.
-}
+                       KgramIndex &index3) : kindex1(index1), kindex2(index2), kindex3(index3) { }*/
 
 /**
  * @brief WildEngine::potentials : Returns all potential terms in the wildcard query, filtered
@@ -28,7 +23,8 @@ std::list<std::string> WildEngine::vocab(){ //need to use WildEngine:: or wont b
  * @param wildcard : the literal wildcard term. (i.e. "h*llo")potentialterms
  * @return The return value is a list of strings that fit the wildcard.
  */
-std::list<std::string> WildEngine::potentials(std::string &wildcard){
+std::list<std::string> WildEngine::potentials(std::string &wildcard, KgramIndex &kindex1,
+                                              KgramIndex &kindex2, KgramIndex &kindex3){
     std::list<std::string> refToList = KgramIndex::getGrams(wildcard, 3);
     std::list<std::string> potentialterms, filtered;
     //std::cout << refToList.size() << std::endl;

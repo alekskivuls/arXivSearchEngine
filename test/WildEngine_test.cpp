@@ -10,7 +10,7 @@ class WildTest : public ::testing::Test {
   KgramIndex index3 = KgramIndex(3);
   KgramIndex index1 = KgramIndex(1);
   KgramIndex index2 = KgramIndex(2);
-  WildEngine wengine = WildEngine(index1, index2, index3); //HOW DO I LINK THIS T_T
+//  WildEngine wengine = WildEngine();
 };
 
 /**
@@ -37,11 +37,7 @@ TEST_F(WildTest, wildcard)
     index1.addTerm(healo);
     index1.addTerm(wip);
     //index3.vocab(); //check if pass by ref works
-//    std::list<std::string> res = wengine.vocab();
-    //std::cout << &index1 << std::endl;
-//    EXPECT_EQ(res.size(), index1.getVocab().size());
-    //trying to test the getgrams method to index
-    std::list<std::string> res = wengine.potentials(wildcard);
+    std::list<std::string> res = WildEngine::potentials(wildcard, index1, index2, index3);
     EXPECT_EQ(res.size(), 1);
     std::cout << res.front() << std::endl; //IT WORKS! TwT
 //    EXPECT_EQ(res.front(), "ell");

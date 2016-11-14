@@ -13,9 +13,11 @@ class WildEngine {
     /**
      * @brief kindex1 : User can load in their indexes.
      */
-    KgramIndex& kindex1; //need the & after to do by reference
-    KgramIndex& kindex2;
-    KgramIndex& kindex3;
+    // KgramIndex& kindex1; //need the & after to do by reference
+    // KgramIndex& kindex2;
+    // KgramIndex& kindex3;
+
+    static std::string regularex(std::string wildcard);
 
 public:
 
@@ -26,15 +28,14 @@ public:
      * @param index3 : pass your reference and these will point to it.
      * The order must specifically be index1, 2, and 3 to function properly.
      */
-    WildEngine(KgramIndex &index1, KgramIndex &index2, KgramIndex &index3);
+    WildEngine();
 
-    std::list<std::string> potentials(std::string &wildcard);
+    static std::list<std::string> potentials(std::string &wildcard, KgramIndex &kindex1,
+                                              KgramIndex &kindex2, KgramIndex &kindex3);
 
     // std::list<std::string> recommendations(std::string &wildcard);
 
-    std::list<std::string> vocab();
-
-    std::string regularex(std::string wildcard);
+    
 };
 
 #endif

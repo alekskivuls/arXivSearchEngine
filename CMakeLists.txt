@@ -16,6 +16,7 @@ set(SOURCES
     ${PROJECT_NAME_STR}/InvertedIndex.cpp
     ${PROJECT_NAME_STR}/KEngine.cpp
     ${PROJECT_NAME_STR}/KgramIndex.cpp
+    ${PROJECT_NAME_STR}/KSerializer.cpp
     ${PROJECT_NAME_STR}/PorterStemmer.cpp
     ${PROJECT_NAME_STR}/QEngine.cpp
     ${PROJECT_NAME_STR}/Serializer.cpp

@@ -30,8 +30,8 @@ inline double_t Reverse(double_t value) {
 // the vocabulary list, and the vocabulary table.
 void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
-
 	std::vector<uint32_t> vocabPositions = Serializer::buildVocab(filePath, auxIdx);
+
 	Serializer::buildPostings(filePath, auxIdx, vocabPositions);
 }
 
@@ -73,6 +73,11 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 	vocabTable.close();
 	postingsFile.close();
 }
+
+/**
+  * Writes a single list of postings for one vocabulary term to the given postings file.
+  * Currently writes only the document frequency (size of list) and each document ID as a gap.
+  */
 
 
 // Writes a single list of postings for one vocabulary term to the given postings file.
