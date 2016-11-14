@@ -13,6 +13,7 @@ bool KgramIndex::hasKgram(std::string &kgram) const {
 	return _mIndex.find(kgram) != _mIndex.end();
 }
 
+
 /** This (public) method, getTerms will, given a string kgram (key), return the list<string> (value) of
  * terms associates with that kgram from the _mIndex
  */
@@ -24,6 +25,7 @@ std::list<std::string> KgramIndex::getTerms(std::string &kgram) {
 	else
 		return empty;
 }
+
 
 /**
  * This (private) method, addKgram will, given a string kgram and a string term,
@@ -54,9 +56,11 @@ void KgramIndex::addKgram(std::string &kgram, std::string &term) {
 	}
 }
 
+
 int KgramIndex::getKSize(){
     return _kgramSize;
 }
+
 
 /** This (public) method will separate the term into kgrams (of the size passed in constructor)
  * and use the addKgram (private) to add that kgram key to term pair into the _mIndex.
@@ -84,6 +88,7 @@ void KgramIndex::addTerm(std::string &term) { //TODO: fix addTerm logic
 		}
 	}
 }
+
 
 /**
  * How to use this (public) method: 
@@ -118,6 +123,7 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
 	return grams;
 }
 
+
 /*
  * This method prints all kgrams and terms associated to each kgram to the console.
  */
@@ -125,6 +131,7 @@ void KgramIndex::vocab() const { //vocab = grams here
     for (auto pair : _mIndex) std::cout << pair.first << '\n'; //first is the kgrams
 	std::cout << getGramCount() << '\n';
 }
+
 
 std::list<std::string> KgramIndex::getVocab() {
     std::list<std::string> ret;
@@ -134,6 +141,16 @@ std::list<std::string> KgramIndex::getVocab() {
     }
     return ret;
 }
+
+std::list<std::string> KgramIndex::getKgramList() {
+    std::list<std::string> ret;
+    for (auto pair : _mIndex) {
+        for (auto value : pair.first)
+            ret.push_back(value);
+    }
+    return ret;
+}
+
 
 /*
  * returns the number of kgrams that exist in the inverted index.
