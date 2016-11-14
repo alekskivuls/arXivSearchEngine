@@ -36,13 +36,14 @@ TEST_F(WildTest, wildcard)
     index1.addTerm(jello);
     index1.addTerm(healo);
     index1.addTerm(wip);
-    index3.vocab(); //check if pass by ref works
+    //index3.vocab(); //check if pass by ref works
 //    std::list<std::string> res = wengine.vocab();
     //std::cout << &index1 << std::endl;
 //    EXPECT_EQ(res.size(), index1.getVocab().size());
     //trying to test the getgrams method to index
     std::list<std::string> res = wengine.potentials(wildcard);
-    EXPECT_EQ(res.size(), 3); //returns 0.
+    EXPECT_EQ(res.size(), 1);
+    std::cout << res.front() << std::endl; //IT WORKS! TwT
 //    EXPECT_EQ(res.front(), "ell");
 //    res.pop_front();
 //    EXPECT_EQ(res.front(), "llo");

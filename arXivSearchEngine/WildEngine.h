@@ -33,6 +33,8 @@ public:
     // std::list<std::string> recommendations(std::string &wildcard);
 
     std::list<std::string> vocab();
+
+    std::string regularex(std::string wildcard);
 };
 
 #endif

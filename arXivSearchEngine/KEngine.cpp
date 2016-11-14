@@ -9,7 +9,13 @@
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 KEngine::KEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 
-//inefficient code.
+/**
+ * The function jaccard currently takes in three parameters, two string terms
+ * you want the jaccard coefficient for and the integer kgram size.
+ *
+ * The jaccard coeffienct is representative of how how similar the term's kgrams are
+ * taking into account the length of the terms.
+ */
 //change to using private _ksize?
 float KEngine::jaccard(std::string &term1, std::string &term2, int kSize){
     const std::list<std::string> &grams1 = KgramIndex::getGrams(term1, kSize);
@@ -102,9 +108,8 @@ int KEngine::min(int x, int y, int z) {
  
 
 /** editDistDP(str1, str2)
- * Dynamic Programming. 
+ * Dynamic Programming to actually find the closest term.
  */
-
 int KEngine::editDistDP(std::string term1, std::string term2) {
     // Create a table to store results of subproblems
     int m = term1.length();
