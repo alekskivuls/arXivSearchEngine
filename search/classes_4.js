@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['porterstemmer',['PorterStemmer',['../classPorterStemmer.html',1,'']]]
+  ['kengine',['KEngine',['../classKEngine.html',1,'']]],
+  ['kgramindex',['KgramIndex',['../classKgramIndex.html',1,'']]]
 ];

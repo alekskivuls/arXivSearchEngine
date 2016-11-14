@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qengine',['QEngine',['../classQEngine.html',1,'']]]
+  ['porterstemmer',['PorterStemmer',['../classPorterStemmer.html',1,'']]]
 ];

@@ -79,8 +79,11 @@ Inheritance diagram for InvertedIndex:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3ee55fe4318e63f2ed9a0bdada5129e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a3ee55fe4318e63f2ed9a0bdada5129e2">addTerm</a> (const std::string &amp;term, const unsigned int &amp;docId, const unsigned int &amp;pos)</td></tr>
-<tr class="separator:a3ee55fe4318e63f2ed9a0bdada5129e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbf12955191c399cec1c2bf27616e683"><td class="memItemLeft" align="right" valign="top"><a id="acbf12955191c399cec1c2bf27616e683"></a>
+std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocabList</b> () const</td></tr>
+<tr class="separator:acbf12955191c399cec1c2bf27616e683"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a527e7f50ee48083e74a744f244a9c70b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a527e7f50ee48083e74a744f244a9c70b">addTerm</a> (const std::string &amp;term, const uint32_t &amp;docId, const uint32_t &amp;pos)</td></tr>
+<tr class="separator:a527e7f50ee48083e74a744f244a9c70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b67410c7f5eccea2999e095c7380ca4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a3b67410c7f5eccea2999e095c7380ca4">hasPostings</a> (const std::string &amp;term) const</td></tr>
 <tr class="separator:a3b67410c7f5eccea2999e095c7380ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6fdfc7f864f083f04652feff4bd274f"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#ae6fdfc7f864f083f04652feff4bd274f">getPostings</a> (const std::string &amp;term) const</td></tr>
@@ -88,15 +91,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a66049b6806e05a52d55d9ca226eae938"><td class="memItemLeft" align="right" valign="top"><a id="a66049b6806e05a52d55d9ca226eae938"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>vocab</b> () const</td></tr>
 <tr class="separator:a66049b6806e05a52d55d9ca226eae938"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a057d9035badf53d4dc7d0daf97c42c76"><td class="memItemLeft" align="right" valign="top"><a id="a057d9035badf53d4dc7d0daf97c42c76"></a>
-std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocab</b> () const</td></tr>
-<tr class="separator:a057d9035badf53d4dc7d0daf97c42c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade2d430aba80fd18acbf3100d9cbdc71"><td class="memItemLeft" align="right" valign="top"><a id="ade2d430aba80fd18acbf3100d9cbdc71"></a>
 std::unordered_map&lt; std::string, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> () const</td></tr>
 <tr class="separator:ade2d430aba80fd18acbf3100d9cbdc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a930a1e1ac520481a81130d6207d52aae"><td class="memItemLeft" align="right" valign="top"><a id="a930a1e1ac520481a81130d6207d52aae"></a>
-unsigned int&#160;</td><td class="memItemRight" valign="bottom"><b>getTermCount</b> () const</td></tr>
-<tr class="separator:a930a1e1ac520481a81130d6207d52aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memItemLeft" align="right" valign="top"><a id="aa115f8005afa5e892233a9b7d9d1a2d3"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTermCount</b> () const</td></tr>
+<tr class="separator:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -106,8 +106,8 @@ Friends</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3ee55fe4318e63f2ed9a0bdada5129e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ee55fe4318e63f2ed9a0bdada5129e2">&sect;&nbsp;</a></span>addTerm()</h2>
+<a id="a527e7f50ee48083e74a744f244a9c70b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a527e7f50ee48083e74a744f244a9c70b">&sect;&nbsp;</a></span>addTerm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -121,13 +121,13 @@ Friends</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const unsigned int &amp;&#160;</td>
+          <td class="paramtype">const uint32_t &amp;&#160;</td>
           <td class="paramname"><em>docId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const unsigned int &amp;&#160;</td>
+          <td class="paramtype">const uint32_t &amp;&#160;</td>
           <td class="paramname"><em>pos</em>&#160;</td>
         </tr>
         <tr>

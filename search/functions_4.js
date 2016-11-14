@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['populateindex',['populateIndex',['../classEngine.html#ad4a86e0d2529c904497cccd312f83e31',1,'Engine']]]
+  ['haspostings',['hasPostings',['../classInvertedIndex.html#a3b67410c7f5eccea2999e095c7380ca4',1,'InvertedIndex']]]
 ];

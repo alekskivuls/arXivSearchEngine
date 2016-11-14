@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tokenizer',['Tokenizer',['../classTokenizer.html#a93dd44e5e9e12e2eb89442c1c4c0ebd7',1,'Tokenizer::Tokenizer(const boost::filesystem::path &amp;p)'],['../classTokenizer.html#a413f57e53616e0a229c9144c30883e3b',1,'Tokenizer::Tokenizer(const std::string &amp;s)']]]
+  ['kgramindex',['KgramIndex',['../classKgramIndex.html#a0669ed0d06208bb68131fb75afff5e84',1,'KgramIndex']]]
 ];

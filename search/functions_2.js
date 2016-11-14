@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['haspostings',['hasPostings',['../classInvertedIndex.html#a3b67410c7f5eccea2999e095c7380ca4',1,'InvertedIndex']]]
+  ['editdistdp',['editDistDP',['../classKEngine.html#a6d439510a2ff687f9e4b875b22f955ca',1,'KEngine']]]
 ];

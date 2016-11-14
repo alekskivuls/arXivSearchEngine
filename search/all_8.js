@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['populateindex',['populateIndex',['../classEngine.html#ad4a86e0d2529c904497cccd312f83e31',1,'Engine']]],
-  ['porterstemmer',['PorterStemmer',['../classPorterStemmer.html',1,'']]]
+  ['kengine',['KEngine',['../classKEngine.html',1,'']]],
+  ['kgramindex',['KgramIndex',['../classKgramIndex.html',1,'KgramIndex'],['../classKgramIndex.html#a0669ed0d06208bb68131fb75afff5e84',1,'KgramIndex::KgramIndex()']]]
 ];

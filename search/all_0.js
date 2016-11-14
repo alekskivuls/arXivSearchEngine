@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['addterm',['addTerm',['../classInvertedIndex.html#a3ee55fe4318e63f2ed9a0bdada5129e2',1,'InvertedIndex']]]
+  ['addterm',['addTerm',['../classInvertedIndex.html#a527e7f50ee48083e74a744f244a9c70b',1,'InvertedIndex::addTerm()'],['../classKgramIndex.html#a9e87be6cb306b74708b60a86b13b43ea',1,'KgramIndex::addTerm()']]]
 ];
