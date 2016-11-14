@@ -12,29 +12,10 @@
 #include "DocInfo.h"
 #include "Engine.h"
 
-inline uint32_t Reverse(uint32_t value) {
-    return (value & 0xFF000000) >> 24 |
-		(value & 0x00FF0000) >> 8 |
-		(value & 0x0000FF00) << 8 |
-		(value & 0x000000FF) << 24;
-}
-
-/*
-inline uint64_t Reverse(uint64_t value) {
-    return (value & 0xFF00000000000000) >> 56 |
-		(value & 0x00FF000000000000) >> 40 |
-        (value & 0x0000FF0000000000) >> 24 |
-        (value & 0x000000FF00000000) >> 8 |
-        (value & 0x00000000FF000000) << 8 |
-        (value & 0x0000000000FF0000) << 24 |
-        (value & 0x000000000000FF00) << 40 |
-        (value & 0x00000000000000FF) << 56;
-}*/
-
 // Default constructors and destructors
 Engine::Engine() { 
-    idTable = std::unordered_map<uint32_t, std::string>();
-    idx = InvertedIndex();
+   // idTable = std::unordered_map<uint32_t, std::string>();
+   // idx = InvertedIndex();
 }
 
 void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
@@ -78,12 +59,14 @@ std::vector<std::string> split(std::string token) {
     return vect;
 }
 
-void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<uint32_t, std::string> &idTable) {
+void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
+    idTable = std::unordered_map<uint32_t, std::string>();
+    idx = InvertedIndex();
     std::unordered_map<std::string, std::string> cache;
-    boost::filesystem::directory_iterator it(dir), eod;
+    boost::filesystem::directory_iterator it(inDir), eod;
     std::vector<std::string> mPathList;
     getPathNames(dir, mPathList);
 
@@ -146,18 +129,12 @@ void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &id
     totalEnd = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
+
+    Serializer::buildIndex(outDir, idx);
 }
 
 void Engine::index(const std::string &filepath) {
-    boost::filesystem::path dir(filepath);
-    boost::filesystem::directory_iterator it(dir), eod;
-
-    idTable = std::unordered_map<uint32_t, std::string>();
-    idx = InvertedIndex();
-    Engine::populateIndex(dir, idx, idTable);
-    std::cout << "idx size = " << idx.getTermCount() << '\n';
-
-    //printIndex();
+    DiskInvertedIndex(boost::filesystem::path(filepath));
 }
 
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
@@ -167,11 +144,10 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 
     idTable = std::unordered_map<uint32_t, std::string>();
     idx = InvertedIndex();
-    Engine::populateIndex(dir, idx, idTable);
-    std::cout << "idx size = " << idx.getTermCount() << '\n';
 
     std::string path = "C:/Users/pkim7/Desktop/output"; // change to your output directory
     boost::filesystem::path dirOut(path);
+    Engine::populateIndex(dir, dirOut);
     Serializer::buildIndex(dirOut, idx);
 
     std::cout << "Printing index: " << std::endl;

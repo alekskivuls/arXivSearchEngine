@@ -22,7 +22,7 @@
 
 #include "KEngine.h"
 #include "KgramIndex.h"
-
+#include "DiskInvertedIndex.h"
 
 class Engine {
 	boost::filesystem::path dir;
@@ -34,6 +34,7 @@ class Engine {
     KgramIndex kInd1 = KgramIndex(1);
     KgramIndex kInd2 = KgramIndex(2);
     KgramIndex kInd3 = KgramIndex(3);
+    //DiskInvertedIndex dIdx;
 
 public:
 	Engine();
@@ -44,8 +45,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-	void populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx,
-		std::unordered_map<uint32_t, std::string> &idTable);
+    void populateIndex(const boost::filesystem::path &inDir,const boost::filesystem::path &outDir);
 
 	void populateEucDist();
 

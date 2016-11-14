@@ -19,8 +19,6 @@ void pktest() {
 }
 
 int main() {
-    pktest(); //  do not delete yet
-    return 0;
     //Initialize Engine
     Engine engine;
 
