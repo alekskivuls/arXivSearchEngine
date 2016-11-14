@@ -29,13 +29,12 @@ inline double_t Reverse(double_t value) {
 // at this point, "index" contains the in-memory inverted index 
 // now we save the index to disk, building three files: the postings index,
 // the vocabulary list, and the vocabulary table.
-void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
+void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, const  std::vector<double_t> &weights) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
 	std::vector<uint32_t> vocabPositions = Serializer::buildVocab(filePath, auxIdx);
 	Serializer::buildPostings(filePath, auxIdx, vocabPositions); // build and write postings to disk
 
-    std::vector<double_t> weights = Serializer::buildEucDist(auxIdx); // build and write document length to disk
-	Serializer::writeEucDist(filePath, weights);
+    Serializer::buildEucDist(filePath, weights); // build and write document length to disk
 
 	// std::vector<uint32_t> &gramsVocab = Serializer::buildGramVocab(gram1, gram2, ...); // FOR CHERIE (merge then sort list before passing into this function?)
 	// Serializer::buildGramdex(filePath, gramsVocab, gram1, gram2, ...); // FOR CHERIE
@@ -143,34 +142,7 @@ std::vector<uint32_t> Serializer::buildVocab(const boost::filesystem::path &file
 	return positions;
 }
 
-std::vector<double_t> Serializer::buildEucDist(const InvertedIndex &auxIdx) {
-	std::vector<double_t> weights(auxIdx.getVocabList().size()); // 
-	for (const auto &term : auxIdx.getVocabList())
-		weights.push_back(0.0);
-
-
-	for (const auto &term : auxIdx.getVocabList()) { // for EVERY TERM
-		const std::list<DocInfo> &postings = auxIdx.getPostings(term);
-		for (const DocInfo &post : postings) {
-
-			// GET TERM FREQUENCY
-			const uint32_t &tf = post.getPositions().size();
-
-			if (tf == 0.0) {
-				double_t wgt = 1.0 + log((double_t)tf);
-				weights[post.getDocId()] = weights.at(post.getDocId()) + (wgt * wgt);
-			}
-		}
-	}
-
-	uint32_t i;
-	for (i = 0; i < weights.size(); ++i)
-		weights[i] = sqrt(weights.at(i));
-
-	return weights;
-}
-
-void Serializer::writeEucDist(const boost::filesystem::path &filePath, const std::vector<double_t> &weights) {
+void Serializer::buildEucDist(const boost::filesystem::path &filePath, const std::vector<double_t> &weights) {
 	boost::filesystem::path weightbPath = filePath;
 	std::ofstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
@@ -179,7 +151,8 @@ void Serializer::writeEucDist(const boost::filesystem::path &filePath, const std
 	weightFile.write((const char*)&size, sizeof(size)); // write to disk length of document to file
 
 	for (const double_t &dist : weights) {
-		double_t encoded = Reverse(dist);
+		//double_t encoded = Reverse(dist);
+		double_t encoded = dist;
 		weightFile.write((const char*)&encoded, sizeof(encoded)); // write to disk length of document to file
 	}
 

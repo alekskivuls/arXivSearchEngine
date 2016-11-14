@@ -11,16 +11,61 @@
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 
-std::vector<DocInfo> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
+std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
 	std::istringstream iss(userQuery);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
 
-	for (const std::string &s : tokens) {
-		std::cout << s << std::endl;
+	uint32_t size = dIdx.getN();
+	std::vector<double_t> &weights = dIdx.ReadWeights();
+	std::vector<std::pair<uint32_t, double_t>> scores;
+	scores.reserve(size);
+	uint32_t i;
+	for (i = 0; i < size; ++i) 
+		scores.push_back(std::pair<uint32_t, double_t>(i, 0.0)); // <-- Acc is score value
+
+	i = 0;
+	// I DID NOT SUM ACCUMULATOR YET
+	for (std::string token : tokens) {
+		std::string stemmedToken = PorterStemmer::stem(token);
+		std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
+
+		double_t df = (double_t)docList.size();
+		double_t wqt = (df == 0.0) ? 0 : log(1.0 + (size / df)); // WQT
+
+
+		// FOR EACH TERM... CALC SCORES FOR ALL DOCS
+		for (const DocInfo &doc : docList) {
+			double_t tf =  doc.getPositions().size();
+			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
+
+			double_t Ad = wqt * wdt;
+			if (Ad != 0) scores[doc.getDocId()].second += (Ad / weights[doc.getDocId()]);
+		}
 	}
 
-	return std::vector<DocInfo>();
+	// SORT AND THEN RETURN TOP 10
+	std::vector<uint32_t> result;
+
+	return std::vector<uint32_t>();
+}
+
+std::vector<uint32_t> QEngine::heapify(std::list<std::pair<uint32_t, double_t>> scores) {
+	std::make_heap(scores.begin(), scores.end());
+
+	std::vector<uint32_t> result;
+	result.reserve(10);
+
+	uint32_t i;
+	for (i = 0; i < 10; ++i) {
+		result[i] = scores.front().first;
+
+		std::cout << "MAX = " << scores.front().second << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
+
+		std::pop_heap(scores.begin(), scores.end()); scores.pop_back(); // gets top and pops from heap
+	}
+
+	return result;
 }
 
 /*

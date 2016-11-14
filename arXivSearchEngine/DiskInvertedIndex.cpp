@@ -19,7 +19,8 @@ uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
 double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
 	double_t value = 0;
 	stream.read((char*)&value, sizeof(value));
-	return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	//return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	return value;
 }
 
 /*uint32_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
@@ -186,14 +187,28 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const
 	return std::list<DocInfo>();
 }
 
-std::vector<double_t> DiskInvertedIndex::ReadWeights(const boost::filesystem::path &path) {
-	fs::path weightbPath = path;
+uint32_t DiskInvertedIndex::getN() {
+	fs::path weightbPath = mPath;
 
 	ifstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::in | std::ios::binary);
 
 	std::vector<double_t> weights;
 	uint32_t size = ReadInt(weightFile);
+	weightFile.close();
+	return size;
+}
+
+std::vector<double_t> DiskInvertedIndex::ReadWeights() {
+	fs::path weightbPath = mPath;
+
+	ifstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
+		std::ios::in | std::ios::binary);
+
+	std::vector<double_t> weights;
+	uint32_t size = ReadInt(weightFile);
+
+	std::cout << "READ FILE VECTOR SIZE: " << size << std::endl;
 	weights.reserve(size);
 
 	uint32_t i;
@@ -203,6 +218,8 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights(const boost::filesystem::pa
 	}
 
 	weightFile.close();
+
+	return weights;
 }
 
 /*DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) { // 

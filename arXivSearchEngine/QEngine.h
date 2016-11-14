@@ -2,6 +2,8 @@
 #define QUERY_LANGUAGE_H
 
 #include "DiskInvertedIndex.h"
+#include "PorterStemmer.h"
+#include <cmath>
 #include <stack>
 #include <vector>
 
@@ -32,7 +34,9 @@ public:
 
     std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex &dIdx);
 
-	std::vector<DocInfo> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
+	std::vector<uint32_t> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
+
+	std::vector<uint32_t> heapify(std::list<std::pair<uint32_t, double_t>> scores);
 
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */

@@ -60,6 +60,7 @@ std::vector<std::string> split(std::string token) {
 }
 
 void Engine::updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string &term) {
+	std::cout << "SHIT STICK" << std::endl;
     if (wdt.find(term) == wdt.end())
         wdt[term] = 1;
     else
@@ -87,7 +88,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::vector<std::string> mPathList;
     getPathNames(inDir, mPathList);
 
-    ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
+	std::vector<double_t> ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
     ld.reserve(mPathList.size());
 
     std::sort(mPathList.begin(), mPathList.end());
@@ -95,7 +96,6 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     uint32_t i = 0;
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-        ld.push_back(0.0);
 
         std::unordered_map<std::string, uint32_t> wdt;
 
@@ -130,6 +130,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                         std::string stemmedToken = (cache.find(token) != cache.end())
                                 ? cache[token] : PorterStemmer::stem(token);
                         idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
+						updateTf(wdt, stemmedToken);
                     }
                     else {
                         std::string total = "";
@@ -144,20 +145,52 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                         std::string &totalToken = total;
                         //std::string &totalToken = PorterStemmer::stem(total);
                         idx.addTerm(totalToken, i, posIndex);
+						updateTf(wdt, total);
                     }
 
                     posIndex++;
                 }
             }
         }
+		std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
+		for (auto pr : wdt) {
+			std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
+		}
+		ld.push_back(calcEucDist(wdt));
+		wdt = std::unordered_map<std::string, uint32_t>();
     }
+	// test write print
+	/*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
+	for (double_t &d : ld) {
+		std::cout << d << std::endl;
+	}*/
     totalEnd = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
-    Serializer::buildIndex(outDir, idx);
+    Serializer::buildIndex(outDir, idx, ld);
     dir = outDir;
+
+	// TEST PRINT READ
+
+	//testRead(outDir.string());
 }
+
+void Engine::rank(std::string input) {
+	DiskInvertedIndex dIdx(dir);
+	queryEngine.rankedQuery(input, dIdx);
+}
+
+/*void Engine::testRead(const std::string &filepath) {
+	DiskInvertedIndex dIdx = DiskInvertedIndex(filepath);
+	std::vector<double_t> ld = dIdx.ReadWeights();
+	// test write print
+	std::cout << "TEST PRINT FOR READING EUCLIDEAN DISTANCE." << std::endl;
+	for (double_t &d : ld) {
+		std::cout << d << std::endl;
+	}
+}*/
+
 
 void Engine::createIndex(const std::string &filepath) {
     auto cwd = boost::filesystem::current_path();
@@ -171,6 +204,8 @@ void Engine::loadIndex(const std::string &filepath) {
     //DiskInvertedIndex(boost::filesystem::path(filepath));
 }
 
+
+/*
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
     std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
     boost::filesystem::path dir(file); // change input back to: filepath
@@ -256,7 +291,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     }
     std::cout << std::endl;
     auxIdx.mPostings.close();
-}
+}*/
 
 void Engine::printIndex() {
     typedef std::pair<std::string, std::list<DocInfo>> pair;

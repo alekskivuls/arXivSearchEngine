@@ -66,7 +66,11 @@ public:
 
     void loadIndex(const std::string &filepath);
 
-	void diskWriteTest(const std::string &filepath);
+	void rank(std::string input);
+
+	//void diskWriteTest(const std::string &filepath);
+
+	//void testRead(const std::string &filepath);
 
 	void printVocab();
 

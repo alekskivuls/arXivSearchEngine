@@ -13,7 +13,7 @@ class Serializer {
 public:
 
 	// this method MUST pass in a populated auxilary index ready to encode (vbe & gap) AND 
-    static void buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
+    static void buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, const  std::vector<double_t> &weights);
 
 	static std::vector<uint32_t> buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx);
 
@@ -22,9 +22,7 @@ public:
 
     static void WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
 
-	static std::vector<double_t> buildEucDist(const InvertedIndex &auxIdx);
-
-	static void writeEucDist(const boost::filesystem::path &filePath, const std::vector<double_t> &weights);
+	static void buildEucDist(const boost::filesystem::path &filePath, const std::vector<double_t> &weights);
 };
 
 #endif

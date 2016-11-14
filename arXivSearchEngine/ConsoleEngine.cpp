@@ -6,7 +6,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "Engine.h"
 
-void pktest() {
+/*void pktest() {
     // Paul's test code. just ignore it.
     //Initialize Engine
     Engine engine;
@@ -16,7 +16,7 @@ void pktest() {
     std::cout << "Writing to Disk: " << std::endl;
     //std::getline(std::cin, filepath);
     engine.diskWriteTest("hello"); // should create 3 files
-}
+}*/
 
 int main() {
     //pktest(); //  do not delete yet
@@ -55,6 +55,9 @@ int main() {
             filepath = input.substr(6, std::string::npos);
             engine.loadIndex(filepath);
         }
+		else if (boost::algorithm::starts_with(input, ":rank ")) { // REMOVE THIS LATER
+			engine.rank(input.substr(6, std::string::npos));
+		}
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);
         }

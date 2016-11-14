@@ -32,14 +32,13 @@ public:
 	mutable std::ifstream mVocabList;
 	mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
-	uint32_t N;
 	//std::vector<double_t> weights;
 	
 	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
 
 	static std::vector<VocabEntry> ReadVocabTable(const boost::filesystem::path &path);
 
-	static std::vector<double_t> ReadWeights(const boost::filesystem::path &path);
+	std::vector<double_t> ReadWeights();
 
 	VocabEntry BinarySearchVocabulary(const std::string &term) const;
 	//static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
@@ -51,6 +50,8 @@ public:
 	DiskInvertedIndex(const boost::filesystem::path  &path);
 
     std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
+
+	uint32_t DiskInvertedIndex::getN();
 
     void printAllPostings(const InvertedIndex &idx);
 
