@@ -49,9 +49,13 @@ public:
 
 	void printVocab();
 
+    std::list<std::string> getVocab();
+
 	void printIndex();
 
 	void printQuery(std::string &query);
+
+    std::vector<std::string> getQuery(std::string &query);
 
 	std::string stem(std::string &token);
 };

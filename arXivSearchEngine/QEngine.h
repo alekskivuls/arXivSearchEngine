@@ -29,7 +29,6 @@ class QEngine {
 
 public:
 	QEngine();
-	~QEngine();
 
 	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex &idx);
 

@@ -1,5 +1,4 @@
 #include "Serializer.h"
-#include <iostream>
 #include <iomanip>
 
 // For correcting endianness issues; you may not need these.
@@ -38,19 +37,17 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 	// simultaneously build the vocabulary table on disk, mapping a term index to a 
 	// file location in the postings file.
-	std::ofstream postingsFile(postingsPath.append("/postings.bin").string(),
+    std::ofstream postingsFile(postingsPath.append("/postings.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
-	std::ofstream vocabTable(tablePath.append("/vocabTable.bin").string(),
+    std::ofstream vocabTable(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
 
 	// the first thing we must write to the vocabTable file is the number of vocab terms.
 	int64_t termCount = Reverse(auxIdx.getVocabList().size()); // UNCOMMENT FOR WINDOWS
-														   //int64_t termCount = (int64_t) auxIdx.getIndex().size();
+
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
-	std::cout << "num terms: " << auxIdx.getVocabList().size() << std::endl;
 
 
-	//std::cout << "WRITING TO FILE" << std::endl;
 	int64_t vocabIndex = 0; // FOR EVERY TERM
 	for (const std::string &term : auxIdx.getVocabList()) {
 		const std::list<DocInfo> &postings = auxIdx.getPostings(term);
@@ -58,38 +55,15 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
 		// and the byte location of the postings for the term in the postings file.
 		uint64_t vPosition = Reverse(vocabPositions[vocabIndex]);
-		std::cout << "V POSITION: " << Reverse(vPosition) << std::endl;
 		vocabTable.write((const char*)&vPosition, sizeof(vPosition));
 
-		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp()); // og(uint64_t) (uint32_t)
-		std::cout << "P POSITION: " << Reverse(pPosition) << std::endl;
+		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp());
 		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
 
 
 		WritePostings(postingsFile, postings);
 		vocabIndex++;
 	}
-
-
-	/*
-	typedef const std::pair<std::string, std::list<DocInfo>> pair;
-	for (pair &element : auxIdx.getIndex()) {
-		const std::list<DocInfo> &postings = auxIdx.getPostings(element.first);
-
-		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
-		// and the byte location of the postings for the term in the postings file.
-		uint64_t vPosition = Reverse(vocabPositions[vocabIndex]);
-		std::cout << "V POSITION: " << Reverse(vPosition) << std::endl;
-		vocabTable.write((const char*)&vPosition, sizeof(vPosition));
-
-		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp()); // og(uint64_t) (uint32_t)
-		std::cout <<  "P POSITION: " << Reverse(pPosition) << std::endl;
-		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
-
-
-		WritePostings(postingsFile, postings);
-		vocabIndex++;
-	}*/
 
 	vocabTable.close();
 	postingsFile.close();
@@ -100,25 +74,21 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 // Currently writes only the document frequency (size of list) and each document ID as a gap.
 void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings) { 
 	// Write the document frequency.
-	size_t docFreq = (uint64_t) Reverse(postings.size()); // std::size_t this one HAS to be sizet std::size_t uint64_t
+	size_t docFreq = (uint64_t) Reverse(postings.size());
 
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
 
-	uint32_t lastDocId = 0; // uint32_t
+	uint32_t lastDocId = 0;
 	for (const DocInfo &currDoc : postings) {
 		// write document ID gap.
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
-		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId); // uint32_t
+		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId);
 
 		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));
-		//std::cout << Reverse(docIdGap) << ' ';
 
-		lastDocId = (uint32_t)currDoc.getDocId(); // uint32_t
+		lastDocId = (uint32_t)currDoc.getDocId();
 	}
-	//std::cout << std::endl;
-	//std::cout << std::hex << docIdGap << ' ';
-	// CHECK DIFFERENCE
 }
 
 
@@ -130,27 +100,14 @@ std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &file
 	int vocabPos = 0;
 
 	boost::filesystem::path vocabPath = filePath;
-	std::ofstream vocabFile(vocabPath.append("/vocabList.bin").string(),
+    std::ofstream vocabFile(vocabPath.append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
 
-	std::cout << "WRITING TO FILE" << std::endl;
 	for (const std::string &term : auxIdx.getVocabList()) {
 		positions[vocabIndex] = vocabFile.tellp();
-		std::cout << "STRING = " << term.c_str() << std::endl;
-		std::cout << "SIZE OF CHAR = " << (sizeof(char) * term.length()) << std::endl;
 		vocabFile.write(term.c_str(), (sizeof(char) * term.length()));
 		vocabIndex++;
 	}
-	/*
-	typedef const std::pair<std::string, std::list<DocInfo>> pair;
-	for (pair &element : auxIdx.getIndex()) {
-		positions[vocabIndex] = vocabFile.tellp();
-		//std::cout << element.first.c_str() << std::endl;
-		std::cout << "STRING = " << element.first.c_str() << std::endl;
-		std::cout << "SIZE OF CHAR = " << (sizeof(char) * element.first.length()) << std::endl;
-		vocabFile.write(element.first.c_str(), (sizeof(char) * element.first.length()));
-		vocabIndex++;
-	}*/
 
 	vocabFile.close();
 	return positions;

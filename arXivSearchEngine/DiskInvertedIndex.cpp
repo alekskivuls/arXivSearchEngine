@@ -1,5 +1,4 @@
 #include "DiskInvertedIndex.h"
-#include <iostream>
 #include <sstream>
 
 
@@ -22,13 +21,12 @@ uint64_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
 	return (uint64_t)Reverse(value); // UNCOMMENT FOR WINDDOWS
-						   //return value;
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
-	mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin").string(),
+    mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios_base::in | std::ios_base::binary);
-	mPostings.open(boost::filesystem::path(mPath).append("/postings.bin").string(),
+    mPostings.open(boost::filesystem::path(mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios_base::in | std::ios_base::binary);
 
 	// open the vocabulary table and read it into memory. 
@@ -36,13 +34,6 @@ DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPat
 	// a position in the vocabularyTable file, and the second is a position in
 	// the postings file.
 	mVocabTable = ReadVocabTable(path);
-
-	/*
-	std::cout << "READING FROM FILE: " << std::endl;
-	for (auto v : mVocabTable) {
-		std::cout << "V POSITION: " << v.StringPosition << std::endl;
-		std::cout << "P POSITION: " << v.PostingPosition << std::endl;
-	}*/
 }
 
 // Reads a table of vocabulary entries, each of which consists of 2 8-byte values:
@@ -51,11 +42,10 @@ DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPat
 std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path) { // THIS FUNCTION IS HUNDO PERCENT BROKEN
 	fs::path tablePath = path;
 
-	ifstream tableFile(tablePath.append("/vocabTable.bin").string(),
+    ifstream tableFile(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::in | std::ios::binary);
 	uint64_t buffer, buffer2;
-	//uint32_t buffer, buffer2; // uint64_t uint32_t
-	//tableFile.read((char *)&buffer, sizeof(buffer));
+
 	tableFile.read((char *)&buffer, sizeof(buffer));
 	buffer = Reverse(buffer);// UNCOMMENT FOR LINUX
 
@@ -71,13 +61,11 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 		vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
 	}
 
-	std::cout << "size of vocabTable: " << vocabTable.size() << std::endl; // wait... but this is returning values...
-
 	return vocabTable;
 }
 
 VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) const { // const icu::UnicodeString &term
-	std::size_t i = 0, j = mVocabTable.size() - 1; //  THIS MIGHT BE BROKEN?!?!
+	std::size_t i = 0, j = mVocabTable.size() - 1;
 	while (i <= j) {
 		std::size_t m = i + (j - i) / 2;
 
@@ -85,24 +73,18 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 		std::string uniStr = ReadVocabStringAtPosition(m);
 
 		int comp = term.compare(uniStr);
-		if (comp == 0) {
-			std::cout << "FOUND V POSITION: " << mVocabTable[m].StringPosition << std::endl;
-			std::cout << "FOUND P POSITION: " << mVocabTable[m].PostingPosition  << std::endl;
+		if (comp == 0) 
 			return mVocabTable[m];
-		}
 		else if (comp < 0) {
-			if (m == 0) {
-				std::cout << "Oh no... It got here... (Not Found)" << std::endl;
+			if (m == 0) 
 				return VocabEntry(-1, -1);
-			}
-
 			j = m - 1;
 		}
 		else {
 			i = m + 1;
 		}
 	}
-	std::cout << "Oh no... It got here... (Empty)" << std::endl;
+
 	return VocabEntry(-1, -1);;
 }
 
@@ -130,22 +112,12 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 		uint32_t currId = encoded + lastDocId;
 
 		posts.push_back(DocInfo(currId));
-		std::cout << currId << ' ';
 		lastDocId = encoded;
 		
 	}// repeat until all postings are read.
-	std::cout << std::endl;
 
 	return posts;
 }
-
-// ignore this for loop for now
-/*for (j = 0; j < 4; ++j) { // i MAY want to call readInt... uncomment this for now
-byte = (j * 8) & 0xFF;
-// after each read, convert the bytes to an int posting. this value
-//    is the GAP since the last posting. decode the document ID from
-//    the gap and put it in the array.
-}*/
 
 std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
 	auto &entry = mVocabTable[i];
@@ -173,9 +145,6 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
 
 std::vector<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const { // const icu::UnicodeString &term
 	VocabEntry entry = BinarySearchVocabulary(term);
-
-	std::cout << "entry.PostingPosition != -1 && entry.StringPosition != -1 is "
-		<< (entry.PostingPosition != -1 && entry.StringPosition != -1) << std::endl;
 	if (entry.PostingPosition != -1 && entry.StringPosition != -1)
 		return ReadPostingsFromFile(mPostings, entry.PostingPosition);
 	return std::vector<DocInfo>();
