@@ -47,6 +47,8 @@ public:
 
 	void vocab() const;
 
+	std::list<std::string> getKgramList() {
+
 	std::list<std::string> getVocab();
 
 	/** This (public) method is independent of the Index.
