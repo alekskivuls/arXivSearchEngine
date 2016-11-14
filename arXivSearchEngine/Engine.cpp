@@ -59,6 +59,24 @@ std::vector<std::string> split(std::string token) {
     return vect;
 }
 
+void Engine::updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string &term) {
+	if (wdt.find(term) == wdt.end()) 
+		wdt[term] = 1;
+	else 
+		wdt[term] = wdt.at(term) + 1;
+}
+
+double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { // check for query: fire in yosemite... top rank should be 1.7
+	double_t Ld = 0.0;
+	for (const std::pair<std::string, uint32_t> &pr : wdt) {
+		double_t tf = (double_t)pr.second;
+		double_t wgt = 1.0 + log((double_t)tf);
+		Ld += (wgt * wgt);
+	}
+
+	return sqrt(Ld);
+}
+
 void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
@@ -78,6 +96,8 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 		ld.push_back(0.0);
+
+		std::unordered_map<std::string, uint32_t> wdt();
 
         // reads json file into stringstream and populates a json tree
         std::ifstream file(p);
@@ -114,10 +134,14 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                     else {
                         std::string total = "";
                         for (auto s : split(token)) {
-                            idx.addTerm(PorterStemmer::stem(s), i, posIndex);
+							std::string &stemmedToken = PorterStemmer::stem(s);
+                            idx.addTerm(stemmedToken, i, posIndex);
+							updateTf(wdt, stemmedToken);
+
                             total += s;
                         }
-                        idx.addTerm(PorterStemmer::stem(total), i, posIndex);
+						std::string &totalToken = PorterStemmer::stem(total);
+                        idx.addTerm(totalToken, i, posIndex);
                     }
 
                     posIndex++;

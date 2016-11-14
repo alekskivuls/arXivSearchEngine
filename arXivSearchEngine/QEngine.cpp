@@ -1,6 +1,7 @@
 #include "QEngine.h"
 #include "PorterStemmer.h"
 #include <sstream>
+#include <iterator>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -9,6 +10,18 @@
 
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
+
+std::vector<DocInfo> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
+	std::istringstream iss(userQuery);
+	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
+		std::istream_iterator<std::string>{} };
+
+	for (const std::string &s : tokens) {
+		std::cout << s << std::endl;
+	}
+
+	return std::vector<DocInfo>();
+}
 
 /*
  * Takes a stemmed string query in inverse notation and parses it into a list formatted in RPN. 

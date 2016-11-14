@@ -45,7 +45,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-    void populateIndex(const boost::filesystem::path &inDir,const boost::filesystem::path &outDir);
+    void populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
 
 	void populateEucDist();
 
@@ -55,6 +55,10 @@ public:
 	* by reference.
 	*/
 	void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
+
+	void updateTf(std::unordered_map<std::string, uint32_t>& wdt, const std::string & term);
+
+	double_t calcEucDist(std::unordered_map<std::string, uint32_t>& wdt);
 
 	void index(const std::string &filepath);
 

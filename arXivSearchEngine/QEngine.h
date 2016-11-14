@@ -32,6 +32,8 @@ public:
 
     std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex &dIdx);
 
+	std::vector<DocInfo> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
+
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */
 	std::list<std::string> stemmify(std::string &userQuery);

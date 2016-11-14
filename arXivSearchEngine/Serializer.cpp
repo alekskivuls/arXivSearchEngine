@@ -144,7 +144,7 @@ std::vector<uint32_t> Serializer::buildVocab(const boost::filesystem::path &file
 }
 
 std::vector<double_t> Serializer::buildEucDist(const InvertedIndex &auxIdx) {
-	std::vector<double_t> weights(auxIdx.getVocabList().size());
+	std::vector<double_t> weights(auxIdx.getVocabList().size()); // 
 	for (const auto &term : auxIdx.getVocabList())
 		weights.push_back(0.0);
 

@@ -32,6 +32,7 @@ public:
 	mutable std::ifstream mVocabList;
 	mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
+	uint32_t N;
 	//std::vector<double_t> weights;
 	
 	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
