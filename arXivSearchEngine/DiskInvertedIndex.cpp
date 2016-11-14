@@ -16,6 +16,12 @@ uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
 	return Reverse(value); // UNCOMMENT FOR WINDDOWS
 }
 
+double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
+	double_t value = 0;
+	stream.read((char*)&value, sizeof(value));
+	return Reverse(value); // UNCOMMENT FOR WINDDOWS
+}
+
 /*uint32_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
     uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
@@ -177,9 +183,28 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const
 	return std::list<DocInfo>();
 }
 
-DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {
-	return DocInfo();
+std::vector<double_t> DiskInvertedIndex::ReadWeights(const boost::filesystem::path &path) {
+	fs::path weightbPath = path;
+
+	ifstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
+		std::ios::in | std::ios::binary);
+
+	std::vector<double_t> weights;
+	uint32_t size = ReadInt(weightFile);
+	weights.reserve(size);
+
+	uint32_t i;
+	for (i = 0; i < size; ++i) {
+		double_t w = ReadDouble(weightFile);
+		weights.push_back(w);
+	}
+
+	weightFile.close();
 }
+
+/*DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) { // 
+	return DocInfo();
+}*/
 
 void DiskInvertedIndex::printAllPostings(const InvertedIndex &idx) {
 	std::cout << std::endl;

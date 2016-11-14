@@ -19,6 +19,7 @@ inline uint32_t Reverse(uint32_t value) {
 		(value & 0x000000FF) << 24;
 }
 
+/*
 inline uint64_t Reverse(uint64_t value) {
     return (value & 0xFF00000000000000) >> 56 |
 		(value & 0x00FF000000000000) >> 40 |
@@ -28,7 +29,7 @@ inline uint64_t Reverse(uint64_t value) {
         (value & 0x0000000000FF0000) << 24 |
         (value & 0x000000000000FF00) << 40 |
         (value & 0x00000000000000FF) << 56;
-}
+}*/
 
 // Default constructors and destructors
 Engine::Engine() { 
@@ -78,7 +79,6 @@ std::vector<std::string> split(std::string token) {
 }
 
 void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<uint32_t, std::string> &idTable) {
-
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
@@ -87,11 +87,15 @@ void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &id
     std::vector<std::string> mPathList;
     getPathNames(dir, mPathList);
 
+	ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
+	ld.reserve(mPathList.size());
+
     std::sort(mPathList.begin(), mPathList.end());
 
-    int i = 0;
+    uint32_t i = 0;
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+		ld.push_back(0.0);
 
         // reads json file into stringstream and populates a json tree
         std::ifstream file(p);

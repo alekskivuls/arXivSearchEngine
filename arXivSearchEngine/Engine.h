@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <cmath>
 #include <list>
 
 #include "KEngine.h"
@@ -28,6 +29,8 @@ class Engine {
 	InvertedIndex idx;
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
+	std::vector<double_t> ld; // DOCUMENT ID, SCORE
+
     KgramIndex kInd1 = KgramIndex(1);
     KgramIndex kInd2 = KgramIndex(2);
     KgramIndex kInd3 = KgramIndex(3);
@@ -43,6 +46,8 @@ public:
 	*/
 	void populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx,
 		std::unordered_map<uint32_t, std::string> &idTable);
+
+	void populateEucDist();
 
 	/**
 	* This method goes to a path and walks through the directory searching for all files that end

@@ -26,18 +26,22 @@ class DiskInvertedIndex : public InvertedIndex {
 public:
 	static uint32_t ReadInt(std::ifstream &stream);
 	//static uint32_t ReadInt64(std::ifstream &stream);
+	static double_t ReadDouble(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
 	mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
+	//std::vector<double_t> weights;
 	
 	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
 
 	static std::vector<VocabEntry> ReadVocabTable(const boost::filesystem::path &path);
 
+	static std::vector<double_t> ReadWeights(const boost::filesystem::path &path);
+
 	VocabEntry BinarySearchVocabulary(const std::string &term) const;
-	static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
+	//static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
 
 
 	std::string ReadVocabStringAtPosition(uint32_t index) const;

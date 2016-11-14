@@ -21,6 +21,10 @@ public:
 		const std::vector<uint32_t> &vocabPositions);
 
     static void WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
+
+	static std::vector<double_t> buildEucDist(const InvertedIndex &auxIdx);
+
+	static void writeEucDist(const boost::filesystem::path &filePath, const std::vector<double_t> &weights);
 };
 
 #endif
