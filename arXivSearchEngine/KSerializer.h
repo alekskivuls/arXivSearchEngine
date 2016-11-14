@@ -19,7 +19,7 @@ public:
     // This method is to build the file to store all of the kgrams to term pairings.
     // It works like an index and maps a token from Kgrams file made by buildKgrams
     // to a terms file made by buildTerms.
-    static void buildIndex(const boost::filesystem::path &filePath, const KgramIndex &auxIdx);
+    static void buildIndex(const boost::filesystem::path &filePath, const KgramIndex &auxIdx1, const KgramIndex &auxIdx2, const KgramIndex &auxIdx3);
 
     // This method will build the file that stores all of the kgrams.
     static std::vector<uint64_t> buildKgrams(const boost::filesystem::path &filePath, const KgramIndex &auxIdx);

@@ -2,10 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-//probably right.
 KgramIndex::KgramIndex(int kSize) : _kgramSize(kSize) { }
-//why is this returning errors?
-
 //returns true or false if the kgram is in the index.
 //private method; used in getTerms (dependency).
 //
@@ -141,6 +138,16 @@ std::list<std::string> KgramIndex::getVocab() {
     }
     return ret;
 }
+
+std::list<std::string> KgramIndex::getKgramList() {
+    std::list<std::string> ret;
+    for (auto pair : _mIndex) {
+        for (auto value : pair.first)
+            ret.push_back(value);
+    }
+    return ret;
+}
+
 
 /*
  * returns the number of kgrams that exist in the inverted index.
