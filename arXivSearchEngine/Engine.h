@@ -56,7 +56,7 @@ public:
 	*/
 	void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
 
-	void updateTf(std::unordered_map<std::string, uint32_t>& wdt, const std::string & term);
+    void updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string & term);
 
 	double_t calcEucDist(std::unordered_map<std::string, uint32_t>& wdt);
 

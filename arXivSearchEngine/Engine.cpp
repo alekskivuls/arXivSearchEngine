@@ -60,21 +60,21 @@ std::vector<std::string> split(std::string token) {
 }
 
 void Engine::updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string &term) {
-	if (wdt.find(term) == wdt.end()) 
-		wdt[term] = 1;
-	else 
-		wdt[term] = wdt.at(term) + 1;
+    if (wdt.find(term) == wdt.end())
+        wdt[term] = 1;
+    else
+        wdt[term] = wdt.at(term) + 1;
 }
 
 double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { // check for query: fire in yosemite... top rank should be 1.7
-	double_t Ld = 0.0;
-	for (const std::pair<std::string, uint32_t> &pr : wdt) {
-		double_t tf = (double_t)pr.second;
-		double_t wgt = 1.0 + log((double_t)tf);
-		Ld += (wgt * wgt);
-	}
+    double_t Ld = 0.0;
+    for (const std::pair<std::string, uint32_t> &pr : wdt) {
+        double_t tf = (double_t)pr.second;
+        double_t wgt = 1.0 + log((double_t)tf);
+        Ld += (wgt * wgt);
+    }
 
-	return sqrt(Ld);
+    return sqrt(Ld);
 }
 
 void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
@@ -87,17 +87,17 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::vector<std::string> mPathList;
     getPathNames(inDir, mPathList);
 
-	ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
-	ld.reserve(mPathList.size());
+    ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
+    ld.reserve(mPathList.size());
 
     std::sort(mPathList.begin(), mPathList.end());
 
     uint32_t i = 0;
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-		ld.push_back(0.0);
+        ld.push_back(0.0);
 
-		std::unordered_map<std::string, uint32_t> wdt();
+        std::unordered_map<std::string, uint32_t> wdt;
 
         // reads json file into stringstream and populates a json tree
         std::ifstream file(p);
@@ -134,13 +134,15 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                     else {
                         std::string total = "";
                         for (auto s : split(token)) {
-							std::string &stemmedToken = PorterStemmer::stem(s);
-                            idx.addTerm(stemmedToken, i, posIndex);
-							updateTf(wdt, stemmedToken);
+                            std::string str = std::string(s);
+                            PorterStemmer::stem(str);
+                            idx.addTerm(str, i, posIndex);
+                            updateTf(wdt, str);
 
                             total += s;
                         }
-						std::string &totalToken = PorterStemmer::stem(total);
+                        std::string &totalToken = total;
+                        //std::string &totalToken = PorterStemmer::stem(total);
                         idx.addTerm(totalToken, i, posIndex);
                     }
 
