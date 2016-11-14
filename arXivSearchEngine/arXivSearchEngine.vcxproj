@@ -156,10 +156,13 @@
     <ClCompile Include="DocInfo.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="InvertedIndex.cpp" />
+    <ClCompile Include="KEngine.cpp" />
+    <ClCompile Include="KgramIndex.cpp" />
     <ClCompile Include="PorterStemmer.cpp" />
     <ClCompile Include="QEngine.cpp" />
     <ClCompile Include="Serializer.cpp" />
     <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="WildEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compressor.h" />
@@ -167,14 +170,14 @@
     <ClInclude Include="DocInfo.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="InvertedIndex.h" />
+    <ClInclude Include="KEngine.h" />
+    <ClInclude Include="KgramIndex.h" />
     <ClInclude Include="PorterStemmer.h" />
     <ClInclude Include="QEngine.h" />
     <ClInclude Include="Serializer.h" />
     <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="TokenStream.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="WildEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
