@@ -69,7 +69,8 @@ void KgramIndex::addTerm(std::string &term) { //TODO: fix addTerm logic
         kterm += '$';
         kterm += term;
         kterm += '$';
-        for (i = 0; i < term.size(); ++i) { //do you not get the numer of kgram for letter
+        int resSize = _kgramSize == 3 ? term.size() : term.size() + 1;
+        for (i = 0; i < resSize; ++i) { //do you not get the numer of kgram for letter
             std::string gram;
             int j;
             for(j = 0; j < _kgramSize; ++j) { // append character term[j]
@@ -101,7 +102,8 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
         kterm += '$';
         kterm += term;
         kterm += '$';
-        for (i = 0; i < term.size(); i++) { //the term.size is the same as # of kgrams
+        int resSize = kSize == 3 ? term.size() : term.size() + 1;
+        for (i = 0; i < resSize; i++) { //the term.size is the same as # of kgrams
             std::string gram;
             int j;
             for(j = 0; j < kSize; ++j) {
@@ -126,24 +128,24 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
  */
 void KgramIndex::vocab() const { //vocab = grams here
     for (auto pair : _mIndex) std::cout << pair.first << '\n'; //first is the kgrams
-	std::cout << getGramCount() << '\n';
+    std::cout << _mIndex.size() << '\n';
 }
 
 
-std::list<std::string> KgramIndex::getVocab() {
-    std::list<std::string> ret;
-    for (auto pair : _mIndex) {
-        for (auto value : pair.second)
-            ret.push_back(value);
-    }
-    return ret;
-}
+//std::list<std::string> KgramIndex::getTermList() {
+//    std::list<std::string> ret;
+//    for (auto pair : _mIndex) {
+//        for (auto value : pair.second)
+//            ret.push_back(value);
+//    }
+//    return ret;
+//}
+
 
 std::list<std::string> KgramIndex::getKgramList() {
     std::list<std::string> ret;
     for (auto pair : _mIndex) {
-        for (auto value : pair.first)
-            ret.push_back(value);
+        ret.push_back(pair.first);
     }
     return ret;
 }
@@ -152,7 +154,7 @@ std::list<std::string> KgramIndex::getKgramList() {
 /*
  * returns the number of kgrams that exist in the inverted index.
  */
-unsigned int KgramIndex::getGramCount() const{
+unsigned int KgramIndex::getGramCount() {
 	return _mIndex.size();
 }
 

@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <fstream>
 #include <vector>
+#include <string>
+
 
 // does not need to be an object. This should be a utility class
 // that is resposible for serializing and nothing else.
@@ -19,14 +21,14 @@ public:
     // This method is to build the file to store all of the kgrams to term pairings.
     // It works like an index and maps a token from Kgrams file made by buildKgrams
     // to a terms file made by buildTerms.
-    static void buildIndex(const boost::filesystem::path &filePath, const KgramIndex &auxIdx1, const KgramIndex &auxIdx2, const KgramIndex &auxIdx3);
+    static void buildIndex(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
 
     // This method will build the file that stores all of the kgrams.
-    static std::vector<uint64_t> buildKgrams(const boost::filesystem::path &filePath, const KgramIndex &auxIdx);
+    static std::vector<uint32_t> buildKgrams(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
 
     // This method will build the file that stores all of the terms.
-    static void buildTerms(const boost::filesystem::path &filePath, const KgramIndex &auxIdx,
-        const std::vector<uint64_t> &vocabPositions);
+    static void buildTerms(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
+        std::vector<uint32_t> &vocabPositions);
 
     static void WriteTerms(std::ofstream &kgramsFile, const std::list<std::string> &terms);
 };
