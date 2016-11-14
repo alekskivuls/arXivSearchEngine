@@ -25,7 +25,7 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
 }
 
 /*
- *
+ * Properly sorts
  */
 void InvertedIndex::addVocab(const std::string &term) {
 	if (vocabList.size() == 0 || vocabList.back() < term) {
