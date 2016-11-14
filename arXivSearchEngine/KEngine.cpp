@@ -117,8 +117,12 @@ int KEngine::editDistDP(std::string term1, std::string term2) {
 
 	std::vector<std::vector<int>> dp;
 	dp.reserve(m);
-	for (int i = 0; i < m; ++i)
-		dp[i].reserve(n);
+	for (int i = 0; i < m; ++i) {
+		dp.push_back(std::vector<int>());
+		dp.at(i).reserve(n);
+		for (int j = 0; j < n; ++j) 
+			dp.at(i).push_back(0);
+	}
  
     // Fill d[][] in bottom up manner
     for (int i=0; i<=m; i++) {
