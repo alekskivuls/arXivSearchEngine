@@ -114,9 +114,11 @@ int KEngine::editDistDP(std::string term1, std::string term2) {
     // Create a table to store results of subproblems
     const size_t m = term1.length() + 1;
     const size_t n = term2.length() + 1;
-	int** dp = new int*[m];
+
+	std::vector<std::vector<int>> dp;
+	dp.reserve(m);
 	for (int i = 0; i < m; ++i)
-		dp[i] = new int[n];
+		dp[i].reserve(n);
  
     // Fill d[][] in bottom up manner
     for (int i=0; i<=m; i++) {
@@ -145,10 +147,6 @@ int KEngine::editDistDP(std::string term1, std::string term2) {
                                    dp[i-1][j-1]); // Replace
         }
     }
-
-	for (int rem = 0; rem < m; rem++)
-		delete[] dp[rem];
-	delete[] dp;
 
     return dp[m][n];
 }
