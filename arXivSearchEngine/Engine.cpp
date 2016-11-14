@@ -278,14 +278,6 @@ std::list<DocInfo> output = queryEngine.processQuery(query, idx);
 			std::cout << std::endl;
 }
 
-void Engine::correctSpelling(std::string &token) {
-    kInd3.vocab();
-    auto list = kEngine.correctSpelling(token, kInd3);
-    for(auto element : list) {
-        std::cout << element << std::endl;
-    }
-}
-
 std::vector<std::string> Engine::getQuery(std::string &query) {
     std::list<DocInfo> output = queryEngine.processQuery(query, idx);
     std::vector<std::string> results;

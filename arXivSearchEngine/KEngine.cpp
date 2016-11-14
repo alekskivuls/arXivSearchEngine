@@ -49,34 +49,28 @@ float KEngine::jaccard(std::string &term1, std::string &term2, int kSize){
 
 std::list<std::string> KEngine::correctSpelling(std::string &mispelled, KgramIndex &idx) {
     const std::list<std::string> &mispgrams = KgramIndex::getGrams(mispelled, idx.getKSize());
-	std::list<std::string> potentialterms;
-	std::list<std::string> final;
-	int i;
-    int lowest = 20;
-
-	for(auto grams : mispgrams){ //grabs all the term list values from the key grams
-        const std::list<std::string> loopterms = idx.getTerms(grams);
-		//get the value of the grams (key) and put them in potentialterms
-        //loopterms = KgramIndex::getTerms(grams); //returns the list of terms
-		for(auto term : loopterms) { //loop thru that term list and get all the terms
-            if (!((std::find(potentialterms.begin(), potentialterms.end(), term)) != potentialterms.end())) {
-            //if (!(potentialterms.contains(term))) {
-                potentialterms.push_back(term); //put in one list
-			}
-		}
-	}
-
-
+    std::list<std::string> final;
+    std::unordered_map<std::string, float> jaccarded;
+    int i;
+    int lowest = 20; //for edit distance
     float threshold = 1.0/4.0; //binary to cut everytime there is less.
     float jc; //storage for the jc.
 
-	//potentialterms should have all of the term
-    for(auto pterms : potentialterms) {
-        jc = jaccard(mispelled, pterms, idx.getKSize());
-		//compare potential terms to the mispelled word.
-        if(jc >= threshold)
-            jaccarded[pterms] = jc;
-	}
+
+    for(auto grams : mispgrams){ //grabs all the term list values from the key grams
+        const std::list<std::string> loopterms = idx.getTerms(grams);
+        //get the value of the grams (key) and put them in potentialterms
+        //loopterms = KgramIndex::getTerms(grams); //returns the list of terms
+        for(auto term : loopterms) { //loop thru that term list and get all the terms
+            if (jaccarded.find(term) == jaccarded.end()) { //if you cant find the term
+            //if (!(potentialterms.contains(term))) {
+                //you didnt find the term...
+                //get jaccardcoefficient of that term and put on jaccarded.
+                jc = jaccard(mispelled, term, idx.getKSize()); //compare mispelled and terms
+                if(jc >= threshold) jaccarded[term] = jc; //saving term:jc
+            }
+        }
+    }
 
 	//get only the ones above the threshold and then throw into editdistance.
     for(auto qualifiers : jaccarded) { //each term in jaccarded is a qual.

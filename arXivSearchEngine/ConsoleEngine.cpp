@@ -50,10 +50,10 @@ int main() {
 			filepath = input.substr(7, std::string::npos);
 			engine.index(filepath);
 		}
-        else if (boost::algorithm::starts_with(input, ":kgram ")) {
-            std::string token = input.substr(7, std::string::npos);
-            engine.correctSpelling(token);
-        }
+//        else if (boost::algorithm::starts_with(input, ":kgram ")) {
+//            std::string token = input.substr(7, std::string::npos);
+//            engine.correctSpelling(token);
+//        }
 		else if(!boost::algorithm::starts_with(input, ":")) { //Query
 			engine.printQuery(input);
 		}

@@ -23,5 +23,4 @@ public:
     static void WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings);
 };
 
-
 #endif

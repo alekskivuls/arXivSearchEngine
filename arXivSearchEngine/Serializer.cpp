@@ -24,8 +24,6 @@ inline uint64_t Reverse(uint64_t value) {
 // now we save the index to disk, building three files: the postings index,
 // the vocabulary list, and the vocabulary table.
 void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
-	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
-
 	std::vector<uint64_t> vocabPositions = Serializer::buildVocab(filePath, auxIdx);
 	Serializer::buildPostings(filePath, auxIdx, vocabPositions);
 }
@@ -69,9 +67,12 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 	postingsFile.close();
 }
 
+/**
+  * Writes a single list of postings for one vocabulary term to the given postings file.
+  * Currently writes only the document frequency (size of list) and each document ID as a gap.
+  */
 
-// Writes a single list of postings for one vocabulary term to the given postings file.
-// Currently writes only the document frequency (size of list) and each document ID as a gap.
+
 void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings) { 
 	// Write the document frequency.
 	size_t docFreq = (uint64_t) Reverse(postings.size());
@@ -99,7 +100,6 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 		lastDocId = (uint32_t)currDoc.getDocId();
 	}
 }
-
 
 std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
 	// first build the vocabulary list: a file of each vocab word concatenated together.
