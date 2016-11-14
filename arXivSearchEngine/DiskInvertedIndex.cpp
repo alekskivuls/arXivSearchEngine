@@ -16,9 +16,9 @@ uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
 	return Reverse(value); // UNCOMMENT FOR WINDDOWS
 }
 uint64_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
-	uint32_t value = 0;
+    uint64_t value = 0;
 	stream.read((char*)&value, sizeof(value));
-	return (uint64_t)Reverse(value); // UNCOMMENT FOR WINDDOWS
+    return Reverse(value); // UNCOMMENT FOR WINDDOWS
 }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
@@ -93,7 +93,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
 	postings.seekg(postingsPosition, postings.beg);
 
 	// Read the document frequency. size_t docFreq = (uint64_t) Reverse(postings.size());
-	size_t docFreq = ReadInt(postings);
+    size_t docFreq = ReadInt64(postings);
 	std::cout << "docFreq(" << docFreq << ") ";
 
 	// initialize the vector of document IDs to return.
@@ -106,14 +106,14 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
 	//unsigned char j, byte;
 	//std::cout << "printing doc gaps: ";
 	for (i = 0; i < docFreq; ++i) {
-		const uint32_t &encodedDoc = ReadInt(postings);
+        const uint32_t &encodedDoc = ReadInt(postings);
 		std::cout << "docId(" << encodedDoc << ") ";
 
 		uint32_t currId = encodedDoc + lastDocId;
 		posts.push_back(DocInfo(currId));
 
 		const DocInfo &currDoc = posts.back();
-		size_t positionSize = ReadInt(postings);
+        size_t positionSize = ReadInt64(postings);
 		std::cout << "positionSize(" << positionSize << ") ";
 
 		uint32_t i, lastPosGap = 0;
