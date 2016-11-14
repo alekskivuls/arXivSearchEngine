@@ -19,7 +19,7 @@ inline uint32_t Reverse(uint32_t value) {
 		(value & 0x000000FF) << 24;
 }
 
-inline uint64_t Reverse(uint64_t value) {
+/*inline uint64_t Reverse(uint64_t value) {
     return (value & 0xFF00000000000000) >> 56 |
 		(value & 0x00FF000000000000) >> 40 |
         (value & 0x0000FF0000000000) >> 24 |
@@ -28,7 +28,7 @@ inline uint64_t Reverse(uint64_t value) {
         (value & 0x0000000000FF0000) << 24 |
         (value & 0x000000000000FF00) << 40 |
         (value & 0x00000000000000FF) << 56;
-}
+}*/
 
 // Default constructors and destructors
 Engine::Engine() { 
@@ -157,8 +157,12 @@ void Engine::index(const std::string &filepath) {
 }
 
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
-    std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
-    boost::filesystem::path dir(file); // change input back to: filepath
+	//std::string pkfile = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // DO NOT DELETE
+    //boost::filesystem::path dir(pkfile); // DO NOT DELETE
+
+	std::string aleksfile = ""; // FOR ALEKS
+	boost::filesystem::path dir(aleksfile); // FOR ALEKS
+
     boost::filesystem::directory_iterator it(dir), eod;
 
     idTable = std::unordered_map<uint32_t, std::string>();
@@ -190,37 +194,34 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
         std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
 
     std::cout << "file size: " << postingsFile.size() << std::endl; // THIS IS STATING ERROR
-    std::cout << "memory size: " << postingsMemory.size() << std::endl;
-
-	if (postingsFile.size() == postingsMemory.size()) {
-		std::list<DocInfo>::iterator iter = postingsFile.begin();
-		for (const DocInfo &doc : postingsMemory) {
-            if ((*iter).getPositions().size() != doc.getPositions().size()) {
-                std::cout << "FILE DocInfo.getPositions.size(" << (*iter).getPositions().size() <<
-                    ") != Memory DocInfo.getPositions.size(" << doc.getPositions().size() << ')' << std::endl;
-				break;
-			}
-			else {
-				std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
-				std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
-			}
-
-            std::list<uint32_t>::iterator posFile = (*iter).getPositions().begin();
-            for(const int temp : doc.getPositions()) {
-                std::cout << "VALUE: " << temp << std::endl;
-            }
-
-			for (auto posMemory : doc.getPositions()) {
-				if (posMemory != *posFile)
-					std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
-				else 
-					std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
-
-				++posFile;
-			}
-			++iter;
+	std::cout << "PRINTING ALL POSTINGS FROM MEMORY INDEX!" <<std::endl;
+	for (auto docFile : postingsFile) {
+		std::cout << "DocId = " << docFile.getDocId() << std::endl << "pos: " ;
+		for (auto posFile : docFile.getPositions()) {
+			std::cout << posFile << " ";
 		}
+		std::cout << std::endl;
 	}
+	std::cout << std::endl;
+
+	/*THIS IS USED TO PRINT ALL TERMS FROM THE FILE INDEX*/
+	printIndex();
+
+	/*THIS IS USED TO PRINT ALL TERMS FROM THE MEMORY INDEX*/
+	auxIdx.printAllPostings(idx);
+
+
+
+
+    std::cout << "memory size: " << postingsMemory.size() << std::endl;
+	for (auto docFile : postingsMemory) {
+		std::cout << "DocId = " << docFile.getDocId() << std::endl << "pos: ";
+		for (auto posFile : docFile.getPositions()) {
+			std::cout << posFile << " ";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 	
 
 
@@ -245,17 +246,20 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 }
 
 void Engine::printIndex() {
-    typedef std::pair<std::string, std::list<DocInfo>> pair;
-    for (const pair &p : idx.getIndex()) {
-        std::cout << "Term (" << p.first << ") found in the following documents:" << std::endl;
-        for (DocInfo doc : p.second) { // list of positions
-            std::cout << "Document id " << doc.getDocId() << " positions(" << doc.getPositions().size() << "): " << std::endl;
-            for (uint32_t &pos : doc.getPositions())
-                std::cout << pos << " ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-    }
+	std::cout << std::endl;
+	std::cout << "PRINTING ALL POSTINGS FROM MEMORY!" << std::endl;
+	for (const std::string &term : idx.getVocabList()) {
+		const std::list<DocInfo> &posts = idx.getPostings(term);
+
+		for (auto docFile : posts) {
+			std::cout << "DocId = " << docFile.getDocId() << std::endl << "pos: ";
+			for (auto posFile : docFile.getPositions()) {
+				std::cout << posFile << " ";
+			}
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 void Engine::printVocab() {

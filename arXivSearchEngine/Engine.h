@@ -5,6 +5,7 @@
 #include "InvertedIndex.h"
 
 #include <boost/filesystem.hpp>
+#include "DiskInvertedIndex.h"
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_map>
