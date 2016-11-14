@@ -112,15 +112,15 @@ int KEngine::min(int x, int y, int z) {
  */
 int KEngine::editDistDP(std::string term1, std::string term2) {
     // Create a table to store results of subproblems
-    const size_t m = term1.length() + 1;
-    const size_t n = term2.length() + 1;
+    const size_t m = term1.length();
+    const size_t n = term2.length();
 
 	std::vector<std::vector<int>> dp;
-	dp.reserve(m);
-	for (int i = 0; i < m; ++i) {
+	dp.reserve(m + 1);
+	for (int i = 0; i < m + 1; ++i) {
 		dp.push_back(std::vector<int>());
-		dp.at(i).reserve(n);
-		for (int j = 0; j < n; ++j) 
+		dp.at(i).reserve(n + 1);
+		for (int j = 0; j < n + 1; ++j) 
 			dp.at(i).push_back(0);
 	}
  
