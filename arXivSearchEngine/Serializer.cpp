@@ -44,14 +44,34 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		std::ios::out | std::ios::binary);
 
 	// the first thing we must write to the vocabTable file is the number of vocab terms.
-	int64_t termCount = Reverse(auxIdx.getIndex().size()); // UNCOMMENT FOR WINDOWS
+	int64_t termCount = Reverse(auxIdx.getVocabList().size()); // UNCOMMENT FOR WINDOWS
 														   //int64_t termCount = (int64_t) auxIdx.getIndex().size();
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
-	std::cout << "num terms: " << auxIdx.getIndex().size() << std::endl;
+	std::cout << "num terms: " << auxIdx.getVocabList().size() << std::endl;
 
 
 	//std::cout << "WRITING TO FILE" << std::endl;
 	int64_t vocabIndex = 0; // FOR EVERY TERM
+	for (const std::string &term : auxIdx.getVocabList()) {
+		const std::list<DocInfo> &postings = auxIdx.getPostings(term);
+
+		// write the vocab table entry for this term: the byte location of the term in the vocab list file,
+		// and the byte location of the postings for the term in the postings file.
+		uint64_t vPosition = Reverse(vocabPositions[vocabIndex]);
+		std::cout << "V POSITION: " << Reverse(vPosition) << std::endl;
+		vocabTable.write((const char*)&vPosition, sizeof(vPosition));
+
+		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp()); // og(uint64_t) (uint32_t)
+		std::cout << "P POSITION: " << Reverse(pPosition) << std::endl;
+		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
+
+
+		WritePostings(postingsFile, postings);
+		vocabIndex++;
+	}
+
+
+	/*
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
 		const std::list<DocInfo> &postings = auxIdx.getPostings(element.first);
@@ -69,7 +89,7 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 		WritePostings(postingsFile, postings);
 		vocabIndex++;
-	}
+	}*/
 
 	vocabTable.close();
 	postingsFile.close();
@@ -105,7 +125,7 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx) {
 	// first build the vocabulary list: a file of each vocab word concatenated together.
 	// also build an array associating each term with its byte location in this file.
-	std::vector<uint64_t> positions(auxIdx.getIndex().size());
+	std::vector<uint64_t> positions(auxIdx.getVocabList().size());
 	int vocabIndex = 0;
 	int vocabPos = 0;
 
@@ -114,6 +134,14 @@ std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &file
 		std::ios::out | std::ios::binary);
 
 	std::cout << "WRITING TO FILE" << std::endl;
+	for (const std::string &term : auxIdx.getVocabList()) {
+		positions[vocabIndex] = vocabFile.tellp();
+		std::cout << "STRING = " << term.c_str() << std::endl;
+		std::cout << "SIZE OF CHAR = " << (sizeof(char) * term.length()) << std::endl;
+		vocabFile.write(term.c_str(), (sizeof(char) * term.length()));
+		vocabIndex++;
+	}
+	/*
 	typedef const std::pair<std::string, std::list<DocInfo>> pair;
 	for (pair &element : auxIdx.getIndex()) {
 		positions[vocabIndex] = vocabFile.tellp();
@@ -122,7 +150,7 @@ std::vector<uint64_t> Serializer::buildVocab(const boost::filesystem::path &file
 		std::cout << "SIZE OF CHAR = " << (sizeof(char) * element.first.length()) << std::endl;
 		vocabFile.write(element.first.c_str(), (sizeof(char) * element.first.length()));
 		vocabIndex++;
-	}
+	}*/
 
 	vocabFile.close();
 	return positions;

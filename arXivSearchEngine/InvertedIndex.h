@@ -19,8 +19,14 @@ class InvertedIndex {
 	/** The hashmap that represents the entire inverted index.*/
 	std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
 
+	std::list<std::string> vocabList;
+
+	void addVocab(const std::string &term);
+
 public:
 	InvertedIndex();
+
+	std::list<std::string> getVocabList() const;
 
 	/** Adds an instance of the stemmed term to the document.
 	 * A new DocInfo is created if the term is first encountered in that document.*/

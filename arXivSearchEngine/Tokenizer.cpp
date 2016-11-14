@@ -39,7 +39,7 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 				token += c;
 			}
 			else {
-				if (c > 0 && isspace(c)) // c == ' '
+				if (c > 0 && isspace(c)) 
 					break; // DONE
 				else {
 					if (c == '-') tempHyphen = true;
@@ -49,7 +49,7 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 		}
 	}
 
-	return pos < _buffer.size();//token.size() != 0; // no more tokens to process from 
+	return token.size() != 0; // no more tokens to process from 
 }
 
 // ignore the following block of comment. I may end up creating a new library for k-grams, 
