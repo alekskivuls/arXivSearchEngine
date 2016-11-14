@@ -18,11 +18,12 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 
 	uint32_t size = dIdx.getN();
 	std::vector<double_t> &weights = dIdx.ReadWeights();
-	std::vector<std::pair<uint32_t, double_t>> scores;
+
+	std::vector<pair> scores;
 	scores.reserve(size);
 	uint32_t i;
 	for (i = 0; i < size; ++i) 
-		scores.push_back(std::pair<uint32_t, double_t>(i, 0.0)); // <-- Acc is score value
+		scores.push_back(pair(i, 0.0)); // <-- Acc is score value
 
 	i = 0;
 	// I DID NOT SUM ACCUMULATOR YET
@@ -40,29 +41,29 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
 
 			double_t Ad = wqt * wdt;
-			if (Ad != 0) scores[doc.getDocId()].second += (Ad / weights[doc.getDocId()]);
+			if (Ad != 0) scores[doc.getDocId()].score += (Ad / weights[doc.getDocId()]);
 		}
 	}
 
 	// SORT AND THEN RETURN TOP 10
-	std::vector<uint32_t> result;
+	std::vector<uint32_t> result = heapify(scores);
 
-	return std::vector<uint32_t>();
+	return result;
 }
 
-std::vector<uint32_t> QEngine::heapify(std::list<std::pair<uint32_t, double_t>> scores) {
-	std::make_heap(scores.begin(), scores.end());
+std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
+	std::make_heap(scores.begin(), scores.end(), doc_score_greater_than());
 
 	std::vector<uint32_t> result;
 	result.reserve(10);
 
 	uint32_t i;
 	for (i = 0; i < 10; ++i) {
-		result[i] = scores.front().first;
+		result[i] = scores.front().docid;
 
-		std::cout << "MAX = " << scores.front().second << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
+		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
 
-		std::pop_heap(scores.begin(), scores.end()); scores.pop_back(); // gets top and pops from heap
+		std::pop_heap(scores.begin(), scores.end(), doc_score_greater_than()); scores.pop_back(); // gets top and pops from heap
 	}
 
 	return result;
