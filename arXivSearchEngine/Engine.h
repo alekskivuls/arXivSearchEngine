@@ -24,7 +24,7 @@
 #include "DiskInvertedIndex.h"
 
 class Engine {
-	boost::filesystem::path dir;
+    boost::filesystem::path dir;
 	InvertedIndex idx;
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
@@ -52,6 +52,10 @@ public:
 	void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
 
 	void index(const std::string &filepath);
+
+    void createIndex(const std::string &filepath);
+
+    void loadIndex(const std::string &filepath);
 
 	void diskWriteTest(const std::string &filepath);
 

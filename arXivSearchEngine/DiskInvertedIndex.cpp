@@ -48,7 +48,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 	tableFile.read((char *)&buffer, sizeof(buffer));
 	buffer = Reverse(buffer);// UNCOMMENT FOR LINUX
 
-	int tableIndex = 0;
+    //int tableIndex = 0;
 
 	std::vector<VocabEntry> vocabTable;
 	vocabTable.reserve(buffer);
@@ -60,7 +60,7 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
 		vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
 	}
 
-	std::cout << "KLAJSD SIZE OF VOCAB TABLEEEE HUUUUUUUU! " << vocabTable.size() << std::endl;
+    //std::cout << "Vocab table size: " << vocabTable.size() << std::endl;
 
 	return vocabTable;
 }
@@ -72,7 +72,7 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 
 
 		std::string uniStr = ReadVocabStringAtPosition(m);
-		//std::cout << "READ VOCAB AT: " << uniStr << std::endl;
+        std::cout << "READ VOCAB AT: " << uniStr << std::endl;
 
 		int comp = term.compare(uniStr);
 		if (comp == 0) 
@@ -156,7 +156,10 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
 	}
 	else {
 		termLength = (mVocabTable[i + 1].StringPosition - entry.StringPosition); // (uint32_t)
+
 	}
+
+    std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
 
 	mVocabList.clear();
 	mVocabList.seekg(entry.StringPosition, mVocabList.beg);
@@ -185,7 +188,7 @@ void DiskInvertedIndex::printAllPostings(const InvertedIndex &idx) {
 	std::cout << std::endl;
 	std::cout << "PRINTING ALL POSTINGS FROM FILE!" << std::endl;
 	for (const std::string &term : idx.getVocabList()) {
-		const std::list<DocInfo> &posts = GetPostings(term);
+        const std::list<DocInfo> &posts = getPostings(term);
 
 		for (auto docFile : posts) {
 			std::cout << "DocId = " << docFile.getDocId() << std::endl << "pos: ";

@@ -1,7 +1,7 @@
 #ifndef QUERY_LANGUAGE_H
 #define QUERY_LANGUAGE_H
 
-#include "InvertedIndex.h"
+#include "DiskInvertedIndex.h"
 #include <stack>
 #include <vector>
 
@@ -30,7 +30,7 @@ class QEngine {
 public:
 	QEngine();
 
-	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex &idx);
+    std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex &dIdx);
 
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */
@@ -40,8 +40,8 @@ public:
 	void printInfixRpn();
 	void printInfixRpn2();
 	
-	void printQueryTest(InvertedIndex *& idx);
-	void printQueryTest2(InvertedIndex *& idx);
+    //void printQueryTest(InvertedIndex *& idx);
+    //void printQueryTest2(InvertedIndex *& idx);
 };
 
 #endif

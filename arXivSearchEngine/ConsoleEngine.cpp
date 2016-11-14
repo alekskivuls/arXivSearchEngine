@@ -19,8 +19,8 @@ void pktest() {
 }
 
 int main() {
-    pktest(); //  do not delete yet
-    return 0;
+    //pktest(); //  do not delete yet
+    //return 0;
     //Initialize Engine
     Engine engine;
 
@@ -28,7 +28,7 @@ int main() {
     std::string filepath;
     std::cout << "Enter directory of corpus" << std::endl;
     std::getline(std::cin, filepath);
-    engine.index(filepath);
+    engine.loadIndex(filepath);
 
     // Main loop
     std::string input;
@@ -48,7 +48,11 @@ int main() {
         }
         else if (boost::algorithm::starts_with(input, ":index ")) {
             filepath = input.substr(7, std::string::npos);
-            engine.index(filepath);
+            engine.createIndex(filepath);
+        }
+        else if (boost::algorithm::starts_with(input, ":load ")) {
+            filepath = input.substr(6, std::string::npos);
+            engine.loadIndex(filepath);
         }
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);

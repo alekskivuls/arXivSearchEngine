@@ -95,7 +95,7 @@ void WTApplication::index()
   /*
    * Update the text, using text input into the stemResult_ field.
    */
-  engine.index(indexPath_->text().toUTF8());
+  engine.createIndex(indexPath_->text().toUTF8());
   result_->setText("Indexing completed");
   //std::string vocabSize = std::to_string(engine.getVocab().size());
   numResults_->setText(std::to_string(engine.getVocab().size()));

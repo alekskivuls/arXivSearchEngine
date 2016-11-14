@@ -45,7 +45,7 @@ public:
 //public:
 	DiskInvertedIndex(const boost::filesystem::path  &path);
 
-	std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
+    std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
 
     void printAllPostings(const InvertedIndex &idx);
 };

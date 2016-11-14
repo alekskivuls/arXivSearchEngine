@@ -14,8 +14,8 @@
 
 // Default constructors and destructors
 Engine::Engine() { 
-   // idTable = std::unordered_map<uint32_t, std::string>();
-   // idx = InvertedIndex();
+    // idTable = std::unordered_map<uint32_t, std::string>();
+    // idx = InvertedIndex();
 }
 
 void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
@@ -64,12 +64,11 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
-    idTable = std::unordered_map<uint32_t, std::string>();
-    idx = InvertedIndex();
+    auto idTable = std::unordered_map<uint32_t, std::string>();
+    auto idx = InvertedIndex();
     std::unordered_map<std::string, std::string> cache;
-    boost::filesystem::directory_iterator it(inDir), eod;
     std::vector<std::string> mPathList;
-    getPathNames(dir, mPathList);
+    getPathNames(inDir, mPathList);
 
     std::sort(mPathList.begin(), mPathList.end());
 
@@ -128,10 +127,19 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
     Serializer::buildIndex(outDir, idx);
+    dir = outDir;
 }
 
-void Engine::index(const std::string &filepath) {
-    DiskInvertedIndex(boost::filesystem::path(filepath));
+void Engine::createIndex(const std::string &filepath) {
+    auto cwd = boost::filesystem::current_path();
+    //std::cout << "Current path is : " << cwd << std::endl;
+    boost::filesystem::path dir(filepath);
+    populateIndex(dir, cwd);
+}
+
+void Engine::loadIndex(const std::string &filepath) {
+    dir = filepath;
+    //DiskInvertedIndex(boost::filesystem::path(filepath));
 }
 
 void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
@@ -154,7 +162,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 
 
     std::string input = "park"; // "breed" "explore" "park"
-	//std::string input = "mannual";
+    //std::string input = "mannual";
     std::string stemmedToken = PorterStemmer::stem(input);
 
 
@@ -169,36 +177,36 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     std::cout << "file size: " << postingsFile.size() << std::endl; // THIS IS STATING ERROR
     std::cout << "memory size: " << postingsMemory.size() << std::endl;
 
-	if (postingsFile.size() == postingsMemory.size()) {
-		std::list<DocInfo>::iterator iter = postingsFile.begin();
-		for (const DocInfo &doc : postingsMemory) {
+    if (postingsFile.size() == postingsMemory.size()) {
+        std::list<DocInfo>::iterator iter = postingsFile.begin();
+        for (const DocInfo &doc : postingsMemory) {
             if ((*iter).getPositions().size() != doc.getPositions().size()) {
                 std::cout << "FILE DocInfo.getPositions.size(" << (*iter).getPositions().size() <<
-                    ") != Memory DocInfo.getPositions.size(" << doc.getPositions().size() << ')' << std::endl;
-				break;
-			}
-			else {
-				std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
-				std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
-			}
+                             ") != Memory DocInfo.getPositions.size(" << doc.getPositions().size() << ')' << std::endl;
+                break;
+            }
+            else {
+                std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
+                std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
+            }
 
             std::list<uint32_t>::iterator posFile = (*iter).getPositions().begin();
             for(const int temp : doc.getPositions()) {
                 std::cout << "VALUE: " << temp << std::endl;
             }
 
-			for (auto posMemory : doc.getPositions()) {
-				if (posMemory != *posFile)
-					std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
-				else 
-					std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
+            for (auto posMemory : doc.getPositions()) {
+                if (posMemory != *posFile)
+                    std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
+                else
+                    std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
 
-				++posFile;
-			}
-			++iter;
-		}
-	}
-	
+                ++posFile;
+            }
+            ++iter;
+        }
+    }
+
 
 
     auxIdx.mPostings.close();
@@ -248,18 +256,19 @@ std::string Engine::stem(std::string &token) {
 }
 
 void Engine::printQuery(std::string &query) {
-std::list<DocInfo> output = queryEngine.processQuery(query, idx);
-			for (auto di : output)
-				std::cout << idTable.at(di.getDocId()) << '\t';
-			std::cout << std::endl << output.size() << std::endl;
-			std::cout << std::endl;
+    auto output = getQuery(query);
+    for (auto di : output)
+        std::cout << di << '\t';
+    std::cout << std::endl << output.size() << std::endl << std::endl;
 }
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
-    std::list<DocInfo> output = queryEngine.processQuery(query, idx);
+    DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
+    std::cout << dIdx.ReadVocabStringAtPosition(1) << std::endl;
+    std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;
     results.reserve(output.size());
     for (auto di : output)
-        results.push_back(idTable.at(di.getDocId()));
+        results.push_back(std::to_string(di.getDocId()));
     return results;
 }

@@ -166,15 +166,15 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &idx) {
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedIndex &dIdx) {
 	std::list<std::string> infix = stemmify(userQuery);
 
 	if (infix.size() == 0) {
-		return idx.getPostings("");
+        return dIdx.GetPostings("");
 	}
 
 	if (infix.size() == 1) {
-		for (auto d : idx.getPostings(infix.front())) {
+        for (auto d : dIdx.GetPostings(infix.front())) {
 			std::cout << d.getDocId() << ":\n";
 			for (auto i : d.getPositions()) {
 				std::cout << i << " ";
@@ -182,7 +182,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &
 			std::cout << "\n";
 		}
 		std::cout << "\n";
-		return idx.getPostings(infix.front());
+        return dIdx.GetPostings(infix.front());
 	}
 
 	std::list<std::string> rpnQuery = infixToRPN(infix);
@@ -216,7 +216,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &
 				//result.push(XOR(left, right));
 		}
 		else 
-			result.push(idx.getPostings(token));
+            result.push(dIdx.GetPostings(token));
 	}
 	return result.top();
 }
@@ -351,7 +351,7 @@ std::list<DocInfo> QEngine::PHRASE(std::list<DocInfo> &left, std::list<DocInfo> 
 	
 	return result;
 }
-
+/*
 // Query Test 2
 void QEngine::printQueryTest2(InvertedIndex *& idx) {
 	idx->addTerm("Hello", (uint32_t)1, 1);
@@ -377,8 +377,9 @@ void QEngine::printQueryTest2(InvertedIndex *& idx) {
 			std::cout << i << " ";
 		std::cout << '\n';
 	}*/
-}
+//}*/
 
+/*
 // Query Test 1
 void QEngine::printQueryTest(InvertedIndex *& idx) {
 	std::list<DocInfo> left = idx->getPostings("Hello");
@@ -418,7 +419,7 @@ void QEngine::printQueryTest(InvertedIndex *& idx) {
 	std::cout << '\n';
 
 	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
-}
+}*/
 
 // Infix, rpn test 1
 void QEngine::printInfixRpn() {

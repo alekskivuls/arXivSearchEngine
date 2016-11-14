@@ -1,5 +1,6 @@
 #include "Serializer.h"
 #include <iomanip>
+#include <iostream>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -46,6 +47,9 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 		std::ios::out | std::ios::binary);
     std::ofstream vocabTable(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
+
+    std::cout << "Writing to: " << postingsPath << std::endl;
+    std::cout << "Writing to: " << tablePath << std::endl;
 
 	// the first thing we must write to the vocabTable file is the number of vocab terms.
 	uint32_t termCount = Reverse(auxIdx.getVocabList().size()); // UNCOMMENT FOR WINDOWS
@@ -121,6 +125,8 @@ std::vector<uint32_t> Serializer::buildVocab(const boost::filesystem::path &file
 	boost::filesystem::path vocabPath = filePath;
     std::ofstream vocabFile(vocabPath.append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
+
+    std::cout << "Writing to: " << vocabPath << std::endl;
 
 	for (const std::string &term : auxIdx.getVocabList()) {
 		positions[vocabIndex] = vocabFile.tellp();
