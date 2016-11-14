@@ -156,8 +156,8 @@ void Engine::index(const std::string &filepath) {
     //printIndex();
 }
 
-void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK
-    std::string file = "/media/akivuls/6CDE3E09DE3DCC58/Users/akivuls/Documents/arXivDocuments/test"; // // change to your input directory
+void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
+    std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
     boost::filesystem::path dir(file); // change input back to: filepath
     boost::filesystem::directory_iterator it(dir), eod;
 
@@ -166,7 +166,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     Engine::populateIndex(dir, idx, idTable);
     std::cout << "idx size = " << idx.getTermCount() << '\n';
 
-    std::string path = "/home/akivuls/Desktop"; // change to your output directory
+    std::string path = "C:/Users/pkim7/Desktop/output"; // change to your output directory
     boost::filesystem::path dirOut(path);
     Serializer::buildIndex(dirOut, idx);
 
@@ -176,7 +176,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
 
 
-    std::string input = "park"; // "breed" "explore"
+    std::string input = "park"; // "breed" "explore" "park"
 	//std::string input = "mannual";
     std::string stemmedToken = PorterStemmer::stem(input);
 
@@ -189,11 +189,11 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     else
         std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
 
-    std::cout << "file size: " << postingsFile.size() << std::endl;
+    std::cout << "file size: " << postingsFile.size() << std::endl; // THIS IS STATING ERROR
     std::cout << "memory size: " << postingsMemory.size() << std::endl;
 
 	if (postingsFile.size() == postingsMemory.size()) {
-		auto iter = postingsFile.begin();
+		std::list<DocInfo>::iterator iter = postingsFile.begin();
 		for (const DocInfo &doc : postingsMemory) {
             if ((*iter).getPositions().size() != doc.getPositions().size()) {
                 std::cout << "FILE DocInfo.getPositions.size(" << (*iter).getPositions().size() <<
@@ -205,7 +205,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
 				std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
 			}
 
-            auto posFile = (*iter).getPositions().begin();
+            std::list<uint32_t>::iterator posFile = (*iter).getPositions().begin();
             for(const int temp : doc.getPositions()) {
                 std::cout << "VALUE: " << temp << std::endl;
             }
