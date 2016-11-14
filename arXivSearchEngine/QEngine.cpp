@@ -17,7 +17,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 		std::istream_iterator<std::string>{} };
 
 	uint32_t size = dIdx.getN();
-	std::vector<double_t> &weights = dIdx.ReadWeights();
+    const std::vector<double_t> &weights = dIdx.ReadWeights();
 
 	std::vector<pair> scores;
 	scores.reserve(size);
@@ -29,7 +29,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 	// I DID NOT SUM ACCUMULATOR YET
 	for (std::string token : tokens) {
 		std::string stemmedToken = PorterStemmer::stem(token);
-		std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
+        const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
 
 		double_t df = (double_t)docList.size();
 		double_t wqt = (df == 0.0) ? 0 : log(1.0 + (size / df)); // WQT

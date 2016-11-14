@@ -51,7 +51,7 @@ public:
 
     std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
 
-	uint32_t DiskInvertedIndex::getN();
+    uint32_t getN();
 
     void printAllPostings(const InvertedIndex &idx);
 
