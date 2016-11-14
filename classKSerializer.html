@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.12"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>arXivSearchEngine: Compressor Class Reference</title>
+<title>arXivSearchEngine: KSerializer Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -60,27 +60,33 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="classCompressor-members.html">List of all members</a>  </div>
+<a href="classKSerializer-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Compressor Class Reference</div>  </div>
+<div class="title">KSerializer Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="KSerializer_8h_source.html">KSerializer.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2e77beac8fd60dd2ebd6ba9b6f4c23ea"><td class="memItemLeft" align="right" valign="top"><a id="a2e77beac8fd60dd2ebd6ba9b6f4c23ea"></a>
-static std::list&lt; unsigned char &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>encodeNumber</b> (uint32_t source)</td></tr>
-<tr class="separator:a2e77beac8fd60dd2ebd6ba9b6f4c23ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a639af7879a736e66d92584ffac49c8d7"><td class="memItemLeft" align="right" valign="top"><a id="a639af7879a736e66d92584ffac49c8d7"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>encode</b> (const std::list&lt; int &gt; &amp;source)</td></tr>
-<tr class="separator:a639af7879a736e66d92584ffac49c8d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa86c8fa73b88fadd1d3e33bd08223df8"><td class="memItemLeft" align="right" valign="top"><a id="aa86c8fa73b88fadd1d3e33bd08223df8"></a>
-static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>decode</b> (const uint32_t &amp;source)</td></tr>
-<tr class="separator:aa86c8fa73b88fadd1d3e33bd08223df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e7308581b1e560e226a7f9de8e1a41b"><td class="memItemLeft" align="right" valign="top"><a id="a9e7308581b1e560e226a7f9de8e1a41b"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx)</td></tr>
+<tr class="separator:a9e7308581b1e560e226a7f9de8e1a41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdf35067155115e31811534ff27fdadf"><td class="memItemLeft" align="right" valign="top"><a id="acdf35067155115e31811534ff27fdadf"></a>
+static std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildKgrams</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx)</td></tr>
+<tr class="separator:acdf35067155115e31811534ff27fdadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0d8a000c7e5deceef799894a956003"><td class="memItemLeft" align="right" valign="top"><a id="aab0d8a000c7e5deceef799894a956003"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx, const std::vector&lt; uint64_t &gt; &amp;vocabPositions)</td></tr>
+<tr class="separator:aab0d8a000c7e5deceef799894a956003"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26b4b0aeb2c0a9ac13e570e94bd722fa"><td class="memItemLeft" align="right" valign="top"><a id="a26b4b0aeb2c0a9ac13e570e94bd722fa"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteTerms</b> (std::ofstream &amp;kgramsFile, const std::list&lt; std::string &gt; &amp;terms)</td></tr>
+<tr class="separator:a26b4b0aeb2c0a9ac13e570e94bd722fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>arXivSearchEngine/<a class="el" href="Compressor_8h_source.html">Compressor.h</a></li>
-<li>arXivSearchEngine/Compressor.cpp</li>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class serializes the <a class="el" href="classKgramIndex.html">KgramIndex</a>; writing it to disk. </p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>arXivSearchEngine/<a class="el" href="KSerializer_8h_source.html">KSerializer.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

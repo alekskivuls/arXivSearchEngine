@@ -71,16 +71,53 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a40eb8adbdabb01be915dc12dffcb1a6c"><td class="memItemLeft" align="right" valign="top"><a id="a40eb8adbdabb01be915dc12dffcb1a6c"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
 <tr class="separator:a40eb8adbdabb01be915dc12dffcb1a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa53b34686524e34cc17574cc08432994"><td class="memItemLeft" align="right" valign="top"><a id="aa53b34686524e34cc17574cc08432994"></a>
-static std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
-<tr class="separator:aa53b34686524e34cc17574cc08432994"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4747c8979d19ba1fe7bc9dd97e9e1e2"><td class="memItemLeft" align="right" valign="top"><a id="aa4747c8979d19ba1fe7bc9dd97e9e1e2"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildPostings</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; uint64_t &gt; &amp;vocabPositions)</td></tr>
-<tr class="separator:aa4747c8979d19ba1fe7bc9dd97e9e1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a34952014786c1fe4bf856b126eec9e"><td class="memItemLeft" align="right" valign="top"><a id="a9a34952014786c1fe4bf856b126eec9e"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>WritePostings</b> (std::ofstream &amp;postingsFile, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;postings)</td></tr>
+<tr class="memitem:a176405fda10295951ff8266e5b140964"><td class="memItemLeft" align="right" valign="top"><a id="a176405fda10295951ff8266e5b140964"></a>
+static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
+<tr class="separator:a176405fda10295951ff8266e5b140964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc821500037b799b7dd935164a45bafc"><td class="memItemLeft" align="right" valign="top"><a id="adc821500037b799b7dd935164a45bafc"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildPostings</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
+<tr class="separator:adc821500037b799b7dd935164a45bafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a34952014786c1fe4bf856b126eec9e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSerializer.html#a9a34952014786c1fe4bf856b126eec9e">WritePostings</a> (std::ofstream &amp;postingsFile, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;postings)</td></tr>
 <tr class="separator:a9a34952014786c1fe4bf856b126eec9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9a34952014786c1fe4bf856b126eec9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a34952014786c1fe4bf856b126eec9e">&sect;&nbsp;</a></span>WritePostings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Serializer::WritePostings </td>
+          <td>(</td>
+          <td class="paramtype">std::ofstream &amp;&#160;</td>
+          <td class="paramname"><em>postingsFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>postings</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Writes a single list of postings for one vocabulary term to the given postings file. Currently writes only the document frequency (size of list) and each document ID as a gap. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>arXivSearchEngine/<a class="el" href="Serializer_8h_source.html">Serializer.h</a></li>
 <li>arXivSearchEngine/Serializer.cpp</li>

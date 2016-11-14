@@ -60,6 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classWildEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">WildEngine Class Reference</div>  </div>
@@ -68,22 +69,19 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac05220e511bd317453500a071fe8367b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#ac05220e511bd317453500a071fe8367b">WildEngine</a> (<a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;index1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;index2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;index3)</td></tr>
-<tr class="memdesc:ac05220e511bd317453500a071fe8367b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.  <a href="#ac05220e511bd317453500a071fe8367b">More...</a><br /></td></tr>
-<tr class="separator:ac05220e511bd317453500a071fe8367b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6c007838cdc0daa1710771ff77a6ebd"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#ae6c007838cdc0daa1710771ff77a6ebd">potentials</a> (std::string &amp;wildcard)</td></tr>
-<tr class="memdesc:ae6c007838cdc0daa1710771ff77a6ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html#ae6c007838cdc0daa1710771ff77a6ebd" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters.  <a href="#ae6c007838cdc0daa1710771ff77a6ebd">More...</a><br /></td></tr>
-<tr class="separator:ae6c007838cdc0daa1710771ff77a6ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75872a179541e04c37a9bd5489a20681"><td class="memItemLeft" align="right" valign="top"><a id="a75872a179541e04c37a9bd5489a20681"></a>
-std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vocab</b> ()</td></tr>
-<tr class="separator:a75872a179541e04c37a9bd5489a20681"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acee8a393c3cb1e1d669f2143536c242e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#acee8a393c3cb1e1d669f2143536c242e">regularex</a> (std::string wildcard)</td></tr>
-<tr class="memdesc:acee8a393c3cb1e1d669f2143536c242e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html#acee8a393c3cb1e1d669f2143536c242e" title="WildEngine::regularex : This method takes in a string wildcard and turns the wildcard into a regular ...">WildEngine::regularex</a> : This method takes in a string wildcard and turns the wildcard into a regular expression pattern string.  <a href="#acee8a393c3cb1e1d669f2143536c242e">More...</a><br /></td></tr>
-<tr class="separator:acee8a393c3cb1e1d669f2143536c242e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#a7c71d7c4c9b51ce4c89deada73e70fc6">WildEngine</a> ()</td></tr>
+<tr class="memdesc:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.  <a href="#a7c71d7c4c9b51ce4c89deada73e70fc6">More...</a><br /></td></tr>
+<tr class="separator:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="memItemLeft" align="right" valign="top">static std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b">potentials</a> (std::string &amp;wildcard, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex3)</td></tr>
+<tr class="memdesc:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters.  <a href="#a8b509c2f2f99d7124bd70c43110ceb4b">More...</a><br /></td></tr>
+<tr class="separator:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac05220e511bd317453500a071fe8367b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac05220e511bd317453500a071fe8367b">&sect;&nbsp;</a></span>WildEngine()</h2>
+<a id="a7c71d7c4c9b51ce4c89deada73e70fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c71d7c4c9b51ce4c89deada73e70fc6">&sect;&nbsp;</a></span>WildEngine()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -91,31 +89,14 @@ std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom
         <tr>
           <td class="memname">WildEngine::WildEngine </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
-          <td class="paramname"><em>index1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
-          <td class="paramname"><em>index2</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
-          <td class="paramname"><em>index3</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p><a class="el" href="classWildEngine.html">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. </p>
-<p><a class="el" href="classWildEngine.html#ac05220e511bd317453500a071fe8367b" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine::WildEngine</a> : The constructor of the <a class="el" href="classWildEngine.html">WildEngine</a>; requires reference of 3 different size <a class="el" href="classKgramIndex.html">KgramIndex</a> objects. They are expected to contain the same vocabulary.</p>
+<p><a class="el" href="classWildEngine.html#a7c71d7c4c9b51ce4c89deada73e70fc6" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine::WildEngine</a> : The constructor of the <a class="el" href="classWildEngine.html">WildEngine</a>; requires reference of 3 different size <a class="el" href="classKgramIndex.html">KgramIndex</a> objects. They are expected to contain the same vocabulary.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index1</td><td>: pass your reference and these will point to it. </td></tr>
@@ -131,23 +112,53 @@ std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae6c007838cdc0daa1710771ff77a6ebd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6c007838cdc0daa1710771ff77a6ebd">&sect;&nbsp;</a></span>potentials()</h2>
+<a id="a8b509c2f2f99d7124bd70c43110ceb4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b509c2f2f99d7124bd70c43110ceb4b">&sect;&nbsp;</a></span>potentials()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::list&lt; std::string &gt; WildEngine::potentials </td>
           <td>(</td>
           <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>wildcard</em></td><td>)</td>
+          <td class="paramname"><em>wildcard</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>kindex1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>kindex2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>kindex3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classWildEngine.html#ae6c007838cdc0daa1710771ff77a6ebd" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters. </p>
+<p><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">wildcard</td><td>: the literal wildcard term. (i.e. "h*llo")potentialterms </td></tr>
@@ -155,33 +166,6 @@ std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The return value is a list of strings that fit the wildcard. </dd></dl>
-
-</div>
-</div>
-<a id="acee8a393c3cb1e1d669f2143536c242e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acee8a393c3cb1e1d669f2143536c242e">&sect;&nbsp;</a></span>regularex()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string WildEngine::regularex </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>wildcard</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="classWildEngine.html#acee8a393c3cb1e1d669f2143536c242e" title="WildEngine::regularex : This method takes in a string wildcard and turns the wildcard into a regular ...">WildEngine::regularex</a> : This method takes in a string wildcard and turns the wildcard into a regular expression pattern string. </p>
-<p>The intention of this method was for it to create a regular expression string to be sent to the caller to be turned into a boost::regex mattern to be matched. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">wildcard</td><td>: the std::string of the wildcard token. (i.e. "h*llo") </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The return value is a std::string of the regular expression of the inputed std::string. (i.e. "(^h\\wllo$)"; the '' is escaped for when it is taken in, otherwise literal regular expression is "(^h\wllo$)". </dd></dl>
 
 </div>
 </div>
