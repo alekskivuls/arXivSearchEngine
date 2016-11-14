@@ -78,7 +78,7 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 
 
 		std::string uniStr = ReadVocabStringAtPosition(m);
-        std::cout << "READ VOCAB AT: " << uniStr << std::endl;
+        //std::cout << "READ VOCAB AT: " << uniStr << std::endl;
 
 		int comp = term.compare(uniStr);
 		if (comp == 0) 
@@ -165,7 +165,7 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
 
 	}
 
-    std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
+    //std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
 
 	mVocabList.clear();
 	mVocabList.seekg(entry.StringPosition, mVocabList.beg);
@@ -224,4 +224,12 @@ void DiskInvertedIndex::printAllPostings(const InvertedIndex &idx) {
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
+}
+
+std::list<std::string> DiskInvertedIndex::getVocabList() {
+    std::list<std::string> vec;
+    for(int i = 0; i < mVocabTable.size(); i++) {
+        vec.push_back(ReadVocabStringAtPosition(i));
+    }
+    return vec;
 }

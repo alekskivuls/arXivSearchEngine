@@ -247,11 +247,15 @@ void Engine::printIndex() {
 }
 
 void Engine::printVocab() {
-    idx.vocab();
+    auto vocab = getVocab();
+    for(auto term : vocab)
+        std::cout << term << std::endl;
+    std::cout << vocab.size() << std::endl;
 }
 
 std::list<std::string> Engine::getVocab() {
-    return idx.getVocabList();
+    DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
+    return dIdx.getVocabList();
 }
 
 std::string Engine::stem(std::string &token) {
