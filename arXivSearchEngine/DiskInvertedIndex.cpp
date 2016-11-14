@@ -112,7 +112,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
 		uint32_t currId = encodedDoc + lastDocId;
 		posts.push_back(DocInfo(currId));
 
-		const DocInfo &currDoc = posts.back();
+        DocInfo &currDoc = posts.back();
         size_t positionSize = ReadInt64(postings);
 		std::cout << "positionSize(" << positionSize << ") ";
 
@@ -123,7 +123,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
 
 			uint32_t currPos = encodedPos + lastPosGap;
 
-			currDoc.getPositions().push_back(currPos);
+            currDoc.addPosition(currPos);
 
 			lastPosGap = encodedPos;
 		}

@@ -27,9 +27,9 @@ public:
 	uint32_t getDocId() const;
 
 	/**Returns the list of the term's occurence.*/
-	std::list<uint32_t> getPositions() const;
+    std::list<uint32_t> getPositions() const;
 
-	void addPosition(int &value);
+    void addPosition(uint32_t &value);
 };
 
 #endif

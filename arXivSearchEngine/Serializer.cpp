@@ -101,7 +101,7 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 			postingsFile.write((const char*)&posGap, sizeof(posGap));
 			std::cout << posGap << " ";
 
-			lastPosGap = posGap;
+            lastPosGap = pos;
 		}
 		std::cout << std::endl;
 

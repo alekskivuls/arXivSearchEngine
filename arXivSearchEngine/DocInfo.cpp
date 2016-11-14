@@ -25,6 +25,6 @@ std::list<uint32_t> DocInfo::getPositions() const {
 	return _posList;
 }
 
-void DocInfo::addPosition(int &value) {
+void DocInfo::addPosition(uint32_t &value) {
 	_posList.push_back(value);
 }
