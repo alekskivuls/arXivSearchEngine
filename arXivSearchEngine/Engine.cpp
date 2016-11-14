@@ -15,25 +15,25 @@
 
 inline uint32_t Reverse(uint32_t value) {
     return (value & 0xFF000000) >> 24 |
-                                   (value & 0x00FF0000) >> 8 |
-                                   (value & 0x0000FF00) << 8 |
-                                   (value & 0x000000FF) << 24;
+		(value & 0x00FF0000) >> 8 |
+		(value & 0x0000FF00) << 8 |
+		(value & 0x000000FF) << 24;
 }
 
 inline uint64_t Reverse(uint64_t value) {
     return (value & 0xFF00000000000000) >> 56 |
-                                           (value & 0x00FF000000000000) >> 40 |
-                                           (value & 0x0000FF0000000000) >> 24 |
-                                           (value & 0x000000FF00000000) >> 8 |
-                                           (value & 0x00000000FF000000) << 8 |
-                                           (value & 0x0000000000FF0000) << 24 |
-                                           (value & 0x000000000000FF00) << 40 |
-                                           (value & 0x00000000000000FF) << 56;
+		(value & 0x00FF000000000000) >> 40 |
+        (value & 0x0000FF0000000000) >> 24 |
+        (value & 0x000000FF00000000) >> 8 |
+        (value & 0x00000000FF000000) << 8 |
+        (value & 0x0000000000FF0000) << 24 |
+        (value & 0x000000000000FF00) << 40 |
+        (value & 0x00000000000000FF) << 56;
 }
 
 // Default constructors and destructors
 Engine::Engine() { 
-    idTable = std::unordered_map<unsigned int, std::string>();
+    idTable = std::unordered_map<uint32_t, std::string>();
     idx = InvertedIndex();
 }
 
@@ -78,7 +78,7 @@ std::vector<std::string> split(std::string token) {
     return vect;
 }
 
-void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<unsigned int, std::string> &idTable) {
+void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx, std::unordered_map<uint32_t, std::string> &idTable) {
 
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
@@ -116,7 +116,7 @@ void Engine::populateIndex(const boost::filesystem::path &dir, InvertedIndex &id
                 Tokenizer tkzr(input);
                 std::string token;
                 token.reserve(200);
-                unsigned int posIndex = 0;
+                uint32_t posIndex = 0;
                 bool hyphen = false;
                 while (tkzr.nextToken(token, hyphen)) {
                     // while not end of file.
@@ -149,7 +149,7 @@ void Engine::index(const std::string &filepath) {
     boost::filesystem::path dir(filepath);
     boost::filesystem::directory_iterator it(dir), eod;
 
-    idTable = std::unordered_map<unsigned int, std::string>();
+    idTable = std::unordered_map<uint32_t, std::string>();
     idx = InvertedIndex();
     Engine::populateIndex(dir, idx, idTable);
     std::cout << "idx size = " << idx.getTermCount() << '\n';
@@ -162,7 +162,7 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     boost::filesystem::path dir(file); // change input back to: filepath
     boost::filesystem::directory_iterator it(dir), eod;
 
-    idTable = std::unordered_map<unsigned int, std::string>();
+    idTable = std::unordered_map<uint32_t, std::string>();
     idx = InvertedIndex();
     Engine::populateIndex(dir, idx, idTable);
     std::cout << "idx size = " << idx.getTermCount() << '\n';
@@ -174,44 +174,15 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     std::cout << "Printing index: " << std::endl;
     std::cout << "size of index: " << idx.getIndex().size() << std::endl;
 
-    //Engine::printIndex();
-
     DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
 
-    /*for (auto ele : idx.getIndex()) {
-        std::vector<DocInfo>
-        VocabEntry entry = auxIdx.BinarySearchVocabulary(ele.first);
-        if (entry.PostingPosition != -1 && entry.StringPosition != -1)
-            return ReadPostingsFromFile(mPostings, entry.PostingPosition);
-        return std::vector<DocInfo>();
-    }
 
-
-    std::cout << "entry.PostingPosition != -1 && entry.StringPosition != -1 is "
-        << (entry.PostingPosition != -1 && entry.StringPosition != -1) << std::endl;
-    */
-
-
-    PorterStemmer stemmer;
     std::string input = "and"; // "breed" "explore"
-    std::string stemmedToken = stemmer.stem(input);
-    //std::string stemmedToken = "mannual";
-    auto ve = auxIdx.BinarySearchVocabulary(stemmedToken);
-    std::cout << "DOES VE EXIST FFS?\nV POSITION: " << ve.StringPosition << std::endl;
-    std::cout << "P POSITION: " << ve.PostingPosition << std::endl;
-    std::cout << "Reverse(ve.StringPosition): " << Reverse((uint32_t)ve.StringPosition) << std::endl;
-    std::cout << "Reverse(ve.PostingPosition): " << Reverse((uint32_t)ve.PostingPosition) << std::endl;
-
-    std::cout << std::endl << std::endl<< "PRINTING VOCAB TABLE: " << std::endl; // should NOT be emtpy
-    typedef const std::pair<std::string, std::list<DocInfo>> pair;
-    for (auto vocabE : auxIdx.mVocabTable) { // pair &element : auxIdx.getIndex()
-        std::cout << "V POSITION: " << vocabE.StringPosition << std::endl; // Reverse(vocabE.StringPosition)
-        std::cout << "P POSITION: " << vocabE.PostingPosition << std::endl; // Reverse(vocabE.PostingPosition)
-    }
+	//std::string input = "mannual";
+    std::string stemmedToken = PorterStemmer::stem(input);
 
 
-
-    std::vector<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken); //LKJASDJLKASJDKSJDKJKLDASDLJLKJDKASLJJKLADKLJDKSAJDKLASJDLKSJDLKSAJLKASDJ
+    std::list<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken);
     std::list<DocInfo> postingsMemory = idx.getPostings(stemmedToken);
 
     if (postingsFile.size() == postingsMemory.size())
@@ -222,22 +193,39 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
     std::cout << "file size: " << postingsFile.size() << std::endl;
     std::cout << "memory size: " << postingsMemory.size() << std::endl;
 
-    unsigned char i = 0;
-    for (const DocInfo &doc : postingsMemory) {
-        std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
+	if (postingsFile.size() == postingsMemory.size()) {
+		auto iter = postingsFile.begin();
+		for (const DocInfo &doc : postingsMemory) {
+			if (postingsMemory.size() != doc.getPositions().size()) {
+				std::cout << "FILE DocInfo.getPositions(" << (*iter).getPositions().size() <<
+					") != Memory DocInfo.getPositions(" << doc.getPositions().size() << ')' << std::endl;
+				break;
+			}
+			else {
+				std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
+				std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
+			}
 
-        if (i < postingsFile.size())
-            std::cout << "FILE DocInfo ID(" << postingsFile[i++].getDocId() << ")" << std::endl;
-        else
-            std::cout << "No more DocInfos" << std::endl;
-    }
+			auto posFile = (*iter).getPositions().begin();
+			for (auto posMemory : doc.getPositions()) {
+				if (posMemory != *posFile)
+					std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
+				else 
+					std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
+
+				++posFile;
+			}
+			++iter;
+		}
+	}
+	
 
 
     auxIdx.mPostings.close();
     auxIdx.mPostings.open(boost::filesystem::path(auxIdx.mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
                           std::ios_base::in | std::ios_base::binary);
     std::cout << "READING FROM FILE: " << std::endl;
-    uint32_t val, itr = 0, count = 0, total = 0; // when reading... use int32_t or uint32_t... use the safer of 2 or the one that works.
+    uint32_t val, itr = 0, count = 0, total = 0;
     while (val = auxIdx.ReadInt(auxIdx.mPostings)) {
         std::cout << "SIZE(" << val << ")" << std::endl;
         count = val;
@@ -249,7 +237,6 @@ void Engine::diskWriteTest(const std::string &filepath) { // change this later t
         }
         std::cout << std::endl;
     }
-    std::cout << "total should be (2000ish): " << total << std::endl;
     std::cout << std::endl;
     auxIdx.mPostings.close();
 }
@@ -260,7 +247,7 @@ void Engine::printIndex() {
         std::cout << "Term (" << p.first << ") found in the following documents:" << std::endl;
         for (DocInfo doc : p.second) { // list of positions
             std::cout << "Document id " << doc.getDocId() << " positions(" << doc.getPositions().size() << "): " << std::endl;
-            for (unsigned int &pos : doc.getPositions())
+            for (uint32_t &pos : doc.getPositions())
                 std::cout << pos << " ";
             std::cout << std::endl;
         }
@@ -271,7 +258,6 @@ void Engine::printIndex() {
 void Engine::printVocab() {
     idx.vocab();
 }
-
 
 std::list<std::string> Engine::getVocab() {
     return idx.getVocabList();

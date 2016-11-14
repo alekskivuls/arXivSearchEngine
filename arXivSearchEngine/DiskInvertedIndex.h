@@ -3,12 +3,14 @@
 
 
 #include "InvertedIndex.h"
+#include <boost/filesystem.hpp>
 #include "DocInfo.h"
 #include <cstdint>
 #include <string>
 #include <fstream>
-#include <vector>
-#include <boost/filesystem.hpp>
+#include <list>
+#include <vector> // argue with Neal about this..?
+
 
 struct VocabEntry {
 	uint64_t StringPosition;
@@ -30,7 +32,7 @@ public:
 	mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
 	
-	static std::vector<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint64_t postingsPosition);
+	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint64_t postingsPosition); // std::vector<DocInfo>
 
 	static std::vector<VocabEntry> ReadVocabTable(const boost::filesystem::path &path);
 
@@ -43,7 +45,7 @@ public:
 //public:
 	DiskInvertedIndex(const boost::filesystem::path  &path);
 
-	std::vector<DocInfo> GetPostings(const std::string &term) const;
+	std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
 };
 
 #endif

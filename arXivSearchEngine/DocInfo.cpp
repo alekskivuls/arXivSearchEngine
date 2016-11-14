@@ -1,10 +1,10 @@
 #include "DocInfo.h"
 
 // Default constructors and destructors
-DocInfo::DocInfo() { }
-DocInfo::DocInfo(const unsigned int &docId) : _docId(docId) { }
+DocInfo::DocInfo() : _posList(std::list<uint32_t>()) { }
+DocInfo::DocInfo(const uint32_t &docId) : _docId(docId), _posList(std::list<uint32_t>()) { }
 
-void DocInfo::addPosition(const unsigned int &pos) {
+void DocInfo::addPosition(const uint32_t &pos) {
 	for (auto it = _posList.begin(); it != _posList.end(); ++it) {
 		if (pos < *it) {
 			_posList.insert(it, pos);
@@ -15,13 +15,13 @@ void DocInfo::addPosition(const unsigned int &pos) {
 }
 
 // Getter method for Document Name (a.k.a. id)
-unsigned int DocInfo::getDocId() const {
+uint32_t DocInfo::getDocId() const {
 	return _docId;
 }
 
 // Getter method for the list of all positional occurences of the term 
 // related to this DocInfo. 
-std::list<unsigned int> DocInfo::getPositions() {
+std::list<uint32_t> DocInfo::getPositions() const {
 	return _posList;
 }
 

@@ -1,6 +1,7 @@
 #ifndef COMPRESSOR_H
 #define COMPRESSOR_H
 
+#include <cstdint>
 #include <string>
 #include <list>
 
@@ -12,7 +13,7 @@ public: // build inverted first. build kgram index based on key values of invert
 
 	static std::string encode(const std::list<int> &source);
 
-	static unsigned int decode(const unsigned int &source);
+	static uint32_t decode(const uint32_t &source);
 };
 
 #endif

@@ -64,7 +64,7 @@ std::list<std::string> InvertedIndex::getVocabList() const {
  *
  * _mIndex.find may be redundant....replace later with _mIndex[term]
  */
-void InvertedIndex::addTerm(const std::string &term, const unsigned int &docId, const unsigned int &pos) {
+void InvertedIndex::addTerm(const std::string &term, const uint32_t &docId, const uint32_t &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
 		addVocab(term);
 		_mIndex.insert(std::pair<std::string, std::list<DocInfo>>(term, std::list<DocInfo>())); // create postings list
@@ -104,6 +104,6 @@ std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() co
 /*
  * returns the number of unique terms that exist in the inverted index.
  */
-unsigned int InvertedIndex::getTermCount() const {
+uint32_t InvertedIndex::getTermCount() const {
 	return _mIndex.size();
 }

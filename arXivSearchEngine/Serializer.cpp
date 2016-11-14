@@ -1,5 +1,6 @@
 #include "Serializer.h"
 #include <iomanip>
+#include <iostream>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -47,7 +48,7 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 	vocabTable.write((const char*)&termCount, sizeof(termCount));
 
-
+	std::cout << "WRITING TO FILE" << std::endl;
 	int64_t vocabIndex = 0; // FOR EVERY TERM
 	for (const std::string &term : auxIdx.getVocabList()) {
 		const std::list<DocInfo> &postings = auxIdx.getPostings(term);
@@ -59,11 +60,13 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 
 		uint64_t pPosition = Reverse((uint64_t)postingsFile.tellp());
 		vocabTable.write((const char*)&pPosition, sizeof(pPosition));
-
-
+		
 		WritePostings(postingsFile, postings);
+		
 		vocabIndex++;
 	}
+	std::cout << std::endl << std::endl;;
+
 
 	vocabTable.close();
 	postingsFile.close();
@@ -75,8 +78,8 @@ void Serializer::buildPostings(const boost::filesystem::path &filePath, const In
 void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocInfo> &postings) { 
 	// Write the document frequency.
 	size_t docFreq = (uint64_t) Reverse(postings.size());
-
 	postingsFile.write((const char*)&docFreq, sizeof(docFreq));
+	std::cout << "docFreq(" << docFreq << ") " << std::endl;;
 
 	uint32_t lastDocId = 0;
 	for (const DocInfo &currDoc : postings) {
@@ -84,8 +87,23 @@ void Serializer::WritePostings(std::ofstream &postingsFile, const std::list<DocI
 		// Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
 		// want to remove the Reverse calls.
 		uint32_t docIdGap = Reverse(currDoc.getDocId() - lastDocId);
+		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap)); // variable byte encode this
+		std::cout << "docIdGap(" << docIdGap << ") contains: ";
 
-		postingsFile.write((const char*)&docIdGap, sizeof(docIdGap));
+		size_t positionSize = (uint64_t)Reverse(currDoc.getPositions().size());
+		postingsFile.write((const char*)&positionSize, sizeof(positionSize)); // write to disk size of position list
+		std::cout << "positionSize(" << positionSize << ") positions: ";
+
+		uint32_t lastPosGap = 0;
+		for (const uint32_t &pos : currDoc.getPositions()) { // std::list<uint32_t>
+			std::cout << "THIS SHOULD ALWAYS BE A NUMBER " << pos << std::endl;
+			uint32_t posGap = Reverse(pos - lastPosGap);
+			postingsFile.write((const char*)&posGap, sizeof(posGap));
+			std::cout << posGap << " ";
+
+			lastPosGap = posGap;
+		}
+		std::cout << std::endl;
 
 		lastDocId = (uint32_t)currDoc.getDocId();
 	}

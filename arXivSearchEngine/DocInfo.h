@@ -1,6 +1,7 @@
 #ifndef DOC_POS_H
 #define DOC_POS_H
 
+#include <cstdint>
 #include <string>
 #include <list>
 
@@ -11,22 +12,22 @@
  */
 class DocInfo {
 	/** The document name that is associated with the stemmed term in the index.*/
-	unsigned int _docId;
+	uint32_t _docId;
 
 	/** A list of positional occurences of the term associated with the document.*/
-	std::list<unsigned int> _posList;
+	std::list<uint32_t> _posList;
 
 public:
 	DocInfo();
-	DocInfo(const unsigned int &docId);
+	DocInfo(const uint32_t &docId);
 
-	void addPosition(const unsigned int &pos);
+	void addPosition(const uint32_t &pos);
 
 	/**Returns the name of the document (json file name).*/
-	unsigned int getDocId() const;
+	uint32_t getDocId() const;
 
 	/**Returns the list of the term's occurence.*/
-	std::list<unsigned int> getPositions();
+	std::list<uint32_t> getPositions() const;
 
 	void addPosition(int &value);
 };

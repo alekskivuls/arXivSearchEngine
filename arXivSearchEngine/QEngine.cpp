@@ -354,21 +354,21 @@ std::list<DocInfo> QEngine::PHRASE(std::list<DocInfo> &left, std::list<DocInfo> 
 
 // Query Test 2
 void QEngine::printQueryTest2(InvertedIndex *& idx) {
-	idx->addTerm("Hello", (unsigned int)1, 1);
-	idx->addTerm("Hello", (unsigned int)1, 2);
+	idx->addTerm("Hello", (uint32_t)1, 1);
+	idx->addTerm("Hello", (uint32_t)1, 2);
 
-	idx->addTerm("Hello", (unsigned int)2, 1);
-	idx->addTerm("Hello", (unsigned int)2, 3);
-	idx->addTerm("Hello", (unsigned int)2, 5);
+	idx->addTerm("Hello", (uint32_t)2, 1);
+	idx->addTerm("Hello", (uint32_t)2, 3);
+	idx->addTerm("Hello", (uint32_t)2, 5);
 
-	idx->addTerm("World", (unsigned int)2, 2);
-	idx->addTerm("World", (unsigned int)2, 6);
+	idx->addTerm("World", (uint32_t)2, 2);
+	idx->addTerm("World", (uint32_t)2, 6);
 
-	idx->addTerm("World", (unsigned int)3, 1);
-	idx->addTerm("World", (unsigned int)3, 1);
+	idx->addTerm("World", (uint32_t)3, 1);
+	idx->addTerm("World", (uint32_t)3, 1);
 
-	idx->addTerm("Aleks", (unsigned int)2, 3);
-	idx->addTerm("Aleks", (unsigned int)2, 7);
+	idx->addTerm("Aleks", (uint32_t)2, 3);
+	idx->addTerm("Aleks", (uint32_t)2, 7);
 
 	//auto docList = processQuery(std::string("Hello ` World"), idx); // deprecated use of processQuery
 	/*for (auto di : docList) {

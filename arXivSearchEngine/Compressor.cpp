@@ -1,6 +1,6 @@
 #include "Compressor.h"
 #include <iostream>
-#include <stdint.h>
+#include <cstdint>
 
 /*
  * Future implementation must include gap encoding to reduce the amount of bytes consumed.
@@ -31,7 +31,7 @@ std::list<unsigned char> Compressor::encodeNumber(uint64_t source) { // pass in 
 }
 
 
-unsigned int Compressor::decode(const unsigned int &source) {
+uint32_t Compressor::decode(const uint32_t &source) {
 
 
 

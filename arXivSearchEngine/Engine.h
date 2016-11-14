@@ -13,6 +13,7 @@
 #include "DocInfo.h"
 #include <algorithm>
 #include <iostream>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <chrono>
@@ -22,7 +23,7 @@ class Engine {
 	boost::filesystem::path dir;
 	InvertedIndex idx;
 	QEngine queryEngine;
-	std::unordered_map<unsigned int, std::string> idTable;
+	std::unordered_map<uint32_t, std::string> idTable;
 
 public:
 	Engine();
@@ -34,7 +35,7 @@ public:
 	* lowercase and stemmed before being put into the inverted index.
 	*/
 	void populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx,
-		std::unordered_map<unsigned int, std::string> &idTable);
+		std::unordered_map<uint32_t, std::string> &idTable);
 
 	/**
 	* This method goes to a path and walks through the directory searching for all files that end

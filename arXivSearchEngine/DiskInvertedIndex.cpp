@@ -1,21 +1,19 @@
 #include "DiskInvertedIndex.h"
 #include <sstream>
-
-
+#include <iostream>
 
 using std::ifstream;
 namespace fs = boost::filesystem;
 
 extern uint32_t Reverse(uint32_t);
 extern uint64_t Reverse(uint64_t);
-extern double_t Reverse(double_t);
+//extern double_t Reverse(double_t);
 
 
 uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
 	return Reverse(value); // UNCOMMENT FOR WINDDOWS
-						   //return value;
 }
 uint64_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
 	uint32_t value = 0;
@@ -88,7 +86,7 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
 	return VocabEntry(-1, -1);;
 }
 
-std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint64_t postingsPosition) {
+std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint64_t postingsPosition) { // change from vector to list...?
 	// seek the specified position in the file
 	postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
 					  // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
@@ -96,10 +94,10 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 
 	// Read the document frequency. size_t docFreq = (uint64_t) Reverse(postings.size());
 	size_t docFreq = ReadInt(postings);
+	std::cout << "docFreq(" << docFreq << ") ";
 
 	// initialize the vector of document IDs to return.
-	std::vector<DocInfo> posts;
-	posts.reserve(docFreq);
+	std::list<DocInfo> posts;
 
 	// read 4 bytes at a time from the file, until you have read as many
 	//    postings as the document frequency promised.
@@ -108,11 +106,29 @@ std::vector<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &post
 	//unsigned char j, byte;
 	//std::cout << "printing doc gaps: ";
 	for (i = 0; i < docFreq; ++i) {
-		const uint32_t &encoded = ReadInt(postings); //  // try 64
-		uint32_t currId = encoded + lastDocId;
+		const uint32_t &encodedDoc = ReadInt(postings);
+		std::cout << "docId(" << encodedDoc << ") ";
 
+		uint32_t currId = encodedDoc + lastDocId;
 		posts.push_back(DocInfo(currId));
-		lastDocId = encoded;
+
+		const DocInfo &currDoc = posts.back();
+		size_t positionSize = ReadInt(postings);
+		std::cout << "positionSize(" << positionSize << ") ";
+
+		uint32_t i, lastPosGap = 0;
+		for (i = 0; i < positionSize; ++i) {
+			const uint32_t &encodedPos = ReadInt(postings);
+			std::cout << encodedPos << " ";
+
+			uint32_t currPos = encodedPos + lastPosGap;
+
+			currDoc.getPositions().push_back(currPos);
+
+			lastPosGap = encodedPos;
+		}
+
+		lastDocId = encodedDoc;
 		
 	}// repeat until all postings are read.
 
@@ -143,11 +159,11 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(size_t i) const {
 	return std::move(str);
 }
 
-std::vector<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const { // const icu::UnicodeString &term
+std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const { // const icu::UnicodeString &term
 	VocabEntry entry = BinarySearchVocabulary(term);
 	if (entry.PostingPosition != -1 && entry.StringPosition != -1)
 		return ReadPostingsFromFile(mPostings, entry.PostingPosition);
-	return std::vector<DocInfo>();
+	return std::list<DocInfo>();
 }
 
 DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {

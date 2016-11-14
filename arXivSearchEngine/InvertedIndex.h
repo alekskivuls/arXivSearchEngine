@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include "DocInfo.h"
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <list>
@@ -32,7 +33,7 @@ public:
 
 	/** Adds an instance of the stemmed term to the document.
 	 * A new DocInfo is created if the term is first encountered in that document.*/
-	void addTerm(const std::string &term, const unsigned int &docId, const unsigned int &pos); // maybe create a remove term?
+	void addTerm(const std::string &term, const uint32_t &docId, const uint32_t &pos); // maybe create a remove term?
 
 	/**This method is used to check if a term exists. Instead of catching an out of
 	* bounds error everytime, we can check to avoid the expensive try/ catch overhead.*/
@@ -45,7 +46,7 @@ public:
 
     std::unordered_map<std::string, std::list<DocInfo>> getIndex() const;
 
-	unsigned int getTermCount() const;
+	uint32_t getTermCount() const;
 };
 
 #endif

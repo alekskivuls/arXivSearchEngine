@@ -5,12 +5,13 @@
 
 #include <boost/filesystem.hpp>
 #include <fstream>
+#include <cstdint>
 
 class Tokenizer : public TokenStream {
 	std::fstream _file;
 	std::string _buffer;
 	bool isFileTokenizer;
-	unsigned int pos;
+	uint32_t pos;
 
 public:
 	/** variable byte and gap encoding (bytes -> .json files)*/
