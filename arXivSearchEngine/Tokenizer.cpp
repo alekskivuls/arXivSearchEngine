@@ -49,7 +49,8 @@ bool Tokenizer::nextToken(std::string &token, bool &hyphen) {
 		}
 	}
 
-	return token.size() != 0; // no more tokens to process from
+    //return token.size() != 0 || pos < _buffer.size();
+    return pos < _buffer.size() || token.size() != 0; // no more tokens to process from
 }
 
 // ignore the following block of comment. I may end up creating a new library for k-grams, 

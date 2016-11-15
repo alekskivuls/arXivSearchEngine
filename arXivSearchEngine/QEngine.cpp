@@ -17,7 +17,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 		std::istream_iterator<std::string>{} };
 
 	uint32_t size = dIdx.getN();
-	std::vector<double_t> &weights = dIdx.ReadWeights();
+    const std::vector<double_t> &weights = dIdx.ReadWeights();
 
 	std::vector<pair> scores;
 	scores.reserve(size);
@@ -29,7 +29,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 	// I DID NOT SUM ACCUMULATOR YET
 	for (std::string token : tokens) {
 		std::string stemmedToken = PorterStemmer::stem(token);
-		std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
+        const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
 
 		double_t df = (double_t)docList.size();
 		double_t wqt = (df == 0.0) ? 0 : log(1.0 + (size / df)); // WQT
@@ -55,10 +55,10 @@ std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
 	std::make_heap(scores.begin(), scores.end(), doc_score_greater_than());
 
 	std::vector<uint32_t> result;
-	result.reserve(10);
-
-	uint32_t i;
-	for (i = 0; i < 10; ++i) {
+    int numResults = scores.size() < 10 ? scores.size() : 10;
+    result.reserve(10);
+    uint32_t i;
+    for (i = 0; i < numResults; ++i) {
 		result[i] = scores.front().docid;
 
 		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)

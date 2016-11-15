@@ -206,7 +206,8 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights() {
 		std::ios::in | std::ios::binary);
 
 	std::vector<double_t> weights;
-	uint32_t size = ReadInt(weightFile);
+    uint32_t size = ReadInt(weightFile);
+    std::cout << "Size: " << size << std::endl;
 
 	std::cout << "READ FILE VECTOR SIZE: " << size << std::endl;
 	weights.reserve(size);

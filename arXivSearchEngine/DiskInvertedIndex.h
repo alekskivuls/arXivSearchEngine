@@ -27,6 +27,7 @@ public:
 	static uint32_t ReadInt(std::ifstream &stream);
 	//static uint32_t ReadInt64(std::ifstream &stream);
 	static double_t ReadDouble(std::ifstream &stream);
+    static uint32_t ReadIntRaw(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
@@ -51,7 +52,7 @@ public:
 
     std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
 
-	uint32_t DiskInvertedIndex::getN();
+    uint32_t getN();
 
     void printAllPostings(const InvertedIndex &idx);
 

@@ -62,7 +62,7 @@ public:
 
 	std::vector<uint32_t> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
 
-	std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores);
+    std::vector<uint32_t> heapify(std::vector<pair> scores);
 
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */
