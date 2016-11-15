@@ -333,6 +333,21 @@ void Engine::printQuery(std::string &query) {
 std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
     std::cout << dIdx.ReadVocabStringAtPosition(1) << std::endl;
+
+	KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
+
+	std::istringstream iss(query);
+	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
+		std::istream_iterator<std::string>{} };
+	for (std::string &token : tokens) {
+		std::list<std::string> &candidates = KEngine::correctSpelling(token, kidx);
+		if (candidates.size() != 1) { // mispelled
+			std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+		}
+		//KEngine::correctSpelling
+		// did you mean?
+	}
+
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;
     results.reserve(output.size());

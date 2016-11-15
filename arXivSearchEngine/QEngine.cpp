@@ -275,7 +275,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 				//result.push(XOR(left, right));
 		}
 		else 
-            result.push(dIdx.GetPostings(token));
+			result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
 	}
 	return result.top();
 }

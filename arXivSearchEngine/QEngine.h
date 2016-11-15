@@ -3,6 +3,7 @@
 
 #include "DiskInvertedIndex.h"
 #include "PorterStemmer.h"
+#include "KEngine.h"
 #include <cmath>
 #include <stack>
 #include <vector>
