@@ -68,9 +68,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a40eb8adbdabb01be915dc12dffcb1a6c"><td class="memItemLeft" align="right" valign="top"><a id="a40eb8adbdabb01be915dc12dffcb1a6c"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
-<tr class="separator:a40eb8adbdabb01be915dc12dffcb1a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a216bd61d57f4a86d2c4968fbc9b7a940"><td class="memItemLeft" align="right" valign="top"><a id="a216bd61d57f4a86d2c4968fbc9b7a940"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
+<tr class="separator:a216bd61d57f4a86d2c4968fbc9b7a940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a176405fda10295951ff8266e5b140964"><td class="memItemLeft" align="right" valign="top"><a id="a176405fda10295951ff8266e5b140964"></a>
 static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
 <tr class="separator:a176405fda10295951ff8266e5b140964"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -79,6 +79,9 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildPostings<
 <tr class="separator:adc821500037b799b7dd935164a45bafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a34952014786c1fe4bf856b126eec9e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSerializer.html#a9a34952014786c1fe4bf856b126eec9e">WritePostings</a> (std::ofstream &amp;postingsFile, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;postings)</td></tr>
 <tr class="separator:a9a34952014786c1fe4bf856b126eec9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af45221cf2f1e2df73086b67725b62c0d"><td class="memItemLeft" align="right" valign="top"><a id="af45221cf2f1e2df73086b67725b62c0d"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildEucDist</b> (const boost::filesystem::path &amp;filePath, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
+<tr class="separator:af45221cf2f1e2df73086b67725b62c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9a34952014786c1fe4bf856b126eec9e"></a>

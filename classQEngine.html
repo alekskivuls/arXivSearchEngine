@@ -59,6 +59,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classQEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -66,11 +67,24 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structQEngine_1_1greatest.html">greatest</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structQEngine_1_1pair.html">pair</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aac9eb69c9934f0cdd589ded71e2e5cf8"><td class="memItemLeft" align="right" valign="top"><a id="aac9eb69c9934f0cdd589ded71e2e5cf8"></a>
-std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>processQuery</b> (std::string &amp;userQuery, <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;idx)</td></tr>
-<tr class="separator:aac9eb69c9934f0cdd589ded71e2e5cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a6390626d0d8a92462381cae6d9cd0"><td class="memItemLeft" align="right" valign="top"><a id="a43a6390626d0d8a92462381cae6d9cd0"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>processQuery</b> (std::string &amp;userQuery, <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;dIdx)</td></tr>
+<tr class="separator:a43a6390626d0d8a92462381cae6d9cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae90c48df3eb5ffa6c6f15837b7affe06"><td class="memItemLeft" align="right" valign="top"><a id="ae90c48df3eb5ffa6c6f15837b7affe06"></a>
+std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>rankedQuery</b> (std::string userQuery, <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;dIdx)</td></tr>
+<tr class="separator:ae90c48df3eb5ffa6c6f15837b7affe06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3be3c7e9115f5cf42a2d3fca6e033ab"><td class="memItemLeft" align="right" valign="top"><a id="aa3be3c7e9115f5cf42a2d3fca6e033ab"></a>
+std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>heapify</b> (std::vector&lt; <a class="el" href="structQEngine_1_1pair.html">pair</a> &gt; scores)</td></tr>
+<tr class="separator:aa3be3c7e9115f5cf42a2d3fca6e033ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6681a08e0e575c57b0b17f66e0ea9c1c"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQEngine.html#a6681a08e0e575c57b0b17f66e0ea9c1c">stemmify</a> (std::string &amp;userQuery)</td></tr>
 <tr class="separator:a6681a08e0e575c57b0b17f66e0ea9c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a871b548ccab7b83f08199e9b635276ad"><td class="memItemLeft" align="right" valign="top"><a id="a871b548ccab7b83f08199e9b635276ad"></a>
@@ -79,12 +93,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printInfixRpn</b> ()<
 <tr class="memitem:ad842a2ead8ada2895d6ae51a33a1de96"><td class="memItemLeft" align="right" valign="top"><a id="ad842a2ead8ada2895d6ae51a33a1de96"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printInfixRpn2</b> ()</td></tr>
 <tr class="separator:ad842a2ead8ada2895d6ae51a33a1de96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec64bb3a29461d25a6c303de646517e1"><td class="memItemLeft" align="right" valign="top"><a id="aec64bb3a29461d25a6c303de646517e1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>printQueryTest</b> (<a class="el" href="classInvertedIndex.html">InvertedIndex</a> *&amp;idx)</td></tr>
-<tr class="separator:aec64bb3a29461d25a6c303de646517e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0357f07e28b3aa80ca92b04917a271e2"><td class="memItemLeft" align="right" valign="top"><a id="a0357f07e28b3aa80ca92b04917a271e2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>printQueryTest2</b> (<a class="el" href="classInvertedIndex.html">InvertedIndex</a> *&amp;idx)</td></tr>
-<tr class="separator:a0357f07e28b3aa80ca92b04917a271e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6681a08e0e575c57b0b17f66e0ea9c1c"></a>
