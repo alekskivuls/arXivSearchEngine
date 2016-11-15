@@ -26,10 +26,11 @@ struct VocabEntry {
 
 class DiskInvertedIndex : public InvertedIndex {
 public:
+	static uint8_t ReadChar(std::ifstream &stream);
 	static uint32_t ReadInt(std::ifstream &stream);
+	static uint32_t ReadRawInt(std::ifstream &stream);
 	//static uint32_t ReadInt64(std::ifstream &stream);
 	static double_t ReadDouble(std::ifstream &stream);
-    static uint32_t ReadIntRaw(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
@@ -42,6 +43,8 @@ public:
 	static std::vector<VocabEntry> ReadVocabTable(const boost::filesystem::path &path);
 
 	std::vector<double_t> ReadWeights();
+
+	static std::unordered_map<uint32_t, std::string> ReadIdTableFromFile(const boost::filesystem::path &path);
 
 	VocabEntry BinarySearchVocabulary(const std::string &term) const;
 	//static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...

@@ -81,7 +81,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
-    auto idTable = std::unordered_map<uint32_t, std::string>();
+    idTable = std::unordered_map<uint32_t, std::string>();
     auto idx = InvertedIndex();
     std::unordered_map<std::string, std::string> cache;
     std::vector<std::string> mPathList;
@@ -95,7 +95,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     uint32_t i = 0;
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-
+		//ld.push_back(0.0);
         std::unordered_map<std::string, uint32_t> wdt;
 
         // reads json file into stringstream and populates a json tree
@@ -167,7 +167,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
-    Serializer::buildIndex(outDir, idx, ld);
+    Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
     dir = outDir;
 
 	// TEST PRINT READ
@@ -333,7 +333,7 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
     std::cout << dIdx.ReadVocabStringAtPosition(1) << std::endl;
 
-	KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
+    //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
 
 	/*

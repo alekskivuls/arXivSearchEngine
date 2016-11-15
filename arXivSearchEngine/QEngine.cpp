@@ -62,7 +62,7 @@ std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
 			break;
 
 		result.push_back(scores.front().docid);
-		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
+		std::cout << "MAX: docid(" << scores.front().docid <<") score(" << scores.front().score << ")" << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
 		std::pop_heap(scores.begin(), scores.end(), greatest()); scores.pop_back(); // gets top and pops from heap
 	}
 

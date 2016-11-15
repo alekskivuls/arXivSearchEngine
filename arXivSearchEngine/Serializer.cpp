@@ -5,6 +5,14 @@
 typedef double double_t;
 
 // For correcting endianness issues; you may not need these.
+inline uint8_t Reverse(uint8_t value) {
+	value = (value & 0xF0) >> 4 | (value & 0x0F) << 4;
+	value = (value & 0xCC) >> 2 | (value & 0x33) << 2;
+	value = (value & 0xAA) >> 1 | (value & 0x55) << 1;
+	return value;
+}
+
+// For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
 	return (value & 0xFF000000) >> 24 |
 		(value & 0x00FF0000) >> 8 |
@@ -31,12 +39,15 @@ inline double_t Reverse(double_t value) {
 // at this point, "index" contains the in-memory inverted index 
 // now we save the index to disk, building three files: the postings index,
 // the vocabulary list, and the vocabulary table.
-void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, const  std::vector<double_t> &weights) {
+void Serializer::buildIndex(const boost::filesystem::path &filePath, const InvertedIndex &auxIdx, 
+	const std::unordered_map<uint32_t, std::string> &idTable, const  std::vector<double_t> &weights) {
 	// do i really need an array of terms? why not just iterate the hashmap with an advanced for loop?
 	std::vector<uint32_t> vocabPositions = Serializer::buildVocab(filePath, auxIdx);
 	Serializer::buildPostings(filePath, auxIdx, vocabPositions); // build and write postings to disk
 
     Serializer::buildEucDist(filePath, weights); // build and write document length to disk
+
+	Serializer::buildIdTable(filePath, idTable);
 
 	// std::vector<uint32_t> &gramsVocab = Serializer::buildGramVocab(gram1, gram2, ...); // FOR CHERIE (merge then sort list before passing into this function?)
 	// Serializer::buildGramdex(filePath, gramsVocab, gram1, gram2, ...); // FOR CHERIE
@@ -159,4 +170,39 @@ void Serializer::buildEucDist(const boost::filesystem::path &filePath, const std
 	}
 
 	weightFile.close();
+}
+
+void Serializer::buildIdTable(const boost::filesystem::path & filePath, const std::unordered_map<uint32_t, std::string>& idTable)
+{
+	boost::filesystem::path weightbPath = filePath;
+	std::ofstream idTableFile(weightbPath.append("/idTable.bin", boost::filesystem::path::codecvt()).string(),
+		std::ios::out | std::ios::binary);
+
+	uint32_t i, size = Reverse((uint32_t)idTable.size());
+	//uint32_t i, size = (uint32_t)idTable.size(); // 
+	idTableFile.write((const char*)&size, sizeof(size)); // write to disk length of document to file
+
+
+	for (std::pair<uint32_t, std::string> pr : idTable) {
+		uint32_t id = Reverse((uint32_t) pr.first);
+		//uint32_t id = (uint32_t)pr.first;
+		idTableFile.write((const char *) &id, sizeof(id)); // write doc id to disk
+
+		uint32_t len = Reverse((uint32_t)pr.second.size());
+		//uint32_t len = (uint32_t)pr.second.size();
+
+        //std::cout << "HUE HUE IT WRITES" << std::endl;
+        //std::cout << "len (write) = " << len << std::endl;
+		idTableFile.write((const char *) &len, sizeof(len)); // write size of string to disk
+
+		//idTableFile.write(pr.second.c_str(), (sizeof(char) * pr.second.length())); // write value, string, to disk
+		for (i = 0; i < pr.second.size(); ++i) {
+			//uint8_t ch = Reverse((uint8_t)pr.second[i]);
+			uint8_t ch = (uint8_t)pr.second[i];
+
+			idTableFile.write((const char*)&ch, sizeof(ch)); // write char values, string, to disk
+		}
+	}
+
+	idTableFile.close();
 }
