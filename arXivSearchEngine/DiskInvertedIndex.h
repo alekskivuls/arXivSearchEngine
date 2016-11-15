@@ -36,6 +36,7 @@ public:
 	mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
 	//std::vector<double_t> weights;
+    std::unordered_map<uint32_t, std::string> mIdTable;
 	
 	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
 

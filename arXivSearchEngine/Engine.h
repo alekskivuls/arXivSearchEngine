@@ -31,9 +31,9 @@ class Engine {
     std::unordered_map<uint32_t, std::string> idTable;
 	std::vector<double_t> ld; // DOCUMENT ID, SCORE
 
-    KgramIndex kInd1 = KgramIndex(1);
-    KgramIndex kInd2 = KgramIndex(2);
-    KgramIndex kInd3 = KgramIndex(3);
+    KgramIndex kIdx1 = KgramIndex(1);
+    KgramIndex kIdx2 = KgramIndex(2);
+    KgramIndex kIdx3 = KgramIndex(3);
     //DiskInvertedIndex dIdx;
 
 public:
@@ -66,7 +66,9 @@ public:
 
     void loadIndex(const std::string &filepath);
 
-    std::vector<uint32_t> rank(std::string input);
+    std::vector<uint32_t> rank(std::string &query);
+
+    void printRank(std::string &query);
 
 	//void diskWriteTest(const std::string &filepath);
 

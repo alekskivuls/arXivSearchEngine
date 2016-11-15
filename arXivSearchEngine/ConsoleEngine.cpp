@@ -33,11 +33,11 @@ int main() {
     engine.loadIndex(filepath);
 
 	
-	std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
+    /*std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
 	for (auto pair : idTable) {
 		std::cout << "pair.first = " << pair.first << " ";
 		std::cout << "pair.second = " << pair.second << std::endl;
-	}
+    }*/
 
     // Main loop
     std::string input;
@@ -64,7 +64,8 @@ int main() {
             engine.loadIndex(filepath);
         }
 		else if (boost::algorithm::starts_with(input, ":rank ")) { // REMOVE THIS LATER
-			engine.rank(input.substr(6, std::string::npos));
+            std::string query = input.substr(6, std::string::npos);
+            engine.printRank(query);
 		}
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);

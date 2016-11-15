@@ -131,7 +131,6 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
             return mVocabTable[m];
         else if (comp < 0) {
             if (m == 0) {
-                std::cout << "UH OH IT GOT HERE 2!" << std::endl;
                 return VocabEntry(-1, -1);
             }
             j = m - 1;
@@ -140,8 +139,6 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
             i = m + 1;
         }
     }
-
-    std::cout << "UH OH IT GOT HERE 2!" << std::endl;
     return VocabEntry(-1, -1);;
 }
 
@@ -226,8 +223,6 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const
     VocabEntry entry = BinarySearchVocabulary(term);
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
         return ReadPostingsFromFile(mPostings, entry.PostingPosition);
-
-    std::cout << "DAMN IT! IT GOT HERE!" << std::endl;
     return std::list<DocInfo>();
 }
 

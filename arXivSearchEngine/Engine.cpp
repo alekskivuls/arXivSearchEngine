@@ -129,6 +129,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                                 ? cache[token] : PorterStemmer::stem(token);
                         idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
                         updateTf(wdt, stemmedToken);
+                        kIdx1.addTerm(token);
+                        kIdx2.addTerm(token);
+                        kIdx3.addTerm(token);
                     }
                     else {
                         std::string total = "";
@@ -139,11 +142,17 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                             updateTf(wdt, str);
 
                             total += s;
+                            kIdx1.addTerm(token);
+                            kIdx2.addTerm(token);
+                            kIdx3.addTerm(token);
                         }
                         std::string &totalToken = total;
                         //std::string &totalToken = PorterStemmer::stem(total);
                         idx.addTerm(totalToken, i, posIndex);
                         updateTf(wdt, total);
+                        kIdx1.addTerm(token);
+                        kIdx2.addTerm(token);
+                        kIdx3.addTerm(token);
                     }
 
 
@@ -175,9 +184,15 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
 	//testRead(outDir.string());
 }
 
-std::vector<uint32_t> Engine::rank(std::string input) {
+void Engine::printRank(std::string &query) {
+    auto list = rank(query);
+    for(auto element : list)
+        std::cout << element << std::endl;
+}
+
+std::vector<uint32_t> Engine::rank(std::string &query) {
 	DiskInvertedIndex dIdx(dir);
-    return queryEngine.rankedQuery(input, dIdx);
+    return queryEngine.rankedQuery(query, dIdx);
 }
 
 /*void Engine::testRead(const std::string &filepath) {
@@ -331,23 +346,21 @@ void Engine::printQuery(std::string &query) {
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
-    std::cout << dIdx.ReadVocabStringAtPosition(1) << std::endl;
 
     //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
-
-	/*
+    /*
 	std::istringstream iss(query);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
 	for (std::string &token : tokens) {
-		std::list<std::string> &candidates = KEngine::correctSpelling(token, kidx);
+        std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
 		if (candidates.size() != 1) { // mispelled
 			std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
 		}
-		//KEngine::correctSpelling
+        //KEngine::correctSpelling
 		// did you mean?
-	}*/
+    }*/
 
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;
