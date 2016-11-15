@@ -50,7 +50,7 @@ public:
     //constructor just needs the location of the files.
     KDeserializer(const boost::filesystem::path  &path);
 
-    std::list<std::string> GetTerms(const std::string &kgram) const; // std::vector<DocInfo>
+    std::list<std::string> GetTerms(std::string &kgram); // std::vector<DocInfo>
 
     void printAllTerms(KgramIndex &idx);
 };

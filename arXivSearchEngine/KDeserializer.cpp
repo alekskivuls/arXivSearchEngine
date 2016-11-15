@@ -44,8 +44,11 @@ std::vector<KgramEntry> KDeserializer::ReadKgramTable(const boost::filesystem::p
     ifstream tableFile(tablePath.append("/kgramTable.bin", boost::filesystem::path::codecvt()).string(),
         std::ios::in | std::ios::binary);
     uint32_t buffer, buffer2;
+    if (!tableFile)
+        std::cout << "Open failed? " << tablePath.string() << std::endl;
 
     tableFile.read((char *)&buffer, sizeof(buffer)); //read 32int.
+    std::cout << "buffer" << buffer << "; " << tableFile.tellg() << std::endl;
     buffer = Reverse(buffer);// UNCOMMENT FOR LINUX reverse int.
 
     int tableIndex = 0;
@@ -153,7 +156,7 @@ std::string KDeserializer::ReadKgramStringAtPosition(uint32_t index) const{
 }
 
 
-std::list<std::string> KDeserializer::GetTerms(const std::string &kgram) const{ // const icu::UnicodeString &term
+std::list<std::string> KDeserializer::GetTerms(std::string &kgram) { // const icu::UnicodeString &term
     KgramEntry entry = BinarySearchKgrams(kgram); //reyurns entree of it
     std::cout << "kgrams list here" << std::endl;
     if (entry.TermPosition != -1 && entry.KgramPosition != -1)
@@ -168,10 +171,12 @@ std::list<std::string> KDeserializer::GetTerms(const std::string &kgram) const{ 
 void KDeserializer::printAllTerms(KgramIndex &idx){
     std::cout << std::endl;
     std::cout << "PRINTING FROM FILE!" << std::endl;
-    for (const std::string &kgram : idx.getKgramList()) {
-
-        const std::list<std::string> &term = GetTerms(kgram);
-        std::cout << "did reach!" << std::endl;
+    for (std::string &kgram : idx.getKgramList()) {
+        std::cout << kgram << std::endl;
+        auto term = GetTerms(kgram);
+        for (std::string &trm : term){
+            std::cout << trm << std::endl;
+        }
         std::cout << std::endl;
     }
     std::cout << std::endl;

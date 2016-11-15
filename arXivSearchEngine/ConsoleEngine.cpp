@@ -24,6 +24,7 @@ int main() {
     //Initialize Engine
     Engine engine;
 
+
     // Set file directory
     std::string filepath;
     std::cout << "Enter directory of corpus" << std::endl;
