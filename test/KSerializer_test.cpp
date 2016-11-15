@@ -3,6 +3,7 @@
 #include <boost/filesystem.hpp>
 #include <string>
 #include "KSerializer.h"
+#include "KDeserializer.h"
 
 class KserialTest : public ::testing::Test {
 
@@ -11,11 +12,13 @@ public:
     KgramIndex index2 = KgramIndex(2);
     KgramIndex index3 = KgramIndex(3);
     std::string file;
+    KDeserializer deserial = KDeserializer("CORPUS_TEST_DIR");
 
 protected:
    virtual void SetUp() {
        //Requires CORPUS_TEST_DIR environment variable to be set
        file = std::getenv("CORPUS_TEST_DIR");
+
    }
 
    virtual void TearDown() {
@@ -38,9 +41,8 @@ TEST_F(KserialTest, serial)
     index1.addTerm(hello);
 
     KSerializer::buildIndex(dir, index1, index2, index3);
-
+    //deserial.printAllTerms(index3);
 //    std::list<std::string> res = WildEngine::potentials(wildcard, index1, index2, index3);
 //    EXPECT_EQ(res.size(), 1);
 //    std::cout << res.front() << std::endl;
-
 }

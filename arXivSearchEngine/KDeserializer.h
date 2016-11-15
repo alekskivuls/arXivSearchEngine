@@ -25,10 +25,12 @@ struct KgramEntry {
 /**
  * This class serializes the KgramIndex; writing it to disk.
  */
-class KDeserializer : public KgramIndex {
+class KDeserializer {
 public:
+    static std::string ReadTerm(std::ifstream &terms, uint32_t lastTermloc); // implement this after i fix the read method...
+    //may not even need above method.
+
     static uint32_t ReadInt(std::ifstream &stream);
-    //static uint32_t ReadInt64(std::ifstream &stream);
 
     boost::filesystem::path mPath;
     mutable std::ifstream mKgramList;
@@ -41,8 +43,7 @@ public:
     static std::vector<KgramEntry> ReadKgramTable(const boost::filesystem::path &path);
 
     KgramEntry BinarySearchKgrams(const std::string &kgram) const;
-    static std::string ReadTerm(std::ifstream &terms, uint32_t lastTermloc); // implement this after i fix the read method...
-    //may not even need above method.
+
 
     std::string ReadKgramStringAtPosition(uint32_t index) const;
 
@@ -51,7 +52,7 @@ public:
 
     std::list<std::string> GetTerms(const std::string &kgram) const; // std::vector<DocInfo>
 
-    void printAllTerms(const KgramIndex &idx);
+    void printAllTerms(KgramIndex &idx);
 };
 
 #endif

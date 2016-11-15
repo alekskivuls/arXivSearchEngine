@@ -10,16 +10,16 @@ inline uint32_t Reverse(uint32_t value) {
         (value & 0x000000FF) << 24;
 }
 
-inline uint64_t Reverse(uint64_t value) {
-    return (value & 0xFF00000000000000) >> 56 |
-        (value & 0x00FF000000000000) >> 40 |
-        (value & 0x0000FF0000000000) >> 24 |
-        (value & 0x000000FF00000000) >> 8 |
-        (value & 0x00000000FF000000) << 8 |
-        (value & 0x0000000000FF0000) << 24 |
-        (value & 0x000000000000FF00) << 40 |
-        (value & 0x00000000000000FF) << 56;
-}
+//inline uint64_t Reverse(uint64_t value) {
+//    return (value & 0xFF00000000000000) >> 56 |
+//        (value & 0x00FF000000000000) >> 40 |
+//        (value & 0x0000FF0000000000) >> 24 |
+//        (value & 0x000000FF00000000) >> 8 |
+//        (value & 0x00000000FF000000) << 8 |
+//        (value & 0x0000000000FF0000) << 24 |
+//        (value & 0x000000000000FF00) << 40 |
+//        (value & 0x00000000000000FF) << 56;
+//}
 
 /**
  * This method is to build the file to store all of the kgrams to term pairings.
@@ -30,41 +30,29 @@ inline uint64_t Reverse(uint64_t value) {
  */
 void KSerializer::buildIndex(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3){
     std::vector<uint32_t> kgramPositions = KSerializer::buildKgrams(filePath, auxIdx1, auxIdx2, auxIdx3); //returns the vector<int>
+    for (auto thing : kgramPositions) {
+        std::cout << thing << std::endl;
+    }
     //vector<int> is just like another int[]... but by reference?
     std::cout << "finished buildkgrams, into buildterms" << std::endl;
     KSerializer::buildTerms(filePath, auxIdx1, auxIdx2, auxIdx3, kgramPositions); //builds kgram table here
 }
 
-//used by build terms
-//should first print out number of terms with terms preceeding.
+/**
+ * @brief KSerializer::WriteTerms : This method writes the terms to the termsFile.
+ * @param termsFile : the outputfile stream of where you will write to.
+ * @param terms : the list of strings you wish to store on disk.
+ *
+ * Terms file is stored like so: #terms, #chars in term1, term1...
+ */
 void KSerializer::WriteTerms(std::ofstream &termsFile, const std::list<std::string> &terms) {
-    size_t termCt = (uint32_t) Reverse(terms.size());
+    uint32_t termCt = Reverse((uint32_t)terms.size());
     termsFile.write((char*)&termCt, sizeof(termCt)); //writing number of terms.
 
-    //now i just want to write to terms.
-//    uint32_t lastTerm = termsFile.tellp();
     for (auto &currTerm : terms) {
-        // write document ID gap.
-        // Uses Reverse to fix endianness issues on Windows. If not building on Windows, you may
-        // want to remove the Reverse calls.
-//        uint32_t TerAdGap = Reverse(termsFile.tellp() - lastTerm);
-//        termsFile.write((const char*)&TerAdGap, sizeof(TerAdGap)); // variable byte encode this
-
-        termsFile.write(currTerm.c_str(), (sizeof(char) * currTerm.length())); //writing null term string.
-//        //i dont have positions...
-//        size_t positionSize = (uint32_t)Reverse(currDoc.getPositions().size());
-//        termsFile.write((const char*)&positionSize, sizeof(positionSize)); // write to disk size of position list
-
-//        uint32_t lastPosGap = 0;
-//        for (const uint32_t &pos : currDoc.getPositions()) {
-//            uint32_t posGap = Reverse(pos - lastPosGap);
-//            termsFile.write((const char*)&posGap, sizeof(posGap));
-//            lastPosGap = pos;
-//        }
-
-//        lastTerm = (uint32_t)(currTerm.size() * sizeof(char)); //use this tellp instead of docid? can i?
-        //where the term started.
-        //dont want to close because of main one.
+        uint32_t termSz = Reverse((uint32_t)currTerm.size());
+        termsFile.write((char*)&termSz, sizeof(termSz));
+        termsFile.write(currTerm.c_str(), (sizeof(char) * currTerm.size())); //writing null term string.
     }
 }
 

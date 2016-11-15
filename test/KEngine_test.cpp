@@ -26,9 +26,9 @@ TEST_F(KengineTest, kgram_getgrams3)
     std::string hillo = std::string("hillo");
     KEngine::jaccard(hello, hillo, 3); //bigger kgram less accurate.
     EXPECT_EQ(KEngine::jaccard(jello, hillo, 3), 0.25);
-    std::list<std::string> res = KEngine::correctSpelling(hillo, index3);
+    std::list<std::string> res = KEngine::correctSpelling(jello, index3);
     EXPECT_EQ(res.size(), 1); //they are different
-    EXPECT_EQ(res.front(), hello);
+    EXPECT_EQ(res.front(), jello);
 }
 
 //Document feq to break tie; implement that logic in engine main.

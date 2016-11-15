@@ -21,7 +21,7 @@ struct VocabEntry {
 };
 
 
-class DiskInvertedIndex : public InvertedIndex {
+class DiskInvertedIndex /*: public InvertedIndex*/ {
 public:
 	static uint32_t ReadInt(std::ifstream &stream);
 	//static uint32_t ReadInt64(std::ifstream &stream);
