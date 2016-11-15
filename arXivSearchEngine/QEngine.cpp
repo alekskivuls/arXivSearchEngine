@@ -55,14 +55,14 @@ std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
 	std::make_heap(scores.begin(), scores.end(), greatest());
 
 	std::vector<uint32_t> result;
-    int numResults = scores.size() < 10 ? scores.size() : 10;
     result.reserve(10);
     uint32_t i;
-    for (i = 0; i < numResults; ++i) {
+    for (i = 0; i < 10; ++i) {
+		if (scores.front().score == 0) // max score is 0
+			break;
+
 		result.push_back(scores.front().docid);
-
 		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
-
 		std::pop_heap(scores.begin(), scores.end(), greatest()); scores.pop_back(); // gets top and pops from heap
 	}
 
