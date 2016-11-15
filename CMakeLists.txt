@@ -37,6 +37,8 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 
 #C++11 flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0") # debug, no optimisation
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage") # enabling coverage
 
 find_package(Threads REQUIRED)
 #---------

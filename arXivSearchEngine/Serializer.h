@@ -7,6 +7,8 @@
 #include <fstream>
 #include <vector>
 
+typedef double double_t;
+
 // does not need to be an object. This should be a utility class 
 // that is resposible for serializing and nothing else.
 class Serializer { 
