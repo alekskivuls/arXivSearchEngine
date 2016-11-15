@@ -60,7 +60,6 @@ std::vector<std::string> split(std::string token) {
 }
 
 void Engine::updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string &term) {
-	std::cout << "SHIT STICK" << std::endl;
     if (wdt.find(term) == wdt.end())
         wdt[term] = 1;
     else
@@ -117,7 +116,6 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                 std::string input = pair.second.get_value<std::string>();
                 std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
-
                 Tokenizer tkzr(input);
                 std::string token;
                 token.reserve(200);
@@ -130,7 +128,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                         std::string stemmedToken = (cache.find(token) != cache.end())
                                 ? cache[token] : PorterStemmer::stem(token);
                         idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
-						updateTf(wdt, stemmedToken);
+                        updateTf(wdt, stemmedToken);
                     }
                     else {
                         std::string total = "";
@@ -145,17 +143,18 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                         std::string &totalToken = total;
                         //std::string &totalToken = PorterStemmer::stem(total);
                         idx.addTerm(totalToken, i, posIndex);
-						updateTf(wdt, total);
+                        updateTf(wdt, total);
                     }
+
 
                     posIndex++;
                 }
             }
         }
-		std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
+        /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
 		for (auto pr : wdt) {
 			std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
-		}
+        }*/
 		ld.push_back(calcEucDist(wdt));
 		wdt = std::unordered_map<std::string, uint32_t>();
     }

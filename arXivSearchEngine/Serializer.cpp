@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <iostream>
 
+typedef double double_t;
+
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
 	return (value & 0xFF000000) >> 24 |
@@ -147,7 +149,7 @@ void Serializer::buildEucDist(const boost::filesystem::path &filePath, const std
 	std::ofstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
 		std::ios::out | std::ios::binary);
 
-	uint32_t size = Reverse(weights.size());
+    uint32_t size = Reverse((uint32_t)weights.size());
 	weightFile.write((const char*)&size, sizeof(size)); // write to disk length of document to file
 
 	for (const double_t &dist : weights) {

@@ -55,10 +55,10 @@ std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
 	std::make_heap(scores.begin(), scores.end(), doc_score_greater_than());
 
 	std::vector<uint32_t> result;
-	result.reserve(10);
-
-	uint32_t i;
-	for (i = 0; i < 10; ++i) {
+    int numResults = scores.size() < 10 ? scores.size() : 10;
+    result.reserve(10);
+    uint32_t i;
+    for (i = 0; i < numResults; ++i) {
 		result[i] = scores.front().docid;
 
 		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)

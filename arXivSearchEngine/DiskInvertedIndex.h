@@ -27,6 +27,7 @@ public:
 	static uint32_t ReadInt(std::ifstream &stream);
 	//static uint32_t ReadInt64(std::ifstream &stream);
 	static double_t ReadDouble(std::ifstream &stream);
+    static uint32_t ReadIntRaw(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
