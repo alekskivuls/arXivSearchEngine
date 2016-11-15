@@ -31,6 +31,13 @@ int main() {
     std::getline(std::cin, filepath);
     engine.loadIndex(filepath);
 
+	
+	std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
+	for (auto pair : idTable) {
+		std::cout << "pair.first = " << pair.first << " ";
+		std::cout << "pair.second = " << pair.second << std::endl;
+	}
+
     // Main loop
     std::string input;
     while (true) {

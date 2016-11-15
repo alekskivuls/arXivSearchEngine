@@ -5,15 +5,29 @@
 using std::ifstream;
 namespace fs = boost::filesystem;
 
+extern uint8_t Reverse(uint8_t);
 extern uint32_t Reverse(uint32_t);
 extern uint64_t Reverse(uint64_t);
 extern double_t Reverse(double_t);
 
+uint8_t DiskInvertedIndex::ReadChar(std::ifstream &stream) {
+	uint8_t value = 0;
+	stream.read((char*)&value, sizeof(value));
+	//return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	return value; // UNCOMMENT FOR WINDDOWS
+}
 
 uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
 	uint32_t value = 0;
 	stream.read((char*)&value, sizeof(value));
 	return Reverse(value); // UNCOMMENT FOR WINDDOWS
+}
+
+uint32_t DiskInvertedIndex::ReadRawInt(std::ifstream &stream) {
+	uint32_t value = 0;
+	stream.read((char*)&value, sizeof(value));
+	return Reverse(value); // UNCOMMENT FOR WINDDOWS
+	return value; // UNCOMMENT FOR WINDDOWS
 }
 
 double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
@@ -70,6 +84,47 @@ std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path)
     //std::cout << "Vocab table size: " << vocabTable.size() << std::endl;
 
 	return vocabTable;
+}
+
+std::unordered_map<uint32_t, std::string> DiskInvertedIndex::ReadIdTableFromFile(const boost::filesystem::path &path) {
+	fs::path idTablePath = path;
+
+	ifstream idTableFile(idTablePath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
+		std::ios::in | std::ios::binary);
+	idTableFile.close();
+	idTableFile.open(idTablePath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
+		std::ios::in | std::ios::binary);
+
+	std::cout << "YAY IT GOT HERE!" << std::endl;
+
+	uint32_t i, j, size = ReadInt(idTableFile);
+	std::cout << "size = " << size << std::endl;
+	std::unordered_map<uint32_t, std::string> idTable;
+	for (i = 0; i < size; ++i) {
+		std::cout << i << std::endl;
+		uint32_t id = ReadInt(idTableFile);
+		uint32_t len = ReadInt(idTableFile);
+
+		std::cout << "YAY IT GOT HERE!!" << std::endl;
+
+		std::string value = "";
+		std::cout << "len = " << len << std::endl;
+		for (j = 0; j < len; ++j) {
+			//std::cout << "Fuck..." << std::endl;
+			uint8_t ch = ReadChar(idTableFile);
+			idTableFile.read((char*)&ch, sizeof(ch));
+
+			value += (unsigned char) ch;
+		}
+
+		std::cout << "YAY IT GOT HERE!!!" << std::endl;
+
+		idTable[id] = value;
+	}
+
+	std::cout << "YAY IT GOT HERE!!!!!" << std::endl;
+
+	return idTable;
 }
 
 VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) const { // const icu::UnicodeString &term
