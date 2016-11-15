@@ -66,7 +66,7 @@ public:
 
     void loadIndex(const std::string &filepath);
 
-	void rank(std::string input);
+    std::vector<uint32_t> rank(std::string input);
 
 	//void diskWriteTest(const std::string &filepath);
 

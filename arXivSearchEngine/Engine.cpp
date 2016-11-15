@@ -175,9 +175,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
 	//testRead(outDir.string());
 }
 
-void Engine::rank(std::string input) {
+std::vector<uint32_t> Engine::rank(std::string input) {
 	DiskInvertedIndex dIdx(dir);
-	queryEngine.rankedQuery(input, dIdx);
+    return queryEngine.rankedQuery(input, dIdx);
 }
 
 /*void Engine::testRead(const std::string &filepath) {

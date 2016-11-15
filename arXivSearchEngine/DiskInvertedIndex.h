@@ -12,6 +12,8 @@
 #include <vector> // argue with Neal about this..?
 
 
+typedef double double_t;
+
 struct VocabEntry {
 	uint32_t StringPosition;
 	uint32_t PostingPosition;
