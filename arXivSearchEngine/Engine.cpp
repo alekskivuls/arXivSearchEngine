@@ -333,7 +333,7 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
     std::cout << dIdx.ReadVocabStringAtPosition(1) << std::endl;
 
-	KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
+    //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
 
 	/*
