@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['editdistdp',['editDistDP',['../classKEngine.html#a6d439510a2ff687f9e4b875b22f955ca',1,'KEngine']]],
-  ['engine',['Engine',['../classEngine.html',1,'']]]
+  ['diskinvertedindex',['DiskInvertedIndex',['../classDiskInvertedIndex.html',1,'']]],
+  ['docinfo',['DocInfo',['../classDocInfo.html',1,'']]]
 ];

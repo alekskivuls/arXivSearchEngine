@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['compressor',['Compressor',['../classCompressor.html',1,'']]],
-  ['correctspelling',['correctSpelling',['../classKEngine.html#ae31417ec11fa03414dcde069699bd2f5',1,'KEngine']]]
+  ['buildindex',['buildIndex',['../classKSerializer.html#ace0acb182afb0275e750beb55a9f7c72',1,'KSerializer']]]
 ];

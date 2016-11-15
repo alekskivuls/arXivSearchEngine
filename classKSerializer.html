@@ -70,23 +70,120 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e7308581b1e560e226a7f9de8e1a41b"><td class="memItemLeft" align="right" valign="top"><a id="a9e7308581b1e560e226a7f9de8e1a41b"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx)</td></tr>
-<tr class="separator:a9e7308581b1e560e226a7f9de8e1a41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdf35067155115e31811534ff27fdadf"><td class="memItemLeft" align="right" valign="top"><a id="acdf35067155115e31811534ff27fdadf"></a>
-static std::vector&lt; uint64_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildKgrams</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx)</td></tr>
-<tr class="separator:acdf35067155115e31811534ff27fdadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab0d8a000c7e5deceef799894a956003"><td class="memItemLeft" align="right" valign="top"><a id="aab0d8a000c7e5deceef799894a956003"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx, const std::vector&lt; uint64_t &gt; &amp;vocabPositions)</td></tr>
-<tr class="separator:aab0d8a000c7e5deceef799894a956003"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26b4b0aeb2c0a9ac13e570e94bd722fa"><td class="memItemLeft" align="right" valign="top"><a id="a26b4b0aeb2c0a9ac13e570e94bd722fa"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteTerms</b> (std::ofstream &amp;kgramsFile, const std::list&lt; std::string &gt; &amp;terms)</td></tr>
-<tr class="separator:a26b4b0aeb2c0a9ac13e570e94bd722fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace0acb182afb0275e750beb55a9f7c72"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKSerializer.html#ace0acb182afb0275e750beb55a9f7c72">buildIndex</a> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
+<tr class="separator:ace0acb182afb0275e750beb55a9f7c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84eec9c82bc57b205e46c1c51a83966c"><td class="memItemLeft" align="right" valign="top"><a id="a84eec9c82bc57b205e46c1c51a83966c"></a>
+static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildKgrams</b> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
+<tr class="separator:a84eec9c82bc57b205e46c1c51a83966c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7529d4b1246d796141a2ff6a2aa8e20d"><td class="memItemLeft" align="right" valign="top"><a id="a7529d4b1246d796141a2ff6a2aa8e20d"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3, std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
+<tr class="separator:a7529d4b1246d796141a2ff6a2aa8e20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b529b5bd8fa9f5a7d9150f6a8906235"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKSerializer.html#a0b529b5bd8fa9f5a7d9150f6a8906235">WriteTerms</a> (std::ofstream &amp;kgramsFile, const std::list&lt; std::string &gt; &amp;terms)</td></tr>
+<tr class="memdesc:a0b529b5bd8fa9f5a7d9150f6a8906235"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classKSerializer.html#a0b529b5bd8fa9f5a7d9150f6a8906235" title="KSerializer::WriteTerms : This method writes the terms to the termsFile. ">KSerializer::WriteTerms</a> : This method writes the terms to the termsFile.  <a href="#a0b529b5bd8fa9f5a7d9150f6a8906235">More...</a><br /></td></tr>
+<tr class="separator:a0b529b5bd8fa9f5a7d9150f6a8906235"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class serializes the <a class="el" href="classKgramIndex.html">KgramIndex</a>; writing it to disk. </p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ace0acb182afb0275e750beb55a9f7c72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace0acb182afb0275e750beb55a9f7c72">&sect;&nbsp;</a></span>buildIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KSerializer::buildIndex </td>
+          <td>(</td>
+          <td class="paramtype">boost::filesystem::path &amp;&#160;</td>
+          <td class="paramname"><em>filePath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>auxIdx1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>auxIdx2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;&#160;</td>
+          <td class="paramname"><em>auxIdx3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method is to build the file to store all of the kgrams to term pairings. It works like an index and maps a token from Kgrams file made by buildKgrams to a terms file made by buildTerms.</p>
+<p>Calls build </p>
+
+</div>
+</div>
+<a id="a0b529b5bd8fa9f5a7d9150f6a8906235"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b529b5bd8fa9f5a7d9150f6a8906235">&sect;&nbsp;</a></span>WriteTerms()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void KSerializer::WriteTerms </td>
+          <td>(</td>
+          <td class="paramtype">std::ofstream &amp;&#160;</td>
+          <td class="paramname"><em>termsFile</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>terms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classKSerializer.html#a0b529b5bd8fa9f5a7d9150f6a8906235" title="KSerializer::WriteTerms : This method writes the terms to the termsFile. ">KSerializer::WriteTerms</a> : This method writes the terms to the termsFile. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">termsFile</td><td>: the outputfile stream of where you will write to. </td></tr>
+    <tr><td class="paramname">terms</td><td>: the list of strings you wish to store on disk.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Terms file is stored like so: #terms, #chars in term1, term1... </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>arXivSearchEngine/<a class="el" href="KSerializer_8h_source.html">KSerializer.h</a></li>
+<li>arXivSearchEngine/KSerializer.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

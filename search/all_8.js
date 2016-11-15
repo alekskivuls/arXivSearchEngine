@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['kengine',['KEngine',['../classKEngine.html',1,'']]],
-  ['kgramindex',['KgramIndex',['../classKgramIndex.html',1,'KgramIndex'],['../classKgramIndex.html#a0669ed0d06208bb68131fb75afff5e84',1,'KgramIndex::KgramIndex()']]],
-  ['kserializer',['KSerializer',['../classKSerializer.html',1,'']]]
+  ['jaccard',['jaccard',['../classKEngine.html#a8ba8ab7ffa31d6cc6a9bf8d5fc3c6b11',1,'KEngine']]]
 ];

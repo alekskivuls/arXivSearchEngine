@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['tokenizer',['Tokenizer',['../classTokenizer.html#a93dd44e5e9e12e2eb89442c1c4c0ebd7',1,'Tokenizer::Tokenizer(const boost::filesystem::path &amp;p)'],['../classTokenizer.html#a413f57e53616e0a229c9144c30883e3b',1,'Tokenizer::Tokenizer(const std::string &amp;s)']]]
+  ['stem',['stem',['../classPorterStemmer.html#a44ef5febb1477c81cea4e729466a5b89',1,'PorterStemmer']]],
+  ['stemmify',['stemmify',['../classQEngine.html#a6681a08e0e575c57b0b17f66e0ea9c1c',1,'QEngine']]]
 ];

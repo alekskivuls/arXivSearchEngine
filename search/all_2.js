@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['diskinvertedindex',['DiskInvertedIndex',['../classDiskInvertedIndex.html',1,'']]],
-  ['docinfo',['DocInfo',['../classDocInfo.html',1,'']]]
+  ['compressor',['Compressor',['../classCompressor.html',1,'']]],
+  ['correctspelling',['correctSpelling',['../classKEngine.html#ae31417ec11fa03414dcde069699bd2f5',1,'KEngine']]]
 ];
