@@ -335,6 +335,8 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 
 	KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
+
+	/*
 	std::istringstream iss(query);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
@@ -345,7 +347,7 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 		}
 		//KEngine::correctSpelling
 		// did you mean?
-	}
+	}*/
 
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;

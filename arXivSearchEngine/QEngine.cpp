@@ -41,7 +41,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
 
 			double_t Ad = wqt * wdt;
-			if (Ad != 0) scores[doc.getDocId()].score += (Ad / weights[doc.getDocId()]);
+			if (Ad != 0) scores[doc.getDocId()-1].score += (Ad / weights[doc.getDocId()-1]);
 		}
 	}
 
@@ -52,18 +52,18 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 }
 
 std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
-	std::make_heap(scores.begin(), scores.end(), doc_score_greater_than());
+	std::make_heap(scores.begin(), scores.end(), greatest());
 
 	std::vector<uint32_t> result;
     int numResults = scores.size() < 10 ? scores.size() : 10;
     result.reserve(10);
     uint32_t i;
     for (i = 0; i < numResults; ++i) {
-		result[i] = scores.front().docid;
+		result.push_back(scores.front().docid);
 
 		std::cout << "MAX = " << scores.front().score << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
 
-		std::pop_heap(scores.begin(), scores.end(), doc_score_greater_than()); scores.pop_back(); // gets top and pops from heap
+		std::pop_heap(scores.begin(), scores.end(), greatest()); scores.pop_back(); // gets top and pops from heap
 	}
 
 	return result;

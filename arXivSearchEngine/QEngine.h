@@ -45,13 +45,13 @@ public:
 		double_t score;
 	};
 
-	struct doc_score_greater_than {
+	struct greatest {
 		/*bool operator()(doc const& a, doc const& b) const {
 			return a.rank > b.rank;
 		}*/
 
 		bool operator()(const pair& l, const pair& r) const {
-			return l.score > r.score;
+			return l.score < r.score;
 		}
 	};
 
