@@ -6,7 +6,7 @@ class EngineTest : public ::testing::Test {
 protected:
     virtual void SetUp() {
         //Requires CORPUS_TEST_DIR environment variable to be set
-        engine.index(std::getenv("CORPUS_TEST_DIR"));
+        engine.createIndex(std::getenv("CORPUS_TEST_DIR"));
     }
 
     virtual void TearDown() {

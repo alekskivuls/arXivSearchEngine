@@ -17,20 +17,24 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <cmath>
 #include <list>
 
 #include "KEngine.h"
 #include "KgramIndex.h"
-
+#include "DiskInvertedIndex.h"
 
 class Engine {
-	boost::filesystem::path dir;
+    boost::filesystem::path dir;
 	InvertedIndex idx;
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
+	std::vector<double_t> ld; // DOCUMENT ID, SCORE
+
     KgramIndex kInd1 = KgramIndex(1);
     KgramIndex kInd2 = KgramIndex(2);
     KgramIndex kInd3 = KgramIndex(3);
+    //DiskInvertedIndex dIdx;
 
 public:
 	Engine();
@@ -41,8 +45,9 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-	void populateIndex(const boost::filesystem::path &dir, InvertedIndex &idx,
-		std::unordered_map<uint32_t, std::string> &idTable);
+    void populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
+
+	void populateEucDist();
 
 	/**
 	* This method goes to a path and walks through the directory searching for all files that end
@@ -51,9 +56,21 @@ public:
 	*/
 	void getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList);
 
+    void updateTf(std::unordered_map<std::string, uint32_t> &wdt, const std::string & term);
+
+	double_t calcEucDist(std::unordered_map<std::string, uint32_t>& wdt);
+
 	void index(const std::string &filepath);
 
-	void diskWriteTest(const std::string &filepath);
+    void createIndex(const std::string &filepath);
+
+    void loadIndex(const std::string &filepath);
+
+    std::vector<uint32_t> rank(std::string input);
+
+	//void diskWriteTest(const std::string &filepath);
+
+	//void testRead(const std::string &filepath);
 
 	void printVocab();
 

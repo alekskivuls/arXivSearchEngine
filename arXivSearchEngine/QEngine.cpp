@@ -1,6 +1,7 @@
 #include "QEngine.h"
 #include "PorterStemmer.h"
 #include <sstream>
+#include <iterator>
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -9,6 +10,64 @@
 
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
+
+std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
+	std::istringstream iss(userQuery);
+	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
+		std::istream_iterator<std::string>{} };
+
+	uint32_t size = dIdx.getN();
+    const std::vector<double_t> &weights = dIdx.ReadWeights();
+
+	std::vector<pair> scores;
+	scores.reserve(size);
+	uint32_t i;
+	for (i = 0; i < size; ++i) 
+		scores.push_back(pair(i, 0.0)); // <-- Acc is score value
+
+	i = 0;
+	// I DID NOT SUM ACCUMULATOR YET
+	for (std::string token : tokens) {
+		std::string stemmedToken = PorterStemmer::stem(token);
+        const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
+
+		double_t df = (double_t)docList.size();
+		double_t wqt = (df == 0.0) ? 0 : log(1.0 + (size / df)); // WQT
+
+
+		// FOR EACH TERM... CALC SCORES FOR ALL DOCS
+		for (const DocInfo &doc : docList) {
+			double_t tf =  doc.getPositions().size();
+			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
+
+			double_t Ad = wqt * wdt;
+			if (Ad != 0) scores[doc.getDocId()-1].score += (Ad / weights[doc.getDocId()-1]);
+		}
+	}
+
+	// SORT AND THEN RETURN TOP 10
+	std::vector<uint32_t> result = heapify(scores);
+
+	return result;
+}
+
+std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
+	std::make_heap(scores.begin(), scores.end(), greatest());
+
+	std::vector<uint32_t> result;
+    result.reserve(10);
+    uint32_t i;
+    for (i = 0; i < 10; ++i) {
+		if (scores.front().score == 0) // max score is 0
+			break;
+
+		result.push_back(scores.front().docid);
+		std::cout << "MAX: docid(" << scores.front().docid <<") score(" << scores.front().score << ")" << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
+		std::pop_heap(scores.begin(), scores.end(), greatest()); scores.pop_back(); // gets top and pops from heap
+	}
+
+	return result;
+}
 
 /*
  * Takes a stemmed string query in inverse notation and parses it into a list formatted in RPN. 
@@ -166,15 +225,15 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &idx) {
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedIndex &dIdx) {
 	std::list<std::string> infix = stemmify(userQuery);
 
 	if (infix.size() == 0) {
-		return idx.getPostings("");
+        return dIdx.GetPostings("");
 	}
 
 	if (infix.size() == 1) {
-		for (auto d : idx.getPostings(infix.front())) {
+        for (auto d : dIdx.GetPostings(infix.front())) {
 			std::cout << d.getDocId() << ":\n";
 			for (auto i : d.getPositions()) {
 				std::cout << i << " ";
@@ -182,7 +241,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &
 			std::cout << "\n";
 		}
 		std::cout << "\n";
-		return idx.getPostings(infix.front());
+        return dIdx.GetPostings(infix.front());
 	}
 
 	std::list<std::string> rpnQuery = infixToRPN(infix);
@@ -216,7 +275,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, InvertedIndex &
 				//result.push(XOR(left, right));
 		}
 		else 
-			result.push(idx.getPostings(token));
+			result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
 	}
 	return result.top();
 }
@@ -351,7 +410,7 @@ std::list<DocInfo> QEngine::PHRASE(std::list<DocInfo> &left, std::list<DocInfo> 
 	
 	return result;
 }
-
+/*
 // Query Test 2
 void QEngine::printQueryTest2(InvertedIndex *& idx) {
 	idx->addTerm("Hello", (uint32_t)1, 1);
@@ -377,8 +436,9 @@ void QEngine::printQueryTest2(InvertedIndex *& idx) {
 			std::cout << i << " ";
 		std::cout << '\n';
 	}*/
-}
+//}*/
 
+/*
 // Query Test 1
 void QEngine::printQueryTest(InvertedIndex *& idx) {
 	std::list<DocInfo> left = idx->getPostings("Hello");
@@ -418,7 +478,7 @@ void QEngine::printQueryTest(InvertedIndex *& idx) {
 	std::cout << '\n';
 
 	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
-}
+}*/
 
 // Infix, rpn test 1
 void QEngine::printInfixRpn() {

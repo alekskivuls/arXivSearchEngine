@@ -1,7 +1,10 @@
 #ifndef QUERY_LANGUAGE_H
 #define QUERY_LANGUAGE_H
 
-#include "InvertedIndex.h"
+#include "DiskInvertedIndex.h"
+#include "PorterStemmer.h"
+#include "KEngine.h"
+#include <cmath>
 #include <stack>
 #include <vector>
 
@@ -28,9 +31,38 @@ class QEngine {
 	std::list<DocInfo> PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist);
 
 public:
+
+	struct pair {
+		pair() {}
+		explicit pair(const uint32_t &first, const double_t &second)
+			: docid(first), score(second) { }
+
+		/*int operator()(const pair& other) const { 
+			return score > other.score;
+		}*/
+
+		uint32_t docid;
+		double_t score;
+	};
+
+	struct greatest {
+		/*bool operator()(doc const& a, doc const& b) const {
+			return a.rank > b.rank;
+		}*/
+
+		bool operator()(const pair& l, const pair& r) const {
+			return l.score < r.score;
+		}
+	};
+
+
 	QEngine();
 
-	std::list<DocInfo> processQuery(std::string &userQuery, InvertedIndex &idx);
+    std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex &dIdx);
+
+	std::vector<uint32_t> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
+
+    std::vector<uint32_t> heapify(std::vector<pair> scores);
 
 	/** Takes a std::string query, stems each token in the query, and returns a list 
 	 * of stemmed tokens and operators in inverse notation. */
@@ -40,8 +72,8 @@ public:
 	void printInfixRpn();
 	void printInfixRpn2();
 	
-	void printQueryTest(InvertedIndex *& idx);
-	void printQueryTest2(InvertedIndex *& idx);
+    //void printQueryTest(InvertedIndex *& idx);
+    //void printQueryTest2(InvertedIndex *& idx);
 };
 
 #endif

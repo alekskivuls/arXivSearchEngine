@@ -30,9 +30,11 @@ private:
   WLabel *numResults_;
   WTextArea *result_;
 
+  void load();
   void index();
-  void stem();
   void search();
+  void rank();
+  void stem();
 };
 
 /*
@@ -44,27 +46,27 @@ private:
 WTApplication::WTApplication(const WEnvironment& env)
   : WApplication(env)
 {
-  setTitle("arXivSearchEngine");                         // application title
+  setTitle("arXivSearchEngine");                                    // application title
 
   root()->addWidget(new WText("Filepath: "));
   indexPath_ = new WLineEdit(root());
   indexPath_->setTextSize(100);
   indexPath_->setFocus();
-  WPushButton *indexButton
-    = new WPushButton("Index", root());                   // create a button
-  indexButton->setMargin(5, Left);                            // add 5 pixels margin
+  WPushButton *loadButton = new WPushButton("Load", root());                   // create a button
+  loadButton->setMargin(5, Left);
+  WPushButton *indexButton = new WPushButton("Index", root());                   // create a button
+  indexButton->setMargin(5, Left);                                  // add 5 pixels margin
   root()->addWidget(new WBreak());
 
-  root()->addWidget(new WText("Query: "));               // show some text
-  searchBox_ = new WLineEdit(root());                    // allow text input
+  root()->addWidget(new WText("Query: "));                          // show some text
+  searchBox_ = new WLineEdit(root());                               // allow text input
 
-  WPushButton *stemButton
-    = new WPushButton("Stem", root());                   // create a button
-  stemButton->setMargin(5, Left);                            // add 5 pixels margin
-
-  WPushButton *searchButton
-    = new WPushButton("Search", root());                   // create a button
-  searchButton->setMargin(5);                            // add 5 pixels margin
+  WPushButton *searchButton = new WPushButton("Search", root());                   // create a button
+  searchButton->setMargin(5);                                       // add 5 pixels margin
+  WPushButton *rankButton = new WPushButton("Rank", root());                   // create a button
+  rankButton->setMargin(5, Left);                                    // add 5 pixels margin
+  WPushButton *stemButton = new WPushButton("Stem", root());                   // create a button
+  stemButton->setMargin(5, Left);                                    // add 5 pixels margin
   root()->addWidget(new WText("Num Results: "));
   numResults_ = new WLabel(root());
 
@@ -79,9 +81,11 @@ WTApplication::WTApplication(const WEnvironment& env)
    *
    * - simple Wt-way
    */
+  loadButton->clicked().connect(this, &WTApplication::load);
   indexButton->clicked().connect(this, &WTApplication::index);
-  stemButton->clicked().connect(this, &WTApplication::stem);
   searchButton->clicked().connect(this, &WTApplication::search);
+  rankButton->clicked().connect(this, &WTApplication::rank);
+  stemButton->clicked().connect(this, &WTApplication::stem);
 
   /*
    * - using an arbitrary function object (binding values with boost::bind())
@@ -90,12 +94,21 @@ WTApplication::WTApplication(const WEnvironment& env)
     (boost::bind(&WTApplication::stem, this));
 }
 
+void WTApplication::load()
+{
+  /*
+   * Load the index from spcified file
+   */
+  engine.loadIndex(indexPath_->text().toUTF8());
+  result_->setText("Index loaded");
+}
+
 void WTApplication::index()
 {
   /*
    * Update the text, using text input into the stemResult_ field.
    */
-  engine.index(indexPath_->text().toUTF8());
+  engine.createIndex(indexPath_->text().toUTF8());
   result_->setText("Indexing completed");
   //std::string vocabSize = std::to_string(engine.getVocab().size());
   numResults_->setText(std::to_string(engine.getVocab().size()));
@@ -121,6 +134,23 @@ void WTApplication::search()
   //  vocabList += term + "\n";
   std::string query = searchBox_->text().toUTF8();
   std::vector<std::string> output = engine.getQuery(query);
+
+  std::string queryResult = "";
+  for (auto di : output)
+      queryResult += di + '\t';
+  queryResult += '\n' + output.size() + '\n';
+  result_->setText("Results: \n" + queryResult);
+  numResults_->setText(std::to_string(output.size()));
+}
+
+
+void WTApplication::rank()
+{
+  /*
+   * Update the text, using text input into the stemResult_ field.
+   */
+  std::string query = searchBox_->text().toUTF8();
+  std::vector<uint32_t> output = engine.rank(query);
 
   std::string queryResult = "";
   for (auto di : output)

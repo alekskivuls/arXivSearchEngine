@@ -6,7 +6,7 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "Engine.h"
 
-void pktest() {
+/*void pktest() {
     // Paul's test code. just ignore it.
     //Initialize Engine
     Engine engine;
@@ -16,11 +16,12 @@ void pktest() {
     std::cout << "Writing to Disk: " << std::endl;
     //std::getline(std::cin, filepath);
     engine.diskWriteTest("hello"); // should create 3 files
-}
+}*/
 
 int main() {
-    pktest(); //  do not delete yet
-    return 0;
+    //pktest(); //  do not delete yet
+    //return 0;
+
     //Initialize Engine
     Engine engine;
 
@@ -29,7 +30,14 @@ int main() {
     std::string filepath;
     std::cout << "Enter directory of corpus" << std::endl;
     std::getline(std::cin, filepath);
-    engine.index(filepath);
+    engine.loadIndex(filepath);
+
+	
+	std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
+	for (auto pair : idTable) {
+		std::cout << "pair.first = " << pair.first << " ";
+		std::cout << "pair.second = " << pair.second << std::endl;
+	}
 
     // Main loop
     std::string input;
@@ -49,8 +57,15 @@ int main() {
         }
         else if (boost::algorithm::starts_with(input, ":index ")) {
             filepath = input.substr(7, std::string::npos);
-            engine.index(filepath);
+            engine.createIndex(filepath);
         }
+        else if (boost::algorithm::starts_with(input, ":load ")) {
+            filepath = input.substr(6, std::string::npos);
+            engine.loadIndex(filepath);
+        }
+		else if (boost::algorithm::starts_with(input, ":rank ")) { // REMOVE THIS LATER
+			engine.rank(input.substr(6, std::string::npos));
+		}
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);
         }
