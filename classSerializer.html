@@ -68,12 +68,15 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a216bd61d57f4a86d2c4968fbc9b7a940"><td class="memItemLeft" align="right" valign="top"><a id="a216bd61d57f4a86d2c4968fbc9b7a940"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
-<tr class="separator:a216bd61d57f4a86d2c4968fbc9b7a940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e17757411135be3946ec3411f2f9c05"><td class="memItemLeft" align="right" valign="top"><a id="a6e17757411135be3946ec3411f2f9c05"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::unordered_map&lt; uint32_t, std::string &gt; &amp;idTable, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
+<tr class="separator:a6e17757411135be3946ec3411f2f9c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a176405fda10295951ff8266e5b140964"><td class="memItemLeft" align="right" valign="top"><a id="a176405fda10295951ff8266e5b140964"></a>
 static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
 <tr class="separator:a176405fda10295951ff8266e5b140964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72e6fdaa2d0f1b1c5cb18f143a2e1752"><td class="memItemLeft" align="right" valign="top"><a id="a72e6fdaa2d0f1b1c5cb18f143a2e1752"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIdTable</b> (const boost::filesystem::path &amp;filePath, const std::unordered_map&lt; uint32_t, std::string &gt; &amp;idTable)</td></tr>
+<tr class="separator:a72e6fdaa2d0f1b1c5cb18f143a2e1752"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc821500037b799b7dd935164a45bafc"><td class="memItemLeft" align="right" valign="top"><a id="adc821500037b799b7dd935164a45bafc"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildPostings</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
 <tr class="separator:adc821500037b799b7dd935164a45bafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
