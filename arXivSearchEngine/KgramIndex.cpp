@@ -128,7 +128,7 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
  */
 void KgramIndex::vocab() const { //vocab = grams here
     for (auto pair : _mIndex) std::cout << pair.first << '\n'; //first is the kgrams
-    std::cout << _mIndex.size() << '\n';
+    //std::cout << _mIndex.size() << '\n';
 }
 
 

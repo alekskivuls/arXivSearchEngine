@@ -106,7 +106,7 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
 
 
         std::string uniStr = ReadKgramStringAtPosition(m); //read middle kgram.
-        //std::cout << "READ KGRUM AT: " << uniStr << std::endl;
+        std::cout << "READ KGRUM AT: " << uniStr << "starts " << m << std::endl;
 
         int comp = kgram.compare(uniStr);
         if (comp == 0)
@@ -180,5 +180,38 @@ void KDeserializer::printAllTerms(KgramIndex &idx){
         std::cout << std::endl;
     }
     std::cout << std::endl;
+}
+
+/**
+ * @brief toKgramIndex : This method takes in three indexes. Intended to be a 1-gram, 2-gram, and 3-gram
+ * KgramIndex.
+ * @param idx1
+ * @param idx2
+ * @param idx3
+ */
+void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex &idx3) {
+    //first i need to read it from the kgramtable and then i need to
+    //count how long the kgram is and put their terms in their respective kgramindexes.
+    int numKgrams = mKgramTable.size();
+    int i = 0, k;
+    std::string kgramT;
+    for(KgramEntry pairs : mKgramTable){
+        //just read the terms stored here.
+        //just get all the terms and store them into these kgram indexes.
+        //basically remaking them.
+        //or i can just get the kgram pair and then count and throw it into the get terms.
+        kgramT = ReadKgramStringAtPosition(pairs.KgramPosition);
+        k = kgramT.size();
+        for (auto term : GetTerms(kgramT)) {
+            std::cout << "BEFORE I LOAD IN " << term << std::endl;
+            if(k == 1) idx1.addTerm(term);
+            else if(k == 2) idx2.addTerm(term);
+            else idx3.addTerm(term);
+            //i am spending time to check. or i could just add to all and just call the add term to check.
+            //is addterm more time consuming or this checking process?
+        }
+        //i can get all the terms with a list of kgrams.
+
+    }
 }
 

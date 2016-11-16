@@ -13,7 +13,7 @@
 #include "Engine.h"
 
 // Default constructors and destructors
-Engine::Engine() { 
+Engine::Engine() {
     // idTable = std::unordered_map<uint32_t, std::string>();
     // idx = InvertedIndex();
 }
@@ -87,7 +87,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::vector<std::string> mPathList;
     getPathNames(inDir, mPathList);
 
-	std::vector<double_t> ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
+    std::vector<double_t> ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
     ld.reserve(mPathList.size());
 
     std::sort(mPathList.begin(), mPathList.end());
@@ -95,7 +95,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     uint32_t i = 0;
     for (auto p : mPathList) {
         std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-		//ld.push_back(0.0);
+        //ld.push_back(0.0);
         std::unordered_map<std::string, uint32_t> wdt;
 
         // reads json file into stringstream and populates a json tree
@@ -161,17 +161,17 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
             }
         }
         /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
-		for (auto pr : wdt) {
-			std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
+        for (auto pr : wdt) {
+            std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
         }*/
-		ld.push_back(calcEucDist(wdt));
-		wdt = std::unordered_map<std::string, uint32_t>();
+        ld.push_back(calcEucDist(wdt));
+        wdt = std::unordered_map<std::string, uint32_t>();
     }
-	// test write print
-	/*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
-	for (double_t &d : ld) {
-		std::cout << d << std::endl;
-	}*/
+    // test write print
+    /*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
+    for (double_t &d : ld) {
+        std::cout << d << std::endl;
+    }*/
     totalEnd = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
@@ -179,9 +179,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
     dir = outDir;
 
-	// TEST PRINT READ
+    // TEST PRINT READ
 
-	//testRead(outDir.string());
+    //testRead(outDir.string());
 }
 
 void Engine::printRank(std::string &query) {
@@ -191,18 +191,18 @@ void Engine::printRank(std::string &query) {
 }
 
 std::vector<uint32_t> Engine::rank(std::string &query) {
-	DiskInvertedIndex dIdx(dir);
+    DiskInvertedIndex dIdx(dir);
     return queryEngine.rankedQuery(query, dIdx);
 }
 
 /*void Engine::testRead(const std::string &filepath) {
-	DiskInvertedIndex dIdx = DiskInvertedIndex(filepath);
-	std::vector<double_t> ld = dIdx.ReadWeights();
-	// test write print
-	std::cout << "TEST PRINT FOR READING EUCLIDEAN DISTANCE." << std::endl;
-	for (double_t &d : ld) {
-		std::cout << d << std::endl;
-	}
+    DiskInvertedIndex dIdx = DiskInvertedIndex(filepath);
+    std::vector<double_t> ld = dIdx.ReadWeights();
+    // test write print
+    std::cout << "TEST PRINT FOR READING EUCLIDEAN DISTANCE." << std::endl;
+    for (double_t &d : ld) {
+        std::cout << d << std::endl;
+    }
 }*/
 
 
@@ -349,18 +349,17 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 
     //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
-    /*
-	std::istringstream iss(query);
-	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
-		std::istream_iterator<std::string>{} };
-	for (std::string &token : tokens) {
-        std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
-		if (candidates.size() != 1) { // mispelled
-			std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
-		}
+    std::istringstream iss(query);
+    std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
+        std::istream_iterator<std::string>{} };
+    for (std::string &token : tokens) {
+        std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
+        if (candidates.size() != 1) { // mispelled
+            std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+        }
         //KEngine::correctSpelling
-		// did you mean?
-    }*/
+        // did you mean?
+    }
 
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;
