@@ -185,7 +185,7 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 void Engine::printRank(std::string &query) {
     auto list = rank(query);
     for(auto element : list)
-        std::cout << element << std::endl;
+        std::cout << getArticleName(element) << std::endl;
 }
 
 std::vector<uint32_t> Engine::rank(std::string &query) {
@@ -204,6 +204,11 @@ void Engine::createIndex(const std::string &filepath) {
 void Engine::loadIndex(const std::string &filepath) {
     dir = filepath;
     //DiskInvertedIndex(boost::filesystem::path(filepath));
+	idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
+}
+
+std::string Engine::getArticleName(const uint32_t &docid) {
+	return idTable.at(docid);
 }
 
 void Engine::printIndex() {
@@ -269,7 +274,7 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
     std::vector<std::string> results;
     results.reserve(output.size());
     for (auto di : output)
-        results.push_back(std::to_string(di.getDocId()));
+        results.push_back(getArticleName(di.getDocId()));
 
     return results;
 }
