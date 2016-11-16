@@ -184,12 +184,12 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 }
 
 void Engine::printRank(std::string &query) {
-    auto list = rank(query);
+    auto list = getRank(query);
     for(auto element : list)
-        std::cout << getArticleName(element) << std::endl;
+        std::cout << getArticleName(element.first)  << "\t:\t" << element.second << std::endl;
 }
 
-std::vector<uint32_t> Engine::rank(std::string &query) {
+std::vector<std::pair<uint32_t, double_t>> Engine::getRank(std::string &query) {
 	DiskInvertedIndex dIdx(dir);
     return queryEngine.rankedQuery(query, dIdx);
 }

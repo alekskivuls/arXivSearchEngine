@@ -70,7 +70,7 @@ public:
 
     void loadIndex(const std::string &filepath);
 
-    std::vector<uint32_t> rank(std::string &query);
+    std::vector<std::pair<uint32_t, double_t>> getRank(std::string &query);
 
     void printRank(std::string &query);
 
