@@ -11,6 +11,8 @@
 #include "Tokenizer.h"
 #include "DocInfo.h"
 #include "Engine.h"
+#include "KSerializer.h"
+#include "KDeserializer.h"
 
 // Default constructors and destructors
 Engine::Engine() {
@@ -77,7 +79,7 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
     return sqrt(Ld);
 }
 
-void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
+void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
@@ -94,8 +96,8 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
 
     uint32_t i = 0;
     for (auto p : mPathList) {
-        std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-        //ld.push_back(0.0);
+        std::cout << "Processing Article (" << (i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+		//ld.push_back(0.0);
         std::unordered_map<std::string, uint32_t> wdt;
 
         // reads json file into stringstream and populates a json tree
@@ -164,8 +166,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
         for (auto pr : wdt) {
             std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
         }*/
-        ld.push_back(calcEucDist(wdt));
-        wdt = std::unordered_map<std::string, uint32_t>();
+		ld.push_back(calcEucDist(wdt));
+		wdt = std::unordered_map<std::string, uint32_t>();
+        ++i;
     }
     // test write print
     /*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
@@ -177,34 +180,20 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
+    KSerializer::buildIndex(outDir, kIdx1, kIdx2, kIdx3);
     dir = outDir;
-
-    // TEST PRINT READ
-
-    //testRead(outDir.string());
 }
 
 void Engine::printRank(std::string &query) {
-    auto list = rank(query);
+    auto list = getRank(query);
     for(auto element : list)
-        std::cout << element << std::endl;
+        std::cout << "doc name: " << getArticleName(element.first)  << " ->\tscore: " << element.second << std::endl;
 }
 
-std::vector<uint32_t> Engine::rank(std::string &query) {
-    DiskInvertedIndex dIdx(dir);
-    return queryEngine.rankedQuery(query, dIdx);
+std::vector<std::pair<uint32_t, double_t>> Engine::getRank(std::string &query) {
+	DiskInvertedIndex dIdx(dir);
+    return queryEngine.rankedQuery(query, dIdx, kIdx3);
 }
-
-/*void Engine::testRead(const std::string &filepath) {
-    DiskInvertedIndex dIdx = DiskInvertedIndex(filepath);
-    std::vector<double_t> ld = dIdx.ReadWeights();
-    // test write print
-    std::cout << "TEST PRINT FOR READING EUCLIDEAN DISTANCE." << std::endl;
-    for (double_t &d : ld) {
-        std::cout << d << std::endl;
-    }
-}*/
-
 
 void Engine::createIndex(const std::string &filepath) {
     auto cwd = boost::filesystem::current_path();
@@ -215,97 +204,15 @@ void Engine::createIndex(const std::string &filepath) {
 
 void Engine::loadIndex(const std::string &filepath) {
     dir = filepath;
-    //DiskInvertedIndex(boost::filesystem::path(filepath));
+    DiskInvertedIndex(boost::filesystem::path(filepath));
+    KDeserializer kds(dir);
+    kds.toKgramIndex(kIdx1, kIdx2, kIdx3);
+	idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
 }
 
-
-/*
-void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
-    std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
-    boost::filesystem::path dir(file); // change input back to: filepath
-    boost::filesystem::directory_iterator it(dir), eod;
-
-    idTable = std::unordered_map<uint32_t, std::string>();
-    idx = InvertedIndex();
-
-    std::string path = "C:/Users/pkim7/Desktop/output"; // change to your output directory
-    boost::filesystem::path dirOut(path);
-    Engine::populateIndex(dir, dirOut);
-    Serializer::buildIndex(dirOut, idx);
-
-    std::cout << "Printing index: " << std::endl;
-    std::cout << "size of index: " << idx.getIndex().size() << std::endl;
-
-    DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
-
-
-    std::string input = "park"; // "breed" "explore" "park"
-    //std::string input = "mannual";
-    std::string stemmedToken = PorterStemmer::stem(input);
-
-
-    std::list<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken);
-    std::list<DocInfo> postingsMemory = idx.getPostings(stemmedToken);
-
-    if (postingsFile.size() == postingsMemory.size())
-        std::cout << "postings lists are same size!" << std::endl;
-    else
-        std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
-
-    std::cout << "file size: " << postingsFile.size() << std::endl; // THIS IS STATING ERROR
-    std::cout << "memory size: " << postingsMemory.size() << std::endl;
-
-    if (postingsFile.size() == postingsMemory.size()) {
-        std::list<DocInfo>::iterator iter = postingsFile.begin();
-        for (const DocInfo &doc : postingsMemory) {
-            if ((*iter).getPositions().size() != doc.getPositions().size()) {
-                std::cout << "FILE DocInfo.getPositions.size(" << (*iter).getPositions().size() <<
-                             ") != Memory DocInfo.getPositions.size(" << doc.getPositions().size() << ')' << std::endl;
-                break;
-            }
-            else {
-                std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
-                std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
-            }
-
-            std::list<uint32_t>::iterator posFile = (*iter).getPositions().begin();
-            for(const int temp : doc.getPositions()) {
-                std::cout << "VALUE: " << temp << std::endl;
-            }
-
-            for (auto posMemory : doc.getPositions()) {
-                if (posMemory != *posFile)
-                    std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
-                else
-                    std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
-
-                ++posFile;
-            }
-            ++iter;
-        }
-    }
-
-
-
-    auxIdx.mPostings.close();
-    auxIdx.mPostings.open(boost::filesystem::path(auxIdx.mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
-                          std::ios_base::in | std::ios_base::binary);
-    std::cout << "READING FROM FILE: " << std::endl;
-    uint32_t val, itr = 0, count = 0, total = 0;
-    while (val = auxIdx.ReadInt(auxIdx.mPostings)) {
-        std::cout << "SIZE(" << val << ")" << std::endl;
-        count = val;
-        total += count;
-
-        for (itr = 0; itr < count; ++itr) {
-            val = auxIdx.ReadInt(auxIdx.mPostings);
-            std::cout << val << ' ';
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-    auxIdx.mPostings.close();
-}*/
+std::string Engine::getArticleName(const uint32_t &docid) {
+	return idTable.at(docid);
+}
 
 void Engine::printIndex() {
     typedef std::pair<std::string, std::list<DocInfo>> pair;
@@ -346,25 +253,11 @@ void Engine::printQuery(std::string &query) {
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
-
-    //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
-
-    std::istringstream iss(query);
-    std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
-        std::istream_iterator<std::string>{} };
-    for (std::string &token : tokens) {
-        std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
-        if (candidates.size() != 1) { // mispelled
-            std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
-        }
-        //KEngine::correctSpelling
-        // did you mean?
-    }
-
-    std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
+    std::list<DocInfo> output = queryEngine.processQuery(query, dIdx, kIdx1, kIdx2, kIdx3);
     std::vector<std::string> results;
     results.reserve(output.size());
     for (auto di : output)
-        results.push_back(std::to_string(di.getDocId()));
+        results.push_back(getArticleName(di.getDocId()));
+
     return results;
 }

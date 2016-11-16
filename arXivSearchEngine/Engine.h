@@ -8,6 +8,7 @@
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_map>
+#include "WildEngine.h"
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"
@@ -20,6 +21,7 @@
 #include <cmath>
 #include <list>
 
+#include "KSerializer.h"
 #include "KEngine.h"
 #include "KgramIndex.h"
 #include "DiskInvertedIndex.h"
@@ -45,7 +47,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-    void populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
+    void populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir);
 
 	void populateEucDist();
 
@@ -62,11 +64,13 @@ public:
 
 	void index(const std::string &filepath);
 
+	std::string getArticleName(const uint32_t &docid);
+
     void createIndex(const std::string &filepath);
 
     void loadIndex(const std::string &filepath);
 
-    std::vector<uint32_t> rank(std::string &query);
+    std::vector<std::pair<uint32_t, double_t>> getRank(std::string &query);
 
     void printRank(std::string &query);
 

@@ -1,8 +1,10 @@
 #include "QEngine.h"
 #include "PorterStemmer.h"
+#include "WildEngine.h"
 #include <sstream>
 #include <iterator>
 #include <iostream>
+#include <string>
 #include <vector>
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
@@ -11,7 +13,7 @@
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 
-std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
+std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx, KgramIndex &kIdx3) {
 	std::istringstream iss(userQuery);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
@@ -28,6 +30,7 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 	i = 0;
 	// I DID NOT SUM ACCUMULATOR YET
 	for (std::string token : tokens) {
+		correctSpelling(dIdx, kIdx3, token);
 		std::string stemmedToken = PorterStemmer::stem(token);
         const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
 
@@ -41,29 +44,26 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
 
 			double_t Ad = wqt * wdt;
-			if (Ad != 0) scores[doc.getDocId()-1].score += (Ad / weights[doc.getDocId()-1]);
+            if (Ad != 0)
+                scores[doc.getDocId()].score += (Ad / weights[doc.getDocId()]);
 		}
 	}
-
 	// SORT AND THEN RETURN TOP 10
-	std::vector<uint32_t> result = heapify(scores);
-
-	return result;
+	return heapify(scores);
 }
 
-std::vector<uint32_t> QEngine::heapify(std::vector<pair> scores) {
-	std::make_heap(scores.begin(), scores.end(), greatest());
+std::vector<std::pair<uint32_t, double_t>> QEngine::heapify(std::vector<pair> scores) {
+	std::make_heap(scores.begin(), scores.end(), descending());
 
-	std::vector<uint32_t> result;
+	std::vector<std::pair<uint32_t, double_t>> result;
     result.reserve(10);
     uint32_t i;
     for (i = 0; i < 10; ++i) {
 		if (scores.front().score == 0) // max score is 0
 			break;
 
-		result.push_back(scores.front().docid);
-		std::cout << "MAX: docid(" << scores.front().docid <<") score(" << scores.front().score << ")" << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
-		std::pop_heap(scores.begin(), scores.end(), greatest()); scores.pop_back(); // gets top and pops from heap
+		result.push_back(std::pair<uint32_t, double_t>(scores.front().docid, scores.front().score));// simple print debugger statement for: fire in yosemite (1.7)
+		std::pop_heap(scores.begin(), scores.end(), descending()); scores.pop_back(); // gets top and pops from heap
 	}
 
 	return result;
@@ -163,7 +163,6 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	std::vector<std::string> strs = split(userQuery);
 	std::list<std::string> infix;
 	
-	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false, first = true;
 	for (auto str : strs) {
 		std::string procStr = str;
@@ -180,7 +179,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				onLiteral = false;
 			infix.push_back("`");
 			std::string substr = procStr.substr(0,str.length()-1);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '"') {
 			onLiteral = true;
@@ -192,14 +191,14 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				infix.push_back("*");
 			}
 			std::string substr = procStr.substr(1, std::string::npos);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '-') {
 			if (str.at(1) == '"') 
 				onLiteral = true;
 			infix.push_back("~");
 			std::string substr = procStr.substr(0,std::string::npos);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '+') {
 			onPlus = true;
@@ -211,7 +210,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				infix.push_back("+");
 				onPlus = false;
 			}
-			infix.push_back(stemmer.stem(procStr));
+			infix.push_back(PorterStemmer::stem(procStr));
 		}
 		if (first) {
 			infix.pop_front();
@@ -221,36 +220,69 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	return infix;
 }
 
+void QEngine::correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token) {
+	if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
+		std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
+		if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
+			token = candidates.front();
+			std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+		}
+		else {
+			std::cout << "There are no spelling corrections available for token(" << token << ")." << std::endl;
+		}
+	}
+}
+
 /*
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
  */
-std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedIndex &dIdx) {
+std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedIndex 
+	&dIdx, KgramIndex &kIdx1, KgramIndex &kIdx2, KgramIndex &kIdx3) {
 	std::list<std::string> infix = stemmify(userQuery);
+    std::stack<std::list<DocInfo>> result;
 
-	if (infix.size() == 0) {
-        return dIdx.GetPostings("");
-	}
+	if (infix.size() == 0) 
+		return dIdx.GetPostings("");
 
-	if (infix.size() == 1) {
-        for (auto d : dIdx.GetPostings(infix.front())) {
-			std::cout << d.getDocId() << ":\n";
-			for (auto i : d.getPositions()) {
-				std::cout << i << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "\n";
+    if(infix.front().find("*") != std::string::npos) {
+        std::string token = infix.front();
+        std::list<std::string> expansion = WildEngine::potentials(token, kIdx1, kIdx2, kIdx3);
+        std::list<DocInfo> ans;
+        std::list<std::string>::iterator itr = expansion.begin();
+        for (; itr != expansion.end(); ++itr) {
+            if (itr == expansion.begin())
+                ans = dIdx.GetPostings(*itr);
+
+            std::list<DocInfo> curr = dIdx.GetPostings(*itr);
+            ans = OR(ans, curr);
+        }
+        result.push(ans);
+    } else if (infix.size() == 1) {
+		correctSpelling(dIdx, kIdx3, infix.front());
         return dIdx.GetPostings(infix.front());
-	}
+    }
 
 	std::list<std::string> rpnQuery = infixToRPN(infix);
 	int dist;
 	bool prevIsPhrase = false;
-	std::stack<std::list<DocInfo>> result;
 	std::list<DocInfo> left, right;
-	for (auto token : rpnQuery) {
-		if (token == "*" || token == "+" || token == "~" || token == "`") {
+	for (auto token : rpnQuery) { // if size is not 0 AND the string CONTAINS *, the token is a wildcard query
+		if (token.size() != 0 && token.find("*") != std::string::npos) {
+			std::list<std::string> expansion = WildEngine::potentials(token, kIdx1, kIdx2, kIdx3);
+            std::list<DocInfo> ans;
+			std::list<std::string>::iterator itr = expansion.begin();
+			for (; itr != expansion.end(); ++itr) {
+				if (itr == expansion.begin()) 
+					ans = dIdx.GetPostings(*itr);
+
+                std::list<DocInfo> curr = dIdx.GetPostings(*itr);
+				ans = OR(ans, curr);
+			}
+
+			result.push(ans);
+		}
+		else if (token == "*" || token == "+" || token == "~" || token == "`") {
 			right = result.top();
 			result.pop();
 
@@ -274,8 +306,10 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 			//if (token == "^") // possibly cool future operator (assuming it makes sense)?
 				//result.push(XOR(left, right));
 		}
-		else 
+		else {
+            correctSpelling(dIdx, kIdx3, token);
 			result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
+		}
 	}
 	return result.top();
 }
@@ -410,75 +444,6 @@ std::list<DocInfo> QEngine::PHRASE(std::list<DocInfo> &left, std::list<DocInfo> 
 	
 	return result;
 }
-/*
-// Query Test 2
-void QEngine::printQueryTest2(InvertedIndex *& idx) {
-	idx->addTerm("Hello", (uint32_t)1, 1);
-	idx->addTerm("Hello", (uint32_t)1, 2);
-
-	idx->addTerm("Hello", (uint32_t)2, 1);
-	idx->addTerm("Hello", (uint32_t)2, 3);
-	idx->addTerm("Hello", (uint32_t)2, 5);
-
-	idx->addTerm("World", (uint32_t)2, 2);
-	idx->addTerm("World", (uint32_t)2, 6);
-
-	idx->addTerm("World", (uint32_t)3, 1);
-	idx->addTerm("World", (uint32_t)3, 1);
-
-	idx->addTerm("Aleks", (uint32_t)2, 3);
-	idx->addTerm("Aleks", (uint32_t)2, 7);
-
-	//auto docList = processQuery(std::string("Hello ` World"), idx); // deprecated use of processQuery
-	/*for (auto di : docList) {
-		std::cout << di.getDocId() << ":\n";
-		for (auto i : di.getPositions()) 
-			std::cout << i << " ";
-		std::cout << '\n';
-	}*/
-//}*/
-
-/*
-// Query Test 1
-void QEngine::printQueryTest(InvertedIndex *& idx) {
-	std::list<DocInfo> left = idx->getPostings("Hello");
-	std::list<DocInfo> right = idx->getPostings("World");
-
-	std::cout << "Left = " << left.size() << '\n';
-	std::cout << "Right = " << right.size() << '\n';
-
-	std::cout << "AND Query:\n";
-	std::list<DocInfo> andQuery = AND(left, right);
-	for (auto doc : andQuery) {
-		std::cout << doc.getDocId() << ":\n";
-		for (auto i : doc.getPositions()) 
-			std::cout << i << ' ';
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-
-	std::cout << "ANDNOT Query:\n";
-	std::list<DocInfo> andNotQuery = ANDNOT(left, right);
-	for (auto doc : andNotQuery) {
-		std::cout << doc.getDocId() << ":\n";
-		for (auto i : doc.getPositions())
-			std::cout << i << ' ';
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-
-	std::cout << "OR Query:\n";
-	std::list<DocInfo> orQuery = OR(left, right);
-	for (auto doc : orQuery) {
-		std::cout << doc.getDocId() << ":\n";
-		for (auto i : doc.getPositions())
-			std::cout << i << ' ';
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-
-	// std::list<DocInfo> phraseQuery = PHRASE(left, right);
-}*/
 
 // Infix, rpn test 1
 void QEngine::printInfixRpn() {

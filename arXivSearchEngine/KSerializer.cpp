@@ -30,11 +30,6 @@ inline uint32_t Reverse(uint32_t value) {
  */
 void KSerializer::buildIndex(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3){
     std::vector<uint32_t> kgramPositions = KSerializer::buildKgrams(filePath, auxIdx1, auxIdx2, auxIdx3); //returns the vector<int>
-    for (auto thing : kgramPositions) {
-        std::cout << thing << std::endl;
-    }
-    //vector<int> is just like another int[]... but by reference?
-    std::cout << "finished buildkgrams, into buildterms" << std::endl;
     KSerializer::buildTerms(filePath, auxIdx1, auxIdx2, auxIdx3, kgramPositions); //builds kgram table here
 }
 
@@ -64,10 +59,7 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
     // also build an array associating each term with its byte location in this file.
     std::vector<uint32_t> positions(auxIdx1.getKgramList().size() + auxIdx2.getKgramList().size() + auxIdx3.getKgramList().size()); //all of your kgrams totaled
     int kgramIndex = 0; //thing you increment
-    //int vocabPos = 0; //whenthefuckdoyouusethis
     std::list<std::string> allKgrams;
-
-//    std::cout << "initialized variables" << std::endl;
 
     //the main file you will write in.
     boost::filesystem::path vocabPath = filePath;
@@ -80,9 +72,6 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
     allKgrams.merge(auxIdx3.getKgramList());
     //alphabetize
     allKgrams.sort(); //$ is first then shorter length should be.
-
-    std::cout << "all grams sorted" << std::endl;
-
     //for the terms in your list of kgrams in your index. so only 3-gram example.
     for (std::string &kgram : allKgrams) {
         positions[kgramIndex] = kgramFile.tellp(); //pos of current char in output stream.
@@ -91,9 +80,6 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
         kgramFile.write(kgram.c_str(), (sizeof(char) * kgram.length())); //size of buffer is second param.
         kgramIndex++; //increment to move to writing in next positions, what is the vector <int> that you will return.
     }
-
-    std::cout << "finished writing" << std::endl; //it never finishes writing
-    //Youre done writing the kgrams down, close the ofstream.
     kgramFile.close();
     return positions; //returning all positions. in order of how you wrote to kgramfile.
 }

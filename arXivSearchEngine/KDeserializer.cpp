@@ -29,7 +29,6 @@ KDeserializer::KDeserializer(const boost::filesystem::path  &path) : mPath(path)
     // we will end up with an array of T pairs of longs, where the first value is
     // a position in the vocabularyTable file, and the second is a position in
     // the postings file.
-    std::cout << "sjfadhkjfh" << std::endl;
     mKgramTable = ReadKgramTable(path);
 }
 
@@ -44,11 +43,10 @@ std::vector<KgramEntry> KDeserializer::ReadKgramTable(const boost::filesystem::p
     ifstream tableFile(tablePath.append("/kgramTable.bin", boost::filesystem::path::codecvt()).string(),
         std::ios::in | std::ios::binary);
     uint32_t buffer, buffer2;
-    if (!tableFile)
-        std::cout << "Open failed? " << tablePath.string() << std::endl;
+    //if (!tableFile) std::cout << "Open failed? " << tablePath.string() << std::endl;
 
     tableFile.read((char *)&buffer, sizeof(buffer)); //read 32int.
-    std::cout << "buffer" << buffer << "; " << tableFile.tellg() << std::endl;
+    //std::cout << "buffer: " << buffer << "; " << tableFile.tellg() << std::endl;
     buffer = Reverse(buffer);// UNCOMMENT FOR LINUX reverse int.
 
     int tableIndex = 0;
@@ -63,7 +61,7 @@ std::vector<KgramEntry> KDeserializer::ReadKgramTable(const boost::filesystem::p
         kgramTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
     }
 
-    std::cout << "KLAJSD SIZE OF KGRUM TABLEEEE HUUUUUUUU! " << kgramTable.size() << std::endl;
+    //std::cout << "Size of kgramTable: " << kgramTable.size() << std::endl;
 
     return kgramTable;
 }
@@ -100,20 +98,18 @@ std::list<std::string> KDeserializer::ReadTermsFromFile(std::ifstream &terms, ui
 //return kgramentry object that contains the requested kgram.
 KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { // const icu::UnicodeString &term
     std::size_t i = 0, j = mKgramTable.size() - 1; //j equals last kgram index.
-    std::cout << "binarysearchkgrams" << std::endl;
     while (i <= j) {
         std::size_t m = i + (j - i) / 2;
 
 
         std::string uniStr = ReadKgramStringAtPosition(m); //read middle kgram.
-        std::cout << "READ KGRUM AT: " << uniStr << "starts " << m << std::endl;
+        //std::cout << "READ KGRUM AT: " << uniStr << "starts " << m << std::endl;
 
         int comp = kgram.compare(uniStr);
         if (comp == 0)
             return mKgramTable[m]; //found it.
         else if (comp < 0) {
             if (m == 0) {
-                std::cout << "UH OH IT GOT HERE 2!" << std::endl;
                 return KgramEntry(-1, -1);
             }
             j = m - 1; //depending on compare search middles. binary.
@@ -122,8 +118,6 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
             i = m + 1;
         }
     }
-
-    std::cout << "UH OH IT GOT HERE 2!" << std::endl;
     return KgramEntry(-1, -1);;
 }
 
@@ -157,20 +151,16 @@ std::string KDeserializer::ReadKgramStringAtPosition(uint32_t index) const{
 
 
 std::list<std::string> KDeserializer::GetTerms(std::string &kgram) { // const icu::UnicodeString &term
-    KgramEntry entry = BinarySearchKgrams(kgram); //reyurns entree of it
-    std::cout << "kgrams list here" << std::endl;
+    KgramEntry entry = BinarySearchKgrams(kgram);
     if (entry.TermPosition != -1 && entry.KgramPosition != -1)
         return ReadTermsFromFile(mTerms, entry.TermPosition);
-    //nothing
-    std::cout << "DAMN IT! IT GOT HERE!" << std::endl;
-    return std::list<std::string>(); //emty list
-
+    return std::list<std::string>(); //empty list
 }
 
 
 void KDeserializer::printAllTerms(KgramIndex &idx){
     std::cout << std::endl;
-    std::cout << "PRINTING FROM FILE!" << std::endl;
+    std::cout << "Printing all terms from file..." << std::endl;
     for (std::string &kgram : idx.getKgramList()) {
         std::cout << kgram << std::endl;
         auto term = GetTerms(kgram);
@@ -203,7 +193,6 @@ void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex 
         kgramT = ReadKgramStringAtPosition(pairs.KgramPosition);
         k = kgramT.size();
         for (auto term : GetTerms(kgramT)) {
-            std::cout << "BEFORE I LOAD IN " << term << std::endl;
             if(k == 1) idx1.addTerm(term);
             else if(k == 2) idx2.addTerm(term);
             else idx3.addTerm(term);
