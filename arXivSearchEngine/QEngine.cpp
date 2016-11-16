@@ -165,7 +165,6 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	std::vector<std::string> strs = split(userQuery);
 	std::list<std::string> infix;
 	
-	PorterStemmer stemmer;
 	bool onLiteral = false, onPlus = false, first = true;
 	for (auto str : strs) {
 		std::string procStr = str;
@@ -182,7 +181,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				onLiteral = false;
 			infix.push_back("`");
 			std::string substr = procStr.substr(0,str.length()-1);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '"') {
 			onLiteral = true;
@@ -194,14 +193,14 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				infix.push_back("*");
 			}
 			std::string substr = procStr.substr(1, std::string::npos);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '-') {
 			if (str.at(1) == '"') 
 				onLiteral = true;
 			infix.push_back("~");
 			std::string substr = procStr.substr(0,std::string::npos);
-			infix.push_back(stemmer.stem(substr));
+			infix.push_back(PorterStemmer::stem(substr));
 		}
 		else if (str.at(0) == '+') {
 			onPlus = true;
@@ -213,7 +212,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 				infix.push_back("+");
 				onPlus = false;
 			}
-			infix.push_back(stemmer.stem(procStr));
+			infix.push_back(PorterStemmer::stem(procStr));
 		}
 		if (first) {
 			infix.pop_front();
@@ -294,7 +293,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 		}
 		else {
 			if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
-				std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
+				std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
 				if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
 					token = candidates.front();
 					std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)

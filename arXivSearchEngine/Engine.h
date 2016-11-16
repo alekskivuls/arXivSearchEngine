@@ -21,6 +21,7 @@
 #include <cmath>
 #include <list>
 
+#include "KSerializer.h"
 #include "KEngine.h"
 #include "KgramIndex.h"
 #include "DiskInvertedIndex.h"
