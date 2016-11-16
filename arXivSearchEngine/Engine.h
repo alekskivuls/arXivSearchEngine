@@ -46,7 +46,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-    void populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
+    void populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir);
 
 	void populateEucDist();
 

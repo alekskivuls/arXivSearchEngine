@@ -11,6 +11,7 @@
 #include "Tokenizer.h"
 #include "DocInfo.h"
 #include "Engine.h"
+#include "KSerializer.h"
 
 // Default constructors and destructors
 Engine::Engine() { 
@@ -77,7 +78,7 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
     return sqrt(Ld);
 }
 
-void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
+void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
@@ -177,6 +178,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
+    KSerializer::buildIndex(outDir, kIdx1, kIdx2, kIdx3);
     dir = outDir;
 }
 
@@ -248,9 +250,6 @@ void Engine::printQuery(std::string &query) {
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
     DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
-
-    //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
-
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx, kIdx1, kIdx2, kIdx3);
     std::vector<std::string> results;
     results.reserve(output.size());
