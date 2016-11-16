@@ -256,13 +256,13 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 		if (token.size() != 0 && token.find("*") != std::string::npos) {
 			std::list<std::string> expansion = WildEngine::potentials(token, kIdx1, kIdx2, kIdx3);
 
-			std::list<DocInfo> ans, curr;
+            std::list<DocInfo> ans;
 			std::list<std::string>::iterator itr = expansion.begin();
 			for (; itr != expansion.end(); ++itr) {
 				if (itr == expansion.begin()) 
 					ans = dIdx.GetPostings(*itr);
 
-				std::list<DocInfo> &curr = dIdx.GetPostings(*itr);
+                std::list<DocInfo> curr = dIdx.GetPostings(*itr);
 				ans = OR(ans, curr);
 			}
 
