@@ -292,8 +292,19 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 			//if (token == "^") // possibly cool future operator (assuming it makes sense)?
 				//result.push(XOR(left, right));
 		}
-		else 
+		else {
+			if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
+				std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
+				if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
+					token = candidates.front();
+					std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+				}
+				else {
+					std::cout << "There are no spelling corrections available for token(" << token << ")." << std::endl;
+				}
+			}
 			result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
+		}
 	}
 	return result.top();
 }
