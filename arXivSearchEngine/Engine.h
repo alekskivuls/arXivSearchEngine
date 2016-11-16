@@ -63,6 +63,8 @@ public:
 
 	void index(const std::string &filepath);
 
+	std::string getArticleName(const uint32_t &docid);
+
     void createIndex(const std::string &filepath);
 
     void loadIndex(const std::string &filepath);
