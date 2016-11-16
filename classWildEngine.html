@@ -59,59 +59,35 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classWildEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">WildEngine Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classWildEngine.html" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.  
+ <a href="classWildEngine.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="WildEngine_8h_source.html">WildEngine.h</a>&gt;</code></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#a7c71d7c4c9b51ce4c89deada73e70fc6">WildEngine</a> ()</td></tr>
-<tr class="memdesc:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.  <a href="#a7c71d7c4c9b51ce4c89deada73e70fc6">More...</a><br /></td></tr>
-<tr class="separator:a7c71d7c4c9b51ce4c89deada73e70fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="memItemLeft" align="right" valign="top">static std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b">potentials</a> (std::string &amp;wildcard, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;kindex3)</td></tr>
-<tr class="memdesc:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters.  <a href="#a8b509c2f2f99d7124bd70c43110ceb4b">More...</a><br /></td></tr>
+<tr class="memdesc:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">WildEngine::WildEngine : The constructor of the <a class="el" href="classWildEngine.html" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine</a>; requires reference of 3 different size <a class="el" href="classKgramIndex.html">KgramIndex</a> objects. They are expected to contain the same vocabulary.  <a href="#a8b509c2f2f99d7124bd70c43110ceb4b">More...</a><br /></td></tr>
 <tr class="separator:a8b509c2f2f99d7124bd70c43110ceb4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7c71d7c4c9b51ce4c89deada73e70fc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7c71d7c4c9b51ce4c89deada73e70fc6">&sect;&nbsp;</a></span>WildEngine()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">WildEngine::WildEngine </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p><a class="el" href="classWildEngine.html">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. </p>
-<p><a class="el" href="classWildEngine.html#a7c71d7c4c9b51ce4c89deada73e70fc6" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine::WildEngine</a> : The constructor of the <a class="el" href="classWildEngine.html">WildEngine</a>; requires reference of 3 different size <a class="el" href="classKgramIndex.html">KgramIndex</a> objects. They are expected to contain the same vocabulary.</p>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classWildEngine.html" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine</a> : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index1</td><td>: pass your reference and these will point to it. </td></tr>
     <tr><td class="paramname">index2</td><td>: pass your reference and these will point to it. </td></tr>
-    <tr><td class="paramname">index3</td><td>: pass your reference and these will point to it. The order must specifically be index1, 2, and 3 to function properly.</td></tr>
-    <tr><td class="paramname">index1</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 1. </td></tr>
-    <tr><td class="paramname">index2</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 2. </td></tr>
-    <tr><td class="paramname">index3</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 3. </td></tr>
+    <tr><td class="paramname">index3</td><td>: pass your reference and these will point to it. The order must specifically be index1, 2, and 3 to function properly. </td></tr>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a8b509c2f2f99d7124bd70c43110ceb4b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8b509c2f2f99d7124bd70c43110ceb4b">&sect;&nbsp;</a></span>potentials()</h2>
 
@@ -158,9 +134,12 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b" title="WildEngine::potentials : Returns all potential terms in the wildcard query, filtered via boost::regex...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters. </p>
+<p>WildEngine::WildEngine : The constructor of the <a class="el" href="classWildEngine.html" title="WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram. ">WildEngine</a>; requires reference of 3 different size <a class="el" href="classKgramIndex.html">KgramIndex</a> objects. They are expected to contain the same vocabulary. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">index1</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 1. </td></tr>
+    <tr><td class="paramname">index2</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 2. </td></tr>
+    <tr><td class="paramname">index3</td><td>: Passing in the reference of the <a class="el" href="classKgramIndex.html">KgramIndex</a> object of size 3. <a class="el" href="classWildEngine.html#a8b509c2f2f99d7124bd70c43110ceb4b" title="WildEngine::WildEngine : The constructor of the WildEngine; requires reference of 3 different size Kg...">WildEngine::potentials</a> : Returns all potential terms in the wildcard query, filtered via boost::regex. This is FALSE wildcard, put more (*) for more wildcard characters. </td></tr>
     <tr><td class="paramname">wildcard</td><td>: the literal wildcard term. (i.e. "h*llo")potentialterms </td></tr>
   </table>
   </dd>
