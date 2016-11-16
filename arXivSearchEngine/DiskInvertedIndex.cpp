@@ -102,7 +102,6 @@ std::unordered_map<uint32_t, std::string> DiskInvertedIndex::ReadIdTableFromFile
         uint32_t len = ReadInt(idTableFile);
 
         std::string value = "";
-        //std::cout << "ID: " << id << " len = " << len << std::endl;
         for (j = 0; j < len; j++) {
             uint8_t ch = ReadChar(idTableFile);
             //idTableFile.read((char*)&ch, sizeof(ch));
@@ -110,6 +109,7 @@ std::unordered_map<uint32_t, std::string> DiskInvertedIndex::ReadIdTableFromFile
         }
 
         idTable[id] = value;
+        std::cout << "ID: " << id << " Value = " << value << std::endl;
     }
 
     idTableFile.close();

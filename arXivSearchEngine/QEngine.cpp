@@ -43,10 +43,10 @@ std::vector<uint32_t> QEngine::rankedQuery(std::string userQuery, DiskInvertedIn
 			double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
 
 			double_t Ad = wqt * wdt;
-			if (Ad != 0) scores[doc.getDocId()-1].score += (Ad / weights[doc.getDocId()-1]);
+            if (Ad != 0)
+                scores[doc.getDocId()].score += (Ad / weights[doc.getDocId()]);
 		}
 	}
-
 	// SORT AND THEN RETURN TOP 10
 	std::vector<uint32_t> result = heapify(scores);
 
@@ -235,14 +235,14 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 	}
 
 	if (infix.size() == 1) {
-        for (auto d : dIdx.GetPostings(infix.front())) {
+        /*for (auto d : dIdx.GetPostings(infix.front())) {
 			std::cout << d.getDocId() << ":\n";
 			for (auto i : d.getPositions()) {
 				std::cout << i << " ";
 			}
 			std::cout << "\n";
 		}
-		std::cout << "\n";
+        std::cout << "\n";*/
         return dIdx.GetPostings(infix.front());
 	}
 

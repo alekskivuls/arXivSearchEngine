@@ -95,7 +95,7 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 
     uint32_t i = 0;
     for (auto p : mPathList) {
-        std::cout << "Processing Article (" << (i++) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
+        std::cout << "Processing Article (" << (i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
 		//ld.push_back(0.0);
         std::unordered_map<std::string, uint32_t> wdt;
 
@@ -167,6 +167,7 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
         }*/
 		ld.push_back(calcEucDist(wdt));
 		wdt = std::unordered_map<std::string, uint32_t>();
+        ++i;
     }
 	// test write print
 	/*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
