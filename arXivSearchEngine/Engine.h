@@ -8,6 +8,7 @@
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_map>
+#include "WildEngine.h"
 #include "Tokenizer.h"
 #include "QEngine.h"
 #include "DocInfo.h"

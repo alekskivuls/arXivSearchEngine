@@ -185,17 +185,11 @@ void Serializer::buildIdTable(const boost::filesystem::path & filePath, const st
 
 	for (std::pair<uint32_t, std::string> pr : idTable) {
 		uint32_t id = Reverse((uint32_t) pr.first);
-		//uint32_t id = (uint32_t)pr.first;
 		idTableFile.write((const char *) &id, sizeof(id)); // write doc id to disk
 
 		uint32_t len = Reverse((uint32_t)pr.second.size());
-		//uint32_t len = (uint32_t)pr.second.size();
-
-        //std::cout << "HUE HUE IT WRITES" << std::endl;
-        //std::cout << "len (write) = " << len << std::endl;
 		idTableFile.write((const char *) &len, sizeof(len)); // write size of string to disk
 
-		//idTableFile.write(pr.second.c_str(), (sizeof(char) * pr.second.length())); // write value, string, to disk
 		for (i = 0; i < pr.second.size(); ++i) {
 			//uint8_t ch = Reverse((uint8_t)pr.second[i]);
 			uint8_t ch = (uint8_t)pr.second[i];

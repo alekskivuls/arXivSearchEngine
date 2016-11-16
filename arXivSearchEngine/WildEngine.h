@@ -8,6 +8,13 @@
 #include <string>
 #include <list>
 
+/**
+* @brief WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.
+* @param index1 : pass your reference and these will point to it.
+* @param index2 : pass your reference and these will point to it.
+* @param index3 : pass your reference and these will point to it.
+* The order must specifically be index1, 2, and 3 to function properly.
+*/
 class WildEngine {
 
     /**
@@ -20,15 +27,6 @@ class WildEngine {
     static std::string regularex(std::string wildcard);
 
 public:
-
-    /**
-     * @brief WildEngine : Constructor. Made to load in 1-gram, 2-gram, and 3-gram.
-     * @param index1 : pass your reference and these will point to it.
-     * @param index2 : pass your reference and these will point to it.
-     * @param index3 : pass your reference and these will point to it.
-     * The order must specifically be index1, 2, and 3 to function properly.
-     */
-    WildEngine();
 
     static std::list<std::string> potentials(std::string &wildcard, KgramIndex &kindex1,
                                               KgramIndex &kindex2, KgramIndex &kindex3);

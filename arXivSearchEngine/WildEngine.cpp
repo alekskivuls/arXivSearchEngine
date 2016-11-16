@@ -13,9 +13,10 @@
  * @param index2 : Passing in the reference of the KgramIndex object of size 2.
  * @param index3 : Passing in the reference of the KgramIndex object of size 3.
  */
-WildEngine::WildEngine(){ }/*KgramIndex &index1,
-                       KgramIndex &index2,
-                       KgramIndex &index3) : kindex1(index1), kindex2(index2), kindex3(index3) { }*/
+
+ /*KgramIndex &index1,
+   KgramIndex &index2,
+   KgramIndex &index3) : kindex1(index1), kindex2(index2), kindex3(index3) { }*/
 
 /**
  * @brief WildEngine::potentials : Returns all potential terms in the wildcard query, filtered

@@ -45,11 +45,7 @@ public:
 		double_t score;
 	};
 
-	struct greatest {
-		/*bool operator()(doc const& a, doc const& b) const {
-			return a.rank > b.rank;
-		}*/
-
+	struct descending {
 		bool operator()(const pair& l, const pair& r) const {
 			return l.score < r.score;
 		}
@@ -58,7 +54,8 @@ public:
 
 	QEngine();
 
-    std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex &dIdx);
+	std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex
+		&dIdx, KgramIndex &kIdx1, KgramIndex &kIdx2, KgramIndex &kIdx3);
 
 	std::vector<uint32_t> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
 

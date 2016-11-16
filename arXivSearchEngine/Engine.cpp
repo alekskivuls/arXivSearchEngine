@@ -178,10 +178,6 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
 
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
     dir = outDir;
-
-	// TEST PRINT READ
-
-	//testRead(outDir.string());
 }
 
 void Engine::printRank(std::string &query) {
@@ -195,16 +191,6 @@ std::vector<uint32_t> Engine::rank(std::string &query) {
     return queryEngine.rankedQuery(query, dIdx);
 }
 
-/*void Engine::testRead(const std::string &filepath) {
-	DiskInvertedIndex dIdx = DiskInvertedIndex(filepath);
-	std::vector<double_t> ld = dIdx.ReadWeights();
-	// test write print
-	std::cout << "TEST PRINT FOR READING EUCLIDEAN DISTANCE." << std::endl;
-	for (double_t &d : ld) {
-		std::cout << d << std::endl;
-	}
-}*/
-
 
 void Engine::createIndex(const std::string &filepath) {
     auto cwd = boost::filesystem::current_path();
@@ -217,95 +203,6 @@ void Engine::loadIndex(const std::string &filepath) {
     dir = filepath;
     //DiskInvertedIndex(boost::filesystem::path(filepath));
 }
-
-
-/*
-void Engine::diskWriteTest(const std::string &filepath) { // change this later to a method called: INDEXDISK paul's C:/Users/pkim7/Desktop/corpus
-    std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
-    boost::filesystem::path dir(file); // change input back to: filepath
-    boost::filesystem::directory_iterator it(dir), eod;
-
-    idTable = std::unordered_map<uint32_t, std::string>();
-    idx = InvertedIndex();
-
-    std::string path = "C:/Users/pkim7/Desktop/output"; // change to your output directory
-    boost::filesystem::path dirOut(path);
-    Engine::populateIndex(dir, dirOut);
-    Serializer::buildIndex(dirOut, idx);
-
-    std::cout << "Printing index: " << std::endl;
-    std::cout << "size of index: " << idx.getIndex().size() << std::endl;
-
-    DiskInvertedIndex auxIdx = DiskInvertedIndex(dirOut);
-
-
-    std::string input = "park"; // "breed" "explore" "park"
-    //std::string input = "mannual";
-    std::string stemmedToken = PorterStemmer::stem(input);
-
-
-    std::list<DocInfo> postingsFile = auxIdx.GetPostings(stemmedToken);
-    std::list<DocInfo> postingsMemory = idx.getPostings(stemmedToken);
-
-    if (postingsFile.size() == postingsMemory.size())
-        std::cout << "postings lists are same size!" << std::endl;
-    else
-        std::cout << "postings lists are NOT the same size... you done goofed." << std::endl;
-
-    std::cout << "file size: " << postingsFile.size() << std::endl; // THIS IS STATING ERROR
-    std::cout << "memory size: " << postingsMemory.size() << std::endl;
-
-    if (postingsFile.size() == postingsMemory.size()) {
-        std::list<DocInfo>::iterator iter = postingsFile.begin();
-        for (const DocInfo &doc : postingsMemory) {
-            if ((*iter).getPositions().size() != doc.getPositions().size()) {
-                std::cout << "FILE DocInfo.getPositions.size(" << (*iter).getPositions().size() <<
-                             ") != Memory DocInfo.getPositions.size(" << doc.getPositions().size() << ')' << std::endl;
-                break;
-            }
-            else {
-                std::cout << "MEMORY DocInfo ID(" << doc.getDocId() << ") compared to ";
-                std::cout << "File DocInfo ID(" << (*iter).getDocId() << ')' << std::endl;
-            }
-
-            std::list<uint32_t>::iterator posFile = (*iter).getPositions().begin();
-            for(const int temp : doc.getPositions()) {
-                std::cout << "VALUE: " << temp << std::endl;
-            }
-
-            for (auto posMemory : doc.getPositions()) {
-                if (posMemory != *posFile)
-                    std::cout << "File Pos(" << *posFile << ") != Memory Pos(" << posMemory << ')' << std::endl;
-                else
-                    std::cout << "File Pos(" << *posFile << ") == Memory Pos(" << posMemory << ')' << std::endl;
-
-                ++posFile;
-            }
-            ++iter;
-        }
-    }
-
-
-
-    auxIdx.mPostings.close();
-    auxIdx.mPostings.open(boost::filesystem::path(auxIdx.mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
-                          std::ios_base::in | std::ios_base::binary);
-    std::cout << "READING FROM FILE: " << std::endl;
-    uint32_t val, itr = 0, count = 0, total = 0;
-    while (val = auxIdx.ReadInt(auxIdx.mPostings)) {
-        std::cout << "SIZE(" << val << ")" << std::endl;
-        count = val;
-        total += count;
-
-        for (itr = 0; itr < count; ++itr) {
-            val = auxIdx.ReadInt(auxIdx.mPostings);
-            std::cout << val << ' ';
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
-    auxIdx.mPostings.close();
-}*/
 
 void Engine::printIndex() {
     typedef std::pair<std::string, std::list<DocInfo>> pair;
@@ -354,9 +251,8 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
 	for (std::string &token : tokens) {
-
-		if (dIdx.GetPostings(token).size() == 0) {
-			std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3); // <-- this SHOULD be broken
+		if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
+			std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
 			if (candidates.size() >= 1) { // mispelled
 				token = candidates.front();
 				std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
@@ -364,12 +260,10 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 			else {
 				std::cout << "There are no spelling corrections available for token " << token << "." << std::endl;
 			}
-			//KEngine::correctSpelling
-			// did you mean?
 		}
     }
 
-    std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
+    std::list<DocInfo> output = queryEngine.processQuery(query, dIdx, kIdx1, kIdx2, kIdx3);
     std::vector<std::string> results;
     results.reserve(output.size());
     for (auto di : output)
