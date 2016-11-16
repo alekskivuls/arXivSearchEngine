@@ -219,6 +219,19 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 	return infix;
 }
 
+void QEngine::correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token) {
+	if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
+		std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
+		if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
+			token = candidates.front();
+			std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+		}
+		else {
+			std::cout << "There are no spelling corrections available for token(" << token << ")." << std::endl;
+		}
+	}
+}
+
 /*
  * Takes a stack of stemmed strings formatted in RPN and processes a postingsList. 
  * This method will be responsible for invoking getPostings, AND, OR, ANDNOT and PHRASE. 
@@ -227,19 +240,11 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 	&dIdx, KgramIndex &kIdx1, KgramIndex &kIdx2, KgramIndex &kIdx3) {
 	std::list<std::string> infix = stemmify(userQuery);
 
-	if (infix.size() == 0) {
-        return dIdx.GetPostings("");
-	}
+	if (infix.size() == 0) 
+		return dIdx.GetPostings("");
 
 	if (infix.size() == 1) {
-        /*for (auto d : dIdx.GetPostings(infix.front())) {
-			std::cout << d.getDocId() << ":\n";
-			for (auto i : d.getPositions()) {
-				std::cout << i << " ";
-			}
-			std::cout << "\n";
-		}
-        std::cout << "\n";*/
+		correctSpelling(dIdx, kIdx3, infix.front());
         return dIdx.GetPostings(infix.front());
 	}
 
@@ -289,16 +294,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
 				//result.push(XOR(left, right));
 		}
 		else {
-			if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
-				std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
-				if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
-					token = candidates.front();
-					std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
-				}
-				else {
-					std::cout << "There are no spelling corrections available for token(" << token << ")." << std::endl;
-				}
-			}
+			correctSpelling(dIdx, kIdx3, token);
 			result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
 		}
 	}

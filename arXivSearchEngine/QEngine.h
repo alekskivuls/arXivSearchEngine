@@ -30,6 +30,8 @@ class QEngine {
 
 	std::list<DocInfo> PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist);
 
+	void correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token);
+
 public:
 
 	struct pair {
