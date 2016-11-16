@@ -349,23 +349,31 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
 
     //KgramIndex kidx(3); // GET REFERENCE TO YOUR 3-GRAM
 
-    /*
+    
 	std::istringstream iss(query);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
 	for (std::string &token : tokens) {
-        std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3);
-		if (candidates.size() != 1) { // mispelled
-			std::cout << "Did you mean: " << candidates.front() << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+
+		if (dIdx.GetPostings(token).size() == 0) {
+			std::list<std::string> &candidates = KEngine::correctSpelling(token, kIdx3); // <-- this SHOULD be broken
+			if (candidates.size() >= 1) { // mispelled
+				token = candidates.front();
+				std::cout << "Did you mean: " << token << std::endl; // REPLACE LOGIC LATER (FOR ALEKS)
+			}
+			else {
+				std::cout << "There are no spelling corrections available for token " << token << "." << std::endl;
+			}
+			//KEngine::correctSpelling
+			// did you mean?
 		}
-        //KEngine::correctSpelling
-		// did you mean?
-    }*/
+    }
 
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx);
     std::vector<std::string> results;
     results.reserve(output.size());
     for (auto di : output)
         results.push_back(std::to_string(di.getDocId()));
+
     return results;
 }
