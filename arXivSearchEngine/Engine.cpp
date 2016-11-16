@@ -191,7 +191,7 @@ void Engine::printRank(std::string &query) {
 
 std::vector<std::pair<uint32_t, double_t>> Engine::getRank(std::string &query) {
 	DiskInvertedIndex dIdx(dir);
-    return queryEngine.rankedQuery(query, dIdx);
+    return queryEngine.rankedQuery(query, dIdx, kIdx3);
 }
 
 

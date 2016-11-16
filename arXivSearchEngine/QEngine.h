@@ -59,7 +59,7 @@ public:
 	std::list<DocInfo> processQuery(std::string &userQuery, DiskInvertedIndex
 		&dIdx, KgramIndex &kIdx1, KgramIndex &kIdx2, KgramIndex &kIdx3);
 
-	std::vector<std::pair<uint32_t, double_t>> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx);
+	std::vector<std::pair<uint32_t, double_t>> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx, KgramIndex &kIdx3);
 
 	std::vector<std::pair<uint32_t, double_t>> heapify(std::vector<pair> scores);
 

@@ -13,7 +13,7 @@
 // future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
 QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
 
-std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx) {
+std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx, KgramIndex &kIdx3) {
 	std::istringstream iss(userQuery);
 	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
 		std::istream_iterator<std::string>{} };
@@ -30,6 +30,7 @@ std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string user
 	i = 0;
 	// I DID NOT SUM ACCUMULATOR YET
 	for (std::string token : tokens) {
+		correctSpelling(dIdx, kIdx3, token);
 		std::string stemmedToken = PorterStemmer::stem(token);
         const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
 
