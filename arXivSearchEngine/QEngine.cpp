@@ -48,9 +48,7 @@ std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string user
 		}
 	}
 	// SORT AND THEN RETURN TOP 10
-	std::vector<std::pair<uint32_t, double_t>> result = heapify(scores);
-
-	return result;
+	return heapify(scores);
 }
 
 std::vector<std::pair<uint32_t, double_t>> QEngine::heapify(std::vector<pair> scores) {
@@ -63,8 +61,7 @@ std::vector<std::pair<uint32_t, double_t>> QEngine::heapify(std::vector<pair> sc
 		if (scores.front().score == 0) // max score is 0
 			break;
 
-		result.push_back(std::pair<uint32_t, uint32_t>(scores.front().docid, scores.front().score));
-		std::cout << "MAX: docid(" << scores.front().docid <<") score(" << scores.front().score << ")" << std::endl; // simple print debugger statement for: fire in yosemite (1.7)
+		result.push_back(std::pair<uint32_t, double_t>(scores.front().docid, scores.front().score));// simple print debugger statement for: fire in yosemite (1.7)
 		std::pop_heap(scores.begin(), scores.end(), descending()); scores.pop_back(); // gets top and pops from heap
 	}
 

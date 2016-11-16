@@ -179,14 +179,14 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
     std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
 
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
-    KSerializer::buildIndex(outDir, kIdx1, kIdx2, kIdx3);
+    //KSerializer::buildIndex(outDir, kIdx1, kIdx2, kIdx3);
     dir = outDir;
 }
 
 void Engine::printRank(std::string &query) {
     auto list = getRank(query);
     for(auto element : list)
-        std::cout << getArticleName(element.first)  << "\t:\t" << element.second << std::endl;
+        std::cout << "doc name: " << getArticleName(element.first)  << " ->\tscore: " << element.second << std::endl;
 }
 
 std::vector<std::pair<uint32_t, double_t>> Engine::getRank(std::string &query) {
