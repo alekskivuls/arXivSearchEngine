@@ -30,7 +30,7 @@ public:
     static void buildTerms(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
         std::vector<uint32_t> &vocabPositions);
 
-    static void WriteTerms(std::ofstream &kgramsFile, const std::list<std::string> &terms);
+    static void WriteTerms(std::ofstream &kgramsFile, const std::unordered_set<std::string> &terms);
 };
 
 #endif
