@@ -90,6 +90,7 @@ boxes/*
 ClientBin/
 ~$*
 *~
+*.bin
 *.dbmdl
 *.dbproj.schemaview
 *.jfm

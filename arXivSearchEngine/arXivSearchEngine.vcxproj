@@ -156,8 +156,10 @@
     <ClCompile Include="DocInfo.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="InvertedIndex.cpp" />
+    <ClCompile Include="KDeserializer.cpp" />
     <ClCompile Include="KEngine.cpp" />
     <ClCompile Include="KgramIndex.cpp" />
+    <ClCompile Include="KSerializer.cpp" />
     <ClCompile Include="PorterStemmer.cpp" />
     <ClCompile Include="QEngine.cpp" />
     <ClCompile Include="Serializer.cpp" />
@@ -170,8 +172,10 @@
     <ClInclude Include="DocInfo.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="InvertedIndex.h" />
+    <ClInclude Include="KDeserializer.h" />
     <ClInclude Include="KEngine.h" />
     <ClInclude Include="KgramIndex.h" />
+    <ClInclude Include="KSerializer.h" />
     <ClInclude Include="PorterStemmer.h" />
     <ClInclude Include="QEngine.h" />
     <ClInclude Include="Serializer.h" />
