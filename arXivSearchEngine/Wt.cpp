@@ -150,12 +150,14 @@ void WTApplication::rank()
    * Update the text, using text input into the stemResult_ field.
    */
   std::string query = searchBox_->text().toUTF8();
-  std::vector<uint32_t> output = engine.rank(query);
+  std::vector<std::pair<uint32_t,double_t>> output = engine.getRank(query);
 
   std::string queryResult = "";
   for (auto di : output)
-      queryResult += di + '\t';
+      queryResult += engine.getArticleName(di.first) + " : " + std::to_string(di.second) + '\n';
   queryResult += '\n' + output.size() + '\n';
+  result_->emptyText();
+  result_->setText(std::string(""));
   result_->setText("Results: \n" + queryResult);
   numResults_->setText(std::to_string(output.size()));
 }

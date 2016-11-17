@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <string>
 #include <unordered_set>
+#include <list>
 
 /*
  * Takes in an integer n, and that is the number kgram's number of char grams.

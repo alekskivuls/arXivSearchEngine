@@ -1,6 +1,7 @@
 #include "KSerializer.h"
 #include <iomanip>
 #include <iostream>
+#include <list>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -67,8 +68,8 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
     std::ofstream kgramFile(vocabPath.append("/kgramList.bin", boost::filesystem::path::codecvt()).string(), std::ios::out | std::ios::binary);
 
 	std::list<std::string> allKgrams = auxIdx1.getKgramList();
-	std::list<std::string> &second = auxIdx2.getKgramList();
-	std::list<std::string> &third = auxIdx3.getKgramList();
+    std::list<std::string> second = auxIdx2.getKgramList();
+    std::list<std::string> third = auxIdx3.getKgramList();
 	allKgrams.sort();
 	second.sort();
 	third.sort();
@@ -116,8 +117,8 @@ void KSerializer::buildTerms(boost::filesystem::path &filePath, KgramIndex &auxI
 
 
 	std::list<std::string> allKgrams = auxIdx1.getKgramList(); //likely inefficient because recreated in buildKgrams method as well;
-	std::list<std::string> &second = auxIdx2.getKgramList();
-	std::list<std::string> &third = auxIdx3.getKgramList();
+    std::list<std::string> second = auxIdx2.getKgramList();
+    std::list<std::string> third = auxIdx3.getKgramList();
 
 	allKgrams.sort();
 	second.sort();
