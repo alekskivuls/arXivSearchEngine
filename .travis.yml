@@ -5,15 +5,13 @@ notifications:
   email: false
 env:
 - CORPUS_TEST_DIR=/home/travis/build/alekskivuls/arXivSearchEngine/test/documents/testCorpus
-addons:
-    code_climate:
-        repo_token: 44bac5901f28e82c74f8645323e090e88083c61b3be296fbadf5e1867e04697c
 before_install:
 - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test 
 - sudo apt-add-repository -y ppa:george-edison55/precise-backports
 - sudo apt-add-repository --yes ppa:boost-latest/ppa
 - sudo sh -c 'echo "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main" >> /etc/apt/sources.list'
 - sudo apt-get update -qq
+- pip install --user cpp-coveralls
 install:
 - sudo apt-get install -y libboost1.55-all-dev cmake cmake-data valgrind g++-5 gcc-5
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 30
@@ -27,6 +25,7 @@ script:
 - ./arXivSearchEngine_test
 - cd ..
 after_success:
+- coveralls --exclude lib --exclude tests --gcov-options '\-lp'
 - sudo apt-get install doxygen graphviz
 - openssl aes-256-cbc
   -K $encrypted_7c35d333d4f9_key
