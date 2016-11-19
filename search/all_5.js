@@ -5,5 +5,5 @@ var searchData=
   ['getpathnames',['getPathNames',['../classEngine.html#a28311049f0c0052394f65bb480335f3b',1,'Engine']]],
   ['getpositions',['getPositions',['../classDocInfo.html#a659f4ce98c093ddcc83184dacaf0775b',1,'DocInfo']]],
   ['getpostings',['getPostings',['../classInvertedIndex.html#ae6fdfc7f864f083f04652feff4bd274f',1,'InvertedIndex']]],
-  ['getterms',['getTerms',['../classKgramIndex.html#afc4ba05e8614e6671296de05f7080b04',1,'KgramIndex']]]
+  ['getterms',['getTerms',['../classKgramIndex.html#a972b1230ba5f2c2b3ea087ea5edeb5b0',1,'KgramIndex']]]
 ];
