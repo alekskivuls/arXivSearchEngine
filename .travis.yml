@@ -11,21 +11,19 @@ before_install:
 - sudo apt-add-repository --yes ppa:boost-latest/ppa
 - sudo sh -c 'echo "deb http://llvm.org/apt/precise/ llvm-toolchain-precise main" >> /etc/apt/sources.list'
 - sudo apt-get update -qq
-- pip install --user cpp-coveralls
 install:
 - sudo apt-get install -y libboost1.55-all-dev cmake cmake-data valgrind g++-5 gcc-5
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 30
 - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 20
 script:
-- mkdir build
-- cd build
-- cmake ..
+- mkdir build && cd build
+- cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug ..
 - make
+- make coveralls
 - ctest
 - ./arXivSearchEngine_test
 - cd ..
 after_success:
-- coveralls --exclude lib --exclude tests --gcov-options '\-lp'
 - sudo apt-get install doxygen graphviz
 - openssl aes-256-cbc
   -K $encrypted_7c35d333d4f9_key

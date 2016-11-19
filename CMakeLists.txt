@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8.8)
 set(PROJECT_NAME_STR arXivSearchEngine)
 project (${PROJECT_NAME_STR})
 
+option(COVERALLS "Turn on coveralls support" OFF)
+option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
+
 #---------
 #Boost
 #---------
@@ -9,20 +12,20 @@ project (${PROJECT_NAME_STR})
 #list(REMOVE_ITEM SOURCES "arXivSearchEngine/wt.cpp")
 
 set(SOURCES
-    ${PROJECT_NAME_STR}/Compressor.cpp
-    ${PROJECT_NAME_STR}/DiskInvertedIndex.cpp
-    ${PROJECT_NAME_STR}/DocInfo.cpp
-    ${PROJECT_NAME_STR}/Engine.cpp
-    ${PROJECT_NAME_STR}/InvertedIndex.cpp
-    ${PROJECT_NAME_STR}/KDeserializer.cpp
-    ${PROJECT_NAME_STR}/KEngine.cpp
-    ${PROJECT_NAME_STR}/KgramIndex.cpp
-    ${PROJECT_NAME_STR}/KSerializer.cpp
-    ${PROJECT_NAME_STR}/PorterStemmer.cpp
-    ${PROJECT_NAME_STR}/QEngine.cpp
-    ${PROJECT_NAME_STR}/Serializer.cpp
-    ${PROJECT_NAME_STR}/Tokenizer.cpp
-    ${PROJECT_NAME_STR}/WildEngine.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Compressor.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskInvertedIndex.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DocInfo.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Engine.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/InvertedIndex.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KDeserializer.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KEngine.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KgramIndex.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KSerializer.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/PorterStemmer.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/QEngine.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Serializer.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Tokenizer.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/WildEngine.cpp
 )
 
 #Load boost
@@ -38,10 +41,30 @@ set(Boost_USE_STATIC_RUNTIME    OFF)
 
 #C++11 flags
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0") # debug, no optimisation
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage") # enabling coverage
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0") # debug, no optimisation
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage") # enabling coverage
 
 find_package(Threads REQUIRED)
+
+#---------
+#Coveralls
+#---------
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} 
+	${PROJECT_SOURCE_DIR}/external/coveralls-cmake)
+
+if (COVERALLS)
+	include(Coveralls)
+	coveralls_turn_on_coverage()
+endif()
+
+if (COVERALLS)
+	coveralls_setup(
+        "${SOURCES}" 
+        "${COVERALLS_UPLOAD}"                 
+        "${PROJECT_SOURCE_DIR}/external/coveralls-cmake")
+endif()
+
+
 #---------
 #Directories
 #---------
@@ -78,8 +101,6 @@ if(wt)
   target_link_libraries(arXivSearchEngineWeb
                         ${Boost_LIBRARIES}
                         wt wthttp)
-  set_property(TARGET ${PROJECT_NAME_STR}Web PROPERTY CXX_STANDARD 11)
-  set_property(TARGET ${PROJECT_NAME_STR}Web PROPERTY CXX_STANDARD_REQUIRED ON)
 endif()
 
 #------
@@ -103,9 +124,3 @@ endif()
 
 target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 add_test(test1 ${PROJECT_TEST_NAME})
-
-#C++11 Flags
-set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD 11)
-set_property(TARGET ${PROJECT_NAME_STR} PROPERTY CXX_STANDARD_REQUIRED ON)
-set_property(TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD 11)
-set_property(TARGET ${PROJECT_TEST_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
