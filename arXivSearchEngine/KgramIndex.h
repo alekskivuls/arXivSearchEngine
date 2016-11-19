@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <unordered_set>
 #include <list>
 
 /*
@@ -19,7 +20,7 @@ class KgramIndex {
 	
 	/** The hashmap that represents the entire inverted index.
 	 * Possible future optimization is to do <std::string*> */
-    std::unordered_map<std::string, std::list<std::string>> _mIndex;
+    std::unordered_map<std::string, std::unordered_set<std::string>> _mIndex;
 	// Where do I store this.
 
 	/**This method is used to check if a kgram exists. Instead of catching an out of 
@@ -41,7 +42,7 @@ public:
 
 	//need to add a wildcard method.
 
-    std::list<std::string> getTerms(std::string &kgram);
+	std::unordered_set<std::string> getTerms(std::string &kgram);
 
 	void addTerm(std::string &term); //add kgram to string into index
 

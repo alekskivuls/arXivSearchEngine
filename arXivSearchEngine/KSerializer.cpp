@@ -1,6 +1,7 @@
 #include "KSerializer.h"
 #include <iomanip>
 #include <iostream>
+#include <list>
 
 // For correcting endianness issues; you may not need these.
 inline uint32_t Reverse(uint32_t value) {
@@ -40,7 +41,7 @@ void KSerializer::buildIndex(boost::filesystem::path &filePath, KgramIndex &auxI
  *
  * Terms file is stored like so: #terms, #chars in term1, term1...
  */
-void KSerializer::WriteTerms(std::ofstream &termsFile, const std::list<std::string> &terms) {
+void KSerializer::WriteTerms(std::ofstream &termsFile, const std::unordered_set<std::string> &terms) {
     uint32_t termCt = Reverse((uint32_t)terms.size());
     termsFile.write((char*)&termCt, sizeof(termCt)); //writing number of terms.
 
@@ -59,7 +60,6 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
     // also build an array associating each term with its byte location in this file.
     std::vector<uint32_t> positions(auxIdx1.getKgramList().size() + auxIdx2.getKgramList().size() + auxIdx3.getKgramList().size()); //all of your kgrams totaled
     int kgramIndex = 0; //thing you increment
-    std::list<std::string> allKgrams;
 
     //the main file you will write in.
     boost::filesystem::path vocabPath = filePath;
@@ -67,9 +67,17 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
     //setting output stream as the file. make /kgramList.bin put output there.
     std::ofstream kgramFile(vocabPath.append("/kgramList.bin", boost::filesystem::path::codecvt()).string(), std::ios::out | std::ios::binary);
 
-    allKgrams = auxIdx1.getKgramList();
-    allKgrams.merge(auxIdx2.getKgramList()); //not sure if i can do this
-    allKgrams.merge(auxIdx3.getKgramList());
+	std::list<std::string> allKgrams = auxIdx1.getKgramList();
+    std::list<std::string> second = auxIdx2.getKgramList();
+    std::list<std::string> third = auxIdx3.getKgramList();
+	allKgrams.sort();
+	second.sort();
+	third.sort();
+
+    allKgrams.merge(second);
+	allKgrams.merge(third);
+	//allKgrams.insert();
+
     //alphabetize
     allKgrams.sort(); //$ is first then shorter length should be.
     //for the terms in your list of kgrams in your index. so only 3-gram example.
@@ -96,7 +104,6 @@ void KSerializer::buildTerms(boost::filesystem::path &filePath, KgramIndex &auxI
     // file location in the postings file.
     std::ofstream termsFile(termsPath.append("/terms.bin", boost::filesystem::path::codecvt()).string(), std::ios::out | std::ios::binary);
     std::ofstream kgramTable(tablePath.append("/kgramTable.bin", boost::filesystem::path::codecvt()).string(), std::ios::out | std::ios::binary);
-    std::list<std::string> allKgrams; //likely inefficient because recreated in buildKgrams method as well;
 
 
     // the first thing we must write to the vocabTable file is the number of kgram terms.
@@ -108,13 +115,21 @@ void KSerializer::buildTerms(boost::filesystem::path &filePath, KgramIndex &auxI
 
     int32_t kgramIndex = 0; // FOR EVERY TERM //iterator pmuch.
 
-    allKgrams = auxIdx1.getKgramList();
-    allKgrams.merge(auxIdx2.getKgramList()); //not sure if i can do this
-    allKgrams.merge(auxIdx3.getKgramList());
+
+	std::list<std::string> allKgrams = auxIdx1.getKgramList(); //likely inefficient because recreated in buildKgrams method as well;
+    std::list<std::string> second = auxIdx2.getKgramList();
+    std::list<std::string> third = auxIdx3.getKgramList();
+
+	allKgrams.sort();
+	second.sort();
+	third.sort();
+	allKgrams.merge(second);
+	allKgrams.merge(third);
+
     //alphabetize
     allKgrams.sort();
 
-    std::list<std::string> terms;
+    std::unordered_set<std::string> terms;
     for (std::string &kgram : allKgrams) { //for all kgrams in the index
         //if it doesn't fall in any it will break. vulnerability
         if(kgram.size() == 1) terms = auxIdx1.getTerms(kgram);
@@ -123,10 +138,12 @@ void KSerializer::buildTerms(boost::filesystem::path &filePath, KgramIndex &auxI
 
         // write the kgram table entry for this kgram: the byte location of the kgram in the kgramlist file,
         // and the byte location of the terms for the term in the terms file.
+		//std::cout << "KGRAMINDEX = " << kgramIndex << std::endl;
+		//std::cout << "KGRAM POSITION = " << kgramPositions[kgramIndex] << std::endl;
         uint32_t kPosition = Reverse(kgramPositions[kgramIndex]); //get first //where the k is located you save.
         kgramTable.write((char*)&kPosition, sizeof(kPosition)); //ideally the pointer to the k
         //writing where first kgram is.
-
+		//std::cout << "TERM POSITION = " << termsFile.tellp() << std::endl;
         uint32_t tPosition = Reverse((uint32_t)termsFile.tellp()); //position where you will start writing terms for this kgram
         //also marks where the last term left off. hence where the new term set starts.
         kgramTable.write((char*)&tPosition, sizeof(tPosition)); //write term position.

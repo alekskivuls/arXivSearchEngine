@@ -139,7 +139,7 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
             i = m + 1;
         }
     }
-    return VocabEntry(-1, -1);;
+    return VocabEntry(-1, -1);
 }
 
 std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition) { // change from vector to list...?
@@ -206,9 +206,7 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
     else {
         termLength = (mVocabTable[i + 1].StringPosition - entry.StringPosition); // (uint32_t)
     }
-
     //std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
-
     mVocabList.clear();
     mVocabList.seekg(entry.StringPosition, mVocabList.beg);
     char *buffer = new char[termLength + 1];
