@@ -49,7 +49,7 @@ before_build:
 
 build: on
 #build:
-#  project: 
+  project: C:\projects\arXivSearchEngine\build\arXiveSearchEngine.sln
 #  parallel: true                           # enable MSBuild parallel builds
 #  verbosity: quiet                         # MSBuild verbosity level (quiet|minimal|normal|detailed)
 
