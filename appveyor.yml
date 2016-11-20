@@ -17,7 +17,7 @@ environment:
 # build configuration, i.e. Debug, Release, etc.
 configuration:
   - Debug
-  - Release
+#  - Release
 
 # scripts that are called at very beginning, before repo cloning
 init:
@@ -45,11 +45,11 @@ before_build:
   - cmd: cd C:\projects\arXivSearchEngine
   - cmd: md build
   - cmd: cd build
-  - cmd: cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug ..
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Debug ..
 
-build: off
+build: on
 #build:
-#  project:
+#  project: 
 #  parallel: true                           # enable MSBuild parallel builds
 #  verbosity: quiet                         # MSBuild verbosity level (quiet|minimal|normal|detailed)
 
