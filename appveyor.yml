@@ -47,7 +47,6 @@ before_build:
   - cmd: cd build
   - cmd: cmake -DCMAKE_BUILD_TYPE=Debug ..
 
-build: on
 build:
   project: C:\projects\arXivSearchEngine\build\arXiveSearchEngine.sln
 #  parallel: true                           # enable MSBuild parallel builds
