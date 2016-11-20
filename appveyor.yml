@@ -1,0 +1,58 @@
+# Specify version format
+version: "{build}"
+
+# Operating system (build VM template)
+os: Visual Studio 2015
+
+# build platform, i.e. Win32 (instead of x86), x64, Any CPU. This setting is optional.
+platform: 
+  - Win32
+
+# specify custom environment variables
+environment:
+  MSVC_DEFAULT_OPTIONS: ON
+  BOOST_ROOT: C:\Libraries\boost_1_59_0
+  BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib32-msvc-14.0
+
+# build configuration, i.e. Debug, Release, etc.
+configuration:
+  - Debug
+  - Release
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - cmd: cmake --version
+  - cmd: msbuild /version
+
+# clone directory
+clone_folder: C:\projects\arXivSearchEngine
+
+# branches to build
+branches:
+  # whitelist
+  only: 
+     - master
+  # blacklist
+  # except:
+  #  - gh-pages
+
+# scripts that run after cloning repository
+#install:
+#  - ps: cd C:\projects\arXivSearchEngine
+
+# scripts to run before build
+before_build:
+  - cmd: cd C:\projects\arXivSearchEngine
+  - cmd: md build
+  - cmd: cd build
+  - cmd: cmake -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug ..
+
+build: off
+#build:
+#  project:
+#  parallel: true                           # enable MSBuild parallel builds
+#  verbosity: quiet                         # MSBuild verbosity level (quiet|minimal|normal|detailed)
+
+test: off
+test_script:
+  - cmd: ctest
