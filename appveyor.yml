@@ -54,5 +54,5 @@ build:
 #  verbosity: quiet                         # MSBuild verbosity level (quiet|minimal|normal|detailed)
 
 test: off
-test_script:
-  - cmd: ctest
+#test_script:
+#  - cmd: ctest
