@@ -3,7 +3,21 @@ dist: precise
 language: cpp
 notifications:
   email: false
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "MN6kJKFEbNE2s4R/XLHjvoUvinqE+vtqI7pz+TK8r8dw2s7fbhmD+uykffgKKIEHiO8DOGWI8o3IZILAZsq+1iLMM9CVcp4WBFFE2sAf7vNinZTaMzbHaritJtXiAQ0RarCA6kxePVz4lfe3yJBJzFMiUikgrCRlxbriDOC+g2ysVRwt9tcTBpJsveZhx4On2iaG0Sh7G5TIRw31T6VfJZFl3TLKXN/CWVEybD51FE3UO5U3kn3gBoGjPWoXjvxPAwn0aqlCgk68alZs0R0Ctjsj4kdGK7JHU7QEkp4W5CMXabk+oASw2tpShW9ls/49kcl+xuhVl55+xMNL/PdJ9FUQ/g6LbO7YVYKKfmUOAElszP2cbEeu3GwSxH73+SauaPr+MOd7b0hpF2PiWcXAukh0NKCPIYS4SgI7FQPyRHms3TT0vlv8CoWpJvxE2eI86r2mgckMW18CPAxvWRYNKBt8LvsWAK0NireWE5zZk5xMTSRWxMlRNu6XBXlun5+B0Oen3kaGEb1UhQIKoYHCim/mQrSG3cPWWDGiQ1MSn13JAX8U3Ev+ykhdLyuPCEkd8UEKyIgSDkWsUe9hP2vLRaJQljbs5wLlpAo0lrhca1EoAo8PaZZF6SiU4sf15nHtcJwdY/Y6essYth+Qyy6rf8K6VUAkSuJ95Ul/JiBr4FU="
+addons:
+  coverity_scan:
+    project:
+      name: "alekskivuls/arXivSearchEngine"
+      description: "Build submitted via Travis CI"
+    build_command_prepend: "mkdir build && cd build; cmake -DCMAKE_BUILD_TYPE=Debug .."
+    build_command:   "make"
+    branch_pattern: coverity_scan
 before_install:
+- echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 - sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test 
 - sudo apt-add-repository -y ppa:george-edison55/precise-backports
 - sudo apt-add-repository --yes ppa:boost-latest/ppa
