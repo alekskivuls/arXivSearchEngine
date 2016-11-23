@@ -29,6 +29,9 @@ set(SOURCES
 )
 
 #Load boost
+if(WIN32)
+	add_definitions( -DBOOST_ALL_NO_LIB ) #Disable boost autolinking
+endif()
 FIND_PACKAGE(Boost 1.55.0 COMPONENTS regex system filesystem thread signals REQUIRED)
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found.")
@@ -83,6 +86,7 @@ include_directories(${GTEST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${COMMON_INCLUDE
 
 #Build
 add_executable(${PROJECT_NAME_STR} ${PROJECT_NAME_STR}/ConsoleEngine.cpp ${SOURCES})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME_STR} ${Boost_LIBRARIES})
 
 #list(REMOVE_ITEM SOURCES "${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ConsoleEngine.cpp")

@@ -11,8 +11,9 @@ platform:
 # specify custom environment variables
 environment:
   MSVC_DEFAULT_OPTIONS: ON
-  BOOST_ROOT: C:\Libraries\boost_1_59_0
-  BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib32-msvc-14.0
+  BOOST_ROOT: C:\Libraries\boost_1_62_0
+  BOOST_LIBRARYDIR: C:\Libraries\boost_1_62_0\lib32-msvc-14.0
+  CORPUS_TEST_DIR: C:\projects\arXivSearchEngine\test\documents\testCorpus
 
 # build configuration, i.e. Debug, Release, etc.
 configuration:
@@ -48,10 +49,10 @@ before_build:
   - cmd: cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 build:
-  project: C:\projects\arXivSearchEngine\build\arXiveSearchEngine.sln
+  project: C:\projects\arXivSearchEngine\build\arXivSearchEngine.sln
 #  parallel: true                           # enable MSBuild parallel builds
 #  verbosity: quiet                         # MSBuild verbosity level (quiet|minimal|normal|detailed)
 
 test: off
-test_script:
-  - cmd: ctest
+#test_script:
+#  - cmd: ctest
