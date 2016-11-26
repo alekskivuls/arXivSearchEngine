@@ -18,18 +18,15 @@ class DocInfo {
 	std::list<uint32_t> _posList;
 
 public:
-	DocInfo();
 	DocInfo(const uint32_t &docId);
 
-	void addPosition(const uint32_t &pos);
+    void addPosition(const uint32_t &pos);
 
 	/**Returns the name of the document (json file name).*/
 	uint32_t getDocId() const;
 
 	/**Returns the list of the term's occurence.*/
     std::list<uint32_t> getPositions() const;
-
-    void addPosition(uint32_t &value);
 };
 
 #endif

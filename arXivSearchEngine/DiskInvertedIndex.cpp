@@ -224,10 +224,6 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const
     return std::list<DocInfo>();
 }
 
-DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {
-    return DocInfo();
-}
-
 uint32_t DiskInvertedIndex::getN() {
     fs::path weightbPath = mPath;
 
@@ -263,10 +259,6 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights() {
 
     return weights;
 }
-
-/*DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) { // 
-    return DocInfo();
-}*/
 
 void DiskInvertedIndex::printAllPostings(const InvertedIndex &idx) {
     std::cout << std::endl;
