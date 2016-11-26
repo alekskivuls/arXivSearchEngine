@@ -160,13 +160,12 @@ std::list<std::string> KDeserializer::GetTerms(std::string &kgram) { // const ic
 void KDeserializer::printAllTerms(KgramIndex &idx){
     std::cout << std::endl;
     std::cout << "Printing all terms from file..." << std::endl;
-    for (std::string &kgram : idx.getKgramList()) {
-        std::cout << kgram << std::endl;
+    for (auto &kgram : idx.getKgramList()) {
+        std::cout << kgram << " : " << std::endl;
         auto term = GetTerms(kgram);
-        for (std::string &trm : term){
+        for (auto &trm : term){
             std::cout << trm << std::endl;
         }
-        std::cout << std::endl;
     }
     std::cout << std::endl;
 }
@@ -194,7 +193,7 @@ void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex 
 		k = kgramT.size();
 		for (auto term : GetTerms(kgramT)) {
 			if (k == 1) idx1.addTerm(term);
-			else if (k == 2) idx2.addTerm(term);
+            else if (k == 2) idx2.addTerm(term);
 			else idx3.addTerm(term);
 			//i am spending time to check. or i could just add to all and just call the add term to check.
 			//is addterm more time consuming or this checking process?
