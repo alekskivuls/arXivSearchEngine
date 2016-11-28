@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['editdistdp',['editDistDP',['../classKEngine.html#a6d439510a2ff687f9e4b875b22f955ca',1,'KEngine']]]
+  ['docinfo',['DocInfo',['../classDocInfo.html#ae768e3b909f33d9d3b3fedce90c2c30a',1,'DocInfo']]]
 ];
