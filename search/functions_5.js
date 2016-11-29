@@ -8,5 +8,5 @@ var searchData=
   ['getpostings',['getPostings',['../classInvertedIndex.html#ae6fdfc7f864f083f04652feff4bd274f',1,'InvertedIndex']]],
   ['gettermcount',['getTermCount',['../classInvertedIndex.html#aa115f8005afa5e892233a9b7d9d1a2d3',1,'InvertedIndex']]],
   ['getterms',['getTerms',['../classKgramIndex.html#a972b1230ba5f2c2b3ea087ea5edeb5b0',1,'KgramIndex']]],
-  ['getvocablist',['getVocabList',['../classInvertedIndex.html#acbf12955191c399cec1c2bf27616e683',1,'InvertedIndex']]]
+  ['getvocablist',['getVocabList',['../classInvertedIndex.html#ad0e43c0bed86b2da237df433cfb83fa8',1,'InvertedIndex']]]
 ];
