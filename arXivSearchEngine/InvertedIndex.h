@@ -1,6 +1,7 @@
 #ifndef INVERTED_INDEX_H
 #define INVERTED_INDEX_H
 
+#include <boost/heap/fibonacci_heap.hpp>
 #include <unordered_map>
 #include "DocInfo.h"
 #include <cstdint>
