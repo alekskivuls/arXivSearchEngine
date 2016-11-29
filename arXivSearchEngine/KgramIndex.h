@@ -17,7 +17,7 @@
 class KgramIndex {
 
 	int _kgramSize;
-	std::unordered_set<const std::string&> mCache;
+	std::unordered_set<std::string> mCache;
 	
 	/** The hashmap that represents the entire inverted index.
 	 * Possible future optimization is to do <std::string*> */
