@@ -58,9 +58,6 @@ std::list<std::string> InvertedIndex::getVocabList() const {
 /* 
  * Adds the "term", found in the corresponding "docId" at position "int pos", 
  * into the inverted index.
- * 
- * Side note: maybe we should store all of the information as compressed bytes 
- * later? this way, we can put more on RAM
  *
  * _mIndex.find may be redundant....replace later with _mIndex[term]
  */
@@ -91,7 +88,7 @@ void InvertedIndex::addTerm(const std::string &term, const uint32_t &docId, cons
 /*
  * This method prints all terms and DocInfos associated to each term to the console.
  */
-void InvertedIndex::vocab() const {
+void InvertedIndex::printVocab() const {
 	for (auto pair : _mIndex) 
 		std::cout << pair.first << '\n';
 	std::cout << getTermCount() << '\n';
