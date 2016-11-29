@@ -58,7 +58,7 @@ std::list<std::string> KEngine::correctSpelling(std::string &mispelled, KgramInd
 
 
     for(auto grams : mispgrams){ //grabs all the term list values from the key grams
-        const std::list<std::string> loopterms = idx.getTerms(grams);
+        const std::unordered_set<std::string> loopterms = idx.getTerms(grams);
         //get the value of the grams (key) and put them in potentialterms
         //loopterms = KgramIndex::getTerms(grams); //returns the list of terms
         for(auto term : loopterms) { //loop thru that term list and get all the terms

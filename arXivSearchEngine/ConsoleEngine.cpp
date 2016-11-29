@@ -19,9 +19,6 @@
 }*/
 
 int main() {
-    //pktest(); //  do not delete yet
-    //return 0;
-
     //Initialize Engine
     Engine engine;
 
@@ -30,8 +27,15 @@ int main() {
     std::string filepath;
     std::cout << "Enter directory of corpus" << std::endl;
     std::getline(std::cin, filepath);
+	//engine.createIndex(filepath);
     engine.loadIndex(filepath);
 
+	//engine.createIndex(R"(C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus)");
+
+	//system("pause");
+
+	//engine.loadIndex(R"(C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\arXivSearchEngine)");
+	//return 0;
 	
     /*std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
 	for (auto pair : idTable) {

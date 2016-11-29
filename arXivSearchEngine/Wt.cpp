@@ -59,14 +59,15 @@ WTApplication::WTApplication(const WEnvironment& env)
   root()->addWidget(new WBreak());
 
   root()->addWidget(new WText("Query: "));                          // show some text
-  searchBox_ = new WLineEdit(root());                               // allow text input
+  searchBox_ = new WLineEdit(root());
+  searchBox_->setTextSize(50);                             // allow text input
 
   WPushButton *searchButton = new WPushButton("Search", root());                   // create a button
   searchButton->setMargin(5);                                       // add 5 pixels margin
   WPushButton *rankButton = new WPushButton("Rank", root());                   // create a button
-  rankButton->setMargin(5, Left);                                    // add 5 pixels margin
+  rankButton->setMargin(5);                                    // add 5 pixels margin
   WPushButton *stemButton = new WPushButton("Stem", root());                   // create a button
-  stemButton->setMargin(5, Left);                                    // add 5 pixels margin
+  stemButton->setMargin(5);                                    // add 5 pixels margin
   root()->addWidget(new WText("Num Results: "));
   numResults_ = new WLabel(root());
 
@@ -150,12 +151,14 @@ void WTApplication::rank()
    * Update the text, using text input into the stemResult_ field.
    */
   std::string query = searchBox_->text().toUTF8();
-  std::vector<uint32_t> output = engine.rank(query);
+  std::vector<std::pair<uint32_t,double_t>> output = engine.getRank(query);
 
   std::string queryResult = "";
   for (auto di : output)
-      queryResult += di + '\t';
+      queryResult += engine.getArticleName(di.first) + " : " + std::to_string(di.second) + '\n';
   queryResult += '\n' + output.size() + '\n';
+  result_->emptyText();
+  result_->setText(std::string(""));
   result_->setText("Results: \n" + queryResult);
   numResults_->setText(std::to_string(output.size()));
 }

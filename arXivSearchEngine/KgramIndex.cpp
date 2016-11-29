@@ -15,8 +15,8 @@ bool KgramIndex::hasKgram(std::string &kgram) const {
  * terms associates with that kgram from the _mIndex
  */
 
-std::list<std::string> KgramIndex::getTerms(std::string &kgram) {
-	std::list<std::string> empty;
+std::unordered_set<std::string> KgramIndex::getTerms(std::string &kgram) {
+	std::unordered_set<std::string> empty;
 	if (hasKgram(kgram))
 		return _mIndex.at(kgram); //at returns pointer to where that thing is at.
 	else
@@ -35,21 +35,17 @@ std::list<std::string> KgramIndex::getTerms(std::string &kgram) {
 // TODO: Potential optimation if we change to unordered set type.
 void KgramIndex::addKgram(std::string &kgram, std::string &term) {
 	if (_mIndex.find(kgram) == _mIndex.end()) { //if kgram is new or not in index already
-        std::list<std::string> terms; //list of kgrams
+        std::unordered_set<std::string> terms; //list of kgrams
 		//map kgram to list of string term
         //std::string ptr_term = &term;
-        terms.push_back(term); // kgrams is the array of words put term into array
+		terms.insert(term); // kgrams is the array of words put term into array
 		//i just want to put the list with just one string into the kgram
 		_mIndex[kgram] = terms;
 	}
 	else { //kgram is already made
-        std::list<std::string> &terms = _mIndex[kgram]; //index[kg] is the array of ptrs to the words that apply
+        std::unordered_set<std::string> &terms = _mIndex[kgram]; //index[kg] is the array of ptrs to the words that apply
 
-        if (std::find(terms.begin(), terms.end(), term) == terms.end()){
-        //if (!(terms.contains(term))){ //if term already associated with the kgram, dont put again.
-			//if the term is not in the kgram key 
-            _mIndex[kgram].push_back(term);
-		}
+		terms.insert(term);
 	}
 }
 

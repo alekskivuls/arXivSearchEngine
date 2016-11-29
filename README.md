@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/alekskivuls/arXivSearchEngine.svg?branch=master)](https://travis-ci.org/alekskivuls/arXivSearchEngine)
-
+[![Build Status](https://travis-ci.org/alekskivuls/arXivSearchEngine.svg?branch=master)](https://travis-ci.org/alekskivuls/arXivSearchEngine) [![Build status](https://ci.appveyor.com/api/projects/status/anywctclrbair138/branch/master?svg=true)](https://ci.appveyor.com/project/alekskivuls/arxivsearchengine/branch/master) [![Coverage Status](https://coveralls.io/repos/github/alekskivuls/arXivSearchEngine/badge.svg?branch=master)](https://coveralls.io/github/alekskivuls/arXivSearchEngine?branch=master)
 # arXivSearchEngine
 Search Engine to search reasearch papers published in http://arxiv.org/
 

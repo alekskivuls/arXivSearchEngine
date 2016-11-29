@@ -10,38 +10,35 @@ extern uint32_t Reverse(uint32_t);
 extern uint64_t Reverse(uint64_t);
 extern double_t Reverse(double_t);
 
+//Reversing depends on how method was written, in reverse or not
+//TODO: Refactor to one type (reverse or not) and move read and writing to same class
+
 uint8_t DiskInvertedIndex::ReadChar(std::ifstream &stream) {
     uint8_t value = 0;
     stream.read((char*)&value, sizeof(value));
-    //return Reverse(value); // UNCOMMENT FOR WINDDOWS
-    return value; // UNCOMMENT FOR WINDDOWS
+    //return Reverse(value);
+    return value;
 }
 
 uint32_t DiskInvertedIndex::ReadInt(std::ifstream &stream) {
     uint32_t value = 0;
     stream.read((char*)&value, sizeof(value));
-    return Reverse(value); // UNCOMMENT FOR WINDDOWS
+    return Reverse(value);
 }
 
 uint32_t DiskInvertedIndex::ReadRawInt(std::ifstream &stream) {
     uint32_t value = 0;
     stream.read((char*)&value, sizeof(value));
-    return Reverse(value); // UNCOMMENT FOR WINDDOWS
-    return value; // UNCOMMENT FOR WINDDOWS
+    return Reverse(value);
+    return value;
 }
 
 double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
     double_t value = 0;
     stream.read((char*)&value, sizeof(value));
-    //return Reverse(value); // UNCOMMENT FOR WINDDOWS
+    //return Reverse(value);
     return value;
 }
-
-/*uint32_t DiskInvertedIndex::ReadInt64(std::ifstream &stream) {
-    uint32_t value = 0;
-    stream.read((char*)&value, sizeof(value));
-    return Reverse(value); // UNCOMMENT FOR WINDDOWS
-}*/
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
     mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
@@ -139,7 +136,7 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
             i = m + 1;
         }
     }
-    return VocabEntry(-1, -1);;
+    return VocabEntry(-1, -1);
 }
 
 std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition) { // change from vector to list...?
@@ -206,9 +203,7 @@ std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
     else {
         termLength = (mVocabTable[i + 1].StringPosition - entry.StringPosition); // (uint32_t)
     }
-
     //std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
-
     mVocabList.clear();
     mVocabList.seekg(entry.StringPosition, mVocabList.beg);
     char *buffer = new char[termLength + 1];
@@ -224,10 +219,6 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
         return ReadPostingsFromFile(mPostings, entry.PostingPosition);
     return std::list<DocInfo>();
-}
-
-DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) {
-    return DocInfo();
 }
 
 uint32_t DiskInvertedIndex::getN() {
@@ -264,26 +255,6 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights() {
     weightFile.close();
 
     return weights;
-}
-
-/*DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId) { // 
-    return DocInfo();
-}*/
-
-void DiskInvertedIndex::printAllPostings(const InvertedIndex &idx) {
-    std::cout << std::endl;
-    std::cout << "PRINTING ALL POSTINGS FROM FILE!" << std::endl;
-    for (const std::string &term : idx.getVocabList()) {
-        const std::list<DocInfo> &posts = GetPostings(term);
-        for (auto docFile : posts) {
-            std::cout << "DocId = " << docFile.getDocId() << std::endl << "pos: ";
-            for (auto posFile : docFile.getPositions()) {
-                std::cout << posFile << " ";
-            }
-        }
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;
 }
 
 std::list<std::string> DiskInvertedIndex::getVocabList() {

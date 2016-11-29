@@ -34,7 +34,7 @@ std::list<std::string> WildEngine::potentials(std::string &wildcard, KgramIndex 
         //std::cout << gram << std::endl;
         int found = gram.find('*');
         //std::cout << found << std::endl;
-        std::list<std::string> reterms;
+        std::unordered_set<std::string> reterms;
         if (found == -1) { //no *
             reterms = kindex3.getTerms(gram);
             //std::cout << reterms.size() << std::endl;
@@ -43,7 +43,7 @@ std::list<std::string> WildEngine::potentials(std::string &wildcard, KgramIndex 
                 std::string temp1 = std::string(1, gram.at(0));
                 std::string temp2 = std::string(1, gram.at(2));
                 reterms = kindex1.getTerms(temp1);
-                reterms.merge(kindex1.getTerms(temp2));
+				reterms.insert(kindex1.getTerms(temp2).begin(), kindex1.getTerms(temp2).end());
             } else {
                 gram.erase(found, 1);
                 found = gram.find("*");

@@ -32,6 +32,7 @@ class QEngine {
 
 	void correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token);
 
+
 public:
 
 	struct pair {
@@ -61,18 +62,18 @@ public:
 
 	std::vector<std::pair<uint32_t, double_t>> rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx, KgramIndex &kIdx3);
 
-	std::vector<std::pair<uint32_t, double_t>> heapify(std::vector<pair> scores);
-
-	/** Takes a std::string query, stems each token in the query, and returns a list 
-	 * of stemmed tokens and operators in inverse notation. */
-	std::list<std::string> stemmify(std::string &userQuery);
-
 	// The methods below are used for TestDrivenDevelopment debugging.
 	void printInfixRpn();
 	void printInfixRpn2();
 	
-    //void printQueryTest(InvertedIndex *& idx);
-    //void printQueryTest2(InvertedIndex *& idx);
+
+private:
+
+    std::vector<std::pair<uint32_t, double_t>> heapify(std::vector<pair> scores);
+
+    /** Takes a std::string query, stems each token in the query, and returns a list
+     * of stemmed tokens and operators in inverse notation. */
+    std::list<std::string> stemmify(std::string &userQuery);
 };
 
 #endif

@@ -85,6 +85,7 @@ boxes/*
 /.cache
 /.bash_history
 /.profile
+/.local
 
 # Others
 ClientBin/

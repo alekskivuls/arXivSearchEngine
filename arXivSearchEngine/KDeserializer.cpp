@@ -103,7 +103,7 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
 
 
         std::string uniStr = ReadKgramStringAtPosition(m); //read middle kgram.
-        //std::cout << "READ KGRUM AT: " << uniStr << "starts " << m << std::endl;
+        //std::cout << "READ KGRAM AT: " << uniStr << "starts " << m << std::endl;
 
         int comp = kgram.compare(uniStr);
         if (comp == 0)
@@ -118,7 +118,7 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
             i = m + 1;
         }
     }
-    return KgramEntry(-1, -1);;
+    return KgramEntry(-1, -1);
 }
 
 //accesses stuct's kgramposition.
@@ -129,8 +129,7 @@ std::string KDeserializer::ReadKgramStringAtPosition(uint32_t index) const{
 
 
     if (index == mKgramTable.size() - 1) {
-        mKgramList.clear();
-        //seekg sets the address of the next input token.
+        mKgramList.clear(); //seekg sets the address of the next input token.
         mKgramList.seekg(0, mKgramList.end); // GETS LENGTH OF ENTIRE FILE
         auto end = mKgramList.tellg();
         termLength = (uint32_t) end - entry.KgramPosition;
@@ -161,13 +160,12 @@ std::list<std::string> KDeserializer::GetTerms(std::string &kgram) { // const ic
 void KDeserializer::printAllTerms(KgramIndex &idx){
     std::cout << std::endl;
     std::cout << "Printing all terms from file..." << std::endl;
-    for (std::string &kgram : idx.getKgramList()) {
-        std::cout << kgram << std::endl;
+    for (auto &kgram : idx.getKgramList()) {
+        std::cout << kgram << " : " << std::endl;
         auto term = GetTerms(kgram);
-        for (std::string &trm : term){
+        for (auto &trm : term){
             std::cout << trm << std::endl;
         }
-        std::cout << std::endl;
     }
     std::cout << std::endl;
 }
@@ -185,6 +183,25 @@ void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex 
     int numKgrams = mKgramTable.size();
     int i = 0, k;
     std::string kgramT;
+
+	for (i = 0; i < numKgrams; ++i) {
+		//just read the terms stored here.
+		//just get all the terms and store them into these kgram indexes.
+		//basically remaking them.
+		//or i can just get the kgram pair and then count and throw it into the get terms.
+		kgramT = ReadKgramStringAtPosition(i);
+		k = kgramT.size();
+		for (auto term : GetTerms(kgramT)) {
+			if (k == 1) idx1.addTerm(term);
+            else if (k == 2) idx2.addTerm(term);
+			else idx3.addTerm(term);
+			//i am spending time to check. or i could just add to all and just call the add term to check.
+			//is addterm more time consuming or this checking process?
+		}
+		//i can get all the terms with a list of kgrams.
+	}
+	
+	/*
     for(KgramEntry pairs : mKgramTable){
         //just read the terms stored here.
         //just get all the terms and store them into these kgram indexes.
@@ -201,6 +218,6 @@ void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex 
         }
         //i can get all the terms with a list of kgrams.
 
-    }
+    }*/
 }
 

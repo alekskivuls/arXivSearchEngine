@@ -30,9 +30,6 @@ protected:
  */
 TEST_F(KserialTest, serial)
 {
-    KDeserializer deserial = KDeserializer(file);
-
-    //std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
     boost::filesystem::path dir(file);
     std::string hello = std::string("hello");
     index3.addTerm(hello);
@@ -40,19 +37,11 @@ TEST_F(KserialTest, serial)
     index1.addTerm(hello);
 
     KSerializer::buildIndex(dir, index1, index2, index3);
-    deserial.printAllTerms(index3);
-//    std::list<std::string> res = WildEngine::potentials(wildcard, index1, index2, index3);
-//    EXPECT_EQ(res.size(), 1);
-//    std::cout << res.front() << std::endl;
 }
 
 TEST_F(KserialTest, deserial)
 {
     KDeserializer deserial = KDeserializer(file);
-
-    //std::string file = "C:/Users/pkim7/Documents/Visual Studio 2015/Projects/arXivSearchEngine/test/documents/testCorpus"; // // change to your input directory C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus
-    boost::filesystem::path dir(file);
-    std::string hello = std::string("hello");
     std::list<std::string> kgramList;
 
     std::cout << "This is what is in the index1 before: " << std::endl;
@@ -62,7 +51,8 @@ TEST_F(KserialTest, deserial)
     std::cout << "This is what is in the index1 after deserial: " << std::endl;
     index1.vocab();
     std::cout << std::endl;
-//    kgramList = index1.getKgramList();
-//    EXPECT_EQ(kgramList.front(), 'e');
-//    std::cout << res.front() << std::endl;
+
+    kgramList = index1.getKgramList();
+    std::cout << "Returned kgramList: " << kgramList.front() << std::endl;
+    EXPECT_EQ(kgramList.front(), "o");
 }

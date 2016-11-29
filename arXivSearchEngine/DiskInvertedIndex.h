@@ -1,15 +1,14 @@
 #ifndef DISK_INDEX_H
 #define DISK_INDEX_H
 
-
-#include "InvertedIndex.h"
 #include <boost/filesystem.hpp>
+#include <unordered_map>
 #include "DocInfo.h"
 #include <cstdint>
 #include <string>
 #include <fstream>
 #include <list>
-#include <vector> // argue with Neal about this..?
+#include <vector>
 
 
 typedef double double_t;
@@ -23,12 +22,11 @@ struct VocabEntry {
 };
 
 
-class DiskInvertedIndex /*: public InvertedIndex*/ {
+class DiskInvertedIndex {
 public:
 	static uint8_t ReadChar(std::ifstream &stream);
 	static uint32_t ReadInt(std::ifstream &stream);
 	static uint32_t ReadRawInt(std::ifstream &stream);
-	//static uint32_t ReadInt64(std::ifstream &stream);
 	static double_t ReadDouble(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
@@ -47,19 +45,17 @@ public:
 	static std::unordered_map<uint32_t, std::string> ReadIdTableFromFile(const boost::filesystem::path &path);
 
 	VocabEntry BinarySearchVocabulary(const std::string &term) const;
-	//static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
 
+    //static DocInfo ReadDocumentPosting(std::ifstream &postings, uint32_t lastDocId); // implement this after i fix the read method...
 
 	std::string ReadVocabStringAtPosition(uint32_t index) const;
 
 //public:
-	DiskInvertedIndex(const boost::filesystem::path  &path);
+    DiskInvertedIndex(const boost::filesystem::path &path);
 
-    std::list<DocInfo> GetPostings(const std::string &term) const; // std::vector<DocInfo>
+    std::list<DocInfo> GetPostings(const std::string &term) const;
 
     uint32_t getN();
-
-    void printAllPostings(const InvertedIndex &idx);
 
     std::list<std::string> getVocabList();
 };
