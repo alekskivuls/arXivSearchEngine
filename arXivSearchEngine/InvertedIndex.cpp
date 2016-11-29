@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <iterator>
 #include <iostream>
-InvertedIndex::InvertedIndex() : vocabList(std::list<std::string>()) { }
+InvertedIndex::InvertedIndex() { }
 
 /*
  * Returns whether the postings list associated with the term exists in the inverted index. 
@@ -24,34 +24,7 @@ std::list<DocInfo> InvertedIndex::getPostings(const std::string &term) const {
 		return empty;
 }
 
-/*
- * Properly sorts
- */
-void InvertedIndex::addVocab(const std::string &term) {
-	if (vocabList.size() == 0 || vocabList.back() < term) {
-		vocabList.push_back(term);
-		return;
-	}
-
-	if (vocabList.front() > term) {
-		vocabList.push_front(term);
-		return;
-	}
-
-	auto itr = vocabList.begin(), next = itr;
-	while (itr != vocabList.end()) {
-		next = std::next(itr, 1);
-
-		if (*itr < term && term < *next) {
-			vocabList.insert(next, term);
-			break;
-		}
-
-		++itr; // check next term
-	}
-}
-
-std::list<std::string> InvertedIndex::getVocabList() const {
+std::set<std::string> InvertedIndex::getVocabList() const {
 	return vocabList;
 }
 
@@ -63,7 +36,7 @@ std::list<std::string> InvertedIndex::getVocabList() const {
  */
 void InvertedIndex::addTerm(const std::string &term, const uint32_t &docId, const uint32_t &pos) {
 	if (_mIndex.find(term) == _mIndex.end()) { // TERM DOES NOT EXIST
-		addVocab(term);
+		vocabList.insert(term);
 		_mIndex.insert(std::pair<std::string, std::list<DocInfo>>(term, std::list<DocInfo>())); // create postings list
 		std::list<DocInfo> &postings = _mIndex.at(term);
 		//_mIndex[term] = postings; // populate

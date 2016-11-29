@@ -1,14 +1,13 @@
 #ifndef INVERTED_INDEX_H
 #define INVERTED_INDEX_H
 
-#include <boost/heap/fibonacci_heap.hpp>
 #include <unordered_map>
 #include "DocInfo.h"
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <list>
-
+#include <set>
 
 /**
  * @brief InvertedIndex This data structure represents the inverted index. It incapsulates a set of stemmed
@@ -24,13 +23,7 @@ class InvertedIndex {
     std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
 
     /** @brief vocabList The list of all terms in the vocabulary*/
-	std::list<std::string> vocabList;
-
-    /**
-     * @brief addVocab Adds a term to the vocab list
-     * @param term The term to add
-     */
-	void addVocab(const std::string &term);
+	std::set<std::string> vocabList;
 
 public:
 	InvertedIndex();
@@ -39,7 +32,7 @@ public:
      * @brief getVocabList Gets the vocab list
      * @return The vocab list
      */
-	std::list<std::string> getVocabList() const;
+	std::set<std::string> getVocabList() const;
 
     /**
      * @brief addTerm Adds an instance of the stemmed term to the document.
