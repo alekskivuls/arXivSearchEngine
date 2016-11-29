@@ -67,36 +67,44 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p><a class="el" href="classInvertedIndex.html" title="InvertedIndex This data structure represents the inverted index. It incapsulates a set of stemmed ter...">InvertedIndex</a> This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document.  
+ <a href="classInvertedIndex.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="InvertedIndex_8h_source.html">InvertedIndex.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acbf12955191c399cec1c2bf27616e683"><td class="memItemLeft" align="right" valign="top"><a id="acbf12955191c399cec1c2bf27616e683"></a>
-std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocabList</b> () const</td></tr>
+<tr class="memitem:acbf12955191c399cec1c2bf27616e683"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#acbf12955191c399cec1c2bf27616e683">getVocabList</a> () const</td></tr>
+<tr class="memdesc:acbf12955191c399cec1c2bf27616e683"><td class="mdescLeft">&#160;</td><td class="mdescRight">getVocabList Gets the vocab list  <a href="#acbf12955191c399cec1c2bf27616e683">More...</a><br /></td></tr>
 <tr class="separator:acbf12955191c399cec1c2bf27616e683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a527e7f50ee48083e74a744f244a9c70b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a527e7f50ee48083e74a744f244a9c70b">addTerm</a> (const std::string &amp;term, const uint32_t &amp;docId, const uint32_t &amp;pos)</td></tr>
+<tr class="memdesc:a527e7f50ee48083e74a744f244a9c70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">addTerm Adds an instance of the stemmed term to the document. A new <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> is created if the term is first encountered in that document.  <a href="#a527e7f50ee48083e74a744f244a9c70b">More...</a><br /></td></tr>
 <tr class="separator:a527e7f50ee48083e74a744f244a9c70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b67410c7f5eccea2999e095c7380ca4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a3b67410c7f5eccea2999e095c7380ca4">hasPostings</a> (const std::string &amp;term) const</td></tr>
+<tr class="memdesc:a3b67410c7f5eccea2999e095c7380ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">hasPostings This method is used to check if a term exists. Instead of catching an out of bounds error everytime, we can check to avoid the expensive try/ catch overhead.  <a href="#a3b67410c7f5eccea2999e095c7380ca4">More...</a><br /></td></tr>
 <tr class="separator:a3b67410c7f5eccea2999e095c7380ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6fdfc7f864f083f04652feff4bd274f"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#ae6fdfc7f864f083f04652feff4bd274f">getPostings</a> (const std::string &amp;term) const</td></tr>
+<tr class="memdesc:ae6fdfc7f864f083f04652feff4bd274f"><td class="mdescLeft">&#160;</td><td class="mdescRight">getPostings Gets the postings list of a term  <a href="#ae6fdfc7f864f083f04652feff4bd274f">More...</a><br /></td></tr>
 <tr class="separator:ae6fdfc7f864f083f04652feff4bd274f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66049b6806e05a52d55d9ca226eae938"><td class="memItemLeft" align="right" valign="top"><a id="a66049b6806e05a52d55d9ca226eae938"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>vocab</b> () const</td></tr>
-<tr class="separator:a66049b6806e05a52d55d9ca226eae938"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade2d430aba80fd18acbf3100d9cbdc71"><td class="memItemLeft" align="right" valign="top"><a id="ade2d430aba80fd18acbf3100d9cbdc71"></a>
-std::unordered_map&lt; std::string, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> () const</td></tr>
+<tr class="memitem:af6e567419bd79a0869db150af013f799"><td class="memItemLeft" align="right" valign="top"><a id="af6e567419bd79a0869db150af013f799"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#af6e567419bd79a0869db150af013f799">printVocab</a> () const</td></tr>
+<tr class="memdesc:af6e567419bd79a0869db150af013f799"><td class="mdescLeft">&#160;</td><td class="mdescRight">printVocab This method prints all terms and DocInfos associated to each term to the console. <br /></td></tr>
+<tr class="separator:af6e567419bd79a0869db150af013f799"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2d430aba80fd18acbf3100d9cbdc71"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#ade2d430aba80fd18acbf3100d9cbdc71">getIndex</a> () const</td></tr>
+<tr class="memdesc:ade2d430aba80fd18acbf3100d9cbdc71"><td class="mdescLeft">&#160;</td><td class="mdescRight">getIndex Gets the mapping of terms to postings lists  <a href="#ade2d430aba80fd18acbf3100d9cbdc71">More...</a><br /></td></tr>
 <tr class="separator:ade2d430aba80fd18acbf3100d9cbdc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memItemLeft" align="right" valign="top"><a id="aa115f8005afa5e892233a9b7d9d1a2d3"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getTermCount</b> () const</td></tr>
+<tr class="memitem:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#aa115f8005afa5e892233a9b7d9d1a2d3">getTermCount</a> () const</td></tr>
+<tr class="memdesc:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">getTermCount Gets the number of unique terms that exist in the inverted index.  <a href="#aa115f8005afa5e892233a9b7d9d1a2d3">More...</a><br /></td></tr>
 <tr class="separator:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a0f12dd10b61d0f5fb2b65339f139e8c2"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a0f12dd10b61d0f5fb2b65339f139e8c2">QEngine</a></td></tr>
+<tr class="memitem:a0f12dd10b61d0f5fb2b65339f139e8c2"><td class="memItemLeft" align="right" valign="top"><a id="a0f12dd10b61d0f5fb2b65339f139e8c2"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>QEngine</b></td></tr>
 <tr class="separator:a0f12dd10b61d0f5fb2b65339f139e8c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document. </p>
+<div class="textblock"><p><a class="el" href="classInvertedIndex.html" title="InvertedIndex This data structure represents the inverted index. It incapsulates a set of stemmed ter...">InvertedIndex</a> This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a527e7f50ee48083e74a744f244a9c70b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a527e7f50ee48083e74a744f244a9c70b">&sect;&nbsp;</a></span>addTerm()</h2>
@@ -129,7 +137,36 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Adds an instance of the stemmed term to the document. A new <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> is created if the term is first encountered in that document. </p>
+
+<p>addTerm Adds an instance of the stemmed term to the document. A new <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> is created if the term is first encountered in that document. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">term</td><td>The vocab term to add </td></tr>
+    <tr><td class="paramname">docId</td><td>The document id which the term is associated to </td></tr>
+    <tr><td class="paramname">pos</td><td>The positional index of the term </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ade2d430aba80fd18acbf3100d9cbdc71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade2d430aba80fd18acbf3100d9cbdc71">&sect;&nbsp;</a></span>getIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt; std::string, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &gt; InvertedIndex::getIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getIndex Gets the mapping of terms to postings lists </p>
+<dl class="section return"><dt>Returns</dt><dd>The map of terms to postings lists </dd></dl>
 
 </div>
 </div>
@@ -148,7 +185,55 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the postings list for the requested term. </p>
+
+<p>getPostings Gets the postings list of a term </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">term</td><td>The term to get the postings list of </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The postings list </dd></dl>
+
+</div>
+</div>
+<a id="aa115f8005afa5e892233a9b7d9d1a2d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa115f8005afa5e892233a9b7d9d1a2d3">&sect;&nbsp;</a></span>getTermCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t InvertedIndex::getTermCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getTermCount Gets the number of unique terms that exist in the inverted index. </p>
+<dl class="section return"><dt>Returns</dt><dd>The number of unique terms </dd></dl>
+
+</div>
+</div>
+<a id="acbf12955191c399cec1c2bf27616e683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbf12955191c399cec1c2bf27616e683">&sect;&nbsp;</a></span>getVocabList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; std::string &gt; InvertedIndex::getVocabList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getVocabList Gets the vocab list </p>
+<dl class="section return"><dt>Returns</dt><dd>The vocab list </dd></dl>
 
 </div>
 </div>
@@ -167,31 +252,15 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This method is used to check if a term exists. Instead of catching an out of bounds error everytime, we can check to avoid the expensive try/ catch overhead. </p>
 
-</div>
-</div>
-<h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a0f12dd10b61d0f5fb2b65339f139e8c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f12dd10b61d0f5fb2b65339f139e8c2">&sect;&nbsp;</a></span>QEngine</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">friend class <a class="el" href="classQEngine.html">QEngine</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>FUTURE implementations of the <a class="el" href="classQEngine.html">QEngine</a> will include hiding the <a class="el" href="classInvertedIndex.html">InvertedIndex</a> from the scope of main. To understand the purpose of listing <a class="el" href="classQEngine.html">QEngine</a> as a friend, please refer to the constructor in QEngine.cpp </p>
+<p>hasPostings This method is used to check if a term exists. Instead of catching an out of bounds error everytime, we can check to avoid the expensive try/ catch overhead. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">term</td><td>The term to check </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the term has a postings list </dd></dl>
 
 </div>
 </div>
