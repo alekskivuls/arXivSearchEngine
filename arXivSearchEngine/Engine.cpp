@@ -127,34 +127,35 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
                     // while not end of file.
                     // Get stem the token or retrieve the value from a cache
                     if (!hyphen) {
+						kIdx1.addTerm(token);
+						kIdx2.addTerm(token);
+						kIdx3.addTerm(token);
+
                         std::string stemmedToken = (cache.find(token) != cache.end())
                                 ? cache[token] : PorterStemmer::stem(token);
                         idx.addTerm(stemmedToken, i, posIndex); // stemmedToken
                         updateTf(wdt, stemmedToken);
-                        kIdx1.addTerm(token);
-                        kIdx2.addTerm(token);
-                        kIdx3.addTerm(token);
                     }
                     else {
                         std::string total = "";
                         for (auto s : split(token)) {
-                            std::string str = std::string(s);
-                            PorterStemmer::stem(str);
-                            idx.addTerm(str, i, posIndex);
-                            updateTf(wdt, str);
+							kIdx1.addTerm(s);
+							kIdx2.addTerm(s);
+							kIdx3.addTerm(s);
+							total += s;
 
-                            total += s;
-                            kIdx1.addTerm(token);
-                            kIdx2.addTerm(token);
-                            kIdx3.addTerm(token);
+                            std::string str = std::string(s);
+                            idx.addTerm(PorterStemmer::stem(str), i, posIndex);
+                            updateTf(wdt, str);
                         }
                         std::string &totalToken = total;
                         //std::string &totalToken = PorterStemmer::stem(total);
-                        idx.addTerm(totalToken, i, posIndex);
-                        updateTf(wdt, total);
-                        kIdx1.addTerm(token);
-                        kIdx2.addTerm(token);
-                        kIdx3.addTerm(token);
+                        idx.addTerm(PorterStemmer::stem(totalToken), i, posIndex);
+                        updateTf(wdt, totalToken);
+
+                        kIdx1.addTerm(totalToken);
+                        kIdx2.addTerm(totalToken);
+                        kIdx3.addTerm(totalToken);
                     }
 
 

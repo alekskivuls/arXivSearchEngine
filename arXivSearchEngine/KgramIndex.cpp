@@ -34,6 +34,8 @@ std::unordered_set<std::string> KgramIndex::getTerms(std::string &kgram) {
 
 // TODO: Potential optimation if we change to unordered set type.
 void KgramIndex::addKgram(std::string &kgram, std::string &term) {
+
+	// THIS LINE BELOW
 	if (_mIndex.find(kgram) == _mIndex.end()) { //if kgram is new or not in index already
         std::unordered_set<std::string> terms; //list of kgrams
 		//map kgram to list of string term
@@ -43,8 +45,10 @@ void KgramIndex::addKgram(std::string &kgram, std::string &term) {
 		_mIndex[kgram] = terms;
 	}
 	else { //kgram is already made
+		// THIS LINE BELOW
         std::unordered_set<std::string> &terms = _mIndex[kgram]; //index[kg] is the array of ptrs to the words that apply
 
+		// THIS LINE BELOW
 		terms.insert(term);
 	}
 }
@@ -59,27 +63,31 @@ int KgramIndex::getKSize(){
  * and use the addKgram (private) to add that kgram key to term pair into the _mIndex.
 */
 void KgramIndex::addTerm(std::string &term) { //TODO: fix addTerm logic
-	int i;
-    if(_kgramSize > 1) { //add $ for more than 1
-        std::string kterm;
-        kterm += '$';
-        kterm += term;
-        kterm += '$';
-        int resSize = _kgramSize == 3 ? term.size() : term.size() + 1;
-        for (i = 0; i < resSize; ++i) { //do you not get the numer of kgram for letter
-            std::string gram;
-            int j;
-            for(j = 0; j < _kgramSize; ++j) { // append character term[j]
-                gram += kterm[i + j];
-            }
-            //gram is n letters here.
-            addKgram(gram, term); //add the gram
-        }
-    } else {
-        for (char letter : term) {
-            std::string strl = std::string(1,letter);
-            addKgram(strl, term);
+	if (mCache.find(term) == mCache.end()) {
+		int i;
+		if (_kgramSize > 1) { //add $ for more than 1
+			std::string kterm;
+			kterm += '$';
+			kterm += term;
+			kterm += '$';
+			int resSize = _kgramSize == 3 ? term.size() : term.size() + 1;
+			for (i = 0; i < resSize; ++i) { //do you not get the numer of kgram for letter
+				std::string gram;
+				int j;
+				for (j = 0; j < _kgramSize; ++j) { // append character term[j]
+					gram += kterm[i + j];
+				}
+				//gram is n letters here.
+				addKgram(gram, term); //add the gram
+			}
 		}
+		else {
+			for (char letter : term) {
+				std::string strl = std::string(1, letter);
+				addKgram(strl, term);
+			}
+		}
+		mCache.insert(term);
 	}
 }
 
