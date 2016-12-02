@@ -38,7 +38,7 @@ public:
     std::vector<KgramEntry> mKgramTable; //This is where the kgramtable.bin is translated into.
 
     //convert terms from file into list <string>
-    static std::list<std::string> ReadTermsFromFile(std::ifstream &terms, uint32_t termsPosition); // std::vector<DocInfo>
+    std::unordered_set<std::string> ReadTermsFromFile(std::ifstream &terms, uint32_t termsPosition); // std::vector<DocInfo>
     //where to start reading terms
     static std::vector<KgramEntry> ReadKgramTable(const boost::filesystem::path &path);
 
@@ -50,7 +50,7 @@ public:
     //constructor just needs the location of the files.
     KDeserializer(const boost::filesystem::path  &path);
 
-    std::list<std::string> GetTerms(std::string &kgram); // std::vector<DocInfo>
+    std::unordered_set<std::string> GetTerms(std::string &kgram); // std::vector<DocInfo>
 
     void printAllTerms(KgramIndex &idx);
 

@@ -55,4 +55,21 @@ TEST_F(KserialTest, deserial)
     kgramList = index1.getKgramList();
     std::cout << "Returned kgramList: " << kgramList.front() << std::endl;
     EXPECT_EQ(kgramList.front(), "o");
+
+    deserial.printAllTerms(index1);
+}
+
+TEST_F(KserialTest, unload)
+{
+    KDeserializer deserial = KDeserializer(file);
+    std::list<std::string> kgramList;
+    std::unordered_set<std::string> termList1, termList2;
+    kgramList = index1.getKgramList();
+
+    //termList1 = deserial.GetTerms(kgramList.front()); //EROORS
+    termList2 = index1.getTerms(kgramList.front());
+    //both list should be the same
+
+//    EXPECT_EQ(termList1.size(), termList2.size());
+//    EXPECT_EQ(termList1.find("hello"), termList2.find("hello"));
 }

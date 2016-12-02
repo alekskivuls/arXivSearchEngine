@@ -70,14 +70,14 @@ std::vector<KgramEntry> KDeserializer::ReadKgramTable(const boost::filesystem::p
 //read terms from file and pass back as list.
 //convert terms from file into list <string>
 //ther idstream and then the position where the term starts
-std::list<std::string> KDeserializer::ReadTermsFromFile(std::ifstream &terms, uint32_t termsPosition){ // change from vector to list...?
+std::unordered_set<std::string> KDeserializer::ReadTermsFromFile(std::ifstream &terms, uint32_t termsPosition){ // change from vector to list...?
     terms.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
                       // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
     terms.seekg(termsPosition, terms.beg); //beg means you want it to start here. you can also do end to end there.
     uint32_t numTerms = ReadInt(terms); // size_t
 
     // initialize the vector of document IDs to return.
-    std::list<std::string> trms;
+    std::unordered_set<std::string> trms;
     uint32_t i, j;
     uint8_t buff;
     std::string word;
@@ -89,7 +89,7 @@ std::list<std::string> KDeserializer::ReadTermsFromFile(std::ifstream &terms, ui
             terms.read((char*)&buff, sizeof(buff));
             word += std::string(1, buff);
         }
-        trms.push_back(word);
+        trms.insert(word);
     }// repeat until all postings are read.
 
     return trms;
@@ -101,15 +101,21 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
     while (i <= j) {
         std::size_t m = i + (j - i) / 2;
 
+        std::cout << "BreakPoint? 3" << std::endl;
 
         std::string uniStr = ReadKgramStringAtPosition(m); //read middle kgram.
-        //std::cout << "READ KGRAM AT: " << uniStr << "starts " << m << std::endl;
+        std::cout << "READ KGRAM AT: " << uniStr << " starts " << m << std::endl;
 
-        int comp = kgram.compare(uniStr);
-        if (comp == 0)
+        std::cout << "BreakPoint? Confirming this is the line that is broken." << std::endl;
+        int comp = kgram.compare(uniStr); //breaks here
+        std::cout << "BreakPoint? 7" << std::endl;
+        if (comp == 0) {
+            std::cout << "BreakPoint? 6" << std::endl;
             return mKgramTable[m]; //found it.
+        }
         else if (comp < 0) {
             if (m == 0) {
+                std::cout << "BreakPoint? 5" << std::endl;
                 return KgramEntry(-1, -1);
             }
             j = m - 1; //depending on compare search middles. binary.
@@ -118,6 +124,7 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
             i = m + 1;
         }
     }
+    std::cout << "BreakPoint? 4" << std::endl;
     return KgramEntry(-1, -1);
 }
 
@@ -149,11 +156,15 @@ std::string KDeserializer::ReadKgramStringAtPosition(uint32_t index) const{
 }
 
 
-std::list<std::string> KDeserializer::GetTerms(std::string &kgram) { // const icu::UnicodeString &term
+std::unordered_set<std::string> KDeserializer::GetTerms(std::string &kgram) { // const icu::UnicodeString &term
+    std::unordered_set<std::string> empty;
+    std::cout << "BreakPoint? 0" << std::endl;
     KgramEntry entry = BinarySearchKgrams(kgram);
+    std::cout << "BreakPoint? 1" << std::endl;
     if (entry.TermPosition != -1 && entry.KgramPosition != -1)
+        std::cout << "BreakPoint? 2" << std::endl;
         return ReadTermsFromFile(mTerms, entry.TermPosition);
-    return std::list<std::string>(); //empty list
+    return empty/*std::list<std::string>()*/; //empty list
 }
 
 
@@ -216,8 +227,6 @@ void KDeserializer::toKgramIndex(KgramIndex &idx1, KgramIndex &idx2, KgramIndex 
             //i am spending time to check. or i could just add to all and just call the add term to check.
             //is addterm more time consuming or this checking process?
         }
-        //i can get all the terms with a list of kgrams.
-
     }*/
 }
 
