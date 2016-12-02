@@ -31,7 +31,7 @@ public:
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
-	mutable std::ifstream mPostings;
+    mutable std::ifstream mPostings;
 	std::vector<VocabEntry> mVocabTable;
 	//std::vector<double_t> weights;
     std::unordered_map<uint32_t, std::string> mIdTable;

@@ -77,3 +77,23 @@ std::unordered_map<std::string, std::list<DocInfo>> InvertedIndex::getIndex() co
 uint32_t InvertedIndex::getTermCount() const {
 	return _mIndex.size();
 }
+
+void InvertedIndex::addAuthorDoc(const std::string &author, const uint32_t &docId) {
+    if (authorDoc.find(author) != authorDoc.end()) {
+        auto list = authorDoc.at(author);
+        list.push_back(docId);
+    } else {
+        std::list<uint32_t> list;
+        list.push_back(docId);
+        authorDoc.insert(std::pair<std::string, std::list<uint32_t>>(author, list));
+    }
+}
+
+std::list<uint32_t> InvertedIndex::getAuthorDocs(const std::string &author) {
+    if (authorDoc.find(author) != authorDoc.end()) {
+        return authorDoc.at(author);
+    } else {
+        std::list<uint32_t> empty;
+        return empty;
+    }
+}

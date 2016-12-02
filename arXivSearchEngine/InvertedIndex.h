@@ -16,14 +16,14 @@
  * occurences of the term that occurs for that document.
  */
 class InvertedIndex {
-    /* FUTURE implementations of the QEngine will include hiding the InvertedIndex from the scope of main.
-	 * To understand the purpose of listing QEngine as a friend, please refer to the constructor in QEngine.cpp*/
-	friend class QEngine;
     /** @brief _mIndex The hashmap that represents the entire inverted index.*/
     std::unordered_map<std::string, std::list<DocInfo>> _mIndex;
 
     /** @brief vocabList The list of all terms in the vocabulary*/
 	std::set<std::string> vocabList;
+
+    /** @brief authorDoc The map of authors to documents **/
+    std::unordered_map<std::string, std::list<uint32_t>> authorDoc;
 
 public:
 	InvertedIndex();
@@ -74,6 +74,15 @@ public:
      * @return The number of unique terms
      */
 	uint32_t getTermCount() const;
+
+    /**
+     * @brief addAuthorDoc
+     * @param author
+     * @param doc
+     */
+    void addAuthorDoc(const std::string &author, const std::uint32_t &docId);
+
+    std::list<uint32_t> getAuthorDocs(const std::string &author);
 };
 
 #endif

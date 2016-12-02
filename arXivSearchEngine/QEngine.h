@@ -9,8 +9,6 @@
 #include <vector>
 
 class QEngine {
-	//InvertedIndex _invIndex; // future implementation for singleton design
-
 	/** private method used to split queries into tokens for processing*/
 	std::vector<std::string> split(std::string const &input);
 

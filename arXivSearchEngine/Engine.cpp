@@ -3,7 +3,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
 #include "DiskInvertedIndex.h"
-#include <boost/foreach.hpp>
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
 #include <unordered_set>
@@ -113,7 +112,7 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 
         //std::cout << "json to map...\n";
         // iterate through .json tree
-        BOOST_FOREACH(boost::property_tree::ptree::value_type& pair, pt) {
+        for (auto& pair : pt) {
             if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
                 std::string input = pair.second.get_value<std::string>();
                 std::transform(input.begin(), input.end(), input.begin(), ::tolower);

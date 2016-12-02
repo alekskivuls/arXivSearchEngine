@@ -10,8 +10,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-// future design paradigm is to implement a singleton design pattern where inverted index is hidden from the main 
-QEngine::QEngine() { } // future implementation will pass index into constructor: QEngine(const InvertedIndex &idx) 
+QEngine::QEngine() {}
 
 std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string userQuery, DiskInvertedIndex &dIdx, KgramIndex &kIdx3) {
     std::istringstream iss(userQuery);
