@@ -60,7 +60,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#friends">Friends</a> &#124;
 <a href="classInvertedIndex-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">InvertedIndex Class Reference</div>  </div>
@@ -96,16 +95,53 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#aa115f8005afa5e892233a9b7d9d1a2d3">getTermCount</a> () const</td></tr>
 <tr class="memdesc:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">getTermCount Gets the number of unique terms that exist in the inverted index.  <a href="#aa115f8005afa5e892233a9b7d9d1a2d3">More...</a><br /></td></tr>
 <tr class="separator:aa115f8005afa5e892233a9b7d9d1a2d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Friends</h2></td></tr>
-<tr class="memitem:a0f12dd10b61d0f5fb2b65339f139e8c2"><td class="memItemLeft" align="right" valign="top"><a id="a0f12dd10b61d0f5fb2b65339f139e8c2"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>QEngine</b></td></tr>
-<tr class="separator:a0f12dd10b61d0f5fb2b65339f139e8c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c55d089973c2d747dc4a7e32375f58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a39c55d089973c2d747dc4a7e32375f58">addAuthorDoc</a> (const std::string &amp;author, const std::uint32_t &amp;docId)</td></tr>
+<tr class="memdesc:a39c55d089973c2d747dc4a7e32375f58"><td class="mdescLeft">&#160;</td><td class="mdescRight">addAuthorDoc  <a href="#a39c55d089973c2d747dc4a7e32375f58">More...</a><br /></td></tr>
+<tr class="separator:a39c55d089973c2d747dc4a7e32375f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0955eccb703b0b1fe444fda28321414f"><td class="memItemLeft" align="right" valign="top"><a id="a0955eccb703b0b1fe444fda28321414f"></a>
+std::list&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorDocs</b> (const std::string &amp;author)</td></tr>
+<tr class="separator:a0955eccb703b0b1fe444fda28321414f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classInvertedIndex.html" title="InvertedIndex This data structure represents the inverted index. It incapsulates a set of stemmed ter...">InvertedIndex</a> This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a39c55d089973c2d747dc4a7e32375f58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39c55d089973c2d747dc4a7e32375f58">&sect;&nbsp;</a></span>addAuthorDoc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void InvertedIndex::addAuthorDoc </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>author</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>docId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>addAuthorDoc </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">author</td><td></td></tr>
+    <tr><td class="paramname">doc</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a527e7f50ee48083e74a744f244a9c70b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a527e7f50ee48083e74a744f244a9c70b">&sect;&nbsp;</a></span>addTerm()</h2>
 
