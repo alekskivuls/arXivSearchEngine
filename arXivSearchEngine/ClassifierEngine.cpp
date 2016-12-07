@@ -78,10 +78,9 @@ void ClassifierEngine::populateIndex(boost::filesystem::path &inDir, boost::file
             if (pair.first == "author") {
                 std::string author = pair.second.get_value<std::string>();
                 std::transform(author.begin(), author.end(), author.begin(), ::tolower);
-
                 idx.addAuthorDoc(author, i);
             }
-            if (pair.first == "body") { // if author... get json array and process the authors as well. || pair.first == "title"
+            if (pair.first == "body" || pair.first == "title") { // if author... get json array and process the authors as well.
                 std::string input = pair.second.get_value<std::string>();
                 std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
@@ -105,7 +104,7 @@ void ClassifierEngine::populateIndex(boost::filesystem::path &inDir, boost::file
 //                    }
                     std::string &totalToken = total;
                     //std::string &totalToken = PorterStemmer::stem(total);
-                    idx.addTerm(PorterStemmer::stem(totalToken), i, posIndex);
+                    idx.addTerm(PorterStemmer::stem(totalToken), i, posIndex); //added the stemmed term
 //                    updateTf(wdt, totalToken);
 
 //                    kIdx1.addTerm(totalToken);
@@ -134,6 +133,14 @@ void ClassifierEngine::populateIndex(boost::filesystem::path &inDir, boost::file
     dir = outDir;
 }
 
+/**
+ * @brief ClassifierEngine::featureSelect
+ * @param classTerm
+ * @param noClassTerm
+ * @param noTermClass
+ * @param noTermNoClass
+ * @return The return value for this method is the result of the calculations.
+ */
 double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass){
     double totalDoc = classTerm + noClassTerm + noTermClass + noTermNoClass;
     double classTermCal = (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));

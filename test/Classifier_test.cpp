@@ -26,5 +26,5 @@ TEST_F(ClassifierTest, calculations)
 
 TEST_F(ClassifierTest, diskWrite)
 {
-
+    //cengine.populateIndex();
 }
