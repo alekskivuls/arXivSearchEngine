@@ -6,42 +6,25 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include "Engine.h"
 
-/*void pktest() {
-    // Paul's test code. just ignore it.
-    //Initialize Engine
-    Engine engine;
-
-    // Set file directory
-    //std::string filepath;
-    std::cout << "Writing to Disk: " << std::endl;
-    //std::getline(std::cin, filepath);
-    engine.diskWriteTest("hello"); // should create 3 files
-}*/
-
 int main() {
     //Initialize Engine
     Engine engine;
-
 
     // Set file directory
     std::string filepath;
     std::cout << "Enter directory of corpus" << std::endl;
     std::getline(std::cin, filepath);
-	//engine.createIndex(filepath);
-    engine.loadIndex(filepath);
 
-	//engine.createIndex(R"(C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\test\documents\testCorpus)");
+    //Check if index needs to be loaded
+    std::string isLoadingIndex;
+    std::cout << "Load index? (y/n)" << std::endl;
+    std::getline(std::cin, isLoadingIndex);
 
-	//system("pause");
-
-	//engine.loadIndex(R"(C:\Users\pkim7\Documents\Visual Studio 2015\Projects\arXivSearchEngine\arXivSearchEngine)");
-	//return 0;
-	
-    /*std::unordered_map<uint32_t, std::string> idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
-	for (auto pair : idTable) {
-		std::cout << "pair.first = " << pair.first << " ";
-		std::cout << "pair.second = " << pair.second << std::endl;
-    }*/
+    if(isLoadingIndex.front() == 'y') {
+        engine.loadIndex(filepath);
+    } else {
+        engine.createIndex(filepath);
+    }
 
     // Main loop
     std::string input;
