@@ -29,7 +29,7 @@ inline uint32_t Reverse(uint32_t value) {
  *
  * Calls build
  */
-void KSerializer::buildIndex(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3){
+void KSerializer::buildIndex(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3){
     std::vector<uint32_t> kgramPositions = KSerializer::buildKgrams(filePath, auxIdx1, auxIdx2, auxIdx3); //returns the vector<int>
     KSerializer::buildTerms(filePath, auxIdx1, auxIdx2, auxIdx3, kgramPositions); //builds kgram table here
 }
@@ -55,7 +55,7 @@ void KSerializer::WriteTerms(std::ofstream &termsFile, const std::unordered_set<
 //method to just print all kgrams out here.
 //returns a vector<int> of all of the locations of the kgram youre going to write to file.
 //intend to take in kgramindex of size 1, 2, 3.
-std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3) {
+std::vector<uint32_t> KSerializer::buildKgrams(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3) {
     // first build the vocabulary list: a file of each vocab word concatenated together.
     // also build an array associating each term with its byte location in this file.
     std::vector<uint32_t> positions(auxIdx1.getKgramList().size() + auxIdx2.getKgramList().size() + auxIdx3.getKgramList().size()); //all of your kgrams totaled
@@ -94,7 +94,7 @@ std::vector<uint32_t> KSerializer::buildKgrams(boost::filesystem::path &filePath
 
 
 // This method will build the file that stores all of the terms. Writes term to disk.
-void KSerializer::buildTerms(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
+void KSerializer::buildTerms(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
                                     std::vector<uint32_t> &kgramPositions){
 
     //where you will write the terms and where you will write the tables.

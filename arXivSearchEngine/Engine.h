@@ -27,8 +27,7 @@
 #include "DiskInvertedIndex.h"
 
 class Engine {
-    boost::filesystem::path dir;
-	InvertedIndex idx;
+    DiskInvertedIndex dIdx;
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
 	std::vector<double_t> ld; // DOCUMENT ID, SCORE
@@ -36,7 +35,6 @@ class Engine {
     KgramIndex kIdx1 = KgramIndex(1);
     KgramIndex kIdx2 = KgramIndex(2);
     KgramIndex kIdx3 = KgramIndex(3);
-    //DiskInvertedIndex dIdx;
 
 public:
 	Engine();
@@ -47,7 +45,7 @@ public:
 	* stringstream into a boost, json property tree. The tokens are individually transformed to
 	* lowercase and stemmed before being put into the inverted index.
 	*/
-    void populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir);
+    void populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
 
 	void populateEucDist();
 
@@ -66,23 +64,21 @@ public:
 
 	std::string getArticleName(const uint32_t &docid);
 
-    void createIndex(const std::string &filepath);
+    void createIndex(const boost::filesystem::path &filepath);
 
-    void loadIndex(const std::string &filepath);
+    void createIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir);
+
+    void loadIndex(const boost::filesystem::path &filepath);
 
     std::vector<std::pair<uint32_t, double_t>> getRank(std::string &query);
 
     void printRank(std::string &query);
 
-	//void diskWriteTest(const std::string &filepath);
-
-	//void testRead(const std::string &filepath);
-
 	void printVocab();
 
     std::list<std::string> getVocab();
 
-	void printIndex();
+    //void printIndex();
 
 	void printQuery(std::string &query);
 

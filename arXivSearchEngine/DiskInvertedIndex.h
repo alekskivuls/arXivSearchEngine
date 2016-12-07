@@ -51,6 +51,8 @@ public:
 	std::string ReadVocabStringAtPosition(uint32_t index) const;
 
 //public:
+    DiskInvertedIndex();
+
     DiskInvertedIndex(const boost::filesystem::path &path);
 
     std::list<DocInfo> GetPostings(const std::string &term) const;

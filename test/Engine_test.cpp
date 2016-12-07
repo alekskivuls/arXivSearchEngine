@@ -6,7 +6,8 @@ class EngineTest : public ::testing::Test {
 protected:
     virtual void SetUp() {
         //Requires CORPUS_TEST_DIR environment variable to be set
-        engine.createIndex(std::getenv("CORPUS_TEST_DIR"));
+        boost::filesystem::path dir(std::getenv("CORPUS_TEST_DIR"));
+        engine.createIndex(dir);
     }
 
     virtual void TearDown() {
@@ -22,11 +23,6 @@ TEST_F(EngineTest, porterStemmer)
 {
     std::string caresses = std::string("caresses");
     EXPECT_EQ(engine.stem(caresses),"caress");
-}
-
-TEST_F(EngineTest, diskWrite)
-{
-
 }
 
 TEST_F(EngineTest, vocab)
@@ -49,4 +45,21 @@ TEST_F(EngineTest, vocab)
     EXPECT_EQ(*itr++, "the");
     EXPECT_EQ(*itr++, "thi");
     EXPECT_EQ(itr, vocab.end());
+}
+
+TEST_F(EngineTest, query)
+{
+    std::string query = "park";
+    auto queryResult = engine.getQuery(query);
+    auto itr = queryResult.begin();
+    EXPECT_EQ(*itr++, "article0");
+    EXPECT_EQ(*itr++, "article1");
+    EXPECT_EQ(*itr++, "article3");
+    EXPECT_EQ(*itr++, "article4");
+    EXPECT_EQ(itr, queryResult.end());
+}
+
+TEST_F(EngineTest, loadIndex) {
+    auto cwd = boost::filesystem::current_path();
+    engine.loadIndex(cwd);
 }

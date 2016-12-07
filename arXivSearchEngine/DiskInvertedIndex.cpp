@@ -40,6 +40,8 @@ double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
     return value;
 }
 
+DiskInvertedIndex::DiskInvertedIndex() {}
+
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
     mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
                     std::ios_base::in | std::ios_base::binary);

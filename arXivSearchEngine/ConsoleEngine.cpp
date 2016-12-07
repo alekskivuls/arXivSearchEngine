@@ -20,10 +20,11 @@ int main() {
     std::cout << "Load index? (y/n)" << std::endl;
     std::getline(std::cin, isLoadingIndex);
 
+    boost::filesystem::path dir(filepath);
     if(isLoadingIndex.front() == 'y') {
-        engine.loadIndex(filepath);
+        engine.loadIndex(dir);
     } else {
-        engine.createIndex(filepath);
+        engine.createIndex(dir);
     }
 
     // Main loop

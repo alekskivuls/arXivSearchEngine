@@ -21,13 +21,13 @@ public:
     // This method is to build the file to store all of the kgrams to term pairings.
     // It works like an index and maps a token from Kgrams file made by buildKgrams
     // to a terms file made by buildTerms.
-    static void buildIndex(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
+    static void buildIndex(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
 
     // This method will build the file that stores all of the kgrams.
-    static std::vector<uint32_t> buildKgrams(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
+    static std::vector<uint32_t> buildKgrams(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3);
 
     // This method will build the file that stores all of the terms.
-    static void buildTerms(boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
+    static void buildTerms(const boost::filesystem::path &filePath, KgramIndex &auxIdx1, KgramIndex &auxIdx2, KgramIndex &auxIdx3,
         std::vector<uint32_t> &vocabPositions);
 
     static void WriteTerms(std::ofstream &kgramsFile, const std::unordered_set<std::string> &terms);

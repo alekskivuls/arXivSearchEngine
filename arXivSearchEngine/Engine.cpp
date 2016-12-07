@@ -14,10 +14,7 @@
 #include "KDeserializer.h"
 
 // Default constructors and destructors
-Engine::Engine() {
-    // idTable = std::unordered_map<uint32_t, std::string>();
-    // idx = InvertedIndex();
-}
+Engine::Engine() {}
 
 void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
     boost::filesystem::directory_iterator end_itr;
@@ -78,7 +75,7 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
     return sqrt(Ld);
 }
 
-void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir) {
+void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
     totalStart = std::chrono::system_clock::now();
 
@@ -160,6 +157,10 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 
                     posIndex++;
                 }
+            } else if (pair.first == "title") {
+
+            } else if(pair.first == "author") {
+
             }
         }
         /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
@@ -181,7 +182,7 @@ void Engine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::pa
 
     Serializer::buildIndex(outDir, idx, idTable, ld); // populates all .bin files
     KSerializer::buildIndex(outDir, kIdx1, kIdx2, kIdx3);
-    dir = outDir;
+    dIdx = DiskInvertedIndex(boost::filesystem::path(outDir));
 }
 
 void Engine::printRank(std::string &query) {
@@ -191,21 +192,22 @@ void Engine::printRank(std::string &query) {
 }
 
 std::vector<std::pair<uint32_t, double_t>> Engine::getRank(std::string &query) {
-	DiskInvertedIndex dIdx(dir);
     return queryEngine.rankedQuery(query, dIdx, kIdx3);
 }
 
-void Engine::createIndex(const std::string &filepath) {
+void Engine::createIndex(const boost::filesystem::path &filepath) {
     auto cwd = boost::filesystem::current_path();
     //std::cout << "Current path is : " << cwd << std::endl;
-    boost::filesystem::path dir(filepath);
-    populateIndex(dir, cwd);
+    createIndex(filepath, cwd);
 }
 
-void Engine::loadIndex(const std::string &filepath) {
-    dir = filepath;
-    DiskInvertedIndex(boost::filesystem::path(filepath));
-    KDeserializer kds(dir);
+void Engine::createIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
+    populateIndex(inDir, outDir);
+}
+
+void Engine::loadIndex(const boost::filesystem::path &filepath) {
+    dIdx = DiskInvertedIndex(boost::filesystem::path(filepath));
+    KDeserializer kds(filepath);
     kds.toKgramIndex(kIdx1, kIdx2, kIdx3);
 	idTable = DiskInvertedIndex::ReadIdTableFromFile(boost::filesystem::path(filepath));
 }
@@ -214,9 +216,10 @@ std::string Engine::getArticleName(const uint32_t &docid) {
 	return idTable.at(docid);
 }
 
+/*
 void Engine::printIndex() {
     typedef std::pair<std::string, std::list<DocInfo>> pair;
-    for (const pair &p : idx.getIndex()) {
+    for (const pair &p : dIdx.getIndex()) {
         std::cout << "Term (" << p.first << ") found in the following documents:" << std::endl;
         for (DocInfo doc : p.second) { // list of positions
             std::cout << "Document id " << doc.getDocId() << " positions(" << doc.getPositions().size() << "): " << std::endl;
@@ -226,7 +229,7 @@ void Engine::printIndex() {
         }
         std::cout << std::endl;
     }
-}
+}*/
 
 void Engine::printVocab() {
     auto vocab = getVocab();
@@ -236,7 +239,6 @@ void Engine::printVocab() {
 }
 
 std::list<std::string> Engine::getVocab() {
-    DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
     return dIdx.getVocabList();
 }
 
@@ -252,7 +254,6 @@ void Engine::printQuery(std::string &query) {
 }
 
 std::vector<std::string> Engine::getQuery(std::string &query) {
-    DiskInvertedIndex dIdx = DiskInvertedIndex(dir);
     std::list<DocInfo> output = queryEngine.processQuery(query, dIdx, kIdx1, kIdx2, kIdx3);
     std::vector<std::string> results;
     results.reserve(output.size());
