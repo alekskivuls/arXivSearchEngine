@@ -70,14 +70,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ace0acb182afb0275e750beb55a9f7c72"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKSerializer.html#ace0acb182afb0275e750beb55a9f7c72">buildIndex</a> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
-<tr class="separator:ace0acb182afb0275e750beb55a9f7c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84eec9c82bc57b205e46c1c51a83966c"><td class="memItemLeft" align="right" valign="top"><a id="a84eec9c82bc57b205e46c1c51a83966c"></a>
-static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildKgrams</b> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
-<tr class="separator:a84eec9c82bc57b205e46c1c51a83966c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7529d4b1246d796141a2ff6a2aa8e20d"><td class="memItemLeft" align="right" valign="top"><a id="a7529d4b1246d796141a2ff6a2aa8e20d"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b> (boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3, std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
-<tr class="separator:a7529d4b1246d796141a2ff6a2aa8e20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae75d4576769b06a99012ffabda83dfcb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKSerializer.html#ae75d4576769b06a99012ffabda83dfcb">buildIndex</a> (const boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
+<tr class="separator:ae75d4576769b06a99012ffabda83dfcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bd46d56ce869034f877fd767f46761e"><td class="memItemLeft" align="right" valign="top"><a id="a9bd46d56ce869034f877fd767f46761e"></a>
+static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildKgrams</b> (const boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3)</td></tr>
+<tr class="separator:a9bd46d56ce869034f877fd767f46761e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97afcc6398d6cf7891f7e0f748de9940"><td class="memItemLeft" align="right" valign="top"><a id="a97afcc6398d6cf7891f7e0f748de9940"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b> (const boost::filesystem::path &amp;filePath, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx1, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx2, <a class="el" href="classKgramIndex.html">KgramIndex</a> &amp;auxIdx3, std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
+<tr class="separator:a97afcc6398d6cf7891f7e0f748de9940"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d8cc9d003e92e56a09a5e7c06699a41"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classKSerializer.html#a8d8cc9d003e92e56a09a5e7c06699a41">WriteTerms</a> (std::ofstream &amp;kgramsFile, const std::unordered_set&lt; std::string &gt; &amp;terms)</td></tr>
 <tr class="memdesc:a8d8cc9d003e92e56a09a5e7c06699a41"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classKSerializer.html#a8d8cc9d003e92e56a09a5e7c06699a41" title="KSerializer::WriteTerms : This method writes the terms to the termsFile. ">KSerializer::WriteTerms</a> : This method writes the terms to the termsFile.  <a href="#a8d8cc9d003e92e56a09a5e7c06699a41">More...</a><br /></td></tr>
 <tr class="separator:a8d8cc9d003e92e56a09a5e7c06699a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -85,8 +85,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class serializes the <a class="el" href="classKgramIndex.html">KgramIndex</a>; writing it to disk. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ace0acb182afb0275e750beb55a9f7c72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace0acb182afb0275e750beb55a9f7c72">&sect;&nbsp;</a></span>buildIndex()</h2>
+<a id="ae75d4576769b06a99012ffabda83dfcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae75d4576769b06a99012ffabda83dfcb">&sect;&nbsp;</a></span>buildIndex()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -97,7 +97,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildTerms</b>
         <tr>
           <td class="memname">void KSerializer::buildIndex </td>
           <td>(</td>
-          <td class="paramtype">boost::filesystem::path &amp;&#160;</td>
+          <td class="paramtype">const boost::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>filePath</em>, </td>
         </tr>
         <tr>

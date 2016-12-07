@@ -68,8 +68,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a812293af3578a7df84c30e8596c131e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a812293af3578a7df84c30e8596c131e2">populateIndex</a> (boost::filesystem::path &amp;inDir, boost::filesystem::path &amp;outDir)</td></tr>
-<tr class="separator:a812293af3578a7df84c30e8596c131e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ba10cf40eca951d172962c9f7e557a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEngine.html#a0ba10cf40eca951d172962c9f7e557a2">populateIndex</a> (const boost::filesystem::path &amp;inDir, const boost::filesystem::path &amp;outDir)</td></tr>
+<tr class="separator:a0ba10cf40eca951d172962c9f7e557a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b230d046f395f465cb7e17a32fe5b75"><td class="memItemLeft" align="right" valign="top"><a id="a2b230d046f395f465cb7e17a32fe5b75"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>populateEucDist</b> ()</td></tr>
 <tr class="separator:a2b230d046f395f465cb7e17a32fe5b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -87,12 +87,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>index</b> (const std:
 <tr class="memitem:af4d2962e53cb9ebb8036d89676fb2e85"><td class="memItemLeft" align="right" valign="top"><a id="af4d2962e53cb9ebb8036d89676fb2e85"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getArticleName</b> (const uint32_t &amp;docid)</td></tr>
 <tr class="separator:af4d2962e53cb9ebb8036d89676fb2e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a773a3fcb2ee04d042d88d3c02f84541e"><td class="memItemLeft" align="right" valign="top"><a id="a773a3fcb2ee04d042d88d3c02f84541e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createIndex</b> (const std::string &amp;filepath)</td></tr>
-<tr class="separator:a773a3fcb2ee04d042d88d3c02f84541e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed130736b9ffd6d047b8db78308a47b3"><td class="memItemLeft" align="right" valign="top"><a id="aed130736b9ffd6d047b8db78308a47b3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>loadIndex</b> (const std::string &amp;filepath)</td></tr>
-<tr class="separator:aed130736b9ffd6d047b8db78308a47b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29c7cb72459933c88d143c8b3328461e"><td class="memItemLeft" align="right" valign="top"><a id="a29c7cb72459933c88d143c8b3328461e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createIndex</b> (const boost::filesystem::path &amp;filepath)</td></tr>
+<tr class="separator:a29c7cb72459933c88d143c8b3328461e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8df4f062e7c0a36002601313410e3a0"><td class="memItemLeft" align="right" valign="top"><a id="ad8df4f062e7c0a36002601313410e3a0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createIndex</b> (const boost::filesystem::path &amp;inDir, const boost::filesystem::path &amp;outDir)</td></tr>
+<tr class="separator:ad8df4f062e7c0a36002601313410e3a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7263acd3a84f2f4504d15ebcbcc92f4b"><td class="memItemLeft" align="right" valign="top"><a id="a7263acd3a84f2f4504d15ebcbcc92f4b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>loadIndex</b> (const boost::filesystem::path &amp;filepath)</td></tr>
+<tr class="separator:a7263acd3a84f2f4504d15ebcbcc92f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc9e818444803c828f8d6e155027ab8d"><td class="memItemLeft" align="right" valign="top"><a id="afc9e818444803c828f8d6e155027ab8d"></a>
 std::vector&lt; std::pair&lt; uint32_t, double_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRank</b> (std::string &amp;query)</td></tr>
 <tr class="separator:afc9e818444803c828f8d6e155027ab8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -105,9 +108,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printVocab</b> ()</td
 <tr class="memitem:aadbd9dd475be238b00c2d06c2a794fb2"><td class="memItemLeft" align="right" valign="top"><a id="aadbd9dd475be238b00c2d06c2a794fb2"></a>
 std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocab</b> ()</td></tr>
 <tr class="separator:aadbd9dd475be238b00c2d06c2a794fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78ad1adbf2b323e41f87ec53d8ecc80d"><td class="memItemLeft" align="right" valign="top"><a id="a78ad1adbf2b323e41f87ec53d8ecc80d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>printIndex</b> ()</td></tr>
-<tr class="separator:a78ad1adbf2b323e41f87ec53d8ecc80d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9688a62131ca87ae14f602b59228d997"><td class="memItemLeft" align="right" valign="top"><a id="a9688a62131ca87ae14f602b59228d997"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printQuery</b> (std::string &amp;query)</td></tr>
 <tr class="separator:a9688a62131ca87ae14f602b59228d997"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,8 +148,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>stem</b> (std:
 
 </div>
 </div>
-<a id="a812293af3578a7df84c30e8596c131e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a812293af3578a7df84c30e8596c131e2">&sect;&nbsp;</a></span>populateIndex()</h2>
+<a id="a0ba10cf40eca951d172962c9f7e557a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ba10cf40eca951d172962c9f7e557a2">&sect;&nbsp;</a></span>populateIndex()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -157,13 +157,13 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>stem</b> (std:
         <tr>
           <td class="memname">void Engine::populateIndex </td>
           <td>(</td>
-          <td class="paramtype">boost::filesystem::path &amp;&#160;</td>
+          <td class="paramtype">const boost::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>inDir</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">boost::filesystem::path &amp;&#160;</td>
+          <td class="paramtype">const boost::filesystem::path &amp;&#160;</td>
           <td class="paramname"><em>outDir</em>&#160;</td>
         </tr>
         <tr>

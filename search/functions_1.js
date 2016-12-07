@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['buildindex',['buildIndex',['../classKSerializer.html#ace0acb182afb0275e750beb55a9f7c72',1,'KSerializer']]]
+  ['buildindex',['buildIndex',['../classKSerializer.html#ae75d4576769b06a99012ffabda83dfcb',1,'KSerializer']]]
 ];
