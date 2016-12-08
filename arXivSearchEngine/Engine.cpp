@@ -160,9 +160,18 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
             } else if (pair.first == "title") {
 
             } else if(pair.first == "author") {
-                std::string author = pair.second.get_value<std::string>();
-                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
-                idx.addAuthorDoc(author, i);
+                std::string authorStr = pair.second.get_value<std::string>();
+                //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+
+                std::string delimiter = " AND ";
+                size_t pos = 0;
+                std::string token;
+                while ((pos = authorStr.find(delimiter)) != std::string::npos) {
+                    token = authorStr.substr(0, pos);
+                    idx.addAuthorDoc(token, i);
+                    authorStr.erase(0, pos + delimiter.length());
+                }
+                idx.addAuthorDoc(authorStr, i);
             }
         }
         /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
