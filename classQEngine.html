@@ -88,7 +88,58 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printInfixRpn</b> ()<
 <tr class="memitem:ad842a2ead8ada2895d6ae51a33a1de96"><td class="memItemLeft" align="right" valign="top"><a id="ad842a2ead8ada2895d6ae51a33a1de96"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printInfixRpn2</b> ()</td></tr>
 <tr class="separator:ad842a2ead8ada2895d6ae51a33a1de96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2164dbf1b6efb480adc1e9eed4636fac"><td class="memItemLeft" align="right" valign="top"><a id="a2164dbf1b6efb480adc1e9eed4636fac"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>AND</b> (const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;left, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;right)</td></tr>
+<tr class="separator:a2164dbf1b6efb480adc1e9eed4636fac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c0f4bfcb44b42f18912b07c3615808a"><td class="memItemLeft" align="right" valign="top"><a id="a0c0f4bfcb44b42f18912b07c3615808a"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>OR</b> (const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;left, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;right)</td></tr>
+<tr class="separator:a0c0f4bfcb44b42f18912b07c3615808a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c1b129d7f7375c86ef574296ec6da10"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classQEngine.html#a1c1b129d7f7375c86ef574296ec6da10">ANDNOT</a> (const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;left, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;right)</td></tr>
+<tr class="memdesc:a1c1b129d7f7375c86ef574296ec6da10"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classQEngine.html#a1c1b129d7f7375c86ef574296ec6da10" title="QEngine::ANDNOT Merges 2 postings list and returns the resulting postings list. The postingslist do n...">QEngine::ANDNOT</a> Merges 2 postings list and returns the resulting postings list. The postingslist do not need to know the positions; therefore, a simple ANDNOT merge will only copy the document name/ id.  <a href="#a1c1b129d7f7375c86ef574296ec6da10">More...</a><br /></td></tr>
+<tr class="separator:a1c1b129d7f7375c86ef574296ec6da10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7147cabebf00ebcb30f84cc4b198b512"><td class="memItemLeft" align="right" valign="top"><a id="a7147cabebf00ebcb30f84cc4b198b512"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>PHRASE</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;left, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;right, const int &amp;dist)</td></tr>
+<tr class="separator:a7147cabebf00ebcb30f84cc4b198b512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1c1b129d7f7375c86ef574296ec6da10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c1b129d7f7375c86ef574296ec6da10">&sect;&nbsp;</a></span>ANDNOT()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; QEngine::ANDNOT </td>
+          <td>(</td>
+          <td class="paramtype">const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>right</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classQEngine.html#a1c1b129d7f7375c86ef574296ec6da10" title="QEngine::ANDNOT Merges 2 postings list and returns the resulting postings list. The postingslist do n...">QEngine::ANDNOT</a> Merges 2 postings list and returns the resulting postings list. The postingslist do not need to know the positions; therefore, a simple ANDNOT merge will only copy the document name/ id. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">left</td><td>The list of <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> you want. </td></tr>
+    <tr><td class="paramname">right</td><td>The list of things <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> you do NOT want. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the left ANDNOT the right. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>arXivSearchEngine/<a class="el" href="QEngine_8h_source.html">QEngine.h</a></li>
 <li>arXivSearchEngine/QEngine.cpp</li>
