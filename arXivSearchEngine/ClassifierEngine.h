@@ -14,11 +14,8 @@
 #include "DocInfo.h"
 #include <algorithm>
 #include <iostream>
-#include <cstdint>
 #include <string>
 #include <vector>
-#include <chrono>
-#include <cmath>
 #include <list>
 #include <queue>
 
@@ -26,33 +23,38 @@
 #include "KEngine.h"
 #include "KgramIndex.h"
 #include "DiskInvertedIndex.h"
+#include "ClassifierClass.h"
 
 class ClassifierEngine {
     boost::filesystem::path dir;
 
     DiskInvertedIndex &_idx; //Store the vocabulary, stem and unstem.
     QEngine queryEngine; //maybe use to classify and merges.
+    std::list<ClassifierClass> classList;
+    int numFeatures;
 
     //Need something to count number of term in class, not in...
     //class is author.classTerm
 public:
     //Greatest double first.
-    std::priority_queue<std::pair<double, std::string>> madison, jay, hamilton, globalclass;
+    std::priority_queue<std::pair<double, std::string>> madison, jay, hamilton, globalClass;
 
     ClassifierEngine();
-    ClassifierEngine(DiskInvertedIndex &idx);
+    ClassifierEngine(DiskInvertedIndex &idx, int numFeatures);
     //Extract the nuber of documents for each and put into method for the score.
     double featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass);
 
-    double countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
-    double countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
-    double countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
-    double countNone(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
 
-    void driver();
+    void generateFeaturesList();
+    void generateFeatureProbability();
+    std::string classifyDoc(const uint32_t &docId);
 
     //Get the all time top rank.
-    std::list<std::string> getGlobalTop(uint32_t n);
+    std::list<std::string> getGlobalList(uint32_t n);
     //Access the Hamilton, Jay or Madison Classes
     std::list<std::string> getTopClass(std::string author, uint32_t n);
 

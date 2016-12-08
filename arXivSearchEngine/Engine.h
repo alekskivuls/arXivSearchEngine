@@ -92,9 +92,11 @@ public:
 
     void printAuthors();
 
-    std::list<uint32_t> getAuthorDocs(const std::string &author);
+    std::list<DocInfo> getAuthorDocs(const std::string &author);
 
     void printAuthorDocs(const std::string &author);
+
+    void classifyDocuments();
 };
 
 #endif

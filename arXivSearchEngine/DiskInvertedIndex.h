@@ -53,13 +53,13 @@ public:
 
     std::string readStringAtPosition(uint32_t i, std::vector<ListEntry> &table, std::ifstream &list) const;
 
-    std::list<uint32_t> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
+    std::list<DocInfo> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
 
     DiskInvertedIndex();
 
     DiskInvertedIndex(const boost::filesystem::path &path);
 
-    std::list<DocInfo> GetPostings(const std::string &term);
+    std::list<DocInfo> getPostings(const std::string &term);
 
     uint32_t getN();
 
@@ -67,7 +67,7 @@ public:
 
     std::list<std::string> getAuthorList();
 
-    std::list<uint32_t> getAuthorDocs(const std::string &author);
+    std::list<DocInfo> getAuthorDocs(const std::string &author);
 };
 
 #endif
