@@ -45,45 +45,46 @@ DiskInvertedIndex::DiskInvertedIndex() {}
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
     mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
                     std::ios_base::in | std::ios_base::binary);
-    mPostings.open(boost::filesystem::path(mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
+    mVocabPostings.open(boost::filesystem::path(mPath).append("/postings.bin", boost::filesystem::path::codecvt()).string(),
                    std::ios_base::in | std::ios_base::binary);
-
+    mAuthorList.open(boost::filesystem::path(mPath).append("/authorList.bin", boost::filesystem::path::codecvt()).string(),
+                    std::ios_base::in | std::ios_base::binary);
+    mAuthorPostings.open(boost::filesystem::path(mPath).append("/authorDocs.bin", boost::filesystem::path::codecvt()).string(),
+                    std::ios_base::in | std::ios_base::binary);
     // open the vocabulary table and read it into memory.
     // we will end up with an array of T pairs of longs, where the first value is
     // a position in the vocabularyTable file, and the second is a position in
     // the postings file.
-    mVocabTable = ReadVocabTable(path);
+    mVocabTable = ReadTable(path, "vocabTable.bin");
+    mAuthorTable = ReadTable(path, "authorTable.bin");
 }
 
 // Reads a table of vocabulary entries, each of which consists of 2 8-byte values:
 // a file location for a term's ASCII-encoded string text in vocabList.bin, and
 // a file location for the term's postings list in postings.bin.
-std::vector<VocabEntry> DiskInvertedIndex::ReadVocabTable(const fs::path & path) { // THIS FUNCTION IS HUNDO PERCENT BROKEN
+std::vector<ListEntry> DiskInvertedIndex::ReadTable(const fs::path &path, const std::string &tableFilename) {
     fs::path tablePath = path;
 
-    ifstream tableFile(tablePath.append("/vocabTable.bin", boost::filesystem::path::codecvt()).string(),
+    ifstream tableFile(tablePath.append("/"+tableFilename, boost::filesystem::path::codecvt()).string(),
         std::ios::in | std::ios::binary);
     uint32_t buffer, buffer2;
 
     tableFile.read((char *)&buffer, sizeof(buffer));
     buffer = Reverse(buffer);// UNCOMMENT FOR LINUX
 
-    //int tableIndex = 0;
-    std::vector<VocabEntry> vocabTable;
-    vocabTable.reserve(buffer);
+    std::vector<ListEntry> table;
+    table.reserve(buffer);
 
     while (tableFile.read((char*)&buffer, sizeof(buffer))) {
         tableFile.read((char*)&buffer2, sizeof(buffer2));
 
         // Again, you may not need the reverse calls.
-        vocabTable.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
+        table.emplace_back(Reverse(buffer), Reverse(buffer2));// UNCOMMENT FOR LINUX
     }
-
-    //std::cout << "Vocab table size: " << vocabTable.size() << std::endl;
 
     tableFile.close();
 
-    return vocabTable;
+    return table;
 }
 
 std::unordered_map<uint32_t, std::string> DiskInvertedIndex::ReadIdTableFromFile(const boost::filesystem::path &path) {
@@ -116,21 +117,20 @@ std::unordered_map<uint32_t, std::string> DiskInvertedIndex::ReadIdTableFromFile
     return idTable;
 }
 
-VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) const { // const icu::UnicodeString &term
-    std::size_t i = 0, j = mVocabTable.size() - 1;
+ListEntry DiskInvertedIndex::binarySearchList(const std::string &term, std::vector<ListEntry> &table, std::ifstream &list) { // const icu::UnicodeString &term
+    std::size_t i = 0, j = table.size() - 1;
     while (i <= j) {
         std::size_t m = i + (j - i) / 2;
 
-
-        std::string uniStr = ReadVocabStringAtPosition(m);
+        std::string uniStr = readStringAtPosition(m, table, list);
         //std::cout << "READ VOCAB AT: " << uniStr << std::endl;
 
         int comp = term.compare(uniStr);
         if (comp == 0)
-            return mVocabTable[m];
+            return table[m];
         else if (comp < 0) {
             if (m == 0) {
-                return VocabEntry(-1, -1);
+                return ListEntry(-1, -1);
             }
             j = m - 1;
         }
@@ -138,10 +138,10 @@ VocabEntry DiskInvertedIndex::BinarySearchVocabulary(const std::string &term) co
             i = m + 1;
         }
     }
-    return VocabEntry(-1, -1);
+    return ListEntry(-1, -1);
 }
 
-std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition) { // change from vector to list...?
+std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
     // seek the specified position in the file
     postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
     // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
@@ -190,36 +190,63 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
     return posts;
 }
 
-std::string DiskInvertedIndex::ReadVocabStringAtPosition(uint32_t i) const {
-    auto &entry = mVocabTable[i];
+std::list<uint32_t> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
+    // seek the specified position in the file
+    postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
+    // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
+    postings.seekg(postingsPosition, postings.beg);
+
+    // Read the document frequency. size_t docFreq = (uint32_t) Reverse(postings.size());
+    uint32_t docFreq = ReadInt(postings); // size_t
+    //std::cout << "docFreq(" << docFreq << ") ";
+
+    // initialize the vector of document IDs to return.
+    std::list<uint32_t> docs;
+
+    // read 4 bytes at a time from the file, until you have read as many
+    //    postings as the document frequency promised.
+    uint32_t i;
+    //unsigned char j, byte;
+    //std::cout << "printing doc gaps: ";
+    for (i = 0; i < docFreq; ++i) {
+        const uint32_t &encodedDoc = ReadInt(postings);
+        docs.push_back(encodedDoc);
+
+    }// repeat until all postings are read.
+
+    return docs;
+}
+
+std::string DiskInvertedIndex::readStringAtPosition(uint32_t i, std::vector<ListEntry> &table, std::ifstream &list) const {
+    auto &entry = table[i];
 
     uint32_t termLength;
 
 
-    if (i == mVocabTable.size() - 1) {
-        mVocabList.clear();
-        mVocabList.seekg(0, mVocabList.end); // GETS LENGTH OF ENTIRE FILE
-        auto end = mVocabList.tellg();
+    if (i == table.size() - 1) {
+        list.clear();
+        list.seekg(0, list.end); // GETS LENGTH OF ENTIRE FILE
+        auto end = list.tellg();
         termLength = (uint32_t) end - entry.StringPosition;
     }
     else {
-        termLength = (mVocabTable[i + 1].StringPosition - entry.StringPosition); // (uint32_t)
+        termLength = (table[i + 1].StringPosition - entry.StringPosition); // (uint32_t)
     }
     //std::cout << "Term length:" << termLength << "String pos: " << entry.StringPosition;
-    mVocabList.clear();
-    mVocabList.seekg(entry.StringPosition, mVocabList.beg);
+    list.clear();
+    list.seekg(entry.StringPosition, list.beg);
     char *buffer = new char[termLength + 1];
     buffer[termLength] = '\0';
-    mVocabList.read(buffer, termLength);
+    list.read(buffer, termLength);
     std::string str(buffer);
     delete[] buffer;
     return std::move(str);
 }
 
-std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term) const { // const icu::UnicodeString &term
-    VocabEntry entry = BinarySearchVocabulary(term);
+std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term)  { // const icu::UnicodeString &term
+    ListEntry entry = binarySearchList(term, mVocabTable, mVocabList);
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
-        return ReadPostingsFromFile(mPostings, entry.PostingPosition);
+        return ReadPostingsFromFile(mVocabPostings, entry.PostingPosition);
     return std::list<DocInfo>();
 }
 
@@ -262,7 +289,22 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights() {
 std::list<std::string> DiskInvertedIndex::getVocabList() {
     std::list<std::string> vec;
     for(int i = 0; i < mVocabTable.size(); i++) {
-        vec.push_back(ReadVocabStringAtPosition(i));
+        vec.push_back(readStringAtPosition(i, mVocabTable, mVocabList));
     }
     return vec;
+}
+
+std::list<std::string> DiskInvertedIndex::getAuthorList() {
+    std::list<std::string> vec;
+    for(int i = 0; i < mAuthorTable.size(); i++) {
+        vec.push_back(readStringAtPosition(i, mAuthorTable, mAuthorList));
+    }
+    return vec;
+}
+
+std::list<uint32_t> DiskInvertedIndex::getAuthorDocs(const std::string &author)  {
+    ListEntry entry = binarySearchList(author, mAuthorTable, mAuthorList);
+    if (entry.PostingPosition != -1 && entry.StringPosition != -1)
+        return readAuthorDocsFromFile(mAuthorPostings, entry.PostingPosition);
+    return std::list<uint32_t>();
 }

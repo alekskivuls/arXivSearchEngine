@@ -160,7 +160,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
             } else if (pair.first == "title") {
 
             } else if(pair.first == "author") {
-
+                std::string author = pair.second.get_value<std::string>();
+                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+                idx.addAuthorDoc(author, i);
             }
         }
         /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
@@ -261,4 +263,28 @@ std::vector<std::string> Engine::getQuery(std::string &query) {
         results.push_back(getArticleName(di.getDocId()));
 
     return results;
+}
+
+std::list<std::string> Engine::getAuthors() {
+    return dIdx.getAuthorList();
+}
+
+void Engine::printAuthors() {
+    auto authors = getAuthors();
+    for(auto author : authors) {
+        std::cout << author << std::endl;
+    }
+    std::cout << authors.size() << std::endl;
+}
+
+std::list<uint32_t> Engine::getAuthorDocs(const std::string &author) {
+    return dIdx.getAuthorDocs(author);
+}
+
+void Engine::printAuthorDocs(const std::string &author) {
+    auto authorDocs = getAuthorDocs(author);
+    for(auto docId : authorDocs) {
+        std::cout << getArticleName(docId) << std::endl;
+    }
+    std::cout << authorDocs.size() << std::endl;
 }

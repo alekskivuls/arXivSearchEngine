@@ -85,6 +85,14 @@ public:
     std::vector<std::string> getQuery(std::string &query);
 
     std::string stem(std::string &token);
+
+    std::list<std::string> getAuthors();
+
+    void printAuthors();
+
+    std::list<uint32_t> getAuthorDocs(const std::string &author);
+
+    void printAuthorDocs(const std::string &author);
 };
 
 #endif

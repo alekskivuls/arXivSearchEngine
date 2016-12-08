@@ -43,6 +43,9 @@ int main() {
         else if (input.compare(":vocab") == 0) {
             engine.printVocab();
         }
+        else if (input.compare(":authors") == 0) {
+            engine.printAuthors();
+        }
         else if (boost::algorithm::starts_with(input, ":index ")) {
             filepath = input.substr(7, std::string::npos);
             engine.createIndex(filepath);
@@ -55,6 +58,10 @@ int main() {
             std::string query = input.substr(6, std::string::npos);
             engine.printRank(query);
 		}
+        else if (boost::algorithm::starts_with(input, ":authored ")) {
+            std::string author = input.substr(10, std::string::npos);
+            engine.printAuthorDocs(author);
+        }
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);
         }

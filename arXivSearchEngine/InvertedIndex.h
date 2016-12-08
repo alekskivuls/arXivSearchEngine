@@ -25,6 +25,9 @@ class InvertedIndex {
     /** @brief authorDoc The map of authors to documents **/
     std::unordered_map<std::string, std::list<uint32_t>> authorDoc;
 
+    /** @brief authorList The list of all authors in the corpus*/
+    std::set<std::string> authorList;
+
 public:
 	InvertedIndex();
 
@@ -82,7 +85,9 @@ public:
      */
     void addAuthorDoc(const std::string &author, const std::uint32_t &docId);
 
-    std::list<uint32_t> getAuthorDocs(const std::string &author);
+    std::list<uint32_t> getAuthorDocs(const std::string &author) const;
+
+    std::set<std::string> getAuthorList() const;
 };
 
 #endif

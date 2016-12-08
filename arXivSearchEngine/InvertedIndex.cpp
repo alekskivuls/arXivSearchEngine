@@ -80,20 +80,25 @@ uint32_t InvertedIndex::getTermCount() const {
 
 void InvertedIndex::addAuthorDoc(const std::string &author, const uint32_t &docId) {
     if (authorDoc.find(author) != authorDoc.end()) {
-        auto list = authorDoc.at(author);
+        auto &list = authorDoc.at(author);
         list.push_back(docId);
     } else {
         std::list<uint32_t> list;
         list.push_back(docId);
         authorDoc.insert(std::pair<std::string, std::list<uint32_t>>(author, list));
+        authorList.insert(author);
     }
 }
 
-std::list<uint32_t> InvertedIndex::getAuthorDocs(const std::string &author) {
+std::list<uint32_t> InvertedIndex::getAuthorDocs(const std::string &author) const {
     if (authorDoc.find(author) != authorDoc.end()) {
         return authorDoc.at(author);
     } else {
         std::list<uint32_t> empty;
         return empty;
     }
+}
+
+std::set<std::string> InvertedIndex::getAuthorList() const {
+    return authorList;
 }
