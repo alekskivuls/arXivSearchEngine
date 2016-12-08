@@ -380,9 +380,13 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
     return result;
 }
 
-/*
- * Merges 2 postings list and returns the resulting postings list. The postingslist do not need to
- * know the positions; therefore, a simple ANDNOT merge will only copy the document name/ id.
+/**
+ * @brief QEngine::ANDNOT Merges 2 postings list and returns the resulting postings list.
+ * The postingslist do not need to know the positions; therefore, a simple ANDNOT merge
+ * will only copy the document name/ id.
+ * @param left The list of DocInfo you want.
+ * @param right The list of things DocInfo you do NOT want.
+ * @return The result of the left ANDNOT the right.
  */
 std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
     std::list<DocInfo> result;

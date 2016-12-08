@@ -10,8 +10,6 @@ protected:
     virtual void TearDown() {
         //Add generated file cleanup
     }
-
-
     ClassifierEngine cengine;
 };
 
@@ -24,7 +22,7 @@ TEST_F(ClassifierTest, calculations)
     EXPECT_EQ(std::to_string(result), expected);
 }
 
-TEST_F(ClassifierTest, diskWrite)
-{
-    //cengine.populateIndex();
-}
+//TEST_F(ClassifierTest, diskWrite)
+//{
+//    //cengine.populateIndex();
+//}

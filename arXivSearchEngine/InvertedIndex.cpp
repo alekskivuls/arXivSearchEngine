@@ -90,6 +90,12 @@ void InvertedIndex::addAuthorDoc(const std::string &author, const uint32_t &docI
     }
 }
 
+/**
+ * @brief InvertedIndex::getAuthorDocs Returns list of Document IDs in the form of an
+ * std::list<uint32_t>.
+ * @param author
+ * @return
+ */
 std::list<uint32_t> InvertedIndex::getAuthorDocs(const std::string &author) const {
     if (authorDoc.find(author) != authorDoc.end()) {
         return authorDoc.at(author);

@@ -40,7 +40,7 @@ double_t DiskInvertedIndex::ReadDouble(std::ifstream &stream) {
     return value;
 }
 
-DiskInvertedIndex::DiskInvertedIndex() {}
+DiskInvertedIndex::DiskInvertedIndex() { }
 
 DiskInvertedIndex::DiskInvertedIndex(const boost::filesystem::path &path) : mPath(path) {
     mVocabList.open(boost::filesystem::path(mPath).append("/vocabList.bin", boost::filesystem::path::codecvt()).string(),
@@ -249,7 +249,10 @@ std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term)  { //
         return ReadPostingsFromFile(mVocabPostings, entry.PostingPosition);
     return std::list<DocInfo>();
 }
-
+/**
+ * @brief DiskInvertedIndex::getN Returns the total number of docs in the DiskInvertedIndex.
+ * @return The number of documents in the DiskInvertedIndex.
+ */
 uint32_t DiskInvertedIndex::getN() {
     fs::path weightbPath = mPath;
 
