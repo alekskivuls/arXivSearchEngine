@@ -30,7 +30,7 @@
 class ClassifierEngine {
     boost::filesystem::path dir;
 
-    DiskInvertedIndex _idx; //Store the vocabulary, stem and unstem.
+    DiskInvertedIndex &_idx; //Store the vocabulary, stem and unstem.
     QEngine queryEngine; //maybe use to classify and merges.
 
     //Greatest double first.
@@ -40,7 +40,7 @@ class ClassifierEngine {
     //class is author.classTerm
 public:
     ClassifierEngine();
-    //ClassifierEngine(const DiskInvertedIndex &idx);
+    ClassifierEngine(DiskInvertedIndex &idx);
     //Extract the nuber of documents for each and put into method for the score.
     double featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass);
 
@@ -57,7 +57,7 @@ public:
     std::list<std::string> getTopClass(std::string author, uint32_t n);
 
     //Set the DiskInvertedIndex
-    void setIndex(DiskInvertedIndex &idx);
+    //void setIndex(DiskInvertedIndex &idx);
 };
 
 #endif

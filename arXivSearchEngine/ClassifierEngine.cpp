@@ -14,11 +14,9 @@
 #include "KDeserializer.h"
 
 // Default constructors and destructors
-ClassifierEngine::ClassifierEngine() { }
+//ClassifierEngine::ClassifierEngine() { }
 
-void ClassifierEngine::setIndex(DiskInvertedIndex &idx) {
-    _idx = idx;
-}
+ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx) : _idx(idx) { }
 
 //Populates the priority_queues.
 void ClassifierEngine::driver() {
