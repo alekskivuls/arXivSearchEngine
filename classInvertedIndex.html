@@ -98,9 +98,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a39c55d089973c2d747dc4a7e32375f58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInvertedIndex.html#a39c55d089973c2d747dc4a7e32375f58">addAuthorDoc</a> (const std::string &amp;author, const std::uint32_t &amp;docId)</td></tr>
 <tr class="memdesc:a39c55d089973c2d747dc4a7e32375f58"><td class="mdescLeft">&#160;</td><td class="mdescRight">addAuthorDoc  <a href="#a39c55d089973c2d747dc4a7e32375f58">More...</a><br /></td></tr>
 <tr class="separator:a39c55d089973c2d747dc4a7e32375f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0955eccb703b0b1fe444fda28321414f"><td class="memItemLeft" align="right" valign="top"><a id="a0955eccb703b0b1fe444fda28321414f"></a>
-std::list&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorDocs</b> (const std::string &amp;author)</td></tr>
-<tr class="separator:a0955eccb703b0b1fe444fda28321414f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7401feb15307e9123dae7f9c143d569b"><td class="memItemLeft" align="right" valign="top"><a id="a7401feb15307e9123dae7f9c143d569b"></a>
+std::list&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorDocs</b> (const std::string &amp;author) const</td></tr>
+<tr class="separator:a7401feb15307e9123dae7f9c143d569b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad01418876d35797a7dd70e18e25f8419"><td class="memItemLeft" align="right" valign="top"><a id="ad01418876d35797a7dd70e18e25f8419"></a>
+std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorList</b> () const</td></tr>
+<tr class="separator:ad01418876d35797a7dd70e18e25f8419"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classInvertedIndex.html" title="InvertedIndex This data structure represents the inverted index. It incapsulates a set of stemmed ter...">InvertedIndex</a> This data structure represents the inverted index. It incapsulates a set of stemmed terms and a list of Objects called DocInfos. The list of DocInfos represents an entire postings list. Each <a class="el" href="classDocInfo.html" title="The DocInfo class The document info represents a single document in a single postings list...">DocInfo</a> within the postings list represents the positional occurences of the term that occurs for that document. </p>

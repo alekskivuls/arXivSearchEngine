@@ -71,24 +71,33 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e17757411135be3946ec3411f2f9c05"><td class="memItemLeft" align="right" valign="top"><a id="a6e17757411135be3946ec3411f2f9c05"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIndex</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::unordered_map&lt; uint32_t, std::string &gt; &amp;idTable, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
 <tr class="separator:a6e17757411135be3946ec3411f2f9c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a176405fda10295951ff8266e5b140964"><td class="memItemLeft" align="right" valign="top"><a id="a176405fda10295951ff8266e5b140964"></a>
-static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx)</td></tr>
-<tr class="separator:a176405fda10295951ff8266e5b140964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64c8965a9bdb250f1d847821440a5b32"><td class="memItemLeft" align="right" valign="top"><a id="a64c8965a9bdb250f1d847821440a5b32"></a>
+static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildVocab</b> (const boost::filesystem::path &amp;filePath, const std::set&lt; std::string &gt; &amp;vocabList)</td></tr>
+<tr class="separator:a64c8965a9bdb250f1d847821440a5b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72e6fdaa2d0f1b1c5cb18f143a2e1752"><td class="memItemLeft" align="right" valign="top"><a id="a72e6fdaa2d0f1b1c5cb18f143a2e1752"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildIdTable</b> (const boost::filesystem::path &amp;filePath, const std::unordered_map&lt; uint32_t, std::string &gt; &amp;idTable)</td></tr>
 <tr class="separator:a72e6fdaa2d0f1b1c5cb18f143a2e1752"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc821500037b799b7dd935164a45bafc"><td class="memItemLeft" align="right" valign="top"><a id="adc821500037b799b7dd935164a45bafc"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildPostings</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; uint32_t &gt; &amp;vocabPositions)</td></tr>
 <tr class="separator:adc821500037b799b7dd935164a45bafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a34952014786c1fe4bf856b126eec9e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSerializer.html#a9a34952014786c1fe4bf856b126eec9e">WritePostings</a> (std::ofstream &amp;postingsFile, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;postings)</td></tr>
-<tr class="separator:a9a34952014786c1fe4bf856b126eec9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8588dff653ecc6cd7a2b787c61ddd092"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSerializer.html#a8588dff653ecc6cd7a2b787c61ddd092">writePostings</a> (std::ofstream &amp;postingsFile, const std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; &amp;postings)</td></tr>
+<tr class="separator:a8588dff653ecc6cd7a2b787c61ddd092"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af45221cf2f1e2df73086b67725b62c0d"><td class="memItemLeft" align="right" valign="top"><a id="af45221cf2f1e2df73086b67725b62c0d"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildEucDist</b> (const boost::filesystem::path &amp;filePath, const std::vector&lt; double_t &gt; &amp;weights)</td></tr>
 <tr class="separator:af45221cf2f1e2df73086b67725b62c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4abf66155aa7cd82419f7ce1bf7c1a01"><td class="memItemLeft" align="right" valign="top"><a id="a4abf66155aa7cd82419f7ce1bf7c1a01"></a>
+static std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>buildAuthors</b> (const boost::filesystem::path &amp;filePath, const std::set&lt; std::string &gt; &amp;authorList)</td></tr>
+<tr class="separator:a4abf66155aa7cd82419f7ce1bf7c1a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c17dae59e5a7f046c9f95f79eb16c18"><td class="memItemLeft" align="right" valign="top"><a id="a8c17dae59e5a7f046c9f95f79eb16c18"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildAuthorDocs</b> (const boost::filesystem::path &amp;filePath, const <a class="el" href="classInvertedIndex.html">InvertedIndex</a> &amp;auxIdx, const std::vector&lt; uint32_t &gt; &amp;authorPositions)</td></tr>
+<tr class="separator:a8c17dae59e5a7f046c9f95f79eb16c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64e72a2c4faa6ec84c8ef369a7df77bd"><td class="memItemLeft" align="right" valign="top"><a id="a64e72a2c4faa6ec84c8ef369a7df77bd"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>writeAuthorPostings</b> (std::ofstream &amp;postingsFile, const std::list&lt; uint32_t &gt; &amp;postings)</td></tr>
+<tr class="separator:a64e72a2c4faa6ec84c8ef369a7df77bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9a34952014786c1fe4bf856b126eec9e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9a34952014786c1fe4bf856b126eec9e">&sect;&nbsp;</a></span>WritePostings()</h2>
+<a id="a8588dff653ecc6cd7a2b787c61ddd092"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8588dff653ecc6cd7a2b787c61ddd092">&sect;&nbsp;</a></span>writePostings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -97,7 +106,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>buildEucDist</
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Serializer::WritePostings </td>
+          <td class="memname">void Serializer::writePostings </td>
           <td>(</td>
           <td class="paramtype">std::ofstream &amp;&#160;</td>
           <td class="paramname"><em>postingsFile</em>, </td>

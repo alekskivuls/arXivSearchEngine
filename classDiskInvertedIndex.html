@@ -80,24 +80,33 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0593cc37d0d8e4967b7d9fb298a6042f"><td class="memItemLeft" align="right" valign="top"><a id="a0593cc37d0d8e4967b7d9fb298a6042f"></a>
 std::vector&lt; double_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReadWeights</b> ()</td></tr>
 <tr class="separator:a0593cc37d0d8e4967b7d9fb298a6042f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0e1f774d3fe4f9dfe4f8f89c21d7819"><td class="memItemLeft" align="right" valign="top"><a id="ac0e1f774d3fe4f9dfe4f8f89c21d7819"></a>
-<a class="el" href="structVocabEntry.html">VocabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><b>BinarySearchVocabulary</b> (const std::string &amp;term) const</td></tr>
-<tr class="separator:ac0e1f774d3fe4f9dfe4f8f89c21d7819"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe98e737661ebf4b2c6a8333cf6545bc"><td class="memItemLeft" align="right" valign="top"><a id="abe98e737661ebf4b2c6a8333cf6545bc"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>ReadVocabStringAtPosition</b> (uint32_t index) const</td></tr>
-<tr class="separator:abe98e737661ebf4b2c6a8333cf6545bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6aa945cc97ee08208a091a1c48db127"><td class="memItemLeft" align="right" valign="top"><a id="ae6aa945cc97ee08208a091a1c48db127"></a>
+<a class="el" href="structListEntry.html">ListEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><b>binarySearchList</b> (const std::string &amp;term, std::vector&lt; <a class="el" href="structListEntry.html">ListEntry</a> &gt; &amp;table, std::ifstream &amp;list)</td></tr>
+<tr class="separator:ae6aa945cc97ee08208a091a1c48db127"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cab19af5d3eb5eba2a1e98471f26f08"><td class="memItemLeft" align="right" valign="top"><a id="a1cab19af5d3eb5eba2a1e98471f26f08"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>readStringAtPosition</b> (uint32_t i, std::vector&lt; <a class="el" href="structListEntry.html">ListEntry</a> &gt; &amp;table, std::ifstream &amp;list) const</td></tr>
+<tr class="separator:a1cab19af5d3eb5eba2a1e98471f26f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad08d3e6991dfcb987a3d95a61c1a260"><td class="memItemLeft" align="right" valign="top"><a id="aad08d3e6991dfcb987a3d95a61c1a260"></a>
+std::list&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readAuthorDocsFromFile</b> (std::ifstream &amp;postings, uint32_t postingsPosition)</td></tr>
+<tr class="separator:aad08d3e6991dfcb987a3d95a61c1a260"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e87b0f132689c6d2afcde219d67f997"><td class="memItemLeft" align="right" valign="top"><a id="a4e87b0f132689c6d2afcde219d67f997"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>DiskInvertedIndex</b> (const boost::filesystem::path &amp;path)</td></tr>
 <tr class="separator:a4e87b0f132689c6d2afcde219d67f997"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a477dbc87efb4b0a2c9a9932aa8b013c9"><td class="memItemLeft" align="right" valign="top"><a id="a477dbc87efb4b0a2c9a9932aa8b013c9"></a>
-std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetPostings</b> (const std::string &amp;term) const</td></tr>
-<tr class="separator:a477dbc87efb4b0a2c9a9932aa8b013c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c4e68d46031d07db06efc3088f5b64b"><td class="memItemLeft" align="right" valign="top"><a id="a6c4e68d46031d07db06efc3088f5b64b"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetPostings</b> (const std::string &amp;term)</td></tr>
+<tr class="separator:a6c4e68d46031d07db06efc3088f5b64b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c97f856e0b46d046fd32de4030a7ace"><td class="memItemLeft" align="right" valign="top"><a id="a2c97f856e0b46d046fd32de4030a7ace"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>getN</b> ()</td></tr>
 <tr class="separator:a2c97f856e0b46d046fd32de4030a7ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93dd775f582441d460e717c75daa10f8"><td class="memItemLeft" align="right" valign="top"><a id="a93dd775f582441d460e717c75daa10f8"></a>
 std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocabList</b> ()</td></tr>
 <tr class="separator:a93dd775f582441d460e717c75daa10f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a985b910cfb17723c861fa5ef2e564957"><td class="memItemLeft" align="right" valign="top"><a id="a985b910cfb17723c861fa5ef2e564957"></a>
+std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorList</b> ()</td></tr>
+<tr class="separator:a985b910cfb17723c861fa5ef2e564957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9738df45e5ec8ad6b773e932dcd3cede"><td class="memItemLeft" align="right" valign="top"><a id="a9738df45e5ec8ad6b773e932dcd3cede"></a>
+std::list&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAuthorDocs</b> (const std::string &amp;author)</td></tr>
+<tr class="separator:a9738df45e5ec8ad6b773e932dcd3cede"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -116,9 +125,9 @@ static double_t&#160;</td><td class="memItemRight" valign="bottom"><b>ReadDouble
 <tr class="memitem:a65d25138d954c5f05c3b1fef9be8779c"><td class="memItemLeft" align="right" valign="top"><a id="a65d25138d954c5f05c3b1fef9be8779c"></a>
 static std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReadPostingsFromFile</b> (std::ifstream &amp;postings, uint32_t postingsPosition)</td></tr>
 <tr class="separator:a65d25138d954c5f05c3b1fef9be8779c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbdf718722be29854ccbf513ca8b31da"><td class="memItemLeft" align="right" valign="top"><a id="adbdf718722be29854ccbf513ca8b31da"></a>
-static std::vector&lt; <a class="el" href="structVocabEntry.html">VocabEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReadVocabTable</b> (const boost::filesystem::path &amp;path)</td></tr>
-<tr class="separator:adbdf718722be29854ccbf513ca8b31da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad976de5ec627c60956ef95c1911ba0e1"><td class="memItemLeft" align="right" valign="top"><a id="ad976de5ec627c60956ef95c1911ba0e1"></a>
+static std::vector&lt; <a class="el" href="structListEntry.html">ListEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReadTable</b> (const boost::filesystem::path &amp;path, const std::string &amp;tableName)</td></tr>
+<tr class="separator:ad976de5ec627c60956ef95c1911ba0e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcc56fbb923a35e75b04dfb7343b69b8"><td class="memItemLeft" align="right" valign="top"><a id="adcc56fbb923a35e75b04dfb7343b69b8"></a>
 static std::unordered_map&lt; uint32_t, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>ReadIdTableFromFile</b> (const boost::filesystem::path &amp;path)</td></tr>
 <tr class="separator:adcc56fbb923a35e75b04dfb7343b69b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,12 +140,21 @@ boost::filesystem::path&#160;</td><td class="memItemRight" valign="bottom"><b>mP
 <tr class="memitem:a1dffbb5c1d5d60b6a7ed5106a964b4fa"><td class="memItemLeft" align="right" valign="top"><a id="a1dffbb5c1d5d60b6a7ed5106a964b4fa"></a>
 std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><b>mVocabList</b></td></tr>
 <tr class="separator:a1dffbb5c1d5d60b6a7ed5106a964b4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af377f8992c1891d329154b5f0d12c237"><td class="memItemLeft" align="right" valign="top"><a id="af377f8992c1891d329154b5f0d12c237"></a>
-std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><b>mPostings</b></td></tr>
-<tr class="separator:af377f8992c1891d329154b5f0d12c237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05047d9be6550f44bfd96ea4ebd81d54"><td class="memItemLeft" align="right" valign="top"><a id="a05047d9be6550f44bfd96ea4ebd81d54"></a>
-std::vector&lt; <a class="el" href="structVocabEntry.html">VocabEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mVocabTable</b></td></tr>
-<tr class="separator:a05047d9be6550f44bfd96ea4ebd81d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf70e00000edfd715df56af95ea21e0e"><td class="memItemLeft" align="right" valign="top"><a id="aaf70e00000edfd715df56af95ea21e0e"></a>
+std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><b>mVocabPostings</b></td></tr>
+<tr class="separator:aaf70e00000edfd715df56af95ea21e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62a36cd90b4c2542b73b8b389b2a1767"><td class="memItemLeft" align="right" valign="top"><a id="a62a36cd90b4c2542b73b8b389b2a1767"></a>
+std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><b>mAuthorList</b></td></tr>
+<tr class="separator:a62a36cd90b4c2542b73b8b389b2a1767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3286d984ad6c92b9646e7839e5c6af4"><td class="memItemLeft" align="right" valign="top"><a id="ab3286d984ad6c92b9646e7839e5c6af4"></a>
+std::ifstream&#160;</td><td class="memItemRight" valign="bottom"><b>mAuthorPostings</b></td></tr>
+<tr class="separator:ab3286d984ad6c92b9646e7839e5c6af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af18a037c0523610a9238119d55e87af6"><td class="memItemLeft" align="right" valign="top"><a id="af18a037c0523610a9238119d55e87af6"></a>
+std::vector&lt; <a class="el" href="structListEntry.html">ListEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mVocabTable</b></td></tr>
+<tr class="separator:af18a037c0523610a9238119d55e87af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdc04c91fd75e9d872ca804eaaa715c9"><td class="memItemLeft" align="right" valign="top"><a id="acdc04c91fd75e9d872ca804eaaa715c9"></a>
+std::vector&lt; <a class="el" href="structListEntry.html">ListEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mAuthorTable</b></td></tr>
+<tr class="separator:acdc04c91fd75e9d872ca804eaaa715c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62f34f68e58401e30d04dca36e38bac5"><td class="memItemLeft" align="right" valign="top"><a id="a62f34f68e58401e30d04dca36e38bac5"></a>
 std::unordered_map&lt; uint32_t, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mIdTable</b></td></tr>
 <tr class="separator:a62f34f68e58401e30d04dca36e38bac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
