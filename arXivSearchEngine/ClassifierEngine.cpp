@@ -23,17 +23,26 @@ void ClassifierEngine::driver() {
     //Driver method so I only have to process this once.
     //Nested for loop for all author and term combinations.
     for(auto author : _idx.getAuthorList()) {
+//        for(auto _author : _idx.getAuthorList()){
+//            std::cout << _author << " LIST OF THE AUTHORS " << std::endl;
+//        }
         //Getting all of the doc IDs that author wrote.
         std::list<uint32_t> rawAuthorDocs = _idx.getAuthorDocs(author);
         std::list<DocInfo> authorDocs;
         for(auto docId : rawAuthorDocs)
             authorDocs.push_back(DocInfo(docId));
 
+//        for(auto _term : _idx.getVocabList()) {
+//            std::cout << _term << " LIST OF THE TERMS " << std::endl;
+//        }
+
         for(auto term : _idx.getVocabList()) {
             double weight = 0;
 
             //Getting all of the postings for that term.
             std::list<DocInfo> postings = _idx.GetPostings(term);
+
+            std::cout << term << " AUTHOR IS HERE " << author << std::endl;
 
             //Calling the count classes and saving values
             //If there's no need for it to be in a double. i.e. the counts...
@@ -50,15 +59,15 @@ void ClassifierEngine::driver() {
 
             //Putting it into priority queues.
             //Push it into the global std::priority_queue<std::pair<double, std::string>>
-            globalclass.push(std::pair<double, std::string>(weight, author));
+            globalclass.push(std::pair<double, std::string>(weight, term));
 
             //Pushing it to the other class ones.
             if(author == "MADISON")
-                madison.push(std::pair<double, std::string>(weight, author));
+                madison.push(std::pair<double, std::string>(weight, term));
             else if(author == "JAY")
-                jay.push(std::pair<double, std::string>(weight, author));
+                jay.push(std::pair<double, std::string>(weight, term));
             else //Better be Hamilton or error.
-                hamilton.push(std::pair<double, std::string>(weight, author));
+                hamilton.push(std::pair<double, std::string>(weight, term));
         }
     }
 
@@ -83,7 +92,7 @@ double ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocIn
 }
 
 double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass){
-    double totalDoc = _idx.getN();
+    double totalDoc = classTerm + noClassTerm + noTermClass + noTermNoClass;
     double classTermCal = (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));
     double noClassTermCal = (noClassTerm/totalDoc)*std::log2((noClassTerm*totalDoc)/((classTerm+noClassTerm)*(noClassTerm+noTermNoClass)));
     double noTermClassCal = (noTermClass/totalDoc)*std::log2((noTermClass*totalDoc)/((noTermClass+classTerm)*(noTermClass+noTermNoClass)));

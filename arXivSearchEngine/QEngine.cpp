@@ -394,7 +394,7 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
         return left;
 
     auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
-    while (iIter != left.end()) {
+    while (iIter != left.end() && jIter != right.end()) {
         if ((*iIter).getDocId() > (*jIter).getDocId())
             ++jIter;
         else if ((*jIter).getDocId() > (*iIter).getDocId()) {
@@ -407,6 +407,12 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
         }
     }
 
+    if (iIter != left.end()){
+        while (iIter != left.end()){
+            result.push_back(DocInfo((*iIter).getDocId()));
+            ++iIter;
+        }
+    }
     return result;
 }
 

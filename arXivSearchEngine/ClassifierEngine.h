@@ -1,5 +1,5 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef CENGINE_H
+#define CENGINE_H
 
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
@@ -33,12 +33,12 @@ class ClassifierEngine {
     DiskInvertedIndex &_idx; //Store the vocabulary, stem and unstem.
     QEngine queryEngine; //maybe use to classify and merges.
 
-    //Greatest double first.
-    std::priority_queue<std::pair<double, std::string>> madison, jay, hamilton, globalclass;
-
     //Need something to count number of term in class, not in...
     //class is author.classTerm
 public:
+    //Greatest double first.
+    std::priority_queue<std::pair<double, std::string>> madison, jay, hamilton, globalclass;
+
     ClassifierEngine();
     ClassifierEngine(DiskInvertedIndex &idx);
     //Extract the nuber of documents for each and put into method for the score.

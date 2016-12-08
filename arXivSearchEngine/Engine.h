@@ -27,7 +27,7 @@
 #include "DiskInvertedIndex.h"
 
 class Engine {
-    DiskInvertedIndex dIdx;
+
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
 	std::vector<double_t> ld; // DOCUMENT ID, SCORE
@@ -37,8 +37,10 @@ class Engine {
     KgramIndex kIdx3 = KgramIndex(3);
 
 public:
-	Engine();
-	
+    Engine();
+
+    DiskInvertedIndex dIdx;
+
 	/**
 	* Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that
 	* is allocated on the heap. This method feeds the text file into a stringstream and passes the
