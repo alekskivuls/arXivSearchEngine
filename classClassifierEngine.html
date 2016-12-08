@@ -69,30 +69,36 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a10127c298487ff7d32bf61c41de2fc60"><td class="memItemLeft" align="right" valign="top"><a id="a10127c298487ff7d32bf61c41de2fc60"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx)</td></tr>
-<tr class="separator:a10127c298487ff7d32bf61c41de2fc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7cd567f7436af0f3c4354f4d937b888"><td class="memItemLeft" align="right" valign="top"><a id="ab7cd567f7436af0f3c4354f4d937b888"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx, int numFeatures)</td></tr>
+<tr class="separator:ab7cd567f7436af0f3c4354f4d937b888"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top"><a id="a3b2ed54b7a31250bb8bf9d901b1d5a5e"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>featureSelect</b> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
 <tr class="separator:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3a0015157e57acb666a1612f3e3b4b0"><td class="memItemLeft" align="right" valign="top"><a id="af3a0015157e57acb666a1612f3e3b4b0"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:af3a0015157e57acb666a1612f3e3b4b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8164b785806d8baaf78ae50cdceb61f8"><td class="memItemLeft" align="right" valign="top"><a id="a8164b785806d8baaf78ae50cdceb61f8"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>countClass</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:a8164b785806d8baaf78ae50cdceb61f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84859513d84c0f6d8e214be3068da119"><td class="memItemLeft" align="right" valign="top"><a id="a84859513d84c0f6d8e214be3068da119"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>countTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:a84859513d84c0f6d8e214be3068da119"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97a83ae6593a4ce48291c317391cbd86"><td class="memItemLeft" align="right" valign="top"><a id="a97a83ae6593a4ce48291c317391cbd86"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>countNone</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:a97a83ae6593a4ce48291c317391cbd86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b96e90166f7ca78f68d7ea1f621a1c5"><td class="memItemLeft" align="right" valign="top"><a id="a3b96e90166f7ca78f68d7ea1f621a1c5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>driver</b> ()</td></tr>
-<tr class="separator:a3b96e90166f7ca78f68d7ea1f621a1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27abad62db4c6d763417836652d29742"><td class="memItemLeft" align="right" valign="top"><a id="a27abad62db4c6d763417836652d29742"></a>
-std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getGlobalTop</b> (uint32_t n)</td></tr>
-<tr class="separator:a27abad62db4c6d763417836652d29742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memItemLeft" align="right" valign="top"><a id="a2c626c33d3acfc1183a6de15a551a1ac"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="separator:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memItemLeft" align="right" valign="top"><a id="aa5743e4dc7e77c715eac31fcd4b8e605"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPostings</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="separator:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memItemLeft" align="right" valign="top"><a id="ac40c02d5a5c796dec80eb39b1e76b68d"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClass</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="separator:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86326ad0309a6b833e5f6180477439f2"><td class="memItemLeft" align="right" valign="top"><a id="a86326ad0309a6b833e5f6180477439f2"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="separator:a86326ad0309a6b833e5f6180477439f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memItemLeft" align="right" valign="top"><a id="a07e924cd66b6c9dff6f9b65dc4754a15"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeaturesList</b> ()</td></tr>
+<tr class="separator:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
+<tr class="separator:adaa67ca1359d22e7679c873930970b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memItemLeft" align="right" valign="top"><a id="ad691d0f8a00c0a5cdbad3a259751a2fe"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t &amp;docId)</td></tr>
+<tr class="separator:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa640f47a559a55f0e1e8727db338992c"><td class="memItemLeft" align="right" valign="top"><a id="aa640f47a559a55f0e1e8727db338992c"></a>
+std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getGlobalList</b> (uint32_t n)</td></tr>
+<tr class="separator:aa640f47a559a55f0e1e8727db338992c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3c0ebbdecc11349de23e211cf559d01"><td class="memItemLeft" align="right" valign="top"><a id="ac3c0ebbdecc11349de23e211cf559d01"></a>
 std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTopClass</b> (std::string author, uint32_t n)</td></tr>
 <tr class="separator:ac3c0ebbdecc11349de23e211cf559d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -108,9 +114,9 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 <tr class="memitem:a2a266287062353972058705b4b13a1ce"><td class="memItemLeft" align="right" valign="top"><a id="a2a266287062353972058705b4b13a1ce"></a>
 std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>hamilton</b></td></tr>
 <tr class="separator:a2a266287062353972058705b4b13a1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28986fc85770956c136a9c8b5c08c61e"><td class="memItemLeft" align="right" valign="top"><a id="a28986fc85770956c136a9c8b5c08c61e"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>globalclass</b></td></tr>
-<tr class="separator:a28986fc85770956c136a9c8b5c08c61e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memItemLeft" align="right" valign="top"><a id="a0b4e2d8145dccf7bf4e1f349477aea02"></a>
+std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>globalClass</b></td></tr>
+<tr class="separator:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>arXivSearchEngine/<a class="el" href="ClassifierEngine_8h_source.html">ClassifierEngine.h</a></li>
