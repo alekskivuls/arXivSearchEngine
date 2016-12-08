@@ -100,22 +100,15 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
     std::size_t i = 0, j = mKgramTable.size() - 1; //j equals last kgram index.
     while (i <= j) {
         std::size_t m = i + (j - i) / 2;
-
-        std::cout << "BreakPoint? 3" << std::endl;
-
         std::string uniStr = ReadKgramStringAtPosition(m); //read middle kgram.
-        std::cout << "READ KGRAM AT: " << uniStr << " starts " << m << std::endl;
+        //std::cout << "READ KGRAM AT: " << uniStr << " starts " << m << std::endl;
 
-        std::cout << "BreakPoint? Confirming this is the line that is broken." << std::endl;
         int comp = kgram.compare(uniStr); //breaks here
-        std::cout << "BreakPoint? 7" << std::endl;
         if (comp == 0) {
-            std::cout << "BreakPoint? 6" << std::endl;
             return mKgramTable[m]; //found it.
         }
         else if (comp < 0) {
             if (m == 0) {
-                std::cout << "BreakPoint? 5" << std::endl;
                 return KgramEntry(-1, -1);
             }
             j = m - 1; //depending on compare search middles. binary.
@@ -124,7 +117,6 @@ KgramEntry KDeserializer::BinarySearchKgrams(const std::string &kgram) const { /
             i = m + 1;
         }
     }
-    std::cout << "BreakPoint? 4" << std::endl;
     return KgramEntry(-1, -1);
 }
 
@@ -158,11 +150,8 @@ std::string KDeserializer::ReadKgramStringAtPosition(uint32_t index) const{
 
 std::unordered_set<std::string> KDeserializer::GetTerms(std::string &kgram) { // const icu::UnicodeString &term
     std::unordered_set<std::string> empty;
-    std::cout << "BreakPoint? 0" << std::endl;
     KgramEntry entry = BinarySearchKgrams(kgram);
-    std::cout << "BreakPoint? 1" << std::endl;
     if (entry.TermPosition != -1 && entry.KgramPosition != -1)
-        std::cout << "BreakPoint? 2" << std::endl;
         return ReadTermsFromFile(mTerms, entry.TermPosition);
     return empty/*std::list<std::string>()*/; //empty list
 }
