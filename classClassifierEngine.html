@@ -66,29 +66,35 @@ $(function() {
 <div class="title">ClassifierEngine Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>ClassifierEngine::ClassifierEngine Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start.  
+ <a href="classClassifierEngine.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ClassifierEngine_8h_source.html">ClassifierEngine.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab7cd567f7436af0f3c4354f4d937b888"><td class="memItemLeft" align="right" valign="top"><a id="ab7cd567f7436af0f3c4354f4d937b888"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx, int numFeatures)</td></tr>
 <tr class="separator:ab7cd567f7436af0f3c4354f4d937b888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top"><a id="a3b2ed54b7a31250bb8bf9d901b1d5a5e"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>featureSelect</b> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
+<tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e">featureSelect</a> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
+<tr class="memdesc:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function.  <a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">More...</a><br /></td></tr>
 <tr class="separator:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memItemLeft" align="right" valign="top"><a id="a2c626c33d3acfc1183a6de15a551a1ac"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memItemLeft" align="right" valign="top"><a id="aa5743e4dc7e77c715eac31fcd4b8e605"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPostings</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
 <tr class="separator:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memItemLeft" align="right" valign="top"><a id="ac40c02d5a5c796dec80eb39b1e76b68d"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClass</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="memitem:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac">countClassTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="memdesc:a2c626c33d3acfc1183a6de15a551a1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;.  <a href="#a2c626c33d3acfc1183a6de15a551a1ac">More...</a><br /></td></tr>
+<tr class="separator:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d">countClass</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="memdesc:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;.  <a href="#ac40c02d5a5c796dec80eb39b1e76b68d">More...</a><br /></td></tr>
 <tr class="separator:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86326ad0309a6b833e5f6180477439f2"><td class="memItemLeft" align="right" valign="top"><a id="a86326ad0309a6b833e5f6180477439f2"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countTerm</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="memitem:a86326ad0309a6b833e5f6180477439f2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2">countTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
+<tr class="memdesc:a86326ad0309a6b833e5f6180477439f2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;.  <a href="#a86326ad0309a6b833e5f6180477439f2">More...</a><br /></td></tr>
 <tr class="separator:a86326ad0309a6b833e5f6180477439f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memItemLeft" align="right" valign="top"><a id="a07e924cd66b6c9dff6f9b65dc4754a15"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeaturesList</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15">generateFeaturesList</a> ()</td></tr>
+<tr class="memdesc:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15" title="ClassifierEngine::generateFeaturesList Populates the priority queues with calculated naive bayes func...">ClassifierEngine::generateFeaturesList</a> Populates the priority queues with calculated naive bayes function. Which may be retrieved with <a class="el" href="classClassifierEngine.html#a97c312a12e6846842ce4d230e00860b8" title="getTopClass After driver() is called you can use this method to get the top n scored terms for the sp...">getTopClass()</a> or <a class="el" href="classClassifierEngine.html#ae968190f709903f89909ee2d4162fe5e" title="getGlobalTop After driver() is called you can use this method to get the top n scored terms...">getGlobalTop()</a>. <br /></td></tr>
 <tr class="separator:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
@@ -96,17 +102,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbab
 <tr class="memitem:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memItemLeft" align="right" valign="top"><a id="ad691d0f8a00c0a5cdbad3a259751a2fe"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t &amp;docId)</td></tr>
 <tr class="separator:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae968190f709903f89909ee2d4162fe5e"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#ae968190f709903f89909ee2d4162fe5e">getGlobalTop</a> (uint32_t n)</td></tr>
+<tr class="memdesc:ae968190f709903f89909ee2d4162fe5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalTop After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#ae968190f709903f89909ee2d4162fe5e">More...</a><br /></td></tr>
+<tr class="separator:ae968190f709903f89909ee2d4162fe5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa640f47a559a55f0e1e8727db338992c"><td class="memItemLeft" align="right" valign="top"><a id="aa640f47a559a55f0e1e8727db338992c"></a>
 std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getGlobalList</b> (uint32_t n)</td></tr>
 <tr class="separator:aa640f47a559a55f0e1e8727db338992c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3c0ebbdecc11349de23e211cf559d01"><td class="memItemLeft" align="right" valign="top"><a id="ac3c0ebbdecc11349de23e211cf559d01"></a>
-std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTopClass</b> (std::string author, uint32_t n)</td></tr>
-<tr class="separator:ac3c0ebbdecc11349de23e211cf559d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97c312a12e6846842ce4d230e00860b8"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a97c312a12e6846842ce4d230e00860b8">getTopClass</a> (std::string author, uint32_t n)</td></tr>
+<tr class="memdesc:a97c312a12e6846842ce4d230e00860b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">getTopClass After driver() is called you can use this method to get the top n scored terms for the specified author's priority queue. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#a97c312a12e6846842ce4d230e00860b8">More...</a><br /></td></tr>
+<tr class="separator:a97c312a12e6846842ce4d230e00860b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aae6e1c32b2903f9cf6e6884d71736d64"><td class="memItemLeft" align="right" valign="top"><a id="aae6e1c32b2903f9cf6e6884d71736d64"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>madison</b></td></tr>
+std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#aae6e1c32b2903f9cf6e6884d71736d64">madison</a></td></tr>
+<tr class="memdesc:aae6e1c32b2903f9cf6e6884d71736d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority queues representing different classes that put the highest ranking terms first. <br /></td></tr>
 <tr class="separator:aae6e1c32b2903f9cf6e6884d71736d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa445c17d34c37d44d249b0273a2b997e"><td class="memItemLeft" align="right" valign="top"><a id="aa445c17d34c37d44d249b0273a2b997e"></a>
 std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>jay</b></td></tr>
@@ -118,6 +128,240 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>globalClass</b></td></tr>
 <tr class="separator:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>ClassifierEngine::ClassifierEngine Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac40c02d5a5c796dec80eb39b1e76b68d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac40c02d5a5c796dec80eb39b1e76b68d">&sect;&nbsp;</a></span>countClass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ClassifierEngine::countClass </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>postings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>authorDocs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>
+    <tr><td class="paramname">authorDocs</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the authors wrote. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A uint32_t value that is the number of docs that is in the class AND NOT the term. </dd></dl>
+
+</div>
+</div>
+<a id="a2c626c33d3acfc1183a6de15a551a1ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c626c33d3acfc1183a6de15a551a1ac">&sect;&nbsp;</a></span>countClassTerm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ClassifierEngine::countClassTerm </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>postings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>authorDocs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>
+    <tr><td class="paramname">authorDocs</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the authors wrote. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A uint32_t value that is the number of docs that is in the class AND the term. </dd></dl>
+
+</div>
+</div>
+<a id="a86326ad0309a6b833e5f6180477439f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86326ad0309a6b833e5f6180477439f2">&sect;&nbsp;</a></span>countTerm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t ClassifierEngine::countTerm </td>
+          <td>(</td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>postings</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
+          <td class="paramname"><em>authorDocs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>
+    <tr><td class="paramname">authorDocs</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the authors wrote. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A uint32_t value that is the number of docs that is in the term AND NOT the class. </dd></dl>
+
+</div>
+</div>
+<a id="a3b2ed54b7a31250bb8bf9d901b1d5a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">&sect;&nbsp;</a></span>featureSelect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ClassifierEngine::featureSelect </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>classTerm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>noClassTerm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>noTermClass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>noTermNoClass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">classTerm</td><td>The top left quadrant of (1,1)&lt;term, class&gt;. </td></tr>
+    <tr><td class="paramname">noClassTerm</td><td>The top right quadrant of (1,0)&lt;term, class&gt;. </td></tr>
+    <tr><td class="paramname">noTermClass</td><td>The bottom left quadrant of (0,1)&lt;term, class&gt;. </td></tr>
+    <tr><td class="paramname">noTermNoClass</td><td>The bottom right quadrant of (0,0)&lt;term, class&gt;. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A double value that is the result of naieve bayes function calculation. </dd></dl>
+
+</div>
+</div>
+<a id="ae968190f709903f89909ee2d4162fe5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae968190f709903f89909ee2d4162fe5e">&sect;&nbsp;</a></span>getGlobalTop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; std::string &gt; ClassifierEngine::getGlobalTop </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getGlobalTop After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>The number of top term you want to get. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A std::list&lt;std::string&gt; of the top n terms with the highest in the front of the list. </dd></dl>
+
+</div>
+</div>
+<a id="a97c312a12e6846842ce4d230e00860b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97c312a12e6846842ce4d230e00860b8">&sect;&nbsp;</a></span>getTopClass()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt; std::string &gt; ClassifierEngine::getTopClass </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>author</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>getTopClass After driver() is called you can use this method to get the top n scored terms for the specified author's priority queue. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">author</td><td>The author class you want the top terms for, limited to hamilton, jay, and madison. </td></tr>
+    <tr><td class="paramname">n</td><td>The number of top term you want to get. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A std::list&lt;std::string&gt; of the top n terms with the highest in the front of the list. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>arXivSearchEngine/<a class="el" href="ClassifierEngine_8h_source.html">ClassifierEngine.h</a></li>
 <li>arXivSearchEngine/ClassifierEngine.cpp</li>
