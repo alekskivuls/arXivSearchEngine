@@ -190,7 +190,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
     return posts;
 }
 
-std::list<uint32_t> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
+std::list<DocInfo> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
     // seek the specified position in the file
     postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
     // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
@@ -201,7 +201,7 @@ std::list<uint32_t> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &pos
     //std::cout << "docFreq(" << docFreq << ") ";
 
     // initialize the vector of document IDs to return.
-    std::list<uint32_t> docs;
+    std::list<DocInfo> docs;
 
     // read 4 bytes at a time from the file, until you have read as many
     //    postings as the document frequency promised.
@@ -210,7 +210,7 @@ std::list<uint32_t> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &pos
     //std::cout << "printing doc gaps: ";
     for (i = 0; i < docFreq; ++i) {
         const uint32_t &encodedDoc = ReadInt(postings);
-        docs.push_back(encodedDoc);
+        docs.push_back(DocInfo(encodedDoc));
 
     }// repeat until all postings are read.
 
@@ -243,7 +243,7 @@ std::string DiskInvertedIndex::readStringAtPosition(uint32_t i, std::vector<List
     return std::move(str);
 }
 
-std::list<DocInfo> DiskInvertedIndex::GetPostings(const std::string &term)  { // const icu::UnicodeString &term
+std::list<DocInfo> DiskInvertedIndex::getPostings(const std::string &term)  { // const icu::UnicodeString &term
     ListEntry entry = binarySearchList(term, mVocabTable, mVocabList);
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
         return ReadPostingsFromFile(mVocabPostings, entry.PostingPosition);
@@ -305,9 +305,9 @@ std::list<std::string> DiskInvertedIndex::getAuthorList() {
     return vec;
 }
 
-std::list<uint32_t> DiskInvertedIndex::getAuthorDocs(const std::string &author)  {
+std::list<DocInfo> DiskInvertedIndex::getAuthorDocs(const std::string &author)  {
     ListEntry entry = binarySearchList(author, mAuthorTable, mAuthorList);
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
         return readAuthorDocsFromFile(mAuthorPostings, entry.PostingPosition);
-    return std::list<uint32_t>();
+    return std::list<DocInfo>();
 }

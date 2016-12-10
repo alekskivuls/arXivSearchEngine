@@ -27,6 +27,8 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Tokenizer.cpp
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/WildEngine.cpp
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierEngine.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierClass.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskIo.cpp
 )
 
 #Load boost

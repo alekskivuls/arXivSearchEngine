@@ -12,6 +12,7 @@
 #include "Engine.h"
 #include "KSerializer.h"
 #include "KDeserializer.h"
+#include "ClassifierEngine.h"
 
 // Default constructors and destructors
 Engine::Engine() {}
@@ -286,14 +287,21 @@ void Engine::printAuthors() {
     std::cout << authors.size() << std::endl;
 }
 
-std::list<uint32_t> Engine::getAuthorDocs(const std::string &author) {
+std::list<DocInfo> Engine::getAuthorDocs(const std::string &author) {
     return dIdx.getAuthorDocs(author);
 }
 
 void Engine::printAuthorDocs(const std::string &author) {
     auto authorDocs = getAuthorDocs(author);
     for(auto docId : authorDocs) {
-        std::cout << getArticleName(docId) << std::endl;
+        std::cout << getArticleName(docId.getDocId()) << std::endl;
     }
     std::cout << authorDocs.size() << std::endl;
+}
+
+void Engine::classifyDocuments() {
+    ClassifierEngine cEngine(dIdx, 50);
+    for(auto docId : dIdx.getAuthorDocs("HAMILTON OR MADISON")) {
+        std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(docId.getDocId()) << std::endl;
+    }
 }

@@ -25,7 +25,7 @@ protected:
 //Test that a case of porter stemmer is still working
 TEST_F(ClassifierTest, calculations)
 {
-    ClassifierEngine cengine(engine.dIdx);
+    ClassifierEngine cengine(engine.dIdx, 5);
     //0.000110536 rounded.
     std::string expected = std::string("0.000111");
     double result = cengine.featureSelect(49, 27652, 141, 774106);
@@ -35,9 +35,9 @@ TEST_F(ClassifierTest, calculations)
 TEST_F(ClassifierTest, driver)
 {
     //MADISON and HAMILTON have 2, and JAY has 1.
-    ClassifierEngine cengine(engine.dIdx);
-    cengine.driver();
-    std::pair<double, std::string> pairing = cengine.globalclass.top();
-    cengine.globalclass.pop();
+    ClassifierEngine cengine(engine.dIdx, 5);
+
+    std::pair<double, std::string> pairing = cengine.globalClass.top();
+    cengine.globalClass.pop();
     std::cout << pairing.first << " " << pairing.second << std::endl;
 }

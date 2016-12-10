@@ -1,28 +1,23 @@
 #include "ClassifierEngine.h"
 
-ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx) : _idx(idx) { }
+ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, int numFeatures) : _idx(idx), numFeatures(numFeatures) {
+    generateFeaturesList();
+    generateFeatureProbability();
+}
 
 /**
- * @brief ClassifierEngine::driver Populates the priority queues with calculated
+ * @brief ClassifierEngine::generateFeaturesList Populates the priority queues with calculated
  * naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop().
  */
-void ClassifierEngine::driver() {
+void ClassifierEngine::generateFeaturesList() {
     for(auto author : _idx.getAuthorList()) {
 
-        //Getting all of the doc IDs that author wrote.
-        std::list<uint32_t> rawAuthorDocs = _idx.getAuthorDocs(author);
-        std::list<DocInfo> authorDocs;
-
-        for(auto docId : rawAuthorDocs)
-            authorDocs.push_back(DocInfo(docId));
+        //Getting all of the doc IDs that author wrote. std::list<uint32_t> auto converts to std::list<DocInfo>.
+        std::list<DocInfo> authorDocs = _idx.getAuthorDocs(author);
 
         for(auto term : _idx.getVocabList()) {
             double weight = 0;
-
-            //Getting all of the postings for that term.
-            std::list<DocInfo> postings = _idx.GetPostings(term);
-
-            std::cout << term << " AUTHOR IS HERE " << author << std::endl;
+            std::list<DocInfo> postings = _idx.getPostings(term);
 
             //Calling the count classes and saving values
             double classTerm = countClassTerm(postings, authorDocs);
@@ -37,17 +32,70 @@ void ClassifierEngine::driver() {
 
             //Putting it into priority queues.
             //Pushing it into the global std::priority_queue<std::pair<double, std::string>>
-            globalclass.push(std::pair<double, std::string>(weight, term));
+            globalClass.push(std::pair<double, std::string>(weight, term));
 
             //Pushing it into respecive class std::priority_queue<std::pair<double, std::string>>
             if(author == "MADISON")
                 madison.push(std::pair<double, std::string>(weight, term));
             else if(author == "JAY")
                 jay.push(std::pair<double, std::string>(weight, term));
-            else //Assumed Hamilton Class.
+            else if(author == "HAMILTON")
                 hamilton.push(std::pair<double, std::string>(weight, term));
         }
     }
+}
+
+//Returns the number of postings in the docs thats in the class AND the term.
+uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+    uint32_t postingsCount = 0;
+
+    //FIXME Use pointers and iterators to check in O(j+k) instead of O(n^2)
+    for(auto doc : result) {
+        for(auto docInfo : postings) {
+            if(doc.getDocId() == docInfo.getDocId()) {
+                postingsCount += docInfo.getPositions().size();
+            }
+        }
+    }
+    return postingsCount;
+}
+
+void ClassifierEngine::generateFeatureProbability() {
+    auto featureList = getGlobalList(numFeatures);
+    for(auto author : _idx.getAuthorList()) {
+        if(author.compare("HAMILTON OR MADISON") != 0) {
+            ClassifierClass classClass(author);
+            for(auto term :featureList) {
+                double classTermCount = countClassTermPostings(_idx.getPostings(term), _idx.getAuthorDocs(author));
+                classClass.addTerm(term, classTermCount);
+            }
+            classList.push_back(classClass);
+        }
+    }
+}
+
+std::string ClassifierEngine::classifyDoc(const uint32_t &docId) {
+    auto featureList = getGlobalList(numFeatures);
+    std::string maxClass;
+    double maxWeight = -INFINITY;
+    for(auto classClass : classList) {
+        double totalWeight = log((double)_idx.getAuthorDocs(classClass.getClassName()).size() / _idx.getN());
+        for(auto term : featureList) {
+            for (auto posting : _idx.getPostings(term)) {
+                if (posting.getDocId() == docId) {
+                    totalWeight += log(classClass.getTermProbability(term)) * posting.getPositions().size();
+                    break;
+                }
+            }
+            totalWeight += log(classClass.getTermProbability(term));
+        }
+        if(totalWeight > maxWeight) {
+            maxWeight = totalWeight;
+            maxClass = classClass.getClassName();
+        }
+    }
+    return maxClass;
 }
 
 /**
@@ -55,9 +103,9 @@ void ClassifierEngine::driver() {
  * The top left quadrant of (1,1)<term, class>.
  * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
  * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A double value that is the number of docs that is in the class AND the term.
+ * @return A uint32_t value that is the number of docs that is in the class AND the term.
  */
-double ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
     return result.size();
 }
@@ -67,9 +115,9 @@ double ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<D
  * The top right quadrant of (1,0)<term, class>.
  * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
  * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A double value that is the number of docs that is in the term AND NOT the class.
+ * @return A uint32_t value that is the number of docs that is in the term AND NOT the class.
  */
-double ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.ANDNOT(postings, authorDocs);
     return result.size();
 }
@@ -79,10 +127,10 @@ double ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInf
  * The bottom left quadrant of (0,1)<term, class>.
  * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
  * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A double value that is the number of docs that is in the class AND NOT the term.
+ * @return A uint32_t value that is the number of docs that is in the class AND NOT the term.
  */
-double ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.AND(authorDocs, postings);
+uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.ANDNOT(authorDocs, postings);
     return result.size();
 }
 
@@ -151,8 +199,19 @@ std::list<std::string> ClassifierEngine::getGlobalTop(uint32_t n) {
     std::pair<double, std::string> pairing;
     std::list<std::string> result;
     for (i = 0; i < n; ++i) {
-        pairing = globalclass.top();
+        pairing = globalClass.top();
         result.push_back(pairing.second);
-        globalclass.pop();
+        globalClass.pop();
     }
+}
+
+//Merge conflict with this method. Which to keep?
+std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+    std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
+    std::list<std::string> list;
+    for (uint32_t i = 0; i < n; i++) {
+        list.push_back(tempQueue.top().second);
+        tempQueue.pop();
+    }
+    return list;
 }
