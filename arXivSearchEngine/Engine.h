@@ -39,6 +39,8 @@ class Engine {
 public:
 	Engine();
 	
+	void rocchio();
+
 	/**
 	* Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that
 	* is allocated on the heap. This method feeds the text file into a stringstream and passes the

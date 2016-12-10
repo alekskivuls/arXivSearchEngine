@@ -36,6 +36,9 @@ int main() {
         if (input.compare(":q") == 0) {
             break;
         }
+		else if (input.compare(":rocchio") == 0) { // perform rocchio classification
+			engine.rocchio();
+		}
         else if (boost::algorithm::starts_with(input, ":stem ")) {
             std::string substr = input.substr(6, std::string::npos);
             std::cout << engine.stem(substr) << std::endl;
