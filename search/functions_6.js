@@ -3,7 +3,7 @@ var searchData=
   ['generatefeatureslist',['generateFeaturesList',['../classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15',1,'ClassifierEngine']]],
   ['getauthordocs',['getAuthorDocs',['../classInvertedIndex.html#a7401feb15307e9123dae7f9c143d569b',1,'InvertedIndex']]],
   ['getdocid',['getDocId',['../classDocInfo.html#a5fa7bd6a5e3cd097758a930b3d998fa6',1,'DocInfo']]],
-  ['getglobaltop',['getGlobalTop',['../classClassifierEngine.html#ae968190f709903f89909ee2d4162fe5e',1,'ClassifierEngine']]],
+  ['getgloballist',['getGlobalList',['../classClassifierEngine.html#aa640f47a559a55f0e1e8727db338992c',1,'ClassifierEngine']]],
   ['getgrams',['getGrams',['../classKgramIndex.html#a8fdb1d0854e2392098aca4de2f0822c7',1,'KgramIndex']]],
   ['getindex',['getIndex',['../classInvertedIndex.html#ade2d430aba80fd18acbf3100d9cbdc71',1,'InvertedIndex']]],
   ['getn',['getN',['../classDiskInvertedIndex.html#a2c97f856e0b46d046fd32de4030a7ace',1,'DiskInvertedIndex']]],
