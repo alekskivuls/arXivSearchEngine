@@ -32,12 +32,16 @@ TEST_F(ClassifierTest, calculations)
     EXPECT_EQ(std::to_string(result), expected);
 }
 
-TEST_F(ClassifierTest, driver)
+TEST_F(ClassifierTest, populate_pq)
 {
     //MADISON and HAMILTON have 2, and JAY has 1.
     ClassifierEngine cengine(engine.dIdx, 5);
+    std::string explor = std::string("explor");
+    std::string bayes = std::string("0.019973");
+    EXPECT_EQ(cengine.globalClass.top().second, explor);
+    std::list<std::string> list;
+    std::cout << list.front() << std::endl;
+    //EXPECT_EQ(std::to_string(cengine.getGlobalList(3).front().first), bayes);
+//    EXPECT_EQ(cengine.getGlobalList(1).top().second, explor);
 
-    std::pair<double, std::string> pairing = cengine.globalClass.top();
-    cengine.globalClass.pop();
-    std::cout << pairing.first << " " << pairing.second << std::endl;
 }

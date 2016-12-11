@@ -188,25 +188,14 @@ std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_
 }
 
 /**
- * @brief getGlobalTop After driver() is called you can use this method to get the top n scored terms.
+ * @brief getGlobalList After driver() is called you can use this method to get the top n scored terms.
  * It returns a std::list<std::string> of terms where you can use the front() method from the list to
  * get a reference and navigate from there.
  * @param n The number of top term you want to get.
  * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
  */
-std::list<std::string> ClassifierEngine::getGlobalTop(uint32_t n) {
-    int i;
-    std::pair<double, std::string> pairing;
-    std::list<std::string> result;
-    for (i = 0; i < n; ++i) {
-        pairing = globalClass.top();
-        result.push_back(pairing.second);
-        globalClass.pop();
-    }
-}
-
-//Merge conflict with this method. Which to keep?
 std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+    //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
     std::list<std::string> list;
     for (uint32_t i = 0; i < n; i++) {

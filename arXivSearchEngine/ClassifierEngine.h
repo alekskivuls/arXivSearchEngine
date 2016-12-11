@@ -60,8 +60,6 @@ public:
     void generateFeatureProbability();
     std::string classifyDoc(const uint32_t &docId);
 
-    //Merge conflict.
-    std::list<std::string> getGlobalTop(uint32_t n);
     std::list<std::string> getGlobalList(uint32_t n);
 
     //Access the Hamilton, Jay or Madison Classes

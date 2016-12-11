@@ -8,6 +8,9 @@
 #include <stack>
 #include <vector>
 
+/**
+ * @brief The QEngine class is used to process any kind of merge. Included are AND, ANDNOT, OR merges.
+ */
 class QEngine {
 	/** private method used to split queries into tokens for processing*/
 	std::vector<std::string> split(std::string const &input);
