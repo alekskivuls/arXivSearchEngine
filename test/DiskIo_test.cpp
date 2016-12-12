@@ -71,3 +71,35 @@ TEST_F(DiskIoTest, decimal) {
     EXPECT_EQ(number, DiskIo::ReadDouble(ifstream));
     ifstream.close();
 }
+
+TEST_F(DiskIoTest, vbeInt) {
+    auto filepath = boost::filesystem::current_path().append("/vbeIntTest.bin", boost::filesystem::path::codecvt()).string();
+    std::ofstream ofstream;
+    ofstream.open(filepath, std::ios_base::out | std::ios_base::binary);
+    uint32_t number = 0xF0F0F0FF;
+    DiskIo::WriteVbeInt(ofstream, number);
+    ofstream.close();
+
+    std::cout << filepath << std::endl;
+
+    std::ifstream ifstream;
+    ifstream.open(filepath, std::ios_base::in | std::ios_base::binary);
+    EXPECT_EQ(number, DiskIo::ReadVbeInt(ifstream));
+    ifstream.close();
+}
+
+TEST_F(DiskIoTest, gapVbeInt) {
+    auto filepath = boost::filesystem::current_path().append("/gapVbeIntTest.bin", boost::filesystem::path::codecvt()).string();
+    std::ofstream ofstream;
+    ofstream.open(filepath, std::ios_base::out | std::ios_base::binary);
+    uint32_t number = 0xF0F0F0FF;
+    DiskIo::WriteGapVbeInt(ofstream, number);
+    ofstream.close();
+
+    std::cout << filepath << std::endl;
+
+    std::ifstream ifstream;
+    ifstream.open(filepath, std::ios_base::in | std::ios_base::binary);
+    EXPECT_EQ(number, DiskIo::ReadGapVbeInt(ifstream));
+    ifstream.close();
+}
