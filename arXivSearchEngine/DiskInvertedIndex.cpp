@@ -259,7 +259,6 @@ uint32_t DiskInvertedIndex::getN() {
     ifstream weightFile(weightbPath.append("/docWeights.bin", boost::filesystem::path::codecvt()).string(),
                         std::ios::in | std::ios::binary);
 
-    std::vector<double_t> weights;
     uint32_t size = ReadInt(weightFile);
     weightFile.close();
     return size;
@@ -289,6 +288,7 @@ std::vector<double_t> DiskInvertedIndex::ReadWeights() {
     return weights;
 }
 
+//list
 std::list<std::string> DiskInvertedIndex::getVocabList() {
     std::list<std::string> vec;
     for(int i = 0; i < mVocabTable.size(); i++) {
@@ -311,3 +311,4 @@ std::list<DocInfo> DiskInvertedIndex::getAuthorDocs(const std::string &author)  
         return readAuthorDocsFromFile(mAuthorPostings, entry.PostingPosition);
     return std::list<DocInfo>();
 }
+

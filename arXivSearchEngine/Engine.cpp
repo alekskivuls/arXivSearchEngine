@@ -17,7 +17,8 @@
 // Default constructors and destructors
 Engine::Engine() {}
 
-void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
+
+void Engine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) { // normal json parser
     boost::filesystem::directory_iterator end_itr;
     std::unordered_set<std::string> fileSet;
 
@@ -75,6 +76,165 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
 
     return sqrt(Ld);
 }
+
+
+void Engine::rocchio() {
+	std::unordered_map<std::string, std::list<DocInfo>> classes;
+	std::unordered_map<std::string, std::vector<double_t>> centroid;
+
+	std::list<DocInfo> hamAndMad;
+	std::list<DocInfo> input;
+	
+	auto temp = dIdx.getAuthorList();
+	for (std::string s : temp) {
+		//std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+		std::cout << "String value = " << s << std::endl;
+		if (s == "HAMILTON" || s == "MADISON") {
+			std::cout << "Size = " << dIdx.getAuthorDocs(s).size() << std::endl;
+			classes.insert(std::pair<std::string, std::list<DocInfo>>(s, dIdx.getAuthorDocs(s)));
+			centroid.insert(std::pair<std::string, std::vector<double_t>>(s, std::vector<double_t>()));
+		}
+		else if (s == "HAMILTON OR MADISON") 
+			input = dIdx.getAuthorDocs(s);
+		else if (s == "HAMILTON AND MADISON") 
+			hamAndMad = dIdx.getAuthorDocs(s);
+	}
+
+	std::list<std::string> &vocab = dIdx.getVocabList();
+	std::vector<double_t> idf;
+	idf.reserve(vocab.size());
+
+	//  FOREVERY VECTOR I NEED T COMPONENTS (where t denotes the total # terms)
+	std::vector<std::vector<double_t>> vSpace;
+	vSpace.reserve(dIdx.getN()); // need 85 vectors	   
+	uint32_t i = 0, j = 0;
+	for (i = 0; i < dIdx.getN(); ++i) {
+		vSpace.push_back(std::vector<double_t>());
+		vSpace.at(i).reserve(vocab.size());
+		for (j = 0; j < vocab.size(); ++j)
+			vSpace.at(i).push_back(0.0);
+	}
+
+	std::vector<double_t> ld;
+	ld.reserve(dIdx.getN());
+	for (i = 0; i < dIdx.getN(); ++i)
+		ld.push_back(0.0);
+
+
+	
+	//IDF-t
+	double_t N = (double_t)dIdx.getN(); // THIS METHOD IS FINE
+	for (std::string &term : vocab) {
+		uint32_t dft = dIdx.getPostings(term).size();
+		double_t idft = (dft == 0) ? 0.0 : 1.0 + log10(N / (double_t)dft); // 0.0
+		//printf("N = %.1f, dft = %d, idft = %.3f\n", N, dft, idft);
+		idf.push_back(idft);
+	}
+
+
+	
+	//TF-td
+	uint32_t col = 0;
+	for (std::string &term : vocab) { // READING LEFT TO RIGHT
+		std::list<DocInfo> &postings = dIdx.getPostings(term);
+		
+		for (DocInfo &doc : postings) {
+			const double_t &tftd = (double_t)doc.getPositions().size();
+			double_t wdt = 1.0 + log(tftd);
+
+			ld[doc.getDocId()] = ld.at(doc.getDocId()) + (wdt * wdt); // (tftd * tftd)
+			vSpace.at(doc.getDocId()).at(col) = idf.at(col) * tftd; // tf-t,d
+		}
+		++col;
+	}
+
+	for (i = 0; i < ld.size(); ++i) 
+		ld[i] = sqrt(ld.at(i));
+
+	for (i = 0; i < vSpace.size(); ++i) {
+		for (j = 0; j < vSpace.at(i).size(); ++j) 
+			vSpace.at(i).at(j) = vSpace.at(i).at(j) / ld.at(i);
+	}
+
+	// initialize centroid vectors
+	for (std::pair<const std::string, std::vector<double_t>> &pr : centroid) {
+		for (i = 0; i < vocab.size(); ++i) 
+			pr.second.push_back(0.0);
+	}
+
+	for (auto pr : classes) {
+		std::vector<double_t> &C = centroid.at(pr.first);
+
+		// for every document in the class
+		for (DocInfo doc : pr.second) {
+
+			for (j = 0; j < vocab.size(); ++j) {
+				// NORMALIZE THE VECTOR COMPONENT
+				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
+				// UPDATE CENTROID VECTOR COMPONENT
+				C[j] = C.at(j) + tfidf;
+			}
+		}
+
+		
+		// for every document in the class
+		for (DocInfo &doc : hamAndMad) { // HAMILTON AND MADISON
+
+			for (j = 0; j < vocab.size(); ++j) {
+				// NORMALIZE THE VECTOR COMPONENT
+				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
+				// UPDATE CENTROID VECTOR COMPONENT
+				C[j] = C.at(j) + tfidf;
+			}
+		}
+
+		std::cout << "pr.second (CLASSES) = " << pr.second.size() << std::endl;
+		std::cout << "C.SIZE() = " << C.size() << std::endl;
+		for (j = 0; j < vocab.size(); ++j) 
+			C[j] = C.at(j) / (pr.second.size() + hamAndMad.size()); // C[j] = C.at(j) / C.size(); // not this one... (pr.second.size() + hamAndMad.size()) pr.second.size()
+	}
+
+	std::unordered_map<uint32_t, std::string> output;
+	for (DocInfo &in : input) {
+		std::string ans = "";
+		double_t min = 0.0; // change later.
+
+		for (auto pr : centroid) {
+			double_t curr;
+
+			for (j = 0; j < pr.second.size(); ++j) {
+				double_t diff = pr.second.at(j) - (vSpace.at(in.getDocId()).at(j));
+
+				curr += (diff * diff); // square the components aka square the differences
+			}
+			curr = sqrt(curr);
+
+			pr.second;
+
+
+			if (ans == "") {
+				ans = pr.first;
+				min = curr;
+			}
+			else if (min > curr) {
+				ans = pr.first;
+				min = curr;
+			}
+		}
+
+
+		printf("in = %d, min = %.3f\n", in.getDocId(), min);
+		output.insert(std::pair<uint32_t, std::string>(in.getDocId(), ans));
+	}
+
+
+	for (auto pr : output) {
+		std::cout << "Document id = " << pr.first << " ";
+		std::cout << "(" << idTable.at(pr.first) << ")" << std::endl;
+		std::cout << "is MOST RELEVANT to author: " << pr.second << std::endl << std::endl;
+	}
+}
+
 
 void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
     std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
@@ -158,9 +318,16 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
 
                     posIndex++;
                 }
-            } else if (pair.first == "title") {
+            } else if (pair.first == "title") { // we don't care about this...
 
             } else if(pair.first == "author") {
+				/*
+				std::string author = pair.second.get_value<std::string>();
+                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+                idx.addAuthorDoc(author, i);
+
+				std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
+				*/
                 std::string authorStr = pair.second.get_value<std::string>();
                 //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
 
@@ -175,6 +342,7 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                 idx.addAuthorDoc(authorStr, i);
             }
         }
+
         /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
         for (auto pr : wdt) {
             std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;

@@ -150,6 +150,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClassifierClass.cpp" />
+    <ClCompile Include="ClassifierEngine.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="ConsoleEngine.cpp" />
     <ClCompile Include="DiskInvertedIndex.cpp" />
@@ -167,6 +169,8 @@
     <ClCompile Include="WildEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClassifierClass.h" />
+    <ClInclude Include="ClassifierEngine.h" />
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="DiskInvertedIndex.h" />
     <ClInclude Include="DocInfo.h" />

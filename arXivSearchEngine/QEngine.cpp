@@ -40,7 +40,7 @@ std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string user
         // FOR EACH TERM... CALC SCORES FOR ALL DOCS
         for (const DocInfo &doc : docList) {
             double_t tf =  doc.getPositions().size();
-            double_t wdt = (tf == 0.0) ? 0 : 1.0 + log(tf); // WDT
+            double_t wdt = (tf == 0.0) ? 0.0 : 1.0 + log10(tf); // WDT
 
             double_t Ad = wqt * wdt;
             if (Ad != 0)

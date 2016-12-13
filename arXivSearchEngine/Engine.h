@@ -37,7 +37,9 @@ class Engine {
     KgramIndex kIdx3 = KgramIndex(3);
 
 public:
-    Engine();
+	Engine();
+	
+	void rocchio();
 
     DiskInvertedIndex dIdx;
 
