@@ -100,7 +100,7 @@ void Engine::rocchio() {
 			hamAndMad = dIdx.getAuthorDocs(s);
 	}
 
-	std::list<std::string> &vocab = dIdx.getVocabList();
+    const std::list<std::string> &vocab = dIdx.getVocabList();
 	std::vector<double_t> idf;
 	idf.reserve(vocab.size());
 
@@ -124,7 +124,7 @@ void Engine::rocchio() {
 	
 	//IDF-t
 	double_t N = (double_t)dIdx.getN(); // THIS METHOD IS FINE
-	for (std::string &term : vocab) {
+    for (const std::string &term : vocab) {
 		uint32_t dft = dIdx.getPostings(term).size();
 		double_t idft = (dft == 0) ? 0.0 : 1.0 + log10(N / (double_t)dft); // 0.0
 		//printf("N = %.1f, dft = %d, idft = %.3f\n", N, dft, idft);
@@ -135,10 +135,10 @@ void Engine::rocchio() {
 	
 	//TF-td
 	uint32_t col = 0;
-	for (std::string &term : vocab) { // READING LEFT TO RIGHT
-		std::list<DocInfo> &postings = dIdx.getPostings(term);
+    for (const std::string &term : vocab) { // READING LEFT TO RIGHT
+        const std::list<DocInfo> &postings = dIdx.getPostings(term);
 		
-		for (DocInfo &doc : postings) {
+        for (const DocInfo &doc : postings) {
 			const double_t &tftd = (double_t)doc.getPositions().size();
 			double_t wdt = 1.0 + log(tftd);
 
