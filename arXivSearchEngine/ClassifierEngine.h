@@ -29,7 +29,9 @@ class ClassifierEngine {
      */
     QEngine queryEngine;
 
-    std::list<ClassifierClass> classList;
+    std::vector<std::string> &classList;
+
+    std::list<ClassifierClass> classListData;
 
     /**
      * @brief numFeatures an int value of the number of features ClassifierEngine contains.
@@ -41,11 +43,11 @@ public:
     /**
      * @brief Priority queues representing different classes that put the highest ranking terms first.
      */
-    std::priority_queue<std::pair<double, std::string>> madison, jay, hamilton, globalClass;
+    std::priority_queue<std::pair<double, std::string>> globalClass;
 
     //Constructors
-    ClassifierEngine();
-    ClassifierEngine(DiskInvertedIndex &idx, int numFeatures);
+    //ClassifierEngine();
+    ClassifierEngine(DiskInvertedIndex &idx, std::vector<std::string> &classList);
 
     /**
      * @brief ClassifierEngine::featureSelect Calculates the result using naieve bayes function.
@@ -93,7 +95,7 @@ public:
      */
     void generateFeaturesList();
     void generateFeatureProbability();
-    std::string classifyDoc(const uint32_t &docId);
+    std::string classifyDoc(const uint32_t numFeatures, const uint32_t docId);
 
     /**
      * @brief getGlobalList After driver() is called you can use this method to get the top n scored terms.
@@ -102,18 +104,8 @@ public:
      * @param n The number of top term you want to get.
      * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
      */
-    std::list<std::string> getGlobalList(uint32_t n);
+    std::vector<std::string> getNumTopFeatures(uint32_t n);
 
-//    /**
-//     * @brief getTopClass After driver() is called you can use this method to get the top n scored terms for
-//     * the specified author's priority queue, giving you access to the Hamilton, Jay, or Madison Classes.
-//     * It returns a std::list<std::string> of terms where you can use the front() method from the list to
-//     * get a reference and navigate from there.
-//     * @param author The author class you want the top terms for, limited to hamilton, jay, and madison.
-//     * @param n The number of top term you want to get.
-//     * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
-//     */
-//    std::list<std::string> getTopClass(std::string author, uint32_t n);
 };
 
 #endif

@@ -1,8 +1,8 @@
 #include "ClassifierEngine.h"
 
-ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, int numFeatures) : _idx(idx), numFeatures(numFeatures) {
+ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, std::vector<std::string> &classList) : _idx(idx), classList(classList) {
     generateFeaturesList();
-    generateFeatureProbability();
+    numFeatures = -1;
 }
 
 void ClassifierEngine::generateFeaturesList() {
@@ -26,18 +26,8 @@ void ClassifierEngine::generateFeaturesList() {
                 weight = featureSelect(classTerm, justTerm, justClass, neither);
             }
 
-            //Putting it into priority queues.
-            //Pushing it into the global std::priority_queue<std::pair<double, std::string>>
+            //Pushing it into priority queues.
             globalClass.push(std::pair<double, std::string>(weight, term));
-
-            //TODO remove hard coded classes
-            //Pushing it into respecive class std::priority_queue<std::pair<double, std::string>>
-            if(author == "MADISON")
-                madison.push(std::pair<double, std::string>(weight, term));
-            else if(author == "JAY")
-                jay.push(std::pair<double, std::string>(weight, term));
-            else if(author == "HAMILTON")
-                hamilton.push(std::pair<double, std::string>(weight, term));
         }
     }
 }
@@ -59,7 +49,8 @@ uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, s
 }
 
 void ClassifierEngine::generateFeatureProbability() {
-    auto featureList = getGlobalList(numFeatures);
+    classListData = std::list<ClassifierClass>();
+    auto featureList = getNumTopFeatures(numFeatures);
     for(auto author : _idx.getAuthorList()) {
         if(author.compare("HAMILTON OR MADISON") != 0) {
             ClassifierClass classClass(author);
@@ -67,16 +58,21 @@ void ClassifierEngine::generateFeatureProbability() {
                 double classTermCount = countClassTermPostings(_idx.getPostings(term), _idx.getAuthorDocs(author));
                 classClass.addTerm(term, classTermCount);
             }
-            classList.push_back(classClass);
+            classListData.push_back(classClass);
         }
     }
 }
 
-std::string ClassifierEngine::classifyDoc(const uint32_t &docId) {
-    auto featureList = getGlobalList(numFeatures);
+std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint32_t docId) {
+    if(this->numFeatures != numFeatures) {
+        this->numFeatures = numFeatures;
+        generateFeatureProbability();
+    }
+
+    auto featureList = getNumTopFeatures(numFeatures);
     std::string maxClass;
     double maxWeight = -INFINITY;
-    for(auto classClass : classList) {
+    for(auto classClass : classListData) {
         double totalWeight = log((double)_idx.getAuthorDocs(classClass.getClassName()).size() / _idx.getN());
         for(auto term : featureList) {
             for (auto posting : _idx.getPostings(term)) {
@@ -119,37 +115,10 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
 }
 
-//std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
-//    int i;
-//    std::pair<double, std::string> pairing;
-//    std::list<std::string> result;
-//    if (author == "MADISON") {
-//        for (i = 0; i < n; ++i) {
-//            pairing = madison.top();
-//            result.push_back(pairing.second);
-//            madison.pop();
-//        }
-//    }
-//    else if (author == "JAY") {
-//        for (i = 0; i < n; ++i) {
-//            pairing = jay.top();
-//            result.push_back(pairing.second);
-//            jay.pop();
-//        }
-//    }
-//    else { //Assumes Hamilton.
-//        for (i = 0; i < n; ++i) {
-//            pairing = hamilton.top();
-//            result.push_back(pairing.second);
-//            hamilton.pop();
-//        }
-//    }
-//}
-
-std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t n) {
     //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
-    std::list<std::string> list;
+    std::vector<std::string> list;
     for (uint32_t i = 0; i < n; i++) {
         list.push_back(tempQueue.top().second);
         tempQueue.pop();

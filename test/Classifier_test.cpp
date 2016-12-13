@@ -25,7 +25,14 @@ protected:
 //Test that a case of porter stemmer is still working
 TEST_F(ClassifierTest, calculations)
 {
-    ClassifierEngine cengine(engine.dIdx, 5);
+    std::string classifyClassName = "HAMILTON OR MADISON";
+    std::vector<std::string> classList;
+    for(auto author : engine.dIdx.getAuthorList()) {
+        if(author.compare(classifyClassName) != 0)
+            classList.push_back(author);
+    }
+
+    ClassifierEngine cengine(engine.dIdx, classList);
     //0.000110536 rounded.
     std::string expected = std::string("0.000111");
     double result = cengine.featureSelect(49, 27652, 141, 774106);
@@ -34,8 +41,15 @@ TEST_F(ClassifierTest, calculations)
 
 TEST_F(ClassifierTest, populate_pq)
 {
+    std::string classifyClassName = "HAMILTON OR MADISON";
+    std::vector<std::string> classList;
+    for(auto author : engine.dIdx.getAuthorList()) {
+        if(author.compare(classifyClassName) != 0)
+            classList.push_back(author);
+    }
+
     //MADISON and HAMILTON have 2, and JAY has 1.
-    ClassifierEngine cengine(engine.dIdx, 5);
+    ClassifierEngine cengine(engine.dIdx, classList);
     std::string explor = std::string("explor");
     std::string bayes = std::string("0.019973");
     EXPECT_EQ(cengine.globalClass.top().second, explor);

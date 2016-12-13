@@ -300,8 +300,16 @@ void Engine::printAuthorDocs(const std::string &author) {
 }
 
 void Engine::classifyDocuments() {
-    ClassifierEngine cEngine(dIdx, 50);
-    for(auto docId : dIdx.getAuthorDocs("HAMILTON OR MADISON")) {
-        std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(docId.getDocId()) << std::endl;
+    int numFeatures = 50;
+    std::string classifyClassName = "HAMILTON OR MADISON";
+
+    std::vector<std::string> classList;
+    for(auto author : dIdx.getAuthorList()) {
+        if(author.compare(classifyClassName) != 0)
+            classList.push_back(author);
+    }
+    ClassifierEngine cEngine(dIdx, classList);
+    for(auto docId : dIdx.getAuthorDocs(classifyClassName)) {
+        std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(numFeatures, docId.getDocId()) << std::endl;
     }
 }
