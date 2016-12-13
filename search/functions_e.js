@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['writepostings',['writePostings',['../classSerializer.html#a8588dff653ecc6cd7a2b787c61ddd092',1,'Serializer']]],
-  ['writeterms',['WriteTerms',['../classKSerializer.html#a8d8cc9d003e92e56a09a5e7c06699a41',1,'KSerializer']]]
+  ['vocab',['vocab',['../classKgramIndex.html#a755dda406c723e9213f3d9209796e878',1,'KgramIndex']]]
 ];

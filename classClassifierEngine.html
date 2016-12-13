@@ -67,7 +67,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>ClassifierEngine::ClassifierEngine Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start.  
+<p>Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start.  
  <a href="classClassifierEngine.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ClassifierEngine_8h_source.html">ClassifierEngine.h</a>&gt;</code></p>
@@ -94,7 +94,7 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPos
 <tr class="separator:a86326ad0309a6b833e5f6180477439f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memItemLeft" align="right" valign="top"><a id="a07e924cd66b6c9dff6f9b65dc4754a15"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15">generateFeaturesList</a> ()</td></tr>
-<tr class="memdesc:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15" title="ClassifierEngine::generateFeaturesList Populates the priority queues with calculated naive bayes func...">ClassifierEngine::generateFeaturesList</a> Populates the priority queues with calculated naive bayes function. Which may be retrieved with <a class="el" href="classClassifierEngine.html#a97c312a12e6846842ce4d230e00860b8" title="getTopClass After driver() is called you can use this method to get the top n scored terms for the sp...">getTopClass()</a> or getGlobalTop(). <br /></td></tr>
+<tr class="memdesc:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15" title="ClassifierEngine::generateFeaturesList Populates the priority queues with calculated naive bayes func...">ClassifierEngine::generateFeaturesList</a> Populates the priority queues with calculated naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop(). <br /></td></tr>
 <tr class="separator:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
@@ -105,9 +105,6 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b
 <tr class="memitem:aa640f47a559a55f0e1e8727db338992c"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#aa640f47a559a55f0e1e8727db338992c">getGlobalList</a> (uint32_t n)</td></tr>
 <tr class="memdesc:aa640f47a559a55f0e1e8727db338992c"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#aa640f47a559a55f0e1e8727db338992c">More...</a><br /></td></tr>
 <tr class="separator:aa640f47a559a55f0e1e8727db338992c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97c312a12e6846842ce4d230e00860b8"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a97c312a12e6846842ce4d230e00860b8">getTopClass</a> (std::string author, uint32_t n)</td></tr>
-<tr class="memdesc:a97c312a12e6846842ce4d230e00860b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">getTopClass After driver() is called you can use this method to get the top n scored terms for the specified author's priority queue. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#a97c312a12e6846842ce4d230e00860b8">More...</a><br /></td></tr>
-<tr class="separator:a97c312a12e6846842ce4d230e00860b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -126,7 +123,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 <tr class="separator:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>ClassifierEngine::ClassifierEngine Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start. </p>
+<div class="textblock"><p>Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac40c02d5a5c796dec80eb39b1e76b68d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac40c02d5a5c796dec80eb39b1e76b68d">&sect;&nbsp;</a></span>countClass()</h2>
@@ -313,44 +310,6 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 <p>getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">n</td><td>The number of top term you want to get. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A std::list&lt;std::string&gt; of the top n terms with the highest in the front of the list. </dd></dl>
-
-</div>
-</div>
-<a id="a97c312a12e6846842ce4d230e00860b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a97c312a12e6846842ce4d230e00860b8">&sect;&nbsp;</a></span>getTopClass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::list&lt; std::string &gt; ClassifierEngine::getTopClass </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>author</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>n</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>getTopClass After driver() is called you can use this method to get the top n scored terms for the specified author's priority queue. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">author</td><td>The author class you want the top terms for, limited to hamilton, jay, and madison. </td></tr>
     <tr><td class="paramname">n</td><td>The number of top term you want to get. </td></tr>
   </table>
   </dd>
