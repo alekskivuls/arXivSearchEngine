@@ -5,10 +5,6 @@ ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, int numFeatures) : _i
     generateFeatureProbability();
 }
 
-/**
- * @brief ClassifierEngine::generateFeaturesList Populates the priority queues with calculated
- * naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop().
- */
 void ClassifierEngine::generateFeaturesList() {
     for(auto author : _idx.getAuthorList()) {
 
@@ -98,50 +94,21 @@ std::string ClassifierEngine::classifyDoc(const uint32_t &docId) {
     return maxClass;
 }
 
-/**
- * @brief ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term.
- * The top left quadrant of (1,1)<term, class>.
- * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
- * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A uint32_t value that is the number of docs that is in the class AND the term.
- */
 uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
     return result.size();
 }
 
-/**
- * @brief ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class).
- * The top right quadrant of (1,0)<term, class>.
- * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
- * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A uint32_t value that is the number of docs that is in the term AND NOT the class.
- */
 uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.ANDNOT(postings, authorDocs);
     return result.size();
 }
 
-/**
- * @brief ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term).
- * The bottom left quadrant of (0,1)<term, class>.
- * @param postings The std::list<DocInfo> of the document IDs that the term is contained in.
- * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
- * @return A uint32_t value that is the number of docs that is in the class AND NOT the term.
- */
 uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.ANDNOT(authorDocs, postings);
     return result.size();
 }
 
-/**
- * @brief ClassifierEngine::featureSelect Calculates the result using naieve bayes function.
- * @param classTerm The top left quadrant of (1,1)<term, class>.
- * @param noClassTerm The top right quadrant of (1,0)<term, class>.
- * @param noTermClass The bottom left quadrant of (0,1)<term, class>.
- * @param noTermNoClass The bottom right quadrant of (0,0)<term, class>.
- * @return A double value that is the result of naieve bayes function calculation.
- */
 double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass){
     double totalDoc = classTerm + noClassTerm + noTermClass + noTermNoClass;
     double classTermCal = (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));
@@ -151,15 +118,6 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
 }
 
-/**
- * @brief getTopClass After driver() is called you can use this method to get the top n scored terms for
- * the specified author's priority queue.
- * It returns a std::list<std::string> of terms where you can use the front() method from the list to
- * get a reference and navigate from there.
- * @param author The author class you want the top terms for, limited to hamilton, jay, and madison.
- * @param n The number of top term you want to get.
- * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
- */
 std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
     int i;
     std::pair<double, std::string> pairing;
@@ -187,26 +145,8 @@ std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_
     }
 }
 
-/**
- * @brief getGlobalTop After driver() is called you can use this method to get the top n scored terms.
- * It returns a std::list<std::string> of terms where you can use the front() method from the list to
- * get a reference and navigate from there.
- * @param n The number of top term you want to get.
- * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
- */
-std::list<std::string> ClassifierEngine::getGlobalTop(uint32_t n) {
-    int i;
-    std::pair<double, std::string> pairing;
-    std::list<std::string> result;
-    for (i = 0; i < n; ++i) {
-        pairing = globalClass.top();
-        result.push_back(pairing.second);
-        globalClass.pop();
-    }
-}
-
-//Merge conflict with this method. Which to keep?
 std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+    //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
     std::list<std::string> list;
     for (uint32_t i = 0; i < n; i++) {
