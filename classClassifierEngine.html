@@ -74,9 +74,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7cd567f7436af0f3c4354f4d937b888"><td class="memItemLeft" align="right" valign="top"><a id="ab7cd567f7436af0f3c4354f4d937b888"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx, int numFeatures)</td></tr>
-<tr class="separator:ab7cd567f7436af0f3c4354f4d937b888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa33456d8fb08b620e974e91b62527c"><td class="memItemLeft" align="right" valign="top"><a id="a9fa33456d8fb08b620e974e91b62527c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx, std::vector&lt; std::string &gt; &amp;classList)</td></tr>
+<tr class="separator:a9fa33456d8fb08b620e974e91b62527c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e">featureSelect</a> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
 <tr class="memdesc:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function.  <a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">More...</a><br /></td></tr>
 <tr class="separator:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,27 +99,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
 <tr class="separator:adaa67ca1359d22e7679c873930970b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memItemLeft" align="right" valign="top"><a id="ad691d0f8a00c0a5cdbad3a259751a2fe"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t &amp;docId)</td></tr>
-<tr class="separator:ad691d0f8a00c0a5cdbad3a259751a2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa640f47a559a55f0e1e8727db338992c"><td class="memItemLeft" align="right" valign="top">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#aa640f47a559a55f0e1e8727db338992c">getGlobalList</a> (uint32_t n)</td></tr>
-<tr class="memdesc:aa640f47a559a55f0e1e8727db338992c"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#aa640f47a559a55f0e1e8727db338992c">More...</a><br /></td></tr>
-<tr class="separator:aa640f47a559a55f0e1e8727db338992c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb52f74f491153c2353213496a1e040e"><td class="memItemLeft" align="right" valign="top"><a id="abb52f74f491153c2353213496a1e040e"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t numFeatures, const uint32_t docId)</td></tr>
+<tr class="separator:abb52f74f491153c2353213496a1e040e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac810e5d21c2399e9f1f70be23314be7b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#ac810e5d21c2399e9f1f70be23314be7b">getNumTopFeatures</a> (uint32_t n)</td></tr>
+<tr class="memdesc:ac810e5d21c2399e9f1f70be23314be7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#ac810e5d21c2399e9f1f70be23314be7b">More...</a><br /></td></tr>
+<tr class="separator:ac810e5d21c2399e9f1f70be23314be7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aae6e1c32b2903f9cf6e6884d71736d64"><td class="memItemLeft" align="right" valign="top"><a id="aae6e1c32b2903f9cf6e6884d71736d64"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#aae6e1c32b2903f9cf6e6884d71736d64">madison</a></td></tr>
-<tr class="memdesc:aae6e1c32b2903f9cf6e6884d71736d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority queues representing different classes that put the highest ranking terms first. <br /></td></tr>
-<tr class="separator:aae6e1c32b2903f9cf6e6884d71736d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa445c17d34c37d44d249b0273a2b997e"><td class="memItemLeft" align="right" valign="top"><a id="aa445c17d34c37d44d249b0273a2b997e"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>jay</b></td></tr>
-<tr class="separator:aa445c17d34c37d44d249b0273a2b997e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a266287062353972058705b4b13a1ce"><td class="memItemLeft" align="right" valign="top"><a id="a2a266287062353972058705b4b13a1ce"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>hamilton</b></td></tr>
-<tr class="separator:a2a266287062353972058705b4b13a1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memItemLeft" align="right" valign="top"><a id="a0b4e2d8145dccf7bf4e1f349477aea02"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>globalClass</b></td></tr>
+std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a0b4e2d8145dccf7bf4e1f349477aea02">globalClass</a></td></tr>
+<tr class="memdesc:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority queues representing different classes that put the highest ranking terms first. <br /></td></tr>
 <tr class="separator:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -291,14 +282,14 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 
 </div>
 </div>
-<a id="aa640f47a559a55f0e1e8727db338992c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa640f47a559a55f0e1e8727db338992c">&sect;&nbsp;</a></span>getGlobalList()</h2>
+<a id="ac810e5d21c2399e9f1f70be23314be7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac810e5d21c2399e9f1f70be23314be7b">&sect;&nbsp;</a></span>getNumTopFeatures()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::list&lt; std::string &gt; ClassifierEngine::getGlobalList </td>
+          <td class="memname">std::vector&lt; std::string &gt; ClassifierEngine::getNumTopFeatures </td>
           <td>(</td>
           <td class="paramtype">uint32_t&#160;</td>
           <td class="paramname"><em>n</em></td><td>)</td>

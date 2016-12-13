@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['madison',['madison',['../classClassifierEngine.html#aae6e1c32b2903f9cf6e6884d71736d64',1,'ClassifierEngine']]]
+  ['globalclass',['globalClass',['../classClassifierEngine.html#a0b4e2d8145dccf7bf4e1f349477aea02',1,'ClassifierEngine']]]
 ];
