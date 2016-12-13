@@ -1,46 +1,21 @@
-#define BOOST_SPIRIT_THREADSAFE
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/property_tree/json_parser.hpp>
-#include <boost/filesystem.hpp>
-#include "DiskInvertedIndex.h"
-#include "PorterStemmer.h"
-#include "InvertedIndex.h"
-#include <unordered_set>
-#include "Serializer.h"
-#include "Tokenizer.h"
-#include "DocInfo.h"
 #include "ClassifierEngine.h"
-#include "KSerializer.h"
-#include "KDeserializer.h"
-
-// Default constructors and destructors
-//ClassifierEngine::ClassifierEngine() { }
 
 ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, int numFeatures) : _idx(idx), numFeatures(numFeatures) {
     generateFeaturesList();
     generateFeatureProbability();
 }
 
-//Populates the priority_queues.
 void ClassifierEngine::generateFeaturesList() {
-    //Nested for loop for all author and term combinations.
     for(auto author : _idx.getAuthorList()) {
-        //        for(auto _author : _idx.getAuthorList()){
-        //            std::cout << _author << " LIST OF THE AUTHORS " << std::endl;
-        //        }
-        //Getting all of the doc IDs that author wrote.
-        std::list<DocInfo> authorDocs = _idx.getAuthorDocs(author);
 
-        //        for(auto _term : _idx.getVocabList()) {
-        //            std::cout << _term << " LIST OF THE TERMS " << std::endl;
-        //        }
+        //Getting all of the doc IDs that author wrote. std::list<uint32_t> auto converts to std::list<DocInfo>.
+        std::list<DocInfo> authorDocs = _idx.getAuthorDocs(author);
 
         for(auto term : _idx.getVocabList()) {
             double weight = 0;
             std::list<DocInfo> postings = _idx.getPostings(term);
 
             //Calling the count classes and saving values
-            //If there's no need for it to be in a double. i.e. the counts...
             double classTerm = countClassTerm(postings, authorDocs);
             double justTerm = countTerm(postings, authorDocs);
             double justClass = countClass(postings, authorDocs);
@@ -52,10 +27,11 @@ void ClassifierEngine::generateFeaturesList() {
             }
 
             //Putting it into priority queues.
-            //Push it into the global std::priority_queue<std::pair<double, std::string>>
+            //Pushing it into the global std::priority_queue<std::pair<double, std::string>>
             globalClass.push(std::pair<double, std::string>(weight, term));
 
-            //Pushing it to the other class ones.
+            //TODO remove hard coded classes
+            //Pushing it into respecive class std::priority_queue<std::pair<double, std::string>>
             if(author == "MADISON")
                 madison.push(std::pair<double, std::string>(weight, term));
             else if(author == "JAY")
@@ -64,7 +40,22 @@ void ClassifierEngine::generateFeaturesList() {
                 hamilton.push(std::pair<double, std::string>(weight, term));
         }
     }
+}
 
+//Returns the number of postings in the docs thats in the class AND the term.
+uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+    uint32_t postingsCount = 0;
+
+    //FIXME Use pointers and iterators to check in O(j+k) instead of O(n^2)
+    for(auto doc : result) {
+        for(auto docInfo : postings) {
+            if(doc.getDocId() == docInfo.getDocId()) {
+                postingsCount += docInfo.getPositions().size();
+            }
+        }
+    }
+    return postingsCount;
 }
 
 void ClassifierEngine::generateFeatureProbability() {
@@ -104,35 +95,16 @@ std::string ClassifierEngine::classifyDoc(const uint32_t &docId) {
     return maxClass;
 }
 
-//Returns the number of docs thats in the class AND the term.
 uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
     return result.size();
 }
 
-//Returns the number of postings in the docs thats in the class AND the term.
-uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
-    uint32_t postingsCount = 0;
-
-    //FIXME Use pointers and iterators to check in O(j+k) instead of O(n^2)
-    for(auto doc : result) {
-        for(auto docInfo : postings) {
-            if(doc.getDocId() == docInfo.getDocId()) {
-                postingsCount += docInfo.getPositions().size();
-            }
-        }
-    }
-    return postingsCount;
-}
-
-//Returns the number of docs thats in just the term AND NOT in the class.
 uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.ANDNOT(postings, authorDocs);
     return result.size();
 }
 
-//Returns the number of docs in just the class AND NOT have the term.
 uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
     std::list<DocInfo> result = queryEngine.ANDNOT(authorDocs, postings);
     return result.size();
@@ -147,13 +119,35 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
 }
 
-//Pulls from which ever author's pq it wants. Only from madison, jay or hamilton.
 //std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
-//    //Pop and give it the second pair!
+//    int i;
+//    std::pair<double, std::string> pairing;
+//    std::list<std::string> result;
+//    if (author == "MADISON") {
+//        for (i = 0; i < n; ++i) {
+//            pairing = madison.top();
+//            result.push_back(pairing.second);
+//            madison.pop();
+//        }
+//    }
+//    else if (author == "JAY") {
+//        for (i = 0; i < n; ++i) {
+//            pairing = jay.top();
+//            result.push_back(pairing.second);
+//            jay.pop();
+//        }
+//    }
+//    else { //Assumes Hamilton.
+//        for (i = 0; i < n; ++i) {
+//            pairing = hamilton.top();
+//            result.push_back(pairing.second);
+//            hamilton.pop();
+//        }
+//    }
 //}
 
-//Pulls from the global priority queue
 std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+    //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
     std::list<std::string> list;
     for (uint32_t i = 0; i < n; i++) {

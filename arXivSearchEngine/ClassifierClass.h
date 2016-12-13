@@ -4,6 +4,9 @@
 #include <unordered_map>
 #include <string>
 
+/**
+ * @brief The ClassifierClass class serves as a representation of a class.
+ */
 class ClassifierClass
 {
     std::string className;

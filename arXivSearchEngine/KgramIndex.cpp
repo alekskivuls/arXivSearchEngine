@@ -131,19 +131,14 @@ std::list<std::string> KgramIndex::getGrams(std::string &term, int kSize) {
  * This method prints all kgrams and terms associated to each kgram to the console.
  */
 void KgramIndex::vocab() const { //vocab = grams here
-    for (auto pair : _mIndex) std::cout << pair.first << '\n'; //first is the kgrams
-    //std::cout << _mIndex.size() << '\n';
+    std::cout << "Printing KgramIndex of size " << _mIndex.size() << "." << std::endl;
+    for (auto pair : _mIndex) {
+        std::cout << pair.first << " : ";
+        for (auto term : pair.second)
+            std::cout << term;
+        std::cout << std::endl;
+    }
 }
-
-
-//std::list<std::string> KgramIndex::getTermList() {
-//    std::list<std::string> ret;
-//    for (auto pair : _mIndex) {
-//        for (auto value : pair.second)
-//            ret.push_back(value);
-//    }
-//    return ret;
-//}
 
 
 std::list<std::string> KgramIndex::getKgramList() {
@@ -161,6 +156,3 @@ std::list<std::string> KgramIndex::getKgramList() {
 unsigned int KgramIndex::getGramCount() {
 	return _mIndex.size();
 }
-
-
-//string builder and regex and big int.
