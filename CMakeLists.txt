@@ -28,7 +28,8 @@ set(SOURCES
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/WildEngine.cpp
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierEngine.cpp
     ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierClass.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskIo.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskReader.cpp
+    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskWriter.cpp
 )
 
 #Load boost
@@ -92,8 +93,6 @@ add_executable(${PROJECT_NAME_STR} ${PROJECT_NAME_STR}/ConsoleEngine.cpp ${SOURC
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME_STR} ${Boost_LIBRARIES})
 
-#list(REMOVE_ITEM SOURCES "${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ConsoleEngine.cpp")
-
 add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES} ${SOURCES})
 add_dependencies(${PROJECT_TEST_NAME} googletest)
 TARGET_LINK_LIBRARIES(${PROJECT_TEST_NAME} ${Boost_LIBRARIES})
@@ -103,7 +102,7 @@ TARGET_LINK_LIBRARIES(${PROJECT_TEST_NAME} ${Boost_LIBRARIES})
 find_library(wt wt)
 find_library(wthttp wthttp)
 if(wt)
-  message(MESSAGE "wt not found")
+  message("-- Wt found")
   add_executable(${PROJECT_NAME_STR}Web ${PROJECT_NAME_STR}/Wt.cpp ${SOURCES})
   target_link_libraries(arXivSearchEngineWeb
                         ${Boost_LIBRARIES}
