@@ -1,6 +1,4 @@
 #include "DiskReader.h"
-#include <iostream>
-
 // For correcting endianness issues
 uint8_t DiskReader::Reverse(uint8_t value) {
     value = (value & 0xF0) >> 4 | (value & 0x0F) << 4;
@@ -29,6 +27,8 @@ uint64_t DiskReader::Reverse(uint64_t value) {
         (value & 0x00000000000000FF) << 56;
 }
 
+DiskReader::DiskReader() {}
+
 DiskReader::DiskReader(const std::string &fileName) {
     stream.open(boost::filesystem::current_path().append(fileName, boost::filesystem::path::codecvt()).string(),
                     std::ios_base::in | std::ios_base::binary);
@@ -39,10 +39,14 @@ DiskReader::DiskReader(const std::string &filePath, const std::string &fileName)
                     std::ios_base::in | std::ios_base::binary);
 }
 
+DiskReader::DiskReader(const boost::filesystem::path &filePath, const std::string &fileName) {
+    stream.open(boost::filesystem::path(filePath).append(fileName, boost::filesystem::path::codecvt()).string(),
+                    std::ios_base::in | std::ios_base::binary);
+}
+
 uint8_t DiskReader::readChar() {
     uint8_t value = 0;
     stream.read((char*)&value, sizeof(value));
-    std::cout << +value << std::endl;
     return value;
 }
 

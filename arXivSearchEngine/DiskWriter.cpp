@@ -38,25 +38,25 @@ DiskWriter::DiskWriter(const std::string &filePath, const std::string &fileName)
      stream.open(filepath, std::ios_base::out | std::ios_base::binary);
 }
 
-void DiskWriter::writeChar(const uint8_t &character) {
+void DiskWriter::writeChar(const uint8_t character) {
     stream.write((const char*)&character, sizeof(character));
 }
 
-void DiskWriter::writeInt(const uint32_t &integer) {
+void DiskWriter::writeInt(const uint32_t integer) {
     uint32_t reverse = Reverse(integer);
     stream.write((const char*)&reverse, sizeof(reverse));
 }
 
-void DiskWriter::writeLong(const uint64_t &number) {
+void DiskWriter::writeLong(const uint64_t number) {
     uint64_t reverse = Reverse(number);
     stream.write((const char*)&reverse, sizeof(number));
 }
 
-void DiskWriter::writeDouble(const double_t &decimal) {
+void DiskWriter::writeDouble(const double_t decimal) {
     stream.write((const char*)&decimal, sizeof(decimal));
 }
 
-void DiskWriter::writeVbeInt(const uint32_t &integer) {
+void DiskWriter::writeVbeInt(const uint32_t integer) {
     if(((integer & 0xF0000000) >> 28) > 0)
         writeChar(((integer & 0xF0000000) >> 28) | 0x80);
     if(((integer & 0x0FE00000) >> 21) > 0)

@@ -21,15 +21,15 @@ public:
 
     DiskWriter(const std::string &filePath, const std::string &fileName);
 
-    void writeChar(const uint8_t &character);
+    void writeChar(const uint8_t character);
 
-    void writeInt(const uint32_t &integer);
+    void writeInt(const uint32_t integer);
 
-    void writeLong(const uint64_t &number);
+    void writeLong(const uint64_t number);
 
-    void writeDouble(const double_t &decimal);
+    void writeDouble(const double_t decimal);
 
-    void writeVbeInt(const uint32_t &integer);
+    void writeVbeInt(const uint32_t integer);
 
 };
 

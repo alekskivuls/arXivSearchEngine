@@ -17,9 +17,13 @@ private:
     uint64_t Reverse(uint64_t value);
 
 public:
+    DiskReader();
+
     DiskReader(const std::string &fileName);
 
     DiskReader(const std::string &filePath, const std::string &fileName);
+
+    DiskReader(const boost::filesystem::path &filePath, const std::string &fileName);
 
     uint8_t readChar();
 
