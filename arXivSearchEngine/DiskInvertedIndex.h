@@ -27,7 +27,7 @@ public:
 	static uint8_t ReadChar(std::ifstream &stream);
 	static uint32_t ReadInt(std::ifstream &stream);
 	static uint32_t ReadRawInt(std::ifstream &stream);
-	static double_t ReadDouble(std::ifstream &stream);
+    static double_t ReadDouble(std::ifstream &stream);
 
 	boost::filesystem::path mPath;
 	mutable std::ifstream mVocabList;
@@ -39,7 +39,7 @@ public:
 	//std::vector<double_t> weights;
     std::unordered_map<uint32_t, std::string> mIdTable;
 	
-	static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
+    static std::list<DocInfo> ReadPostingsFromFile(std::ifstream &postings, uint32_t postingsPosition); // std::vector<DocInfo>
 
     static std::vector<ListEntry> ReadTable(const boost::filesystem::path &path, const std::string &tableName);
 
@@ -53,14 +53,13 @@ public:
 
     std::string readStringAtPosition(uint32_t i, std::vector<ListEntry> &table, std::ifstream &list) const;
 
-    std::list<uint32_t> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
+    std::list<DocInfo> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
 
-//public:
     DiskInvertedIndex();
 
     DiskInvertedIndex(const boost::filesystem::path &path);
 
-    std::list<DocInfo> GetPostings(const std::string &term);
+    std::list<DocInfo> getPostings(const std::string &term);
 
     uint32_t getN();
 
@@ -68,7 +67,7 @@ public:
 
     std::list<std::string> getAuthorList();
 
-    std::list<uint32_t> getAuthorDocs(const std::string &author);
+    std::list<DocInfo> getAuthorDocs(const std::string &author);
 };
 
 #endif

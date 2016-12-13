@@ -49,6 +49,9 @@ int main() {
         else if (input.compare(":authors") == 0) {
             engine.printAuthors();
         }
+        else if (input.compare(":classify") == 0) {
+            engine.classifyDocuments();
+        }
         else if (boost::algorithm::starts_with(input, ":index ")) {
             filepath = input.substr(7, std::string::npos);
             engine.createIndex(filepath);

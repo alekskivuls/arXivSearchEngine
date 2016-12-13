@@ -31,7 +31,7 @@ std::vector<std::pair<uint32_t, double_t>> QEngine::rankedQuery(std::string user
     for (std::string token : tokens) {
         correctSpelling(dIdx, kIdx3, token);
         std::string stemmedToken = PorterStemmer::stem(token);
-        const std::list<DocInfo> &docList = dIdx.GetPostings(stemmedToken);
+        const std::list<DocInfo> &docList = dIdx.getPostings(stemmedToken);
 
         double_t df = (double_t)docList.size();
         double_t wqt = (df == 0.0) ? 0 : log(1.0 + (size / df)); // WQT
@@ -220,7 +220,7 @@ std::list<std::string> QEngine::stemmify(std::string &userQuery) {
 }
 
 void QEngine::correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token) {
-    if (dIdx.GetPostings(token).size() == 0) { // check spelling correction
+    if (dIdx.getPostings(token).size() == 0) { // check spelling correction
         std::list<std::string> candidates = KEngine::correctSpelling(token, kIdx3);
         if (candidates.size() >= 1 && candidates.front() != token) { // mispelled
             token = candidates.front();
@@ -242,7 +242,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
     std::stack<std::list<DocInfo>> result;
 
     if (infix.size() == 0)
-        return dIdx.GetPostings("");
+        return dIdx.getPostings("");
 
     if(infix.front().find("*") != std::string::npos) {
         std::string token = infix.front();
@@ -251,15 +251,15 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
         std::list<std::string>::iterator itr = expansion.begin();
         for (; itr != expansion.end(); ++itr) {
             if (itr == expansion.begin())
-                ans = dIdx.GetPostings(*itr);
+                ans = dIdx.getPostings(*itr);
 
-            std::list<DocInfo> curr = dIdx.GetPostings(*itr);
+            std::list<DocInfo> curr = dIdx.getPostings(*itr);
             ans = OR(ans, curr);
         }
         result.push(ans);
     } else if (infix.size() == 1) {
         correctSpelling(dIdx, kIdx3, infix.front());
-        return dIdx.GetPostings(infix.front());
+        return dIdx.getPostings(infix.front());
     }
 
     std::list<std::string> rpnQuery = infixToRPN(infix);
@@ -273,9 +273,9 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
             std::list<std::string>::iterator itr = expansion.begin();
             for (; itr != expansion.end(); ++itr) {
                 if (itr == expansion.begin())
-                    ans = dIdx.GetPostings(*itr);
+                    ans = dIdx.getPostings(*itr);
 
-                std::list<DocInfo> curr = dIdx.GetPostings(*itr);
+                std::list<DocInfo> curr = dIdx.getPostings(*itr);
                 ans = OR(ans, curr);
             }
 
@@ -307,7 +307,7 @@ std::list<DocInfo> QEngine::processQuery(std::string &userQuery, DiskInvertedInd
         }
         else {
             correctSpelling(dIdx, kIdx3, token);
-            result.push(dIdx.GetPostings(token)); // must be a token... check for spelling correction?
+            result.push(dIdx.getPostings(token)); // must be a token... check for spelling correction?
         }
     }
     return result.top();
@@ -335,7 +335,7 @@ std::list<DocInfo> QEngine::AND(const std::list<DocInfo> &left, const std::list<
         else if ((*jIter).getDocId() > (*iIter).getDocId())
             ++iIter;
         else {
-            result.push_back(DocInfo((*iIter).getDocId()));
+                result.push_back(DocInfo((*iIter).getDocId()));
             ++iIter;
             ++jIter;
         }
@@ -380,9 +380,13 @@ std::list<DocInfo> QEngine::OR(const std::list<DocInfo> &left, const std::list<D
     return result;
 }
 
-/*
- * Merges 2 postings list and returns the resulting postings list. The postingslist do not need to
- * know the positions; therefore, a simple ANDNOT merge will only copy the document name/ id.
+/**
+ * @brief QEngine::ANDNOT Merges 2 postings list and returns the resulting postings list.
+ * The postingslist do not need to know the positions; therefore, a simple ANDNOT merge
+ * will only copy the document name/ id.
+ * @param left The list of DocInfo you want.
+ * @param right The list of things DocInfo you do NOT want.
+ * @return The result of the left ANDNOT the right.
  */
 std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right) {
     std::list<DocInfo> result;
@@ -390,7 +394,7 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
         return left;
 
     auto iIter = left.begin(), jIter = right.begin(); // auto =  std::list<DocInfo>::const_iterator
-    while (iIter != left.end()) {
+    while (iIter != left.end() && jIter != right.end()) {
         if ((*iIter).getDocId() > (*jIter).getDocId())
             ++jIter;
         else if ((*jIter).getDocId() > (*iIter).getDocId()) {
@@ -403,6 +407,12 @@ std::list<DocInfo> QEngine::ANDNOT(const std::list<DocInfo> &left, const std::li
         }
     }
 
+    if (iIter != left.end()){
+        while (iIter != left.end()){
+            result.push_back(DocInfo((*iIter).getDocId()));
+            ++iIter;
+        }
+    }
     return result;
 }
 

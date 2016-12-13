@@ -27,7 +27,7 @@
 #include "DiskInvertedIndex.h"
 
 class Engine {
-    DiskInvertedIndex dIdx;
+
 	QEngine queryEngine;
     std::unordered_map<uint32_t, std::string> idTable;
 	std::vector<double_t> ld; // DOCUMENT ID, SCORE
@@ -40,6 +40,8 @@ public:
 	Engine();
 	
 	void rocchio();
+
+    DiskInvertedIndex dIdx;
 
 	/**
 	* Takes a Porter Stemmer and a directory full of .json files to populate an inverted index that
@@ -92,9 +94,11 @@ public:
 
     void printAuthors();
 
-    std::list<uint32_t> getAuthorDocs(const std::string &author);
+    std::list<DocInfo> getAuthorDocs(const std::string &author);
 
     void printAuthorDocs(const std::string &author);
+
+    void classifyDocuments();
 };
 
 #endif

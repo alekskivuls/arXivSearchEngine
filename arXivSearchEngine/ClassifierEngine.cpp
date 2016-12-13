@@ -14,133 +14,130 @@
 #include "KDeserializer.h"
 
 // Default constructors and destructors
-ClassifierEngine::ClassifierEngine() {
-    // idTable = std::unordered_map<uint32_t, std::string>();
-    // idx = InvertedIndex();
+//ClassifierEngine::ClassifierEngine() { }
+
+ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, int numFeatures) : _idx(idx), numFeatures(numFeatures) {
+    generateFeaturesList();
+    generateFeatureProbability();
 }
 
-void ClassifierEngine::getPathNames(const boost::filesystem::path &directory, std::vector<std::string> &mPathList) {
-    boost::filesystem::directory_iterator end_itr;
-    std::unordered_set<std::string> fileSet;
+//Populates the priority_queues.
+void ClassifierEngine::generateFeaturesList() {
+    //Nested for loop for all author and term combinations.
+    for(auto author : _idx.getAuthorList()) {
+        //        for(auto _author : _idx.getAuthorList()){
+        //            std::cout << _author << " LIST OF THE AUTHORS " << std::endl;
+        //        }
+        //Getting all of the doc IDs that author wrote.
+        std::list<DocInfo> authorDocs = _idx.getAuthorDocs(author);
 
-    for (boost::filesystem::directory_iterator itr(directory); itr != end_itr; ++itr) {
-        if (is_regular_file(itr->path())) {
-            std::string s = itr->path().string();
-            if (boost::algorithm::ends_with(s, ".json")) {
-                std::replace(s.begin(), s.end(), '\\', '/');
-                //std::cout << s << '\n';
-                fileSet.insert(s);
+        //        for(auto _term : _idx.getVocabList()) {
+        //            std::cout << _term << " LIST OF THE TERMS " << std::endl;
+        //        }
+
+        for(auto term : _idx.getVocabList()) {
+            double weight = 0;
+            std::list<DocInfo> postings = _idx.getPostings(term);
+
+            //Calling the count classes and saving values
+            //If there's no need for it to be in a double. i.e. the counts...
+            double classTerm = countClassTerm(postings, authorDocs);
+            double justTerm = countTerm(postings, authorDocs);
+            double justClass = countClass(postings, authorDocs);
+            double neither = _idx.getN() - (classTerm + justTerm + justClass);
+
+            //Calling the calculator.
+            if(classTerm * justClass * justTerm * neither > 0){
+                weight = featureSelect(classTerm, justTerm, justClass, neither);
             }
+
+            //Putting it into priority queues.
+            //Push it into the global std::priority_queue<std::pair<double, std::string>>
+            globalClass.push(std::pair<double, std::string>(weight, term));
+
+            //Pushing it to the other class ones.
+            if(author == "MADISON")
+                madison.push(std::pair<double, std::string>(weight, term));
+            else if(author == "JAY")
+                jay.push(std::pair<double, std::string>(weight, term));
+            else if(author == "HAMILTON")
+                hamilton.push(std::pair<double, std::string>(weight, term));
         }
     }
 
-    mPathList.resize(fileSet.size());
-    int i = 0;
-    for (auto s : fileSet)
-        mPathList[i++] = s;
 }
 
-void ClassifierEngine::populateIndex(boost::filesystem::path &inDir, boost::filesystem::path &outDir) {
-    std::chrono::time_point<std::chrono::system_clock> totalStart, totalEnd;
-    totalStart = std::chrono::system_clock::now(); //leaving timer
-
-    idTable = std::unordered_map<uint32_t, std::string>();
-    auto idx = InvertedIndex();
-    std::unordered_map<std::string, std::string> cache;
-    std::vector<std::string> mPathList;
-    getPathNames(inDir, mPathList);
-
-    std::vector<double_t> ld = std::vector<double_t>(); // VOCAB POSITION, SCORE
-    ld.reserve(mPathList.size());
-
-    std::sort(mPathList.begin(), mPathList.end());
-
-    uint32_t i = 0;
-    for (auto p : mPathList) {
-        std::cout << "Processing Article (" << (i) << "): " << boost::filesystem::path(p).stem() << ".json" << std::endl;
-        //ld.push_back(0.0);
-        std::unordered_map<std::string, uint32_t> wdt;
-
-        // reads json file into stringstream and populates a json tree
-        std::ifstream file(p);
-        std::stringstream ss;
-        ss << file.rdbuf();
-        file.close();
-
-        boost::property_tree::ptree pt;
-        boost::property_tree::read_json(ss, pt);
-        boost::filesystem::path dir(p);
-        (idTable)[i] = dir.stem().string();
-
-        //std::cout << "json to map...\n";
-        // iterate through .json tree
-        for (auto& pair : pt) {
-            if (pair.first == "author") {
-                std::string author = pair.second.get_value<std::string>();
-                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
-                idx.addAuthorDoc(author, i);
+void ClassifierEngine::generateFeatureProbability() {
+    auto featureList = getGlobalList(numFeatures);
+    for(auto author : _idx.getAuthorList()) {
+        if(author.compare("HAMILTON OR MADISON") != 0) {
+            ClassifierClass classClass(author);
+            for(auto term :featureList) {
+                double classTermCount = countClassTermPostings(_idx.getPostings(term), _idx.getAuthorDocs(author));
+                classClass.addTerm(term, classTermCount);
             }
-            if (pair.first == "body" || pair.first == "title") { // if author... get json array and process the authors as well.
-                std::string input = pair.second.get_value<std::string>();
-                std::transform(input.begin(), input.end(), input.begin(), ::tolower);
+            classList.push_back(classClass);
+        }
+    }
+}
 
-                Tokenizer tkzr(input);
-                std::string token;
-                token.reserve(200);
-                uint32_t posIndex = 0;
-                bool hyphen = false;
-                while (tkzr.nextToken(token, hyphen)) {
-                    // while not end of file.
-                    std::string total = "";
-//                    for (auto s : split(token)) {
-//                        kIdx1.addTerm(s);
-//                        kIdx2.addTerm(s);
-//                        kIdx3.addTerm(s);
-//                        total += s;
-
-//                        std::string str = std::string(s);
-//                        idx.addTerm(PorterStemmer::stem(str), i, posIndex);
-//                        updateTf(wdt, str);
-//                    }
-                    std::string &totalToken = total;
-                    //std::string &totalToken = PorterStemmer::stem(total);
-                    idx.addTerm(PorterStemmer::stem(totalToken), i, posIndex); //added the stemmed term
-//                    updateTf(wdt, totalToken);
-
-//                    kIdx1.addTerm(totalToken);
-//                    kIdx2.addTerm(totalToken);
-//                    kIdx3.addTerm(totalToken);
-                    posIndex++;
+std::string ClassifierEngine::classifyDoc(const uint32_t &docId) {
+    auto featureList = getGlobalList(numFeatures);
+    std::string maxClass;
+    double maxWeight = -INFINITY;
+    for(auto classClass : classList) {
+        double totalWeight = log((double)_idx.getAuthorDocs(classClass.getClassName()).size() / _idx.getN());
+        for(auto term : featureList) {
+            for (auto posting : _idx.getPostings(term)) {
+                if (posting.getDocId() == docId) {
+                    totalWeight += log(classClass.getTermProbability(term)) * posting.getPositions().size();
+                    break;
                 }
             }
+            totalWeight += log(classClass.getTermProbability(term));
         }
-        /*std::cout << "SIZE OF MAP = " << wdt.size() << std::endl;
-        for (auto pr : wdt) {
-            std::cout << "first = " << pr.first << " second = " << pr.second << std::endl;
-        }*/
-        wdt = std::unordered_map<std::string, uint32_t>();
-        ++i;
+        if(totalWeight > maxWeight) {
+            maxWeight = totalWeight;
+            maxClass = classClass.getClassName();
+        }
     }
-    // test write print
-    /*std::cout << "TEST PRINT FOR WRITING EUCLIDEAN DISTANCE." << std::endl;
-    for (double_t &d : ld) {
-        std::cout << d << std::endl;
-    }*/
-    totalEnd = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = totalEnd-totalStart;
-    std::cout << "Total elapsed time for Populate Index: " << elapsed_seconds.count() << "s." << std::endl;
-
-    dir = outDir;
+    return maxClass;
 }
 
-/**
- * @brief ClassifierEngine::featureSelect
- * @param classTerm
- * @param noClassTerm
- * @param noTermClass
- * @param noTermNoClass
- * @return The return value for this method is the result of the calculations.
- */
+//Returns the number of docs thats in the class AND the term.
+uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+    return result.size();
+}
+
+//Returns the number of postings in the docs thats in the class AND the term.
+uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+    uint32_t postingsCount = 0;
+
+    //FIXME Use pointers and iterators to check in O(j+k) instead of O(n^2)
+    for(auto doc : result) {
+        for(auto docInfo : postings) {
+            if(doc.getDocId() == docInfo.getDocId()) {
+                postingsCount += docInfo.getPositions().size();
+            }
+        }
+    }
+    return postingsCount;
+}
+
+//Returns the number of docs thats in just the term AND NOT in the class.
+uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.ANDNOT(postings, authorDocs);
+    return result.size();
+}
+
+//Returns the number of docs in just the class AND NOT have the term.
+uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
+    std::list<DocInfo> result = queryEngine.ANDNOT(authorDocs, postings);
+    return result.size();
+}
+
 double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass){
     double totalDoc = classTerm + noClassTerm + noTermClass + noTermNoClass;
     double classTermCal = (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));
@@ -148,4 +145,20 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     double noTermClassCal = (noTermClass/totalDoc)*std::log2((noTermClass*totalDoc)/((noTermClass+classTerm)*(noTermClass+noTermNoClass)));
     double noTermNoClassCal = (noTermNoClass/totalDoc)*std::log2((noTermNoClass*totalDoc)/((noTermNoClass+noClassTerm)*(noTermNoClass+noTermClass)));
     return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
+}
+
+//Pulls from which ever author's pq it wants. Only from madison, jay or hamilton.
+//std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
+//    //Pop and give it the second pair!
+//}
+
+//Pulls from the global priority queue
+std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
+    std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
+    std::list<std::string> list;
+    for (uint32_t i = 0; i < n; i++) {
+        list.push_back(tempQueue.top().second);
+        tempQueue.pop();
+    }
+    return list;
 }

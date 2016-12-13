@@ -20,14 +20,6 @@ class QEngine {
 	 * of stemmed tokens and operators in inverse notation. 
 	 * std::list<std::string> stemmify(std::string &userQuery);*/
 
-	std::list<DocInfo> AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
-
-	std::list<DocInfo> OR(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
-
-	std::list<DocInfo> ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
-
-	std::list<DocInfo> PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist);
-
 	void correctSpelling(DiskInvertedIndex &dIdx, KgramIndex &kIdx3, std::string &token);
 
 
@@ -64,7 +56,13 @@ public:
 	void printInfixRpn();
 	void printInfixRpn2();
 	
+    std::list<DocInfo> AND(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
 
+    std::list<DocInfo> OR(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
+    std::list<DocInfo> ANDNOT(const std::list<DocInfo> &left, const std::list<DocInfo> &right);
+
+    std::list<DocInfo> PHRASE(std::list<DocInfo> &left, std::list<DocInfo> &right, const int &dist);
 private:
 
     std::vector<std::pair<uint32_t, double_t>> heapify(std::vector<pair> scores);

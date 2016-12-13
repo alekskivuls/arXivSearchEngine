@@ -12,6 +12,7 @@
 #include "Engine.h"
 #include "KSerializer.h"
 #include "KDeserializer.h"
+#include "ClassifierEngine.h"
 
 // Default constructors and destructors
 Engine::Engine() {}
@@ -78,21 +79,24 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
 
 
 void Engine::rocchio() {
-	std::unordered_map<std::string, std::list<uint32_t>> classes;
+	std::unordered_map<std::string, std::list<DocInfo>> classes;
 	std::unordered_map<std::string, std::vector<double_t>> centroid;
 
-	std::list<uint32_t> hamAndMad;
-	std::list<uint32_t> input;
-
+	std::list<DocInfo> hamAndMad;
+	std::list<DocInfo> input;
+	
 	auto temp = dIdx.getAuthorList();
-	for (auto s : temp) {
-		if (s == "hamilton" || s == "madison") {
-			classes.insert(std::pair<std::string, std::list<uint32_t>>(s, dIdx.getAuthorDocs(s)));
+	for (std::string s : temp) {
+		//std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+		std::cout << "String value = " << s << std::endl;
+		if (s == "HAMILTON" || s == "MADISON") {
+			std::cout << "Size = " << dIdx.getAuthorDocs(s).size() << std::endl;
+			classes.insert(std::pair<std::string, std::list<DocInfo>>(s, dIdx.getAuthorDocs(s)));
 			centroid.insert(std::pair<std::string, std::vector<double_t>>(s, std::vector<double_t>()));
 		}
-		else if (s == "hamilton or madison") 
+		else if (s == "HAMILTON OR MADISON") 
 			input = dIdx.getAuthorDocs(s);
-		else if (s == "hamilton and madison") 
+		else if (s == "HAMILTON AND MADISON") 
 			hamAndMad = dIdx.getAuthorDocs(s);
 	}
 
@@ -121,7 +125,7 @@ void Engine::rocchio() {
 	//IDF-t
 	double_t N = (double_t)dIdx.getN(); // THIS METHOD IS FINE
 	for (std::string &term : vocab) {
-		uint32_t dft = dIdx.GetPostings(term).size();
+		uint32_t dft = dIdx.getPostings(term).size();
 		double_t idft = (dft == 0) ? 0.0 : 1.0 + log10(N / (double_t)dft); // 0.0
 		//printf("N = %.1f, dft = %d, idft = %.3f\n", N, dft, idft);
 		idf.push_back(idft);
@@ -132,7 +136,7 @@ void Engine::rocchio() {
 	//TF-td
 	uint32_t col = 0;
 	for (std::string &term : vocab) { // READING LEFT TO RIGHT
-		std::list<DocInfo> &postings = dIdx.GetPostings(term);
+		std::list<DocInfo> &postings = dIdx.getPostings(term);
 		
 		for (DocInfo &doc : postings) {
 			const double_t &tftd = (double_t)doc.getPositions().size();
@@ -162,11 +166,11 @@ void Engine::rocchio() {
 		std::vector<double_t> &C = centroid.at(pr.first);
 
 		// for every document in the class
-		for (std::uint32_t &doc : pr.second) {
+		for (DocInfo doc : pr.second) {
 
 			for (j = 0; j < vocab.size(); ++j) {
 				// NORMALIZE THE VECTOR COMPONENT
-				double_t tfidf = vSpace.at(doc).at(j);
+				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
 				// UPDATE CENTROID VECTOR COMPONENT
 				C[j] = C.at(j) + tfidf;
 			}
@@ -174,11 +178,11 @@ void Engine::rocchio() {
 
 		
 		// for every document in the class
-		for (std::uint32_t &doc : hamAndMad) { // HAMILTON AND MADISON
+		for (DocInfo &doc : hamAndMad) { // HAMILTON AND MADISON
 
 			for (j = 0; j < vocab.size(); ++j) {
 				// NORMALIZE THE VECTOR COMPONENT
-				double_t tfidf = vSpace.at(doc).at(j);
+				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
 				// UPDATE CENTROID VECTOR COMPONENT
 				C[j] = C.at(j) + tfidf;
 			}
@@ -191,7 +195,7 @@ void Engine::rocchio() {
 	}
 
 	std::unordered_map<uint32_t, std::string> output;
-	for (uint32_t &in : input) {
+	for (DocInfo &in : input) {
 		std::string ans = "";
 		double_t min = 0.0; // change later.
 
@@ -199,7 +203,7 @@ void Engine::rocchio() {
 			double_t curr;
 
 			for (j = 0; j < pr.second.size(); ++j) {
-				double_t diff = pr.second.at(j) - (vSpace.at(in).at(j));
+				double_t diff = pr.second.at(j) - (vSpace.at(in.getDocId()).at(j));
 
 				curr += (diff * diff); // square the components aka square the differences
 			}
@@ -219,8 +223,8 @@ void Engine::rocchio() {
 		}
 
 
-		printf("in = %d, min = %.3f\n", in, min);
-		output.insert(std::pair<uint32_t, std::string>(in, ans));
+		printf("in = %d, min = %.3f\n", in.getDocId(), min);
+		output.insert(std::pair<uint32_t, std::string>(in.getDocId(), ans));
 	}
 
 
@@ -317,11 +321,25 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
             } else if (pair.first == "title") { // we don't care about this...
 
             } else if(pair.first == "author") {
-                std::string author = pair.second.get_value<std::string>();
+				/*
+				std::string author = pair.second.get_value<std::string>();
                 std::transform(author.begin(), author.end(), author.begin(), ::tolower);
                 idx.addAuthorDoc(author, i);
 
 				std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
+				*/
+                std::string authorStr = pair.second.get_value<std::string>();
+                //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+
+                std::string delimiter = " AND ";
+                size_t pos = 0;
+                std::string token;
+                while ((pos = authorStr.find(delimiter)) != std::string::npos) {
+                    token = authorStr.substr(0, pos);
+                    idx.addAuthorDoc(token, i);
+                    authorStr.erase(0, pos + delimiter.length());
+                }
+                idx.addAuthorDoc(authorStr, i);
             }
         }
 
@@ -437,14 +455,21 @@ void Engine::printAuthors() {
     std::cout << authors.size() << std::endl;
 }
 
-std::list<uint32_t> Engine::getAuthorDocs(const std::string &author) {
+std::list<DocInfo> Engine::getAuthorDocs(const std::string &author) {
     return dIdx.getAuthorDocs(author);
 }
 
 void Engine::printAuthorDocs(const std::string &author) {
     auto authorDocs = getAuthorDocs(author);
     for(auto docId : authorDocs) {
-        std::cout << getArticleName(docId) << std::endl;
+        std::cout << getArticleName(docId.getDocId()) << std::endl;
     }
     std::cout << authorDocs.size() << std::endl;
+}
+
+void Engine::classifyDocuments() {
+    ClassifierEngine cEngine(dIdx, 50);
+    for(auto docId : dIdx.getAuthorDocs("HAMILTON OR MADISON")) {
+        std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(docId.getDocId()) << std::endl;
+    }
 }
