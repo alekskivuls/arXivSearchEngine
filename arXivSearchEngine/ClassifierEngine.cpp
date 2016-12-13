@@ -30,6 +30,7 @@ void ClassifierEngine::generateFeaturesList() {
             //Pushing it into the global std::priority_queue<std::pair<double, std::string>>
             globalClass.push(std::pair<double, std::string>(weight, term));
 
+            //TODO remove hard coded classes
             //Pushing it into respecive class std::priority_queue<std::pair<double, std::string>>
             if(author == "MADISON")
                 madison.push(std::pair<double, std::string>(weight, term));
@@ -118,32 +119,32 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
 }
 
-std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
-    int i;
-    std::pair<double, std::string> pairing;
-    std::list<std::string> result;
-    if (author == "MADISON") {
-        for (i = 0; i < n; ++i) {
-            pairing = madison.top();
-            result.push_back(pairing.second);
-            madison.pop();
-        }
-    }
-    else if (author == "JAY") {
-        for (i = 0; i < n; ++i) {
-            pairing = jay.top();
-            result.push_back(pairing.second);
-            jay.pop();
-        }
-    }
-    else { //Assumes Hamilton.
-        for (i = 0; i < n; ++i) {
-            pairing = hamilton.top();
-            result.push_back(pairing.second);
-            hamilton.pop();
-        }
-    }
-}
+//std::list<std::string> ClassifierEngine::getTopClass(std::string author, uint32_t n) {
+//    int i;
+//    std::pair<double, std::string> pairing;
+//    std::list<std::string> result;
+//    if (author == "MADISON") {
+//        for (i = 0; i < n; ++i) {
+//            pairing = madison.top();
+//            result.push_back(pairing.second);
+//            madison.pop();
+//        }
+//    }
+//    else if (author == "JAY") {
+//        for (i = 0; i < n; ++i) {
+//            pairing = jay.top();
+//            result.push_back(pairing.second);
+//            jay.pop();
+//        }
+//    }
+//    else { //Assumes Hamilton.
+//        for (i = 0; i < n; ++i) {
+//            pairing = hamilton.top();
+//            result.push_back(pairing.second);
+//            hamilton.pop();
+//        }
+//    }
+//}
 
 std::list<std::string> ClassifierEngine::getGlobalList(uint32_t n) {
     //Copy of priority queue is made so that origional content is not popped off.

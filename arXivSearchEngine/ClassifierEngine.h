@@ -104,16 +104,16 @@ public:
      */
     std::list<std::string> getGlobalList(uint32_t n);
 
-    /**
-     * @brief getTopClass After driver() is called you can use this method to get the top n scored terms for
-     * the specified author's priority queue, giving you access to the Hamilton, Jay, or Madison Classes.
-     * It returns a std::list<std::string> of terms where you can use the front() method from the list to
-     * get a reference and navigate from there.
-     * @param author The author class you want the top terms for, limited to hamilton, jay, and madison.
-     * @param n The number of top term you want to get.
-     * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
-     */
-    std::list<std::string> getTopClass(std::string author, uint32_t n);
+//    /**
+//     * @brief getTopClass After driver() is called you can use this method to get the top n scored terms for
+//     * the specified author's priority queue, giving you access to the Hamilton, Jay, or Madison Classes.
+//     * It returns a std::list<std::string> of terms where you can use the front() method from the list to
+//     * get a reference and navigate from there.
+//     * @param author The author class you want the top terms for, limited to hamilton, jay, and madison.
+//     * @param n The number of top term you want to get.
+//     * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
+//     */
+//    std::list<std::string> getTopClass(std::string author, uint32_t n);
 };
 
 #endif

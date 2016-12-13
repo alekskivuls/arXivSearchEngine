@@ -44,7 +44,7 @@ TEST_F(DiskRWTest, longs) {
 TEST_F(DiskRWTest, decimal) {
     double_t decimal = 3.14;
     {   //Scope to force flush of buffer on destruction
-        DiskWriter writer = DiskWriter("/doublelTest.bin");
+        DiskWriter writer = DiskWriter("/doubleTest.bin");
         writer.writeDouble(decimal);
     }
 
