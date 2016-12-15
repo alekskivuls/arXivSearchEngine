@@ -13,13 +13,12 @@ void ClassifierEngine::generateFeaturesList() {
             double classTerm = countClassTerm(postings, classDocList);
             double justTerm = countTerm(postings, classDocList);
             double justClass = countClass(postings, classDocList);
-            //FIXME getN is wrong for data subsets
-            double neither = _idx.getN() - (classTerm + justTerm + justClass);
+            double neither = countTotalTrainingDocs() - (classTerm + justTerm + justClass);
 
             //Calling the calculator.
-            if(classTerm * justClass * justTerm * neither > 0){
+            //if(classTerm * justClass * justTerm * neither > 0){
                 weight = featureSelect(classTerm, justTerm, justClass, neither);
-            }
+            //}
 
             //Pushing it into priority queues.
             globalClass.push(std::pair<double, std::string>(weight, term));
@@ -81,7 +80,7 @@ std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint
     std::string maxClass;
     double maxWeight = -INFINITY;
     for(auto classClass : featureData) {
-        double totalWeight = log((double) classDocs.at(classClass.getClassName()).size() / _idx.getN());
+        double totalWeight = log((double) classDocs.at(classClass.getClassName()).size() / countTotalTrainingDocs());
         for(auto term : featureList) {
             for (auto posting : _idx.getPostings(term)) {
                 if (posting.getDocId() == docId) {
@@ -116,11 +115,16 @@ uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<Doc
 
 double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass){
     double totalDoc = classTerm + noClassTerm + noTermClass + noTermNoClass;
-    double classTermCal = (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));
-    double noClassTermCal = (noClassTerm/totalDoc)*std::log2((noClassTerm*totalDoc)/((classTerm+noClassTerm)*(noClassTerm+noTermNoClass)));
-    double noTermClassCal = (noTermClass/totalDoc)*std::log2((noTermClass*totalDoc)/((noTermClass+classTerm)*(noTermClass+noTermNoClass)));
-    double noTermNoClassCal = (noTermNoClass/totalDoc)*std::log2((noTermNoClass*totalDoc)/((noTermNoClass+noClassTerm)*(noTermNoClass+noTermClass)));
-    return classTermCal + noClassTermCal + noTermClassCal + noTermNoClassCal;
+    double totalSum = 0;
+    if(classTerm != 0)
+        totalSum += (classTerm/totalDoc)*std::log2((classTerm*totalDoc)/((classTerm+noClassTerm)*(classTerm+noTermClass)));
+    if(noClassTerm != 0)
+        totalSum += (noClassTerm/totalDoc)*std::log2((noClassTerm*totalDoc)/((classTerm+noClassTerm)*(noClassTerm+noTermNoClass)));
+    if(noTermClass != 0)
+        totalSum += (noTermClass/totalDoc)*std::log2((noTermClass*totalDoc)/((noTermClass+classTerm)*(noTermClass+noTermNoClass)));
+    if(noTermNoClass != 0)
+        totalSum += (noTermNoClass/totalDoc)*std::log2((noTermNoClass*totalDoc)/((noTermNoClass+noClassTerm)*(noTermNoClass+noTermClass)));
+    return totalSum;
 }
 
 std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t n) {
@@ -160,4 +164,12 @@ std::list<DocInfo> ClassifierEngine::getClassDocInfos(std::string &className) co
         classDocList.push_back(DocInfo(doc));
     }
     return classDocList;
+}
+
+uint32_t ClassifierEngine::countTotalTrainingDocs() const {
+    uint32_t count = 0;
+    for(auto classClass : classDocs) {
+        count += classClass.second.size();
+    }
+    return count;
 }

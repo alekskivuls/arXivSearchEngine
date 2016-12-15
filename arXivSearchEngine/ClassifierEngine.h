@@ -32,8 +32,6 @@ class ClassifierEngine {
 
     std::vector<ClassifierClass> featureData;
 
-
-
 public:
 
     /**
@@ -96,6 +94,7 @@ public:
     std::vector<std::string> getClassNames() const;
     std::vector<uint32_t> getClassDocs(std::string &className) const;
     std::list<DocInfo> getClassDocInfos(std::string &className) const;
+    uint32_t countTotalTrainingDocs() const;
     std::string classifyDoc(const uint32_t numFeatures, const uint32_t docId);
 
     /**
