@@ -1,24 +1,19 @@
 #include "ClassifierEngine.h"
 
-ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx, std::vector<std::string> &classList) : _idx(idx), classList(classList) {
-    generateFeaturesList();
-    numFeatures = -1;
-}
+ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx) : _idx(idx) {}
 
 void ClassifierEngine::generateFeaturesList() {
-    for(auto author : _idx.getAuthorList()) {
-
-        //Getting all of the doc IDs that author wrote. std::list<uint32_t> auto converts to std::list<DocInfo>.
-        std::list<DocInfo> authorDocs = _idx.getAuthorDocs(author);
-
+    for(auto className : getClassNames()) {
+        std::list<DocInfo> classDocList = getClassDocInfos(className);
         for(auto term : _idx.getVocabList()) {
             double weight = 0;
             std::list<DocInfo> postings = _idx.getPostings(term);
 
             //Calling the count classes and saving values
-            double classTerm = countClassTerm(postings, authorDocs);
-            double justTerm = countTerm(postings, authorDocs);
-            double justClass = countClass(postings, authorDocs);
+            double classTerm = countClassTerm(postings, classDocList);
+            double justTerm = countTerm(postings, classDocList);
+            double justClass = countClass(postings, classDocList);
+            //FIXME getN is wrong for data subsets
             double neither = _idx.getN() - (classTerm + justTerm + justClass);
 
             //Calling the calculator.
@@ -33,8 +28,8 @@ void ClassifierEngine::generateFeaturesList() {
 }
 
 //Returns the number of postings in the docs thats in the class AND the term.
-uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> classDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, classDocs);
     uint32_t postingsCount = 0;
 
     //FIXME Use pointers and iterators to check in O(j+k) instead of O(n^2)
@@ -48,32 +43,45 @@ uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, s
     return postingsCount;
 }
 
-void ClassifierEngine::generateFeatureProbability() {
-    classListData = std::list<ClassifierClass>();
+void ClassifierEngine::generateFeatureProbability(int numFeatures) {
+    featureData = std::vector<ClassifierClass>();
     auto featureList = getNumTopFeatures(numFeatures);
-    for(auto author : _idx.getAuthorList()) {
-        if(author.compare("HAMILTON OR MADISON") != 0) {
-            ClassifierClass classClass(author);
-            for(auto term :featureList) {
-                double classTermCount = countClassTermPostings(_idx.getPostings(term), _idx.getAuthorDocs(author));
-                classClass.addTerm(term, classTermCount);
-            }
-            classListData.push_back(classClass);
+    for(auto className : getClassNames()) {
+        ClassifierClass classClass(className);
+        for(auto term : featureList) {
+            double classTermCount = countClassTermPostings(_idx.getPostings(term), getClassDocInfos(className));
+            classClass.addTerm(term, classTermCount);
         }
+        featureData.push_back(classClass);
     }
 }
 
-std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint32_t docId) {
-    if(this->numFeatures != numFeatures) {
-        this->numFeatures = numFeatures;
-        generateFeatureProbability();
+void ClassifierEngine::addTrainingDoc(const std::string &className, const uint32_t docId) {
+    auto foundClass = classDocs.find(className);
+    if (foundClass != classDocs.end()) { //found
+        foundClass->second.push_back(docId);
+    } else { //not found
+        std::vector<uint32_t> vec(1, docId);
+        classDocs.insert(std::make_pair(className, vec));
     }
+}
 
+void ClassifierEngine::addTrainingDocList(const std::string &className, const std::vector<uint32_t> &docIds) {
+     auto foundClass = classDocs.find(className);
+     if (foundClass != classDocs.end()) { //found
+         foundClass->second.reserve(foundClass->second.size() + docIds.size()); //preallocate memory
+         foundClass->second.insert(foundClass->second.end(), docIds.begin(), docIds.end()); //merge existing docs with doc list
+     } else { //not found
+         classDocs.insert(std::make_pair(className, docIds));
+     }
+}
+
+std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint32_t docId) {
     auto featureList = getNumTopFeatures(numFeatures);
     std::string maxClass;
     double maxWeight = -INFINITY;
-    for(auto classClass : classListData) {
-        double totalWeight = log((double)_idx.getAuthorDocs(classClass.getClassName()).size() / _idx.getN());
+    for(auto classClass : featureData) {
+        double totalWeight = log((double) classDocs.at(classClass.getClassName()).size() / _idx.getN());
         for(auto term : featureList) {
             for (auto posting : _idx.getPostings(term)) {
                 if (posting.getDocId() == docId) {
@@ -91,18 +99,18 @@ std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint
     return maxClass;
 }
 
-uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.AND(postings, authorDocs);
+uint32_t ClassifierEngine::countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> classDocs) {
+    std::list<DocInfo> result = queryEngine.AND(postings, classDocs);
     return result.size();
 }
 
-uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.ANDNOT(postings, authorDocs);
+uint32_t ClassifierEngine::countTerm(std::list<DocInfo> postings, std::list<DocInfo> classDocs) {
+    std::list<DocInfo> result = queryEngine.ANDNOT(postings, classDocs);
     return result.size();
 }
 
-uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs) {
-    std::list<DocInfo> result = queryEngine.ANDNOT(authorDocs, postings);
+uint32_t ClassifierEngine::countClass(std::list<DocInfo> postings, std::list<DocInfo> classDocs) {
+    std::list<DocInfo> result = queryEngine.ANDNOT(classDocs, postings);
     return result.size();
 }
 
@@ -118,10 +126,38 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
 std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t n) {
     //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
-    std::vector<std::string> list;
+    std::vector<std::string> featureTerms;
     for (uint32_t i = 0; i < n; i++) {
-        list.push_back(tempQueue.top().second);
+        featureTerms.push_back(tempQueue.top().second);
         tempQueue.pop();
     }
-    return list;
+    return featureTerms;
+}
+
+std::vector<std::string> ClassifierEngine::getClassNames() const {
+    std::vector<std::string> classNames;
+    classNames.reserve(classDocs.size());
+    for(auto classDoc : classDocs) {
+        classNames.push_back(classDoc.first);
+    }
+    return classNames;
+}
+
+std::vector<uint32_t> ClassifierEngine::getClassDocs(std::string &className) const {
+    auto foundClass = classDocs.find(className);
+    if (foundClass != classDocs.end()) { //found
+        return foundClass->second;
+    }
+    std::vector<uint32_t> vec;
+    return vec;
+}
+
+//FIXME Method used for boxing uint32_t into DocInfos for easy merge from Query Engine in other methods
+//Change in data types may be required throughout application
+std::list<DocInfo> ClassifierEngine::getClassDocInfos(std::string &className) const {
+    std::list<DocInfo> classDocList;
+    for(auto doc : getClassDocs(className)) {
+        classDocList.push_back(DocInfo(doc));
+    }
+    return classDocList;
 }

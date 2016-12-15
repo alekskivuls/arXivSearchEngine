@@ -5,7 +5,6 @@
 #include "ClassifierClass.h"
 #include "QEngine.h"
 #include "DocInfo.h"
-#include <iostream>
 #include <string>
 #include <vector>
 #include <queue>
@@ -29,14 +28,11 @@ class ClassifierEngine {
      */
     QEngine queryEngine;
 
-    std::vector<std::string> &classList;
+    std::unordered_map<std::string, std::vector<uint32_t>> classDocs;
 
-    std::list<ClassifierClass> classListData;
+    std::vector<ClassifierClass> featureData;
 
-    /**
-     * @brief numFeatures an int value of the number of features ClassifierEngine contains.
-     */
-    int numFeatures;
+
 
 public:
 
@@ -47,7 +43,7 @@ public:
 
     //Constructors
     //ClassifierEngine();
-    ClassifierEngine(DiskInvertedIndex &idx, std::vector<std::string> &classList);
+    ClassifierEngine(DiskInvertedIndex &idx);
 
     /**
      * @brief ClassifierEngine::featureSelect Calculates the result using naieve bayes function.
@@ -60,7 +56,7 @@ public:
     double featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass);
 
     //Extract the number of documents for each and put into method for the score.
-    uint32_t countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClassTermPostings(std::list<DocInfo> postings, std::list<DocInfo> classDocs);
 
     /**
      * @brief ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term.
@@ -69,7 +65,7 @@ public:
      * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
      * @return A uint32_t value that is the number of docs that is in the class AND the term.
      */
-    uint32_t countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClassTerm(std::list<DocInfo> postings, std::list<DocInfo> classDocs);
 
     /**
      * @brief ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term).
@@ -78,7 +74,7 @@ public:
      * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
      * @return A uint32_t value that is the number of docs that is in the class AND NOT the term.
      */
-    uint32_t countClass(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countClass(std::list<DocInfo> postings, std::list<DocInfo> classDocs);
 
     /**
      * @brief ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class).
@@ -87,14 +83,19 @@ public:
      * @param authorDocs The std::list<DocInfo> of the document IDs that the authors wrote.
      * @return A uint32_t value that is the number of docs that is in the term AND NOT the class.
      */
-    uint32_t countTerm(std::list<DocInfo> postings, std::list<DocInfo> authorDocs);
+    uint32_t countTerm(std::list<DocInfo> postings, std::list<DocInfo> classDocs);
 
     /**
      * @brief ClassifierEngine::generateFeaturesList Populates the priority queues with calculated
      * naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop().
      */
     void generateFeaturesList();
-    void generateFeatureProbability();
+    void generateFeatureProbability(int numFeatures);
+    void addTrainingDoc(const std::string &className, const uint32_t docId);
+    void addTrainingDocList(const std::string &className, const std::vector<uint32_t> &docIds);
+    std::vector<std::string> getClassNames() const;
+    std::vector<uint32_t> getClassDocs(std::string &className) const;
+    std::list<DocInfo> getClassDocInfos(std::string &className) const;
     std::string classifyDoc(const uint32_t numFeatures, const uint32_t docId);
 
     /**

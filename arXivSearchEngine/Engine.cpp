@@ -467,16 +467,20 @@ void Engine::printAuthorDocs(const std::string &author) {
     std::cout << authorDocs.size() << std::endl;
 }
 
-void Engine::classifyDocuments() {
-    int numFeatures = 50;
+void Engine::classifyDocuments(const uint32_t numFeatures) {
     std::string classifyClassName = "HAMILTON OR MADISON";
 
-    std::vector<std::string> classList;
+    ClassifierEngine cEngine(dIdx);
     for(auto author : dIdx.getAuthorList()) {
-        if(author.compare(classifyClassName) != 0)
-            classList.push_back(author);
+        if(author != classifyClassName) {
+            for(auto doc : dIdx.getAuthorDocs(author)) {
+                cEngine.addTrainingDoc(author, doc.getDocId());
+            }
+        }
     }
-    ClassifierEngine cEngine(dIdx, classList);
+    cEngine.generateFeaturesList();
+    cEngine.generateFeatureProbability(numFeatures);
+
     for(auto docId : dIdx.getAuthorDocs(classifyClassName)) {
         std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(numFeatures, docId.getDocId()) << std::endl;
     }

@@ -36,9 +36,9 @@ int main() {
         if (input.compare(":q") == 0) {
             break;
         }
-		else if (input.compare(":rocchio") == 0) { // perform rocchio classification
-			engine.rocchio();
-		}
+        else if (input.compare(":rocchio") == 0) { // perform rocchio classification
+            engine.rocchio();
+        }
         else if (boost::algorithm::starts_with(input, ":stem ")) {
             std::string substr = input.substr(6, std::string::npos);
             std::cout << engine.stem(substr) << std::endl;
@@ -50,7 +50,8 @@ int main() {
             engine.printAuthors();
         }
         else if (input.compare(":classify") == 0) {
-            engine.classifyDocuments();
+            uint32_t defaultNumFeatures = 50;
+            engine.classifyDocuments(defaultNumFeatures);
         }
         else if (boost::algorithm::starts_with(input, ":index ")) {
             filepath = input.substr(7, std::string::npos);
@@ -60,13 +61,17 @@ int main() {
             filepath = input.substr(6, std::string::npos);
             engine.loadIndex(filepath);
         }
-		else if (boost::algorithm::starts_with(input, ":rank ")) { // REMOVE THIS LATER
+        else if (boost::algorithm::starts_with(input, ":rank ")) { // REMOVE THIS LATER
             std::string query = input.substr(6, std::string::npos);
             engine.printRank(query);
-		}
+        }
         else if (boost::algorithm::starts_with(input, ":authored ")) {
             std::string author = input.substr(10, std::string::npos);
             engine.printAuthorDocs(author);
+        }
+        else if (boost::algorithm::starts_with(input, ":classify ")) {
+            uint32_t numFeatures = std::stoi(input.substr(10, std::string::npos));
+            engine.classifyDocuments(numFeatures);
         }
         else if(!boost::algorithm::starts_with(input, ":")) { //Query
             engine.printQuery(input);

@@ -98,7 +98,7 @@ public:
 
     void printAuthorDocs(const std::string &author);
 
-    void classifyDocuments();
+    void classifyDocuments(const uint32_t numFeatures);
 };
 
 #endif

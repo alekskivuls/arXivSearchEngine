@@ -22,17 +22,9 @@ protected:
     //ClassifierEngine cengine;
 };
 
-//Test that a case of porter stemmer is still working
 TEST_F(ClassifierTest, calculations)
 {
-    std::string classifyClassName = "HAMILTON OR MADISON";
-    std::vector<std::string> classList;
-    for(auto author : engine.dIdx.getAuthorList()) {
-        if(author.compare(classifyClassName) != 0)
-            classList.push_back(author);
-    }
-
-    ClassifierEngine cengine(engine.dIdx, classList);
+    ClassifierEngine cengine(engine.dIdx);
     //0.000110536 rounded.
     std::string expected = std::string("0.000111");
     double result = cengine.featureSelect(49, 27652, 141, 774106);
@@ -41,19 +33,24 @@ TEST_F(ClassifierTest, calculations)
 
 TEST_F(ClassifierTest, populate_pq)
 {
-    std::string classifyClassName = "HAMILTON OR MADISON";
-    std::vector<std::string> classList;
+    ClassifierEngine cEngine(engine.dIdx);
     for(auto author : engine.dIdx.getAuthorList()) {
-        if(author.compare(classifyClassName) != 0)
-            classList.push_back(author);
+        if(author!="HAMILTON OR MADISON")
+            for(auto doc : engine.dIdx.getAuthorDocs(author)) {
+                cEngine.addTrainingDoc(author, doc.getDocId());
+            }
     }
+    uint32_t numFeatures = 5;
+    cEngine.generateFeaturesList();
+    cEngine.generateFeatureProbability(numFeatures);
 
     //MADISON and HAMILTON have 2, and JAY has 1.
-    ClassifierEngine cengine(engine.dIdx, classList);
     std::string explor = std::string("explor");
     std::string bayes = std::string("0.019973");
-    EXPECT_EQ(cengine.globalClass.top().second, explor);
-    EXPECT_EQ(std::to_string(cengine.globalClass.top().first), bayes);
-    //EXPECT_EQ(cengine.getGlobalList().top().second, explor);
-
+    auto topFeatures = cEngine.getNumTopFeatures(numFeatures);
+    for(auto feature : topFeatures)
+        std::cout << feature << std::endl;
+    //EXPECT_EQ(topFeature.front(), explor);
+    //EXPECT_EQ(cEngine.globalClass.top().second, explor);
+    EXPECT_EQ(std::to_string(cEngine.globalClass.top().first), bayes);
 }
