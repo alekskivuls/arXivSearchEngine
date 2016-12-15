@@ -74,31 +74,49 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9fa33456d8fb08b620e974e91b62527c"><td class="memItemLeft" align="right" valign="top"><a id="a9fa33456d8fb08b620e974e91b62527c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx, std::vector&lt; std::string &gt; &amp;classList)</td></tr>
-<tr class="separator:a9fa33456d8fb08b620e974e91b62527c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10127c298487ff7d32bf61c41de2fc60"><td class="memItemLeft" align="right" valign="top"><a id="a10127c298487ff7d32bf61c41de2fc60"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx)</td></tr>
+<tr class="separator:a10127c298487ff7d32bf61c41de2fc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e">featureSelect</a> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
 <tr class="memdesc:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function.  <a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">More...</a><br /></td></tr>
 <tr class="separator:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memItemLeft" align="right" valign="top"><a id="aa5743e4dc7e77c715eac31fcd4b8e605"></a>
-uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPostings</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="separator:aa5743e4dc7e77c715eac31fcd4b8e605"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac">countClassTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="memdesc:a2c626c33d3acfc1183a6de15a551a1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;.  <a href="#a2c626c33d3acfc1183a6de15a551a1ac">More...</a><br /></td></tr>
-<tr class="separator:a2c626c33d3acfc1183a6de15a551a1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d">countClass</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="memdesc:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;.  <a href="#ac40c02d5a5c796dec80eb39b1e76b68d">More...</a><br /></td></tr>
-<tr class="separator:ac40c02d5a5c796dec80eb39b1e76b68d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86326ad0309a6b833e5f6180477439f2"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2">countTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; authorDocs)</td></tr>
-<tr class="memdesc:a86326ad0309a6b833e5f6180477439f2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;.  <a href="#a86326ad0309a6b833e5f6180477439f2">More...</a><br /></td></tr>
-<tr class="separator:a86326ad0309a6b833e5f6180477439f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2658afbb1271d6cdcdc4bd1643308cf4"><td class="memItemLeft" align="right" valign="top"><a id="a2658afbb1271d6cdcdc4bd1643308cf4"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPostings</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; classDocs)</td></tr>
+<tr class="separator:a2658afbb1271d6cdcdc4bd1643308cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a822bf0f8bed5aadd4a1e13b88bc698"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a7a822bf0f8bed5aadd4a1e13b88bc698">countClassTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; classDocs)</td></tr>
+<tr class="memdesc:a7a822bf0f8bed5aadd4a1e13b88bc698"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a7a822bf0f8bed5aadd4a1e13b88bc698" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;.  <a href="#a7a822bf0f8bed5aadd4a1e13b88bc698">More...</a><br /></td></tr>
+<tr class="separator:a7a822bf0f8bed5aadd4a1e13b88bc698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74dd58a99864496a82453c5223e7db52"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a74dd58a99864496a82453c5223e7db52">countClass</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; classDocs)</td></tr>
+<tr class="memdesc:a74dd58a99864496a82453c5223e7db52"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a74dd58a99864496a82453c5223e7db52" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;.  <a href="#a74dd58a99864496a82453c5223e7db52">More...</a><br /></td></tr>
+<tr class="separator:a74dd58a99864496a82453c5223e7db52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28335591392dda66554ce0f355a7cedc"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a28335591392dda66554ce0f355a7cedc">countTerm</a> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; classDocs)</td></tr>
+<tr class="memdesc:a28335591392dda66554ce0f355a7cedc"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a28335591392dda66554ce0f355a7cedc" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;.  <a href="#a28335591392dda66554ce0f355a7cedc">More...</a><br /></td></tr>
+<tr class="separator:a28335591392dda66554ce0f355a7cedc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memItemLeft" align="right" valign="top"><a id="a07e924cd66b6c9dff6f9b65dc4754a15"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15">generateFeaturesList</a> ()</td></tr>
 <tr class="memdesc:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15" title="ClassifierEngine::generateFeaturesList Populates the priority queues with calculated naive bayes func...">ClassifierEngine::generateFeaturesList</a> Populates the priority queues with calculated naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop(). <br /></td></tr>
 <tr class="separator:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
-<tr class="separator:adaa67ca1359d22e7679c873930970b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd0086e8c7a83c4ac985f9b8ada3c62a"><td class="memItemLeft" align="right" valign="top"><a id="acd0086e8c7a83c4ac985f9b8ada3c62a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> (int numFeatures)</td></tr>
+<tr class="separator:acd0086e8c7a83c4ac985f9b8ada3c62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab43465f7ed11004f5cdb39b96a1e4d5"><td class="memItemLeft" align="right" valign="top"><a id="aab43465f7ed11004f5cdb39b96a1e4d5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addTrainingDoc</b> (const std::string &amp;className, const uint32_t docId)</td></tr>
+<tr class="separator:aab43465f7ed11004f5cdb39b96a1e4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79a763da2843899f1fb2ab0721217c76"><td class="memItemLeft" align="right" valign="top"><a id="a79a763da2843899f1fb2ab0721217c76"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addTrainingDocList</b> (const std::string &amp;className, const std::vector&lt; uint32_t &gt; &amp;docIds)</td></tr>
+<tr class="separator:a79a763da2843899f1fb2ab0721217c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42041628b2cd63330ba584dc29bc5a59"><td class="memItemLeft" align="right" valign="top"><a id="a42041628b2cd63330ba584dc29bc5a59"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getClassNames</b> () const</td></tr>
+<tr class="separator:a42041628b2cd63330ba584dc29bc5a59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0ca5cf55d655fd5c793dc39dbb89eac"><td class="memItemLeft" align="right" valign="top"><a id="ac0ca5cf55d655fd5c793dc39dbb89eac"></a>
+std::vector&lt; uint32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getClassDocs</b> (std::string &amp;className) const</td></tr>
+<tr class="separator:ac0ca5cf55d655fd5c793dc39dbb89eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae32e54a6154c4dbe7cc9276f988fdf98"><td class="memItemLeft" align="right" valign="top"><a id="ae32e54a6154c4dbe7cc9276f988fdf98"></a>
+std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getClassDocInfos</b> (std::string &amp;className) const</td></tr>
+<tr class="separator:ae32e54a6154c4dbe7cc9276f988fdf98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b864b1e013b04f6493d678998e7183"><td class="memItemLeft" align="right" valign="top"><a id="ac5b864b1e013b04f6493d678998e7183"></a>
+uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countTotalTrainingDocs</b> () const</td></tr>
+<tr class="separator:ac5b864b1e013b04f6493d678998e7183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb52f74f491153c2353213496a1e040e"><td class="memItemLeft" align="right" valign="top"><a id="abb52f74f491153c2353213496a1e040e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t numFeatures, const uint32_t docId)</td></tr>
 <tr class="separator:abb52f74f491153c2353213496a1e040e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,8 +134,8 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac40c02d5a5c796dec80eb39b1e76b68d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac40c02d5a5c796dec80eb39b1e76b68d">&sect;&nbsp;</a></span>countClass()</h2>
+<a id="a74dd58a99864496a82453c5223e7db52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74dd58a99864496a82453c5223e7db52">&sect;&nbsp;</a></span>countClass()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -132,7 +150,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
-          <td class="paramname"><em>authorDocs</em>&#160;</td>
+          <td class="paramname"><em>classDocs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -142,7 +160,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;. </p>
+<p><a class="el" href="classClassifierEngine.html#a74dd58a99864496a82453c5223e7db52" title="ClassifierEngine::countClass Returns the number of docs that only falls in the class (not the term)...">ClassifierEngine::countClass</a> Returns the number of docs that only falls in the class (not the term). The bottom left quadrant of (0,1)&lt;term, class&gt;. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>
@@ -154,8 +172,8 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 
 </div>
 </div>
-<a id="a2c626c33d3acfc1183a6de15a551a1ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c626c33d3acfc1183a6de15a551a1ac">&sect;&nbsp;</a></span>countClassTerm()</h2>
+<a id="a7a822bf0f8bed5aadd4a1e13b88bc698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a822bf0f8bed5aadd4a1e13b88bc698">&sect;&nbsp;</a></span>countClassTerm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,7 +188,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
-          <td class="paramname"><em>authorDocs</em>&#160;</td>
+          <td class="paramname"><em>classDocs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -180,7 +198,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;. </p>
+<p><a class="el" href="classClassifierEngine.html#a7a822bf0f8bed5aadd4a1e13b88bc698" title="ClassifierEngine::countClassTerm Returns the number of docs that is in the class AND the term...">ClassifierEngine::countClassTerm</a> Returns the number of docs that is in the class AND the term. The top left quadrant of (1,1)&lt;term, class&gt;. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>
@@ -192,8 +210,8 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
 
 </div>
 </div>
-<a id="a86326ad0309a6b833e5f6180477439f2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86326ad0309a6b833e5f6180477439f2">&sect;&nbsp;</a></span>countTerm()</h2>
+<a id="a28335591392dda66554ce0f355a7cedc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28335591392dda66554ce0f355a7cedc">&sect;&nbsp;</a></span>countTerm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +226,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
-          <td class="paramname"><em>authorDocs</em>&#160;</td>
+          <td class="paramname"><em>classDocs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -218,7 +236,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;. </p>
+<p><a class="el" href="classClassifierEngine.html#a28335591392dda66554ce0f355a7cedc" title="ClassifierEngine::countTerm Returns the number of docs that only falls in the term (not the class)...">ClassifierEngine::countTerm</a> Returns the number of docs that only falls in the term (not the class). The top right quadrant of (1,0)&lt;term, class&gt;. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">postings</td><td>The std::list&lt;DocInfo&gt; of the document IDs that the term is contained in. </td></tr>

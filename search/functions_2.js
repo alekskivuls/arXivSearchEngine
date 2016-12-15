@@ -1,7 +1,7 @@
 var searchData=
 [
   ['correctspelling',['correctSpelling',['../classKEngine.html#ae31417ec11fa03414dcde069699bd2f5',1,'KEngine']]],
-  ['countclass',['countClass',['../classClassifierEngine.html#ac40c02d5a5c796dec80eb39b1e76b68d',1,'ClassifierEngine']]],
-  ['countclassterm',['countClassTerm',['../classClassifierEngine.html#a2c626c33d3acfc1183a6de15a551a1ac',1,'ClassifierEngine']]],
-  ['countterm',['countTerm',['../classClassifierEngine.html#a86326ad0309a6b833e5f6180477439f2',1,'ClassifierEngine']]]
+  ['countclass',['countClass',['../classClassifierEngine.html#a74dd58a99864496a82453c5223e7db52',1,'ClassifierEngine']]],
+  ['countclassterm',['countClassTerm',['../classClassifierEngine.html#a7a822bf0f8bed5aadd4a1e13b88bc698',1,'ClassifierEngine']]],
+  ['countterm',['countTerm',['../classClassifierEngine.html#a28335591392dda66554ce0f355a7cedc',1,'ClassifierEngine']]]
 ];
