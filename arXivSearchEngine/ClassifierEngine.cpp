@@ -1,25 +1,39 @@
 #include "ClassifierEngine.h"
 
+//#include <iostream>
+
 ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx) : _idx(idx) {}
 
+void ClassifierEngine::calculateVariables(uint32_t numFeatures) {
+    totalTrainingDocs = countTotalTrainingDocs();
+    //std::cout << "Generating feature list" << std::endl;
+    generateFeaturesList();
+    topFeatures = getNumTopFeatures(numFeatures);
+    //std::cout << "Top feature size: " << topFeatures.size() << std::endl;
+    //std::cout << "Generating feature probability" << std::endl;
+    generateFeatureProbability();
+}
+
 void ClassifierEngine::generateFeaturesList() {
+    globalClass = std::priority_queue<std::pair<double, std::string>>();
     for(auto className : getClassNames()) {
         std::list<DocInfo> classDocList = getClassDocInfos(className);
         for(auto term : _idx.getVocabList()) {
             double weight = 0;
             std::list<DocInfo> postings = _idx.getPostings(term);
+            if(postings.size() > 5) {
+                //Calling the count classes and saving values
+                double classTerm = countClassTerm(postings, classDocList);
+                double justTerm = countTerm(postings, classDocList);
+                double justClass = countClass(postings, classDocList);
+                double neither = totalTrainingDocs - (classTerm + justTerm + justClass);
 
-            //Calling the count classes and saving values
-            double classTerm = countClassTerm(postings, classDocList);
-            double justTerm = countTerm(postings, classDocList);
-            double justClass = countClass(postings, classDocList);
-            double neither = countTotalTrainingDocs() - (classTerm + justTerm + justClass);
+                //Calling the calculator.
+                weight = featureSelect(classTerm, justTerm, justClass, neither);
 
-            //Calling the calculator.
-            weight = featureSelect(classTerm, justTerm, justClass, neither);
-
-            //Pushing it into priority queues.
-            globalClass.push(std::pair<double, std::string>(weight, term));
+                //Pushing it into priority queues.
+                globalClass.push(std::pair<double, std::string>(weight, term));
+            }
         }
     }
 }
@@ -40,12 +54,11 @@ uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, s
     return postingsCount;
 }
 
-void ClassifierEngine::generateFeatureProbability(uint32_t numFeatures) {
+void ClassifierEngine::generateFeatureProbability() {
     featureData = std::vector<ClassifierClass>();
-    auto featureList = getNumTopFeatures(numFeatures);
     for(auto className : getClassNames()) {
         ClassifierClass classClass(className);
-        for(auto term : featureList) {
+        for(auto term : topFeatures) {
             double classTermCount = countClassTermPostings(_idx.getPostings(term), getClassDocInfos(className));
             classClass.addTerm(term, classTermCount);
         }
@@ -78,11 +91,13 @@ std::string ClassifierEngine::classifyDoc(const uint32_t numFeatures, const uint
     std::string maxClass;
     double maxWeight = -INFINITY;
     for(auto classClass : featureData) {
-        double totalWeight = log((double) classDocs.at(classClass.getClassName()).size() / countTotalTrainingDocs());
+        double totalWeight = log((double) classDocs.at(classClass.getClassName()).size() / totalTrainingDocs);
         for(auto term : featureList) {
             for (auto posting : _idx.getPostings(term)) {
-                if (posting.getDocId() == docId) {
-                    totalWeight += log(classClass.getTermProbability(term)) * posting.getPositions().size();
+                if (posting.getDocId() >= docId) {
+                    if (posting.getDocId() == docId) {
+                        totalWeight += log(classClass.getTermProbability(term)) * posting.getPositions().size();
+                    }
                     break;
                 }
             }
@@ -125,14 +140,14 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return totalSum;
 }
 
-std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t numFeatures) {
+std::unordered_set<std::string> ClassifierEngine::getNumTopFeatures(uint32_t numFeatures) {
     //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
-    std::vector<std::string> featureTerms;
+    std::unordered_set<std::string> featureTerms;
     featureTerms.reserve(numFeatures);
-    while(!tempQueue.empty() || featureTerms.size() < numFeatures) {
+    while(!tempQueue.empty() && featureTerms.size() < numFeatures) {
     //for (uint32_t i = 0; i < numFeatures; i++) {
-        featureTerms.push_back(tempQueue.top().second);
+        featureTerms.insert(tempQueue.top().second);
         tempQueue.pop();
     }
     return featureTerms;

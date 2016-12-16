@@ -77,163 +77,163 @@ double_t Engine::calcEucDist(std::unordered_map<std::string, uint32_t> &wdt) { /
     return sqrt(Ld);
 }
 
+//FXIME Needs to be refactored into class
+//void Engine::rocchio() {
+//	std::unordered_map<std::string, std::list<DocInfo>> classes;
+//	std::unordered_map<std::string, std::vector<double_t>> centroid;
 
-void Engine::rocchio() {
-	std::unordered_map<std::string, std::list<DocInfo>> classes;
-	std::unordered_map<std::string, std::vector<double_t>> centroid;
-
-	std::list<DocInfo> hamAndMad;
-	std::list<DocInfo> input;
+//	std::list<DocInfo> hamAndMad;
+//	std::list<DocInfo> input;
 	
-	auto temp = dIdx.getAuthorList();
-	for (std::string s : temp) {
-		//std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-		std::cout << "String value = " << s << std::endl;
-		if (s == "HAMILTON" || s == "MADISON") {
-			std::cout << "Size = " << dIdx.getAuthorDocs(s).size() << std::endl;
-			classes.insert(std::pair<std::string, std::list<DocInfo>>(s, dIdx.getAuthorDocs(s)));
-			centroid.insert(std::pair<std::string, std::vector<double_t>>(s, std::vector<double_t>()));
-		}
-		else if (s == "HAMILTON OR MADISON") 
-			input = dIdx.getAuthorDocs(s);
-		else if (s == "HAMILTON AND MADISON") 
-			hamAndMad = dIdx.getAuthorDocs(s);
-	}
+//	auto temp = dIdx.getAuthorList();
+//	for (std::string s : temp) {
+//		//std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+//		std::cout << "String value = " << s << std::endl;
+//		if (s == "HAMILTON" || s == "MADISON") {
+//			std::cout << "Size = " << dIdx.getAuthorDocs(s).size() << std::endl;
+//			classes.insert(std::pair<std::string, std::list<DocInfo>>(s, dIdx.getAuthorDocs(s)));
+//			centroid.insert(std::pair<std::string, std::vector<double_t>>(s, std::vector<double_t>()));
+//		}
+//		else if (s == "HAMILTON OR MADISON")
+//			input = dIdx.getAuthorDocs(s);
+//		else if (s == "HAMILTON AND MADISON")
+//			hamAndMad = dIdx.getAuthorDocs(s);
+//	}
 
-    const std::list<std::string> &vocab = dIdx.getVocabList();
-	std::vector<double_t> idf;
-	idf.reserve(vocab.size());
+//    const std::list<std::string> &vocab = dIdx.getVocabList();
+//	std::vector<double_t> idf;
+//	idf.reserve(vocab.size());
 
-	//  FOREVERY VECTOR I NEED T COMPONENTS (where t denotes the total # terms)
-	std::vector<std::vector<double_t>> vSpace;
-	vSpace.reserve(dIdx.getN()); // need 85 vectors	   
-	uint32_t i = 0, j = 0;
-	for (i = 0; i < dIdx.getN(); ++i) {
-		vSpace.push_back(std::vector<double_t>());
-		vSpace.at(i).reserve(vocab.size());
-		for (j = 0; j < vocab.size(); ++j)
-			vSpace.at(i).push_back(0.0);
-	}
+//	//  FOREVERY VECTOR I NEED T COMPONENTS (where t denotes the total # terms)
+//	std::vector<std::vector<double_t>> vSpace;
+//	vSpace.reserve(dIdx.getN()); // need 85 vectors
+//	uint32_t i = 0, j = 0;
+//	for (i = 0; i < dIdx.getN(); ++i) {
+//		vSpace.push_back(std::vector<double_t>());
+//		vSpace.at(i).reserve(vocab.size());
+//		for (j = 0; j < vocab.size(); ++j)
+//			vSpace.at(i).push_back(0.0);
+//	}
 
-	std::vector<double_t> ld;
-	ld.reserve(dIdx.getN());
-	for (i = 0; i < dIdx.getN(); ++i)
-		ld.push_back(0.0);
-
-
-	
-	//IDF-t
-	double_t N = (double_t)dIdx.getN(); // THIS METHOD IS FINE
-    for (const std::string &term : vocab) {
-		uint32_t dft = dIdx.getPostings(term).size();
-		double_t idft = (dft == 0) ? 0.0 : 1.0 + log10(N / (double_t)dft); // 0.0
-		//printf("N = %.1f, dft = %d, idft = %.3f\n", N, dft, idft);
-		idf.push_back(idft);
-	}
+//	std::vector<double_t> ld;
+//	ld.reserve(dIdx.getN());
+//	for (i = 0; i < dIdx.getN(); ++i)
+//		ld.push_back(0.0);
 
 
 	
-	//TF-td
-	uint32_t col = 0;
-    for (const std::string &term : vocab) { // READING LEFT TO RIGHT
-        const std::list<DocInfo> &postings = dIdx.getPostings(term);
+//	//IDF-t
+//	double_t N = (double_t)dIdx.getN(); // THIS METHOD IS FINE
+//    for (const std::string &term : vocab) {
+//		uint32_t dft = dIdx.getPostings(term).size();
+//		double_t idft = (dft == 0) ? 0.0 : 1.0 + log10(N / (double_t)dft); // 0.0
+//		//printf("N = %.1f, dft = %d, idft = %.3f\n", N, dft, idft);
+//		idf.push_back(idft);
+//	}
+
+
+	
+//	//TF-td
+//	uint32_t col = 0;
+//    for (const std::string &term : vocab) { // READING LEFT TO RIGHT
+//        const std::list<DocInfo> &postings = dIdx.getPostings(term);
 		
-        for (const DocInfo &doc : postings) {
-			const double_t &tftd = (double_t)doc.getPositions().size();
-			double_t wdt = 1.0 + log(tftd);
+//        for (const DocInfo &doc : postings) {
+//			const double_t &tftd = (double_t)doc.getPositions().size();
+//			double_t wdt = 1.0 + log(tftd);
 
-			ld[doc.getDocId()] = ld.at(doc.getDocId()) + (wdt * wdt); // (tftd * tftd)
-			vSpace.at(doc.getDocId()).at(col) = idf.at(col) * tftd; // tf-t,d
-		}
-		++col;
-	}
+//			ld[doc.getDocId()] = ld.at(doc.getDocId()) + (wdt * wdt); // (tftd * tftd)
+//			vSpace.at(doc.getDocId()).at(col) = idf.at(col) * tftd; // tf-t,d
+//		}
+//		++col;
+//	}
 
-	for (i = 0; i < ld.size(); ++i) 
-		ld[i] = sqrt(ld.at(i));
+//	for (i = 0; i < ld.size(); ++i)
+//		ld[i] = sqrt(ld.at(i));
 
-	for (i = 0; i < vSpace.size(); ++i) {
-		for (j = 0; j < vSpace.at(i).size(); ++j) 
-			vSpace.at(i).at(j) = vSpace.at(i).at(j) / ld.at(i);
-	}
+//	for (i = 0; i < vSpace.size(); ++i) {
+//		for (j = 0; j < vSpace.at(i).size(); ++j)
+//			vSpace.at(i).at(j) = vSpace.at(i).at(j) / ld.at(i);
+//	}
 
-	// initialize centroid vectors
-	for (std::pair<const std::string, std::vector<double_t>> &pr : centroid) {
-		for (i = 0; i < vocab.size(); ++i) 
-			pr.second.push_back(0.0);
-	}
+//	// initialize centroid vectors
+//	for (std::pair<const std::string, std::vector<double_t>> &pr : centroid) {
+//		for (i = 0; i < vocab.size(); ++i)
+//			pr.second.push_back(0.0);
+//	}
 
-	for (auto pr : classes) {
-		std::vector<double_t> &C = centroid.at(pr.first);
+//	for (auto pr : classes) {
+//		std::vector<double_t> &C = centroid.at(pr.first);
 
-		// for every document in the class
-		for (DocInfo doc : pr.second) {
+//		// for every document in the class
+//		for (DocInfo doc : pr.second) {
 
-			for (j = 0; j < vocab.size(); ++j) {
-				// NORMALIZE THE VECTOR COMPONENT
-				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
-				// UPDATE CENTROID VECTOR COMPONENT
-				C[j] = C.at(j) + tfidf;
-			}
-		}
+//			for (j = 0; j < vocab.size(); ++j) {
+//				// NORMALIZE THE VECTOR COMPONENT
+//				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
+//				// UPDATE CENTROID VECTOR COMPONENT
+//				C[j] = C.at(j) + tfidf;
+//			}
+//		}
 
 		
-		// for every document in the class
-		for (DocInfo &doc : hamAndMad) { // HAMILTON AND MADISON
+//		// for every document in the class
+//		for (DocInfo &doc : hamAndMad) { // HAMILTON AND MADISON
 
-			for (j = 0; j < vocab.size(); ++j) {
-				// NORMALIZE THE VECTOR COMPONENT
-				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
-				// UPDATE CENTROID VECTOR COMPONENT
-				C[j] = C.at(j) + tfidf;
-			}
-		}
+//			for (j = 0; j < vocab.size(); ++j) {
+//				// NORMALIZE THE VECTOR COMPONENT
+//				double_t tfidf = vSpace.at(doc.getDocId()).at(j);
+//				// UPDATE CENTROID VECTOR COMPONENT
+//				C[j] = C.at(j) + tfidf;
+//			}
+//		}
 
-		std::cout << "pr.second (CLASSES) = " << pr.second.size() << std::endl;
-		std::cout << "C.SIZE() = " << C.size() << std::endl;
-		for (j = 0; j < vocab.size(); ++j) 
-			C[j] = C.at(j) / (pr.second.size() + hamAndMad.size()); // C[j] = C.at(j) / C.size(); // not this one... (pr.second.size() + hamAndMad.size()) pr.second.size()
-	}
+//		std::cout << "pr.second (CLASSES) = " << pr.second.size() << std::endl;
+//		std::cout << "C.SIZE() = " << C.size() << std::endl;
+//		for (j = 0; j < vocab.size(); ++j)
+//			C[j] = C.at(j) / (pr.second.size() + hamAndMad.size()); // C[j] = C.at(j) / C.size(); // not this one... (pr.second.size() + hamAndMad.size()) pr.second.size()
+//	}
 
-	std::unordered_map<uint32_t, std::string> output;
-	for (DocInfo &in : input) {
-		std::string ans = "";
-		double_t min = 0.0; // change later.
+//	std::unordered_map<uint32_t, std::string> output;
+//	for (DocInfo &in : input) {
+//		std::string ans = "";
+//		double_t min = 0.0; // change later.
 
-		for (auto pr : centroid) {
-			double_t curr;
+//		for (auto pr : centroid) {
+//			double_t curr;
 
-			for (j = 0; j < pr.second.size(); ++j) {
-				double_t diff = pr.second.at(j) - (vSpace.at(in.getDocId()).at(j));
+//			for (j = 0; j < pr.second.size(); ++j) {
+//				double_t diff = pr.second.at(j) - (vSpace.at(in.getDocId()).at(j));
 
-				curr += (diff * diff); // square the components aka square the differences
-			}
-			curr = sqrt(curr);
+//				curr += (diff * diff); // square the components aka square the differences
+//			}
+//			curr = sqrt(curr);
 
-			pr.second;
-
-
-			if (ans == "") {
-				ans = pr.first;
-				min = curr;
-			}
-			else if (min > curr) {
-				ans = pr.first;
-				min = curr;
-			}
-		}
+//			pr.second;
 
 
-		printf("in = %d, min = %.3f\n", in.getDocId(), min);
-		output.insert(std::pair<uint32_t, std::string>(in.getDocId(), ans));
-	}
+//			if (ans == "") {
+//				ans = pr.first;
+//				min = curr;
+//			}
+//			else if (min > curr) {
+//				ans = pr.first;
+//				min = curr;
+//			}
+//		}
 
 
-	for (auto pr : output) {
-		std::cout << "Document id = " << pr.first << " ";
-		std::cout << "(" << idTable.at(pr.first) << ")" << std::endl;
-		std::cout << "is MOST RELEVANT to author: " << pr.second << std::endl << std::endl;
-	}
-}
+//		printf("in = %d, min = %.3f\n", in.getDocId(), min);
+//		output.insert(std::pair<uint32_t, std::string>(in.getDocId(), ans));
+//	}
+
+
+//	for (auto pr : output) {
+//		std::cout << "Document id = " << pr.first << " ";
+//		std::cout << "(" << idTable.at(pr.first) << ")" << std::endl;
+//		std::cout << "is MOST RELEVANT to author: " << pr.second << std::endl << std::endl;
+//	}
+//}
 
 
 void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::filesystem::path &outDir) {
@@ -320,29 +320,29 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                 }
             } else if (pair.first == "title") { // we don't care about this...
 
-            } else if(pair.first == "author") {
-                /*
-                std::string author = pair.second.get_value<std::string>();
-                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
-                idx.addAuthorDoc(author, i);
+//            } else if(pair.first == "author") {
+//                /*
+//                std::string author = pair.second.get_value<std::string>();
+//                std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+//                idx.addAuthorDoc(author, i);
 
-                std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
-                */
-                std::string authorStr = pair.second.get_value<std::string>();
-                //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
+//                std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
+//                */
+//                std::string authorStr = pair.second.get_value<std::string>();
+//                //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
 
-                std::string delimiter = " AND ";
-                size_t pos = 0;
-                std::string token;
-                while ((pos = authorStr.find(delimiter)) != std::string::npos) {
-                    token = authorStr.substr(0, pos);
-                    idx.addAuthorDoc(token, i);
-                    authorStr.erase(0, pos + delimiter.length());
-                }
-                idx.addAuthorDoc(authorStr, i);
-//            } else if(pair.first == "identifier") { //FIXME Use own class, currently author overwrite
-//                std::string identifier = pair.second.get_value<std::string>();
-//                idx.addAuthorDoc(identifier.substr(0, identifier.find("/")), i);
+//                std::string delimiter = " AND ";
+//                size_t pos = 0;
+//                std::string token;
+//                while ((pos = authorStr.find(delimiter)) != std::string::npos) {
+//                    token = authorStr.substr(0, pos);
+//                    idx.addAuthorDoc(token, i);
+//                    authorStr.erase(0, pos + delimiter.length());
+//                }
+//                idx.addAuthorDoc(authorStr, i);
+            } else if(pair.first == "identifier") { //FIXME Use own class, currently author overwrite
+                std::string identifier = pair.second.get_value<std::string>();
+                idx.addAuthorDoc(identifier.substr(0, identifier.find("/")), i);
             }
         }
 
@@ -458,7 +458,7 @@ void Engine::printAuthors() {
     std::cout << authors.size() << std::endl;
 }
 
-std::list<DocInfo> Engine::getAuthorDocs(const std::string &author) {
+std::vector<DocInfo> Engine::getAuthorDocs(const std::string &author) {
     return dIdx.getAuthorDocs(author);
 }
 
@@ -470,39 +470,46 @@ void Engine::printAuthorDocs(const std::string &author) {
     std::cout << authorDocs.size() << std::endl;
 }
 
-void Engine::classifyDocuments(const uint32_t numFeatures) {
-//    ClassifierEngine cEngine(dIdx);
-//    for(auto author : dIdx.getAuthorList()) {
-//        auto authorDocs = dIdx.getAuthorDocs(author);
-//        std::random_shuffle(authorDocs.begin(), authorDocs.end());
-//        auto currDoc = authorDocs.begin();
-//        for(int i = 0; i < authorDocs.size()*0.8; i++) {
-//            cEngine.addTrainingDoc(author, currDoc->getDocId());
-//            currDoc++;
-//        }
-//    }
-//    cEngine.generateFeaturesList();
-//    cEngine.generateFeatureProbability(numFeatures);
-    //for(int i = authorDocs.size()*0.8; i < authorDocs.size(); i++) {
-    //    std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(numFeatures, docId.getDocId()) << std::endl;
-    //}
-}
-
-void Engine::classifyFederalistDocuments(const uint32_t numFeatures) {
-    std::string classifyClassName = "HAMILTON OR MADISON";
-
+void Engine::classifyDocuments(uint32_t numFeatures) {
+    while(numFeatures > 0) {
     ClassifierEngine cEngine(dIdx);
+    std::vector<uint32_t> testingDocs;
     for(auto author : dIdx.getAuthorList()) {
-        if(author != classifyClassName) {
-            for(auto doc : dIdx.getAuthorDocs(author)) {
-                cEngine.addTrainingDoc(author, doc.getDocId());
-            }
+        auto authorDocs = dIdx.getAuthorDocs(author);
+        //std::random_shuffle(authorDocs.begin(), authorDocs.end());
+        for(int i = 0; i < authorDocs.size()*0.8; i++) {
+            cEngine.addTrainingDoc(author, authorDocs.at(i).getDocId());
+        }
+        for(int i = authorDocs.size()*0.8; i < authorDocs.size(); i++) {
+            testingDocs.push_back(authorDocs.at(i).getDocId());
         }
     }
-    cEngine.generateFeaturesList();
-    cEngine.generateFeatureProbability(numFeatures);
 
-    for(auto docId : dIdx.getAuthorDocs(classifyClassName)) {
-        std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(numFeatures, docId.getDocId()) << std::endl;
+        cEngine.calculateVariables(numFeatures);
+
+        int correctPhys = 0;
+        int correctMat = 0;
+
+        for(auto docId : testingDocs) {
+            auto classClass = cEngine.classifyDoc(numFeatures, docId);
+            auto articleName = getArticleName(docId);
+            //std::cout << articleName << ": " << classClass << std::endl;
+
+            if(articleName.substr(0, 8) == "astro-ph") {
+                if(classClass == "oai:arXiv.org:astro-ph") {
+                    correctPhys++;
+                }
+            } else  {
+                if(classClass == "oai:arXiv.org:cond-mat") {
+                    correctMat++;
+                }
+            }
+        }
+
+        std::cout << numFeatures << " ph: " << correctPhys << " mat: " << correctMat << std::endl;
+        if(numFeatures > 10)
+            numFeatures -= 5;
+        else
+            numFeatures--;
     }
 }

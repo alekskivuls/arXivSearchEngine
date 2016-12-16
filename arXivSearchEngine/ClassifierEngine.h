@@ -37,6 +37,10 @@ class ClassifierEngine {
      */
     std::priority_queue<std::pair<double, std::string>> globalClass;
 
+    uint32_t totalTrainingDocs;
+
+    std::unordered_set<std::string> topFeatures;
+
 public:
 
     //Constructors
@@ -88,13 +92,14 @@ public:
      * naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop().
      */
     void generateFeaturesList();
-    void generateFeatureProbability(uint32_t numFeatures);
+    void generateFeatureProbability();
     void addTrainingDoc(const std::string &className, const uint32_t docId);
     void addTrainingDocList(const std::string &className, const std::vector<uint32_t> &docIds);
     std::vector<std::string> getClassNames() const;
     std::vector<uint32_t> getClassDocs(std::string &className) const;
     std::list<DocInfo> getClassDocInfos(std::string &className) const;
     uint32_t countTotalTrainingDocs() const;
+    void calculateVariables(uint32_t numFeatures);
     std::string classifyDoc(const uint32_t numFeatures, const uint32_t docId);
 
     /**
@@ -104,7 +109,7 @@ public:
      * @param n The number of top term you want to get.
      * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
      */
-    std::vector<std::string> getNumTopFeatures(uint32_t numFeatures);
+    std::unordered_set<std::__cxx11::string> getNumTopFeatures(uint32_t numFeatures);
 
 };
 

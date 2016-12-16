@@ -53,7 +53,7 @@ public:
 
     std::string readStringAtPosition(uint32_t i, std::vector<ListEntry> &table, std::ifstream &list) const;
 
-    std::list<DocInfo> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
+    std::vector<DocInfo> readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition);
 
     DiskInvertedIndex();
 
@@ -67,7 +67,9 @@ public:
 
     std::list<std::string> getAuthorList();
 
-    std::list<DocInfo> getAuthorDocs(const std::string &author);
+    std::vector<DocInfo> getAuthorDocs(const std::string &author);
+
+    std::string getAuthor(DocInfo &doc);
 };
 
 #endif

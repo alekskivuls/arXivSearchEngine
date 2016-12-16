@@ -94,11 +94,11 @@ public:
 
     void printAuthors();
 
-    std::list<DocInfo> getAuthorDocs(const std::string &author);
+    std::vector<DocInfo> getAuthorDocs(const std::string &author);
 
     void printAuthorDocs(const std::string &author);
 
-    void classifyDocuments(const uint32_t numFeatures);
+    void classifyDocuments(uint32_t numFeatures);
 
     void classifyFederalistDocuments(const uint32_t numFeatures);
 };

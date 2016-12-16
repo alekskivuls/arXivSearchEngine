@@ -190,7 +190,7 @@ std::list<DocInfo> DiskInvertedIndex::ReadPostingsFromFile(std::ifstream &postin
     return posts;
 }
 
-std::list<DocInfo> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
+std::vector<DocInfo> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &postings, uint32_t postingsPosition) {
     // seek the specified position in the file
     postings.clear(); // Trust me on this. fstream will fail all subsequent read calls if you ever read to the end of the file,
     // say, if the term you are reading is last alphabetically. This was a nightmare to debug.
@@ -201,7 +201,7 @@ std::list<DocInfo> DiskInvertedIndex::readAuthorDocsFromFile(std::ifstream &post
     //std::cout << "docFreq(" << docFreq << ") ";
 
     // initialize the vector of document IDs to return.
-    std::list<DocInfo> docs;
+    std::vector<DocInfo> docs;
 
     // read 4 bytes at a time from the file, until you have read as many
     //    postings as the document frequency promised.
@@ -305,10 +305,20 @@ std::list<std::string> DiskInvertedIndex::getAuthorList() {
     return vec;
 }
 
-std::list<DocInfo> DiskInvertedIndex::getAuthorDocs(const std::string &author)  {
+std::vector<DocInfo> DiskInvertedIndex::getAuthorDocs(const std::string &author)  {
     ListEntry entry = binarySearchList(author, mAuthorTable, mAuthorList);
     if (entry.PostingPosition != -1 && entry.StringPosition != -1)
         return readAuthorDocsFromFile(mAuthorPostings, entry.PostingPosition);
-    return std::list<DocInfo>();
+    return std::vector<DocInfo>();
 }
 
+std::string DiskInvertedIndex::getAuthor(DocInfo &doc) {
+    for(auto authorName : getAuthorList()) {
+        for(auto authorDoc : getAuthorDocs(authorName)) {
+            if(authorDoc.getDocId() == doc.getDocId())
+                return authorName;
+        }
+    }
+    std::string author;
+    return author;
+}
