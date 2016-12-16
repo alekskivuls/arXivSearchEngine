@@ -15,9 +15,11 @@ make
 ```
 Executables are generated in build directory.
 
-Console Engine: `arXivSearchEngine`
-Web Engine: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `arXivSearchEngineWeb`
-Unit tests: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arXivSearchEngine_test`
+| Program 	 | Executable Name    	    |
+| -------------- | ------------------------ |
+| Console Engine | `arXivSearchEngine`	    |
+| Web Engine	 | `arXivSearchEngineWeb`   |
+| Unit tests     | `arXivSearchEngine_test` |
 
 When making changes to source only need to run `make` again to regenerate executables.
 
@@ -32,7 +34,7 @@ Can build and run project from a Vagrant box.
 Install [Vagrant](https://www.vagrantup.com/) with [Virtual Box](https://www.virtualbox.org/) as your provider.
 ####Command List:
 ```
-vagrant up 			# Run to turn on VM
+vagrant up  		# Run to turn on VM
 vagrant ssh 		# Connect to VM, password is vagrant if prompted
 vagrant halt 		# Stop VM
 vagrant destroy 	# Delete VM from disk
