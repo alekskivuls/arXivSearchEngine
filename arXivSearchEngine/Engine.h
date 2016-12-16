@@ -99,6 +99,8 @@ public:
     void printAuthorDocs(const std::string &author);
 
     void classifyDocuments(const uint32_t numFeatures);
+
+    void classifyFederalistDocuments(const uint32_t numFeatures);
 };
 
 #endif

@@ -16,9 +16,7 @@ void ClassifierEngine::generateFeaturesList() {
             double neither = countTotalTrainingDocs() - (classTerm + justTerm + justClass);
 
             //Calling the calculator.
-            //if(classTerm * justClass * justTerm * neither > 0){
-                weight = featureSelect(classTerm, justTerm, justClass, neither);
-            //}
+            weight = featureSelect(classTerm, justTerm, justClass, neither);
 
             //Pushing it into priority queues.
             globalClass.push(std::pair<double, std::string>(weight, term));
@@ -42,7 +40,7 @@ uint32_t ClassifierEngine::countClassTermPostings(std::list<DocInfo> postings, s
     return postingsCount;
 }
 
-void ClassifierEngine::generateFeatureProbability(int numFeatures) {
+void ClassifierEngine::generateFeatureProbability(uint32_t numFeatures) {
     featureData = std::vector<ClassifierClass>();
     auto featureList = getNumTopFeatures(numFeatures);
     for(auto className : getClassNames()) {
@@ -127,11 +125,13 @@ double ClassifierEngine::featureSelect(double classTerm, double noClassTerm, dou
     return totalSum;
 }
 
-std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t n) {
+std::vector<std::string> ClassifierEngine::getNumTopFeatures(uint32_t numFeatures) {
     //Copy of priority queue is made so that origional content is not popped off.
     std::priority_queue<std::pair<double, std::string>> tempQueue(globalClass);
     std::vector<std::string> featureTerms;
-    for (uint32_t i = 0; i < n; i++) {
+    featureTerms.reserve(numFeatures);
+    while(!tempQueue.empty() || featureTerms.size() < numFeatures) {
+    //for (uint32_t i = 0; i < numFeatures; i++) {
         featureTerms.push_back(tempQueue.top().second);
         tempQueue.pop();
     }

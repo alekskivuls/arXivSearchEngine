@@ -2,10 +2,10 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/filesystem.hpp>
+#include <unordered_set>
 #include "DiskInvertedIndex.h"
 #include "PorterStemmer.h"
 #include "InvertedIndex.h"
-#include <unordered_set>
 #include "Serializer.h"
 #include "Tokenizer.h"
 #include "DocInfo.h"
@@ -284,9 +284,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                     // while not end of file.
                     // Get stem the token or retrieve the value from a cache
                     if (!hyphen) {
-						kIdx1.addTerm(token);
-						kIdx2.addTerm(token);
-						kIdx3.addTerm(token);
+                        kIdx1.addTerm(token);
+                        kIdx2.addTerm(token);
+                        kIdx3.addTerm(token);
 
                         std::string stemmedToken = (cache.find(token) != cache.end())
                                 ? cache[token] : PorterStemmer::stem(token);
@@ -296,9 +296,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                     else {
                         std::string total = "";
                         for (auto s : split(token)) {
-							kIdx1.addTerm(s);
-							kIdx2.addTerm(s);
-							kIdx3.addTerm(s);
+                            kIdx1.addTerm(s);
+                            kIdx2.addTerm(s);
+                            kIdx3.addTerm(s);
 							total += s;
 
                             std::string str = std::string(s);
@@ -321,13 +321,13 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
             } else if (pair.first == "title") { // we don't care about this...
 
             } else if(pair.first == "author") {
-				/*
-				std::string author = pair.second.get_value<std::string>();
+                /*
+                std::string author = pair.second.get_value<std::string>();
                 std::transform(author.begin(), author.end(), author.begin(), ::tolower);
                 idx.addAuthorDoc(author, i);
 
-				std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
-				*/
+                std::cout << "fed paper: " << idTable.at(i) << "; class: " << author << std::endl;
+                */
                 std::string authorStr = pair.second.get_value<std::string>();
                 //std::transform(author.begin(), author.end(), author.begin(), ::tolower);
 
@@ -340,6 +340,9 @@ void Engine::populateIndex(const boost::filesystem::path &inDir, const boost::fi
                     authorStr.erase(0, pos + delimiter.length());
                 }
                 idx.addAuthorDoc(authorStr, i);
+//            } else if(pair.first == "identifier") { //FIXME Use own class, currently author overwrite
+//                std::string identifier = pair.second.get_value<std::string>();
+//                idx.addAuthorDoc(identifier.substr(0, identifier.find("/")), i);
             }
         }
 
@@ -468,6 +471,24 @@ void Engine::printAuthorDocs(const std::string &author) {
 }
 
 void Engine::classifyDocuments(const uint32_t numFeatures) {
+//    ClassifierEngine cEngine(dIdx);
+//    for(auto author : dIdx.getAuthorList()) {
+//        auto authorDocs = dIdx.getAuthorDocs(author);
+//        std::random_shuffle(authorDocs.begin(), authorDocs.end());
+//        auto currDoc = authorDocs.begin();
+//        for(int i = 0; i < authorDocs.size()*0.8; i++) {
+//            cEngine.addTrainingDoc(author, currDoc->getDocId());
+//            currDoc++;
+//        }
+//    }
+//    cEngine.generateFeaturesList();
+//    cEngine.generateFeatureProbability(numFeatures);
+    //for(int i = authorDocs.size()*0.8; i < authorDocs.size(); i++) {
+    //    std::cout << getArticleName(docId.getDocId()) << ": " << cEngine.classifyDoc(numFeatures, docId.getDocId()) << std::endl;
+    //}
+}
+
+void Engine::classifyFederalistDocuments(const uint32_t numFeatures) {
     std::string classifyClassName = "HAMILTON OR MADISON";
 
     ClassifierEngine cEngine(dIdx);

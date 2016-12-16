@@ -32,24 +32,24 @@ class ClassifierEngine {
 
     std::vector<ClassifierClass> featureData;
 
-public:
-
     /**
      * @brief Priority queues representing different classes that put the highest ranking terms first.
      */
     std::priority_queue<std::pair<double, std::string>> globalClass;
+
+public:
 
     //Constructors
     //ClassifierEngine();
     ClassifierEngine(DiskInvertedIndex &idx);
 
     /**
-     * @brief ClassifierEngine::featureSelect Calculates the result using naieve bayes function.
+     * @brief ClassifierEngine::featureSelect Calculates the result using naive bayes function.
      * @param classTerm The top left quadrant of (1,1)<term, class>.
      * @param noClassTerm The top right quadrant of (1,0)<term, class>.
      * @param noTermClass The bottom left quadrant of (0,1)<term, class>.
      * @param noTermNoClass The bottom right quadrant of (0,0)<term, class>.
-     * @return A double value that is the result of naieve bayes function calculation.
+     * @return A double value that is the result of naive bayes function calculation.
      */
     double featureSelect(double classTerm, double noClassTerm, double noTermClass, double noTermNoClass);
 
@@ -88,7 +88,7 @@ public:
      * naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop().
      */
     void generateFeaturesList();
-    void generateFeatureProbability(int numFeatures);
+    void generateFeatureProbability(uint32_t numFeatures);
     void addTrainingDoc(const std::string &className, const uint32_t docId);
     void addTrainingDocList(const std::string &className, const std::vector<uint32_t> &docIds);
     std::vector<std::string> getClassNames() const;
@@ -104,7 +104,7 @@ public:
      * @param n The number of top term you want to get.
      * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
      */
-    std::vector<std::string> getNumTopFeatures(uint32_t n);
+    std::vector<std::string> getNumTopFeatures(uint32_t numFeatures);
 
 };
 
