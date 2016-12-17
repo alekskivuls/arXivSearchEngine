@@ -109,7 +109,7 @@ public:
      * @param n The number of top term you want to get.
      * @return A std::list<std::string> of the top n terms with the highest in the front of the list.
      */
-    std::unordered_set<std::__cxx11::string> getNumTopFeatures(uint32_t numFeatures);
+    std::unordered_set<std::string> getNumTopFeatures(uint32_t numFeatures);
 
 };
 

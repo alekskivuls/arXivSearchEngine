@@ -1,6 +1,6 @@
 #include "ClassifierEngine.h"
 
-//#include <iostream>
+#include <iostream>
 
 ClassifierEngine::ClassifierEngine(DiskInvertedIndex &idx) : _idx(idx) {}
 
@@ -9,6 +9,8 @@ void ClassifierEngine::calculateVariables(uint32_t numFeatures) {
     //std::cout << "Generating feature list" << std::endl;
     generateFeaturesList();
     topFeatures = getNumTopFeatures(numFeatures);
+    //    for (auto term : topFeatures)
+    //        std::cout << term << std::endl;
     //std::cout << "Top feature size: " << topFeatures.size() << std::endl;
     //std::cout << "Generating feature probability" << std::endl;
     generateFeatureProbability();
