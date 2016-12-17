@@ -60,7 +60,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classClassifierEngine-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ClassifierEngine Class Reference</div>  </div>
@@ -78,7 +77,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ClassifierEngine</b> (<a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> &amp;idx)</td></tr>
 <tr class="separator:a10127c298487ff7d32bf61c41de2fc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e">featureSelect</a> (double classTerm, double noClassTerm, double noTermClass, double noTermNoClass)</td></tr>
-<tr class="memdesc:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function.  <a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">More...</a><br /></td></tr>
+<tr class="memdesc:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naive bayes function. ...">ClassifierEngine::featureSelect</a> Calculates the result using naive bayes function.  <a href="#a3b2ed54b7a31250bb8bf9d901b1d5a5e">More...</a><br /></td></tr>
 <tr class="separator:a3b2ed54b7a31250bb8bf9d901b1d5a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2658afbb1271d6cdcdc4bd1643308cf4"><td class="memItemLeft" align="right" valign="top"><a id="a2658afbb1271d6cdcdc4bd1643308cf4"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPostings</b> (std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; postings, std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt; classDocs)</td></tr>
@@ -96,9 +95,9 @@ uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countClassTermPos
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15">generateFeaturesList</a> ()</td></tr>
 <tr class="memdesc:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classClassifierEngine.html#a07e924cd66b6c9dff6f9b65dc4754a15" title="ClassifierEngine::generateFeaturesList Populates the priority queues with calculated naive bayes func...">ClassifierEngine::generateFeaturesList</a> Populates the priority queues with calculated naive bayes function. Which may be retrieved with getTopClass() or getGlobalTop(). <br /></td></tr>
 <tr class="separator:a07e924cd66b6c9dff6f9b65dc4754a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd0086e8c7a83c4ac985f9b8ada3c62a"><td class="memItemLeft" align="right" valign="top"><a id="acd0086e8c7a83c4ac985f9b8ada3c62a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> (int numFeatures)</td></tr>
-<tr class="separator:acd0086e8c7a83c4ac985f9b8ada3c62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaa67ca1359d22e7679c873930970b33"><td class="memItemLeft" align="right" valign="top"><a id="adaa67ca1359d22e7679c873930970b33"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>generateFeatureProbability</b> ()</td></tr>
+<tr class="separator:adaa67ca1359d22e7679c873930970b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab43465f7ed11004f5cdb39b96a1e4d5"><td class="memItemLeft" align="right" valign="top"><a id="aab43465f7ed11004f5cdb39b96a1e4d5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addTrainingDoc</b> (const std::string &amp;className, const uint32_t docId)</td></tr>
 <tr class="separator:aab43465f7ed11004f5cdb39b96a1e4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,19 +116,15 @@ std::list&lt; <a class="el" href="classDocInfo.html">DocInfo</a> &gt;&#160;</td>
 <tr class="memitem:ac5b864b1e013b04f6493d678998e7183"><td class="memItemLeft" align="right" valign="top"><a id="ac5b864b1e013b04f6493d678998e7183"></a>
 uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>countTotalTrainingDocs</b> () const</td></tr>
 <tr class="separator:ac5b864b1e013b04f6493d678998e7183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1d878a8b73ff5bccbab3f5df5f61816"><td class="memItemLeft" align="right" valign="top"><a id="ac1d878a8b73ff5bccbab3f5df5f61816"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>calculateVariables</b> (uint32_t numFeatures)</td></tr>
+<tr class="separator:ac1d878a8b73ff5bccbab3f5df5f61816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb52f74f491153c2353213496a1e040e"><td class="memItemLeft" align="right" valign="top"><a id="abb52f74f491153c2353213496a1e040e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>classifyDoc</b> (const uint32_t numFeatures, const uint32_t docId)</td></tr>
 <tr class="separator:abb52f74f491153c2353213496a1e040e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac810e5d21c2399e9f1f70be23314be7b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#ac810e5d21c2399e9f1f70be23314be7b">getNumTopFeatures</a> (uint32_t n)</td></tr>
-<tr class="memdesc:ac810e5d21c2399e9f1f70be23314be7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#ac810e5d21c2399e9f1f70be23314be7b">More...</a><br /></td></tr>
-<tr class="separator:ac810e5d21c2399e9f1f70be23314be7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memItemLeft" align="right" valign="top"><a id="a0b4e2d8145dccf7bf4e1f349477aea02"></a>
-std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#a0b4e2d8145dccf7bf4e1f349477aea02">globalClass</a></td></tr>
-<tr class="memdesc:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Priority queues representing different classes that put the highest ranking terms first. <br /></td></tr>
-<tr class="separator:a0b4e2d8145dccf7bf4e1f349477aea02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5712bbf2306f843f6252d2f43b218ec"><td class="memItemLeft" align="right" valign="top">std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classClassifierEngine.html#aa5712bbf2306f843f6252d2f43b218ec">getNumTopFeatures</a> (uint32_t numFeatures)</td></tr>
+<tr class="memdesc:aa5712bbf2306f843f6252d2f43b218ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGlobalList After driver() is called you can use this method to get the top n scored terms. It returns a std::list&lt;std::string&gt; of terms where you can use the front() method from the list to get a reference and navigate from there.  <a href="#aa5712bbf2306f843f6252d2f43b218ec">More...</a><br /></td></tr>
+<tr class="separator:aa5712bbf2306f843f6252d2f43b218ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Generating priority queue of top n terms in classes using naive bayes equation for feature selection. Insert a populated <a class="el" href="classDiskInvertedIndex.html">DiskInvertedIndex</a> and call driver() to start. </p>
@@ -286,7 +281,7 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naieve bayes function. ">ClassifierEngine::featureSelect</a> Calculates the result using naieve bayes function. </p>
+<p><a class="el" href="classClassifierEngine.html#a3b2ed54b7a31250bb8bf9d901b1d5a5e" title="ClassifierEngine::featureSelect Calculates the result using naive bayes function. ...">ClassifierEngine::featureSelect</a> Calculates the result using naive bayes function. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">classTerm</td><td>The top left quadrant of (1,1)&lt;term, class&gt;. </td></tr>
@@ -296,21 +291,21 @@ std::priority_queue&lt; std::pair&lt; double, std::string &gt; &gt;&#160;</td><t
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A double value that is the result of naieve bayes function calculation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A double value that is the result of naive bayes function calculation. </dd></dl>
 
 </div>
 </div>
-<a id="ac810e5d21c2399e9f1f70be23314be7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac810e5d21c2399e9f1f70be23314be7b">&sect;&nbsp;</a></span>getNumTopFeatures()</h2>
+<a id="aa5712bbf2306f843f6252d2f43b218ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5712bbf2306f843f6252d2f43b218ec">&sect;&nbsp;</a></span>getNumTopFeatures()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; std::string &gt; ClassifierEngine::getNumTopFeatures </td>
+          <td class="memname">std::unordered_set&lt; std::string &gt; ClassifierEngine::getNumTopFeatures </td>
           <td>(</td>
           <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
+          <td class="paramname"><em>numFeatures</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
