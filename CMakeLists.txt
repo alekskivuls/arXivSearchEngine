@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.8)
 set(PROJECT_NAME_STR arXivSearchEngine)
 project (${PROJECT_NAME_STR})
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
 option(COVERALLS "Turn on coveralls support" OFF)
 option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
@@ -12,24 +14,24 @@ option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
 #list(REMOVE_ITEM SOURCES "arXivSearchEngine/wt.cpp")
 
 set(SOURCES
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Compressor.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskInvertedIndex.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DocInfo.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Engine.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/InvertedIndex.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KDeserializer.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KEngine.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KgramIndex.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/KSerializer.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/PorterStemmer.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/QEngine.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Serializer.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/Tokenizer.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/WildEngine.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierEngine.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/ClassifierClass.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskReader.cpp
-    ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/DiskWriter.cpp
+    ${SRC_DIR}/Compressor.cpp
+    ${SRC_DIR}/DiskInvertedIndex.cpp
+    ${SRC_DIR}/DocInfo.cpp
+    ${SRC_DIR}/Engine.cpp
+    ${SRC_DIR}/InvertedIndex.cpp
+    ${SRC_DIR}/KDeserializer.cpp
+    ${SRC_DIR}/KEngine.cpp
+    ${SRC_DIR}/KgramIndex.cpp
+    ${SRC_DIR}/KSerializer.cpp
+    ${SRC_DIR}/PorterStemmer.cpp
+    ${SRC_DIR}/QEngine.cpp
+    ${SRC_DIR}/Serializer.cpp
+    ${SRC_DIR}/Tokenizer.cpp
+    ${SRC_DIR}/WildEngine.cpp
+    ${SRC_DIR}/ClassifierEngine.cpp
+    ${SRC_DIR}/ClassifierClass.cpp
+    ${SRC_DIR}/DiskReader.cpp
+    ${SRC_DIR}/DiskWriter.cpp
 )
 
 #Load boost
@@ -76,7 +78,7 @@ endif()
 #Directories
 #---------
 #Set dirs
-set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/*.h)
+set(COMMON_INCLUDES ${INCLUDE_DIR}/*.h)
 set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/external)
 #Sources
 #file(GLOB SOURCES "${PROJECT_SOURCE_DIR}/${PROJECT_NAME_STR}/*.cpp")
@@ -86,10 +88,10 @@ file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
 enable_testing()
 add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
 set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
-include_directories(${GTEST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${COMMON_INCLUDES} ${CMAKE_SOURCE_DIR}/${PROJECT_NAME_STR})
+include_directories(${GTEST_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${COMMON_INCLUDES} ${INCLUDE_DIR})
 
 #Build
-add_executable(${PROJECT_NAME_STR} ${PROJECT_NAME_STR}/ConsoleEngine.cpp ${SOURCES})
+add_executable(${PROJECT_NAME_STR} ${SRC_DIR}/ConsoleEngine.cpp ${SOURCES})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME_STR} ${Boost_LIBRARIES})
 
@@ -103,7 +105,7 @@ find_library(wt wt)
 find_library(wthttp wthttp)
 if(wt)
   message("-- Wt found")
-  add_executable(${PROJECT_NAME_STR}Web ${PROJECT_NAME_STR}/Wt.cpp ${SOURCES})
+  add_executable(${PROJECT_NAME_STR}Web ${SRC_DIR}/Wt.cpp ${SOURCES})
   target_link_libraries(arXivSearchEngineWeb
                         ${Boost_LIBRARIES}
                         wt wthttp)

@@ -1,1 +1,0 @@
-call cl /EHsc /I "C:\Program Files (x86)\boost\boost_1_61_0" *.cpp /link /LIBPATH:"C:\Program Files (x86)\boost\boost_1_61_0\libs" /LIBPATH:"C:\Program Files (x86)\boost\boost_1_61_0\stage\lib" /out:arXivEngine.exe
