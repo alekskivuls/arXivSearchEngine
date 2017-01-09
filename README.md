@@ -29,6 +29,9 @@ From top level directory
 rm -r build
 ```
 
+##Sanitizers
+To run with sanitizers pass cmake flags `-DSANITIZE_ADDRESS=On`, `-DSANITIZE_MEMORY=On`, `-DSANITIZE_THREAD=On`, or `-DSANITIZE_UNDEFINED=On`
+
 ##Vagrant
 Can build and run project from a Vagrant box.
 Install [Vagrant](https://www.vagrantup.com/) with [Virtual Box](https://www.virtualbox.org/) as your provider.

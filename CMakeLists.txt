@@ -77,8 +77,16 @@ if (COVERALLS)
         "${PROJECT_SOURCE_DIR}/external/coveralls-cmake")
 endif()
 
+#----------
+#Sanitizers
+#----------
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} 
+	${PROJECT_SOURCE_DIR}/external/sanitizers-cmake/cmake)
+find_package(Sanitizers)
+
 #Sources
-add_custom_target(headers SOURCES ${INCLUDE_DIR})
+FILE(GLOB HeaderFiles ${INCLUDE_DIR}/*.h)
+add_custom_target(headers SOURCES ${HeaderFiles})
 file(GLOB TEST_SRC_FILES ${TEST_DIR}/*.cpp)
 
 #Build
@@ -129,3 +137,7 @@ endif()
 
 target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 add_test(test1 ${PROJECT_TEST_NAME})
+
+#Sanitizers
+add_sanitizers(${PROJECT_NAME_STR})
+add_sanitizers(${PROJECT_TEST_NAME})

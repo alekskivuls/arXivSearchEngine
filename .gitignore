@@ -3,7 +3,7 @@
 
 # Project Files
 *.sln
-*.vxcproj.*
+*.vcxproj*
 
 # User-specific files
 *.suo
