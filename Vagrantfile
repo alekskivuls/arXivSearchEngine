@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/precise64"
+  config.vm.box = "ubuntu/xenial64"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -45,5 +45,5 @@ Vagrant.configure("2") do |config|
   # information on available options.
 
   # Enable provisioning with a shell script. 
-    config.vm.provision "shell", path: "config/provision.sh", privileged: false 
+  config.vm.provision "shell", path: "config/provisionXenial.sh", privileged: false 
 end

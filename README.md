@@ -23,6 +23,9 @@ Executables are generated in build directory.
 
 When making changes to source only need to run `make` again to regenerate executables.
 
+To run the web engine pass in the args to start the server port and html root dir.
+`./arXivSearchEngineWeb --http-address=0.0.0.0 --http-port=8080 --docroot=.`
+
 ## Clean Build
 From top level directory
 ```
